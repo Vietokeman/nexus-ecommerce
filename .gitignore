@@ -404,3 +404,12 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+.vs/
+
+**/CopilotIndices/
+**/*.db
+**/*.db-shm
+**/*.db-wal
+
+**/*.suo
+**/DocumentLayout*.json

@@ -1,7 +1,14 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "E:\\Code\\Microservices\\distributed-ecommerce-platform\\Distributed.Ecommerce.Platform\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{C9276B55-AAEA-4B5E-8A1F-EBAF2083D245}|Solution.items{C9276B55-AAEA-4B5E-8A1F-EBAF2083D245}|E:\\Code\\Commercial_CMS\\src\\CMS.Api\\global.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C9276B55-AAEA-4B5E-8A1F-EBAF2083D245}|Solution.items{C9276B55-AAEA-4B5E-8A1F-EBAF2083D245}|E:\\ki6_fpt\\OJT_FA\\typing-test\\README.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,7 +16,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -22,6 +29,31 @@
             {
               "$type": "Bookmark",
               "Name": "ST:1:0:{e8b06f52-6d01-11d2-aa7d-00c04f990343}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "README.md",
+              "DocumentMoniker": "E:\\ki6_fpt\\OJT_FA\\typing-test\\README.md",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\ki6_fpt\\OJT_FA\\typing-test\\README.md",
+              "ToolTip": "E:\\ki6_fpt\\OJT_FA\\typing-test\\README.md",
+              "RelativeToolTip": "..\\..\\..\\..\\ki6_fpt\\OJT_FA\\typing-test\\README.md",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2025-06-15T07:10:00.59Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "global.json",
+              "DocumentMoniker": "E:\\Code\\Commercial_CMS\\src\\CMS.Api\\global.json",
+              "RelativeDocumentMoniker": "..\\..\\..\\Commercial_CMS\\src\\CMS.Api\\global.json",
+              "ToolTip": "E:\\Code\\Commercial_CMS\\src\\CMS.Api\\global.json",
+              "RelativeToolTip": "..\\..\\..\\Commercial_CMS\\src\\CMS.Api\\global.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-06-15T07:05:55.623Z",
+              "EditorCaption": ""
             }
           ]
         }
