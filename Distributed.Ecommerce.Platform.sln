@@ -5,6 +5,8 @@ VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution.items", "Solution.items", "{C9276B55-AAEA-4B5E-8A1F-EBAF2083D245}"
 	ProjectSection(SolutionItems) = preProject
+		src\docker-compose.override.yml = src\docker-compose.override.yml
+		src\docker-compose.yml = src\docker-compose.yml
 		..\..\ki6_fpt\OJT_FA\typing-test\README.md = ..\..\ki6_fpt\OJT_FA\typing-test\README.md
 		C:\Users\Viet\Pictures\Screenshots\Solution-architect.png = C:\Users\Viet\Pictures\Screenshots\Solution-architect.png
 	EndProjectSection
