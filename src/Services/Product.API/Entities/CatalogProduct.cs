@@ -12,11 +12,11 @@ namespace Product.API.Entities
         [Required]
         [Column(TypeName = "nvarchar(250)")]
         public string Name { get; set; }
-        [Column(TypeName = "nvarchar(max)")]
+        [Column(TypeName = "longtext")]
         public string Summary { get; set; }
         [Column(TypeName = "text")]
         public string Description { get; set; }
-        [Column(TypeName = "decinal(12,2)")]
+        [Column(TypeName = "decimal(12,2)")]
         public decimal Price { get; set; }
 
         //public int StockQuantity { get; set; }

@@ -10,7 +10,7 @@ using Product.API.Persistence;
 namespace Product.API.Migrations
 {
     [DbContext(typeof(ProductContext))]
-    [Migration("20250617191243_Init_ProductDB")]
+    [Migration("20250617192139_Init_ProductDB")]
     partial class Init_ProductDB
     {
         /// <inheritdoc />
@@ -40,11 +40,11 @@ namespace Product.API.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decinal(12,2)");
+                        .HasColumnType("decimal(12,2)");
 
                     b.Property<string>("Summary")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
