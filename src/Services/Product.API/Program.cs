@@ -1,42 +1,25 @@
 ﻿using Common.Logging;
+using Product.API.Extensions;
 using Serilog;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure Serilog for logging
-builder.Host.UseSerilog(Serilogger.Configure);
 
 Log.Information("Starting Product API up");
 
 try
 {
+    builder.Host.UseSerilog(Serilogger.Configure);
 
-    // Use serilog cho full project
-    //ctx host builder context
-    //lc: logger configuration
-    //builder.Host.UseSerilog((ctx, lc) => lc
-    //    .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
-    //    .Enrich.FromLogContext()
-    //    .ReadFrom.Configuration(ctx.Configuration)
-    //);
+    builder.Host.AddAppConfigurations(); // Configure host settings
 
-    // Add services
-    builder.Services.AddControllers();
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
+    builder.Services.AddInfrastructure(); // Add infrastructure services
 
     var app = builder.Build();
 
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
-
-    app.UseHttpsRedirection();
-    app.UseAuthorization();
-    app.MapControllers();
+    app.UseInfrastructure(); // Use infrastructure middleware
     app.Run();
 }
 catch (Exception ex)

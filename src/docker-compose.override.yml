@@ -6,7 +6,7 @@ services:
   orderdb:
     container_name: orderdb
     environment:
-      SA_PASSWORD: "Passw0rd!!"
+      SA_PASSWORD: "Passw0rd!"
       ACCEPT_EULA: "Y"
     restart: always
     volumes:
@@ -18,7 +18,7 @@ services:
   productdb:
     container_name: mysqldb
     environment:
-      MYSQL_ROOT_PASSWORD: "Passw0rd!!"
+      MYSQL_ROOT_PASSWORD: "Passw0rd!"
     restart: always
     volumes:
       - mysql_data:/var/lib/mysql
