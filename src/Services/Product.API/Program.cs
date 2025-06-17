@@ -15,7 +15,7 @@ try
 
     builder.Host.AddAppConfigurations(); // Configure host settings
 
-    builder.Services.AddInfrastructure(); // Add infrastructure services
+    builder.Services.AddInfrastructure(builder.Configuration); // Add infrastructure services
 
     var app = builder.Build();
 
