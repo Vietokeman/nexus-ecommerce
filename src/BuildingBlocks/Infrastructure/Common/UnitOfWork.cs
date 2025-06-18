@@ -1,0 +1,21 @@
+﻿using Contracts.Common.Interfaces;
+using Microsoft.EntityFrameworkCore;
+
+namespace Infrastructure.Common
+{
+    public class UnitOfWork<TContext> : IUnitOfWork<TContext> where TContext : DbContext
+    {
+        private readonly DbContext _context;
+
+        public UnitOfWork(DbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<int> CommitAsync() => await _context.SaveChangesAsync();
+
+
+        public void Dispose() => _context.Dispose();// de huy 
+
+    }
+}
