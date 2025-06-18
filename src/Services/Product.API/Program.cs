@@ -1,5 +1,6 @@
 ﻿using Common.Logging;
 using Product.API.Extensions;
+using Product.API.Persistence;
 using Serilog;
 
 
@@ -20,7 +21,13 @@ try
     var app = builder.Build();
 
     app.UseInfrastructure(); // Use infrastructure middleware
-    app.Run();
+
+    //app.migrateDatabase
+    app.MigrateDatabase<ProductContext>((context, _) => // khong dung IServiceProvider o day nen dung dau _ de hien thi k can tham so 
+    {
+        ProductContextSeed.SeedProductAsync(context, Log.Logger).Wait(); // Seed the database
+    })
+        .Run();// auto update database
 }
 catch (Exception ex)
 {
