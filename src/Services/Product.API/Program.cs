@@ -1,46 +1,41 @@
 ﻿using Common.Logging;
+using Product.API.Extensions;
+using Product.API.Persistence;
 using Serilog;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure Serilog for logging
-builder.Host.UseSerilog(Serilogger.Configure);
 
 Log.Information("Starting Product API up");
 
 try
 {
+    builder.Host.UseSerilog(Serilogger.Configure);
 
-    // Use serilog cho full project
-    //ctx host builder context
-    //lc: logger configuration
-    //builder.Host.UseSerilog((ctx, lc) => lc
-    //    .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
-    //    .Enrich.FromLogContext()
-    //    .ReadFrom.Configuration(ctx.Configuration)
-    //);
+    builder.Host.AddAppConfigurations(); // Configure host settings
 
-    // Add services
-    builder.Services.AddControllers();
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
+    builder.Services.AddInfrastructure(builder.Configuration); // Add infrastructure services
 
     var app = builder.Build();
 
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
+    app.UseInfrastructure(); // Use infrastructure middleware
 
-    app.UseHttpsRedirection();
-    app.UseAuthorization();
-    app.MapControllers();
-    app.Run();
+    //app.migrateDatabase
+    app.MigrateDatabase<ProductContext>((context, _) => // khong dung IServiceProvider o day nen dung dau _ de hien thi k can tham so 
+    {
+        ProductContextSeed.SeedProductAsync(context, Log.Logger).Wait(); // Seed the database
+    })
+        .Run();// auto update database
 }
 catch (Exception ex)
 {
+    string type = ex.GetType().Name;
+    if (type.Equals("StopTheHostException", StringComparison.Ordinal))
+    {
+        throw;
+    }
     Log.Fatal(ex, "Application failed to start correctly");
 }
 finally
