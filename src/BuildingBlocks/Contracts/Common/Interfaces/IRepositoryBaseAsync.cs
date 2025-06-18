@@ -1,11 +1,33 @@
 ﻿using Contracts.Domains;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using System.Linq.Expressions;
 
 namespace Contracts.Common.Interfaces
 {
-    public interface IRepositoryBaseAsync
+    public interface IRepositoryBaseAsync<T, K, TContext> : IRepositoryQueryBase<T, K, TContext>
+        where T : EntityBase<K>
+        where TContext : DbContext
     {
+        Task<K> CreateAsync(T entity);
+
+        Task<List<K>> CreateListAsync(IEnumerable<T> entities);
+
+        Task UpdateAsync(T entity);
+
+        Task UpdateListAsync(IEnumerable<T> entities);
+
+        Task DeleteAsync(T entity);
+
+        Task DeleteListAsync(IEnumerable<T> entities);
+
+        Task<int> SaveChangesAsync();
+
+        Task<IDbContextTransaction> BeginTransactionAsync();
+
+        Task EndTransactionAsync();
+
+        Task RollbackTransactionAsync();
     }
 
 
