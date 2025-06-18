@@ -1,6 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Contracts.Common.Interfaces;
+using Infrastructure.Common;
+using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 using Product.API.Persistence;
+using Product.API.Repositories;
+using Product.API.Repositories.Interfaces;
 
 namespace Product.API.Extensions
 {
@@ -26,7 +30,8 @@ namespace Product.API.Extensions
             // Add other necessary services here, e.g., database context, repositories, etc.
 
             services.ConfigureProductionDbContext(configuration);
-
+            services.AddInfrastructureServices();
+            services.AddAutoMapper(config => config.AddProfile(new MappingProfile()));
             return services;
         }
 
@@ -44,6 +49,15 @@ namespace Product.API.Extensions
 
 
             return services;
+        }
+
+
+        public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
+        {
+            //service dependencies injection
+            return services.AddScoped(typeof(IRepositoryBaseAsync<,,>), typeof(RepositoryBaseAsync<,,>))
+                .AddScoped(typeof(IUnitOfWork<>), typeof(UnitOfWork<>))
+                .AddScoped<IProducRepository, ProductRepository>();
         }
     }
 }

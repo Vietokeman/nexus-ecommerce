@@ -5,9 +5,9 @@ namespace Infrastructure.Common
 {
     public class UnitOfWork<TContext> : IUnitOfWork<TContext> where TContext : DbContext
     {
-        private readonly DbContext _context;
+        private readonly TContext _context;
 
-        public UnitOfWork(DbContext context)
+        public UnitOfWork(TContext context)
         {
             _context = context;
         }
