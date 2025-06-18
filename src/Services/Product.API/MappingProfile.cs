@@ -9,8 +9,8 @@ namespace Product.API
         public MappingProfile()
         {
             CreateMap<CatalogProduct, ProductDto>();
-            CreateMap<CreateProductDto, ProductDto>();
-            CreateMap<UpdateProductDto, ProductDto>().IgnoreAllNonExisting();
+            CreateMap<CreateProductDto, CatalogProduct>().ReverseMap();
+            CreateMap<UpdateProductDto, CatalogProduct>().IgnoreAllNonExisting();
 
         }
     }
