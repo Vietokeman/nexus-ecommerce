@@ -36,12 +36,12 @@ namespace Product.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProduct([FromRoute] long id)
         {
-            var products = await _productRepo.GetProducts();
-            if (products == null || !products.Any())
+            var products = await _productRepo.GetProduct(id);
+            if (products == null)
             {
                 return NotFound("No products found.");
             }
-            var productDtos = _mapper.Map<IEnumerable<ProductDto>>(products);
+            var productDtos = _mapper.Map<ProductDto>(products);
             return Ok(products);
         }
 
