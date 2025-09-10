@@ -1,4 +1,6 @@
 using Common.Logging;
+using Customer.API.Persistence;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +25,9 @@ try
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
-
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnectionString");
+    builder.Services.AddDbContext<CustomerContext>(options =>
+        options.UseNpgsql(connectionString));
     var app = builder.Build();
 
     if (app.Environment.IsDevelopment())
@@ -35,6 +39,7 @@ try
     app.UseHttpsRedirection();
     app.UseAuthorization();
     app.MapControllers();
+    await app.SeedCustomerData();
     app.Run();
 }
 catch (Exception ex)
@@ -48,6 +53,6 @@ catch (Exception ex)
 }
 finally
 {
-    Log.Information("Shut down Product API complete");
+    Log.Information("Shut down Customer API complete");
     Log.CloseAndFlush(); // ghi lai log
 }
