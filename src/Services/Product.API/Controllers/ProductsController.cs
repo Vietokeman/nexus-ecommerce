@@ -48,6 +48,11 @@ namespace Product.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateProduct([FromBody] CreateProductDto productDto)
         {
+            var productEntity = await _productRepo.GetProductsByNo(productDto.No);
+            if (productEntity != null && productEntity.Any())
+            {
+                return BadRequest("Product with the same number already exists.");
+            }
             var product = _mapper.Map<CatalogProduct>(productDto);
             await _productRepo.CreateProduct(product);
             await _productRepo.SaveChangesAsync();
@@ -86,7 +91,7 @@ namespace Product.API.Controllers
         [HttpGet("search/{productNo}")]
         public async Task<IActionResult> GetProductByNo([FromRoute] string productNo)
         {
-            var products = await _productRepo.GetProducByNo(productNo);
+            var products = await _productRepo.GetProductsByNo(productNo);
             if (products == null || !products.Any())
             {
                 return NotFound("No products found with the specified product number.");

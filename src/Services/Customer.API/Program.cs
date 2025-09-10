@@ -39,10 +39,15 @@ try
 }
 catch (Exception ex)
 {
+    string type = ex.GetType().Name;
+    if (type.Equals("StopTheHostException", StringComparison.Ordinal))
+    {
+        throw;
+    }
     Log.Fatal(ex, "Application failed to start correctly");
 }
 finally
 {
-    Log.Information("Shut down Customer API complete");
+    Log.Information("Shut down Product API complete");
     Log.CloseAndFlush(); // ghi lai log
 }

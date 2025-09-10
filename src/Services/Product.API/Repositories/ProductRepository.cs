@@ -19,7 +19,7 @@ namespace Product.API.Repositories
         public async Task<IEnumerable<CatalogProduct>> GetProducts() => await FindAll().ToListAsync();
 
 
-        public async Task<IEnumerable<CatalogProduct>> GetProducByNo(string productNo) => await FindByCondition(x => x.No == productNo).ToListAsync();
+        public async Task<IEnumerable<CatalogProduct>> GetProductsByNo(string productNo) => await FindByCondition(x => x.No == productNo).ToListAsync();
 
 
         public Task CreateProduct(CatalogProduct product) => CreateAsync(product);
