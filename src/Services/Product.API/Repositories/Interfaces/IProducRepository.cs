@@ -8,7 +8,7 @@ namespace Product.API.Repositories.Interfaces
     {
         Task<CatalogProduct> GetProduct(long id);
         Task<IEnumerable<CatalogProduct>> GetProducts();
-        Task<IEnumerable<CatalogProduct>> GetProducByNo(string productNo);
+        Task<IEnumerable<CatalogProduct>> GetProductsByNo(string productNo);
 
         Task CreateProduct(CatalogProduct product);
         Task UpdateProduct(CatalogProduct product);

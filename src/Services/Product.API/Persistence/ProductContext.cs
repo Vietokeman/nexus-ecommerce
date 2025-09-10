@@ -12,6 +12,17 @@ namespace Product.API.Persistence
 
         public DbSet<CatalogProduct> Products { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<CatalogProduct>().ToTable("CatalogProducts");
+            modelBuilder.Entity<CatalogProduct>().HasKey(p => p.Id);
+            modelBuilder.Entity<CatalogProduct>().HasIndex(p => p.No).IsUnique();
+            modelBuilder.Entity<CatalogProduct>().Property(p => p.Name).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<CatalogProduct>().Property(p => p.Description).HasMaxLength(500);
+            modelBuilder.Entity<CatalogProduct>().Property(p => p.Price).HasColumnType("decimal(18,2)");
+        }
+
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             var modified = ChangeTracker.Entries()
