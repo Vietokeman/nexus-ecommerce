@@ -46,10 +46,13 @@ try
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
-        app.UseSwaggerUI();
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Customer Minimal API V1");
+        });
     }
 
-    app.UseHttpsRedirection();
+    //app.UseHttpsRedirection();
     app.UseAuthorization();
     app.MapControllers();
     await app.SeedCustomerData();
