@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Product.API.Entities;
 using Product.API.Repositories.Interfaces;
-using Shared.DTOs;
+using Shared.DTOs.Product;
 using System.ComponentModel.DataAnnotations;
 
 namespace Product.API.Controllers

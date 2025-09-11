@@ -1,5 +1,12 @@
 using Common.Logging;
+using Contracts.Common.Interfaces;
+using Customer.API.Controllers;
 using Customer.API.Persistence;
+using Customer.API.Repositories;
+using Customer.API.Repositories.Interfaces;
+using Customer.API.Services;
+using Customer.API.Services.Interfaces;
+using Infrastructure.Common;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 var builder = WebApplication.CreateBuilder(args);
@@ -28,15 +35,24 @@ try
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnectionString");
     builder.Services.AddDbContext<CustomerContext>(options =>
         options.UseNpgsql(connectionString));
+
+    builder.Services.AddScoped<ICustomerRepository, CustomerRepositoryAsync>()
+        .AddScoped(typeof(IRepositoryBaseAsync<,,>), typeof(RepositoryBaseAsync<,,>))
+        .AddScoped(typeof(IUnitOfWork<>), typeof(UnitOfWork<>))
+        .AddScoped<ICustomerService, CustomerService>();
     var app = builder.Build();
+    app.MapCustomerEndpoints();
 
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
-        app.UseSwaggerUI();
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Customer Minimal API V1");
+        });
     }
 
-    app.UseHttpsRedirection();
+    //app.UseHttpsRedirection();
     app.UseAuthorization();
     app.MapControllers();
     await app.SeedCustomerData();
