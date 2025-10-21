@@ -1,4 +1,5 @@
 using Common.Logging;
+using Product.API.Extensions;
 using Serilog;
 
 
@@ -7,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Configure Serilog for logging
 builder.Host.UseSerilog(Serilogger.Configure);
 
+builder.Host.AddAppConfigurations();
 Log.Information("Starting Basket API up");
 
 try
