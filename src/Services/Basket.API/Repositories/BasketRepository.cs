@@ -20,7 +20,10 @@ namespace Basket.API.Repositories
         {
             try
             {
+                _logger.Information("BEGIN : DELETE BASKET FROM USERNAME");
                 await _redisCacheService.RemoveAsync(username);
+                _logger.Information("END : DELETE BASKET FROM USERNAME");
+
                 return true;
             }
             catch (Exception e)
@@ -32,12 +35,19 @@ namespace Basket.API.Repositories
 
         public async Task<Cart?> GetBasketByUsernameAsync(string username)
         {
+            _logger.Information($"BEGIN : GET BASKET BY {username}");
+
             var basket = await _redisCacheService.GetStringAsync(username);
+
+            _logger.Information($"END : GET BASKET BY {username}");
+
             return string.IsNullOrEmpty(basket) ? null : _serializeService.Deserialize<Cart>(basket);
         }
 
         public async Task<Cart> UpdateBasketAsync(Cart cart, DistributedCacheEntryOptions options = null)
         {
+            _logger.Information($"BEGIN : update BASKET  {cart.Username}");
+
             if (options != null)
 
             {
@@ -47,6 +57,7 @@ namespace Basket.API.Repositories
             {
                 await _redisCacheService.SetStringAsync(cart.Username, _serializeService.Serialize(cart));
             }
+            _logger.Information($"END : update BASKET for  {cart.Username}");
 
             return await GetBasketByUsernameAsync(cart.Username);
         }

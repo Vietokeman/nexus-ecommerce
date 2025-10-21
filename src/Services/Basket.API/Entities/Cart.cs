@@ -2,8 +2,8 @@
 {
     public class Cart
     {
-        public string Username { get; set; }
-        public readonly List<CartItem> Items = new();
+        public string? Username { get; set; }
+        public List<CartItem> Items { get; set; } = new();
         public Cart()
         {
             
