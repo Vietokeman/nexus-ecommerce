@@ -1,3 +1,4 @@
+using Basket.API.Extensions;
 using Common.Logging;
 using Product.API.Extensions;
 using Serilog;
@@ -6,10 +7,7 @@ using Serilog;
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure Serilog for logging
-builder.Host.UseSerilog(Serilogger.Configure);
 
-builder.Host.AddAppConfigurations();
-Log.Information("Starting Basket API up");
 
 try
 {
@@ -22,7 +20,13 @@ try
     //    .Enrich.FromLogContext()
     //    .ReadFrom.Configuration(ctx.Configuration)
     //);
+    builder.Host.UseSerilog(Serilogger.Configure);
 
+    builder.Host.AddAppConfigurations();
+    Log.Information("Starting Basket API up");
+
+    builder.Services.ConfigureServices();
+    builder.Services.ConfigureRedis(builder.Configuration);
     // Add services
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();

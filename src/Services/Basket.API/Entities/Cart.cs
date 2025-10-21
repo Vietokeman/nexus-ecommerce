@@ -16,7 +16,7 @@
         {
             get
             {
-                return Items.Sum(i => i.ProductPrice * i.Quantity);
+                return Items.Sum(i => i.ItemPrice * i.Quantity);
             }
         }
     }
