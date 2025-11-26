@@ -10,8 +10,8 @@ using Product.API.Persistence;
 namespace Product.API.Migrations
 {
     [DbContext(typeof(ProductContext))]
-    [Migration("20250617192139_Init_ProductDB")]
-    partial class Init_ProductDB
+    [Migration("20251126104817_InitDb")]
+    partial class InitDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,10 +29,12 @@ namespace Product.API.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasMaxLength(500)
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("No")
@@ -40,7 +42,7 @@ namespace Product.API.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(12,2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Summary")
                         .IsRequired()
@@ -48,7 +50,10 @@ namespace Product.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
+                    b.HasIndex("No")
+                        .IsUnique();
+
+                    b.ToTable("CatalogProducts", (string)null);
                 });
 #pragma warning restore 612, 618
         }

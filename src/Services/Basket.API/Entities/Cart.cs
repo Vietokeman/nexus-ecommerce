@@ -1,7 +1,10 @@
-﻿namespace Basket.API.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Basket.API.Entities
 {
     public class Cart
     {
+        [Required(ErrorMessage = "Username is required.")]
         public string? Username { get; set; }
         public List<CartItem> Items { get; set; } = new();
         public Cart()

@@ -132,3 +132,16 @@ services:
         restart: 
             always
   
+  # basket api sections
+  basket.api:
+        container_name: basket.api
+        environment:
+          - ASPNETCORE_ENVIRONMENT=Development
+          - AspNetCore_Urls=http://+:80
+          - "CacheSettings:ConnectionString=basketdb:6379"
+        depends_on:
+          - basketdb
+        ports:
+            - "6004:80"
+        restart: 
+            always

@@ -8,20 +8,20 @@ using System.Net;
 
 namespace Basket.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/baskets")]
     [ApiController]
-    public class BasketController : ControllerBase
+    public class BasketsController : ControllerBase
     {
         private readonly IBasketRepository _basketRepository;
 
-        public BasketController(IBasketRepository basketRepository)
+        public BasketsController(IBasketRepository basketRepository)
         {
             _basketRepository = basketRepository;
         }
 
         [HttpGet(template: "{username}", Name = "GetBasket")]
         [ProducesResponseType(typeof(Cart), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<Cart>> GetBasketByUsername([Required] string username)
+        public async Task<ActionResult<Cart>> GetBasketByUsername([Required, MinLength(1)] string username)
         {
             var result = await _basketRepository.GetBasketByUsernameAsync(username);
             return Ok(result ?? new Cart());
@@ -40,7 +40,7 @@ namespace Basket.API.Controllers
 
         [HttpDelete(template: "{username}", Name = "DeleteBasket")]
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<bool>> DeleteBasket([Required] string username)
+        public async Task<ActionResult<bool>> DeleteBasket([Required, MinLength(1)] string username)
         {
             var result = await _basketRepository.DeleteBasketFromUsernameAsync(username);
             return Ok(result);
