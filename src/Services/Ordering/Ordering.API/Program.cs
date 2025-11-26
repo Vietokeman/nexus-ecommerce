@@ -1,4 +1,5 @@
 using Common.Logging;
+using Ordering.Infrastructure;
 using Serilog;
 
 
@@ -20,8 +21,9 @@ try
     //    .Enrich.FromLogContext()
     //    .ReadFrom.Configuration(ctx.Configuration)
     //);
-
     // Add services
+    builder.Services.AddInfastructureServices(builder.Configuration);
+
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
