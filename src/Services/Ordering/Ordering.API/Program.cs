@@ -1,5 +1,6 @@
 using Common.Logging;
 using Ordering.Infrastructure;
+using Ordering.Infrastructure.Persistence;
 using Serilog;
 
 
@@ -34,6 +35,16 @@ try
     {
         app.UseSwagger();
         app.UseSwaggerUI();
+    }
+
+    //Initialise and seed database
+    using (var scope = app.Services.CreateScope())
+    {
+        var services = scope.ServiceProvider;
+        var logger = services.GetRequiredService<Serilog.ILogger>();
+        var orderContextSeed = services.GetRequiredService<OrderContextSeed>();
+        await orderContextSeed.InitialiseAsync();
+        await orderContextSeed.SeedAsync();
     }
 
     app.UseHttpsRedirection();

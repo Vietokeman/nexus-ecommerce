@@ -15,6 +15,8 @@ public static class ConfigureServices
                 sqlServerOptionsAction: builder => builder.MigrationsAssembly(typeof(OrderContext).Assembly.FullName));
         });
 
+        services.AddScoped<OrderContextSeed>();
+
         return services;
     }
 }
