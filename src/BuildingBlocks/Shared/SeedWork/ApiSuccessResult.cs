@@ -6,7 +6,7 @@ public class ApiSuccessResult<T> : ApiResult<T>
     {
     }
 
-    public ApiSuccessResult(T result) : base(isSucceeded: true, result)
+    public ApiSuccessResult(T result) : base(isSucceeded: true, result, "Succes")
     {
     }
 

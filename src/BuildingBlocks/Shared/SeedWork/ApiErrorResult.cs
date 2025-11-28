@@ -13,7 +13,7 @@ public class ApiErrorResult<T> : ApiResult<T>
         Errors = new List<string>();
     }
 
-    public ApiErrorResult(List<string> errors) : base(isSucceeded: false)
+    public ApiErrorResult(List<string> errors) : base(isSucceeded: false, "Error")
     {
         Errors = errors;
     }
