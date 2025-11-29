@@ -12,6 +12,9 @@ namespace Ordering.Application.Common.Mappings
     {
         public MappingProfile()
         {
+            // Convert all enums to string automatically
+            CreateMap<Enum, string>().ConvertUsing(e => e.ToString());
+            
             ApplyMappingsFromAssempbly(Assembly.GetExecutingAssembly());
         }
 
@@ -39,7 +42,6 @@ namespace Ordering.Application.Common.Mappings
                     method.Invoke(instance, new object[] { this });
                 }
             }
-            throw new NotImplementedException();
         }
     }
 }

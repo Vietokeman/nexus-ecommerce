@@ -1,4 +1,5 @@
-﻿using Ordering.Application.Common.Mappings;
+﻿using AutoMapper;
+using Ordering.Application.Common.Mappings;
 using Ordering.Domain.Enums;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,6 @@ namespace Ordering.Application.Common.Models
         public string ShipppingAdress { get; set; }
         public string InvoiceAdress { get; set; }
 
-        public string Status{ get; set; }
+        public string Status { get; set; }
     }
 }

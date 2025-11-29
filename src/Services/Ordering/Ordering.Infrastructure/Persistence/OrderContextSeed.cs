@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ordering.Domain.Entities;
+using Ordering.Domain.Enums;
 using Serilog;
 
 namespace Ordering.Infrastructure.Persistence
@@ -59,14 +60,28 @@ namespace Ordering.Infrastructure.Persistence
         {
             return new List<Order>()
             {
-                new Order{
-                UserName = "customer1",
-                FirstName = "customer1",
-                LastName = "customer1",
-                EmailAdress = "customer1@local.com",
-                ShipppingAdress = "123 Main St",
-                InvoiceAdress = "Vietnam",
-                TotalPrice = 350}
+                new Order
+                {
+                    UserName = "customer1",
+                    FirstName = "customer1",
+                    LastName = "customer1",
+                    EmailAdress = "customer1@local.com",
+                    ShipppingAdress = "123 Main St",
+                    InvoiceAdress = "Vietnam",
+                    TotalPrice = 350,
+                    Status = EOrderStatus.New
+                },
+                new Order
+                {
+                    UserName = "customer2",
+                    FirstName = "customer2",
+                    LastName = "customer2",
+                    EmailAdress = "customer2@local.com",
+                    ShipppingAdress = "456 Oak Ave",
+                    InvoiceAdress = "Vietnam",
+                    TotalPrice = 450,
+                    Status = EOrderStatus.Pending
+                }
             };
         }
     }
