@@ -12,9 +12,6 @@ namespace Ordering.Application.Common.Mappings
     {
         public MappingProfile()
         {
-            // Convert all enums to string automatically
-            CreateMap<Enum, string>().ConvertUsing(e => e.ToString());
-            
             ApplyMappingsFromAssempbly(Assembly.GetExecutingAssembly());
         }
 
@@ -28,18 +25,34 @@ namespace Ordering.Application.Common.Mappings
                 .Where(t => t.GetInterfaces().Any(Hasinterface))
                 .ToList();
 
-            var argumentTypes = new Type[] { typeof(Profile) };
             foreach (var type in types)
             {
                 var instance = Activator.CreateInstance(type);
+                
+                // Check if there's a custom Mapping method
                 var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Instance)
                     .Where(m => m.Name == mappingMethodName
                         && m.GetParameters().Length == 1
                         && m.GetParameters()[0].ParameterType == typeof(Profile))
                     .ToList();
-                foreach (var method in methods)
+
+                if (methods.Any())
                 {
-                    method.Invoke(instance, new object[] { this });
+                    // Use custom mapping
+                    foreach (var method in methods)
+                    {
+                        method.Invoke(instance, new object[] { this });
+                    }
+                }
+                else
+                {
+                    // Auto create mapping from source type to destination type
+                    var interfaceType = type.GetInterfaces()
+                        .First(i => i.IsGenericType && i.GetGenericTypeDefinition() == mapFromType);
+                    var sourceType = interfaceType.GetGenericArguments()[0];
+                    
+                    CreateMap(sourceType, type)
+                        .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
                 }
             }
         }

@@ -22,6 +22,6 @@ namespace Ordering.Application.Common.Models
         public string ShipppingAdress { get; set; }
         public string InvoiceAdress { get; set; }
 
-        public string Status { get; set; }
+        public EOrderStatus Status { get; set; }
     }
 }
