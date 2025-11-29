@@ -1,4 +1,5 @@
 using Common.Logging;
+using Ordering.Application;
 using Ordering.Infrastructure;
 using Ordering.Infrastructure.Persistence;
 using Serilog;
@@ -18,12 +19,13 @@ try
     //ctx host builder context
     //lc: logger configuration
     //builder.Host.UseSerilog((ctx, lc) => lc
-    //    .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
+    //    .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext}{NewLine}{Message: lj}{NewLine}{Exception}{NewLine}")
     //    .Enrich.FromLogContext()
     //    .ReadFrom.Configuration(ctx.Configuration)
     //);
     // Add services
     builder.Services.AddInfastructureServices(builder.Configuration);
+    builder.Services.AddApplicationServices();
 
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
