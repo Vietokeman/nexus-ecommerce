@@ -30,19 +30,25 @@ services:
      image: ${DOCKER_REGISTRY-}product-api:${PLATFORM:-linux}-${TAG:-latest}
      build:
        context: .
-       dockerfile: Services/Product.Api/Dockerfile
+       dockerfile: Services/Product.API/Dockerfile
 
   customer.api:
      image: ${DOCKER_REGISTRY-}customer-api:${PLATFORM:-linux}-${TAG:-latest}
      build:
        context: .
-       dockerfile: Services/Customer.Api/Dockerfile
+       dockerfile: Services/Customer.API/Dockerfile
 
   basket.api:
      image: ${DOCKER_REGISTRY-}basket-api:${PLATFORM:-linux}-${TAG:-latest}
      build:
        context: .
-       dockerfile: Services/Basket.Api/Dockerfile
+       dockerfile: Services/Basket.API/Dockerfile
+
+  ordering.api:
+     image: ${DOCKER_REGISTRY-}ordering-api:${PLATFORM:-linux}-${TAG:-latest}
+     build:
+       context: .
+       dockerfile: Services/Ordering/Ordering.API/Dockerfile
  #network section
 networks:
   default:

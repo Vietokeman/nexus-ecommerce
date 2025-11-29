@@ -1,6 +1,5 @@
 ﻿using Contracts.Common.Interfaces;
 using Ordering.Domain.Entities;
-using Ordering.Infrastructure.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace Ordering.Application.Common.Interfaces
 {
-    public interface IOrderRepository : IRepositoryBaseAsync<Order, long, OrderContext>
+    public interface IOrderRepository : IRepositoryBaseAsync<Order, long>
     {
         Task<IEnumerable<Order>> GetOrderByUserName(string useName);
+        Task<int> SaveChangesAsync();
     }
 }

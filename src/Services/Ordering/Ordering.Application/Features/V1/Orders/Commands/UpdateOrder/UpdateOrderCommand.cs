@@ -1,17 +1,10 @@
-﻿using AutoMapper;
+using MediatR;
 using Ordering.Application.Common.Mappings;
 using Ordering.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Ordering.Application.Common.Models
+namespace Ordering.Application.Features.V1.Orders.Commands.UpdateOrder
 {
-    public class OrderDto : IMapFrom<Domain.Entities.Order>
+    public class UpdateOrderCommand : IRequest, IMapFrom<Domain.Entities.Order>
     {
         public long Id { get; set; }
         public string UserName { get; set; }
@@ -21,7 +14,6 @@ namespace Ordering.Application.Common.Models
         public string EmailAdress { get; set; }
         public string ShipppingAdress { get; set; }
         public string InvoiceAdress { get; set; }
-
         public EOrderStatus Status { get; set; }
     }
 }

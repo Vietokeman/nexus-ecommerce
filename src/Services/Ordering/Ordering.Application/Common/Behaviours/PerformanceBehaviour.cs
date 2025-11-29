@@ -14,7 +14,7 @@ namespace Ordering.Application.Common.Behaviours
     {
         private readonly Stopwatch _timer;
         private readonly ILogger<TRequest> _logger;
-        public PerformanceBehaviour(Stopwatch timer, ILogger<TRequest> logger)
+        public PerformanceBehaviour(ILogger<TRequest> logger)
         {
             _timer = new Stopwatch();
             _logger = logger;
