@@ -1,4 +1,8 @@
 using Common.Logging;
+using Contracts.Common.Interfaces;
+using Contracts.Messages;
+using Infrastructure.Common;
+using Infrastructure.Messages;
 using Ordering.Application;
 using Ordering.Infrastructure;
 using Ordering.Infrastructure.Persistence;
@@ -26,6 +30,10 @@ try
     // Add services
     builder.Services.AddInfastructureServices(builder.Configuration);
     builder.Services.AddApplicationServices();
+
+    // test transmit message
+    builder.Services.AddScoped<IMessageProducer, RabbitMQProducer>();// dang ki dich vu message producer
+    builder.Services.AddScoped<ISerializeService, SeriallizeService>();// dang ki dich vu serialize
 
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();

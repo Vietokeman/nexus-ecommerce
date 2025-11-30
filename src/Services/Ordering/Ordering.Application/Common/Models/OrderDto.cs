@@ -23,5 +23,12 @@ namespace Ordering.Application.Common.Models
         public string InvoiceAdress { get; set; }
 
         public EOrderStatus Status { get; set; }
+
+        public void Mapping(Profile profile)
+        {
+            profile.CreateMap<Domain.Entities.Order, OrderDto>();
+            profile.CreateMap<OrderDto, Domain.Entities.Order>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore()); // Ignore Id when creating new Order
+        }
     }
 }
