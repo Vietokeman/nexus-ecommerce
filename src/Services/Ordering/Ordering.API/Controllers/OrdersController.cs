@@ -61,13 +61,13 @@ namespace Ordering.API.Controllers
             return Ok(results);
         }
 
-        //[HttpPost(Name = RouteNames.CreateOrder)]
-        //[ProducesResponseType(typeof(long), (int)HttpStatusCode.Created)]
-        //public async Task<ActionResult<long>> CreateOrder([FromBody] CreateOrderCommand command)
-        //{
-        //    var result = await _mediator.Send(command);
-        //    return CreatedAtRoute(RouteNames.GetOrdersByUserName, new { userName = command.UserName }, result);
-        //}
+        [HttpPost(Name = RouteNames.CreateOrder)]
+        [ProducesResponseType(typeof(long), (int)HttpStatusCode.Created)]
+        public async Task<ActionResult<long>> CreateOrder([FromBody] CreateOrderCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return CreatedAtRoute(RouteNames.GetOrdersByUserName, new { userName = command.UserName }, result);
+        }
 
         [HttpPut("{id}", Name = RouteNames.UpdateOrder)]
         [ProducesResponseType(typeof(void), (int)HttpStatusCode.NoContent)]
