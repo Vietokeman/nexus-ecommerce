@@ -11,6 +11,7 @@ using Ordering.Application.Features.V1.Orders.Commands.UpdateOrder;
 using Ordering.Application.Features.V1.Orders.Queries.GetOrders;
 using Ordering.Application.Features.V1.Orders.Queries.GetOrdersWithPagination;
 using Ordering.Domain.Entities;
+using RabbitMQ.Client;
 using Shared.SeedWork;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
@@ -98,6 +99,39 @@ namespace Ordering.API.Controllers
             _messageProducer.SendMessage(order);
             var result = _mapper.Map<OrderDto>(order);
             return Ok(result);
+        }
+
+        [HttpGet("test-transmit", Name = "TestTransmit")]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<string>> TestTransmit()
+        {
+            var connectionFactory = new ConnectionFactory()
+            {
+                HostName = "localhost",
+            };
+            var connection = await connectionFactory.CreateConnectionAsync();
+            using var channel = await connection.CreateChannelAsync();
+            await channel.QueueDeclareAsync(
+                queue: "order",
+                exclusive: false
+            );
+
+            // Publish a test message
+            var message = "Test message from API";
+            var body = System.Text.Encoding.UTF8.GetBytes(message);
+            await channel.BasicPublishAsync(exchange: string.Empty, routingKey: "order", body: body);
+
+            // Try to consume the message
+            var result = await channel.BasicGetAsync(queue: "order", autoAck: true);
+            if (result != null)
+            {
+                var receivedMessage = System.Text.Encoding.UTF8.GetString(result.Body.ToArray());
+                return Ok($"Published and received: {receivedMessage}");
+            }
+            else
+            {
+                return Ok("Published test message, but no message received (queue might be empty)");
+            }
         }
     }
 }
