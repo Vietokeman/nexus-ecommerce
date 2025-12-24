@@ -49,6 +49,14 @@ services:
      build:
        context: .
        dockerfile: Services/Ordering/Ordering.API/Dockerfile
+
+  # API Gateway section
+  ocelot.apigw:
+     image: ${DOCKER_REGISTRY-}ocelot-apigw:${PLATFORM:-linux}-${TAG:-latest}
+     build:
+       context: .
+       dockerfile: APIGateWays/OcelotApiGw/Dockerfile
+       
  #network section
 networks:
   default:
