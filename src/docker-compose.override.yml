@@ -159,3 +159,21 @@ services:
             - "6005:80"
         restart: 
             always
+
+  # API Gateway sections
+  ocelot.apigw:
+        container_name: ocelot.apigw
+        environment:
+          - ASPNETCORE_ENVIRONMENT=Development
+          - AspNetCore_Urls=http://+:80
+          - "ElasticConfiguration:Uri=http://elasticsearch:9200"
+        depends_on:
+          - product.api
+          - customer.api
+          - basket.api
+          - ordering.api
+          - elasticsearch
+        ports:
+            - "5000:80"
+        restart: 
+            always
