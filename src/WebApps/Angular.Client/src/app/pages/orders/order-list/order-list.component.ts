@@ -3,8 +3,8 @@ import { OrderService } from '../../../services/order.service';
 import { Order } from '../../../models/order.model';
 
 @Component({
-  selector: 'app-order-list',
-  template: `
+    selector: 'app-order-list',
+    template: `
     <div class="container">
       <h2 class="mb-4">Orders</h2>
 
@@ -60,38 +60,38 @@ import { Order } from '../../../models/order.model';
       </div>
     </div>
   `,
-  styles: [],
+    styles: [],
 })
 export class OrderListComponent implements OnInit {
-  orders: Order[] = [];
-  username = 'customer1';
-  loading = false;
-  error: string | null = null;
+    orders: Order[] = [];
+    username = 'customer1';
+    loading = false;
+    error: string | null = null;
 
-  constructor(private orderService: OrderService) {}
+    constructor(private orderService: OrderService) { }
 
-  ngOnInit(): void {
-    this.loadOrders();
-  }
-
-  loadOrders(): void {
-    if (!this.username) {
-      this.error = 'Please enter a username';
-      return;
+    ngOnInit(): void {
+        this.loadOrders();
     }
 
-    this.loading = true;
-    this.error = null;
+    loadOrders(): void {
+        if (!this.username) {
+            this.error = 'Please enter a username';
+            return;
+        }
 
-    this.orderService.getOrders(this.username).subscribe({
-      next: (data) => {
-        this.orders = data;
-        this.loading = false;
-      },
-      error: (err) => {
-        this.error = err.message;
-        this.loading = false;
-      },
-    });
-  }
+        this.loading = true;
+        this.error = null;
+
+        this.orderService.getOrders(this.username).subscribe({
+            next: (data) => {
+                this.orders = data;
+                this.loading = false;
+            },
+            error: (err) => {
+                this.error = err.message;
+                this.loading = false;
+            },
+        });
+    }
 }

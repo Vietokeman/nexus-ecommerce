@@ -3,8 +3,8 @@ import { CustomerService } from '../../../services/customer.service';
 import { Customer } from '../../../models/customer.model';
 
 @Component({
-  selector: 'app-customer-list',
-  template: `
+    selector: 'app-customer-list',
+    template: `
     <div class="container">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Customers</h2>
@@ -87,74 +87,74 @@ import { Customer } from '../../../models/customer.model';
       </div>
     </div>
   `,
-  styles: [],
+    styles: [],
 })
 export class CustomerListComponent implements OnInit {
-  customers: Customer[] = [];
-  loading = false;
-  error: string | null = null;
-  showCreateForm = false;
-  newCustomer: any = {
-    username: '',
-    firstName: '',
-    lastName: '',
-    emailAddress: '',
-  };
-
-  constructor(private customerService: CustomerService) {}
-
-  ngOnInit(): void {
-    this.loadCustomers();
-  }
-
-  loadCustomers(): void {
-    this.loading = true;
-    this.error = null;
-
-    this.customerService.getCustomers().subscribe({
-      next: (data) => {
-        this.customers = data;
-        this.loading = false;
-      },
-      error: (err) => {
-        this.error = err.message;
-        this.loading = false;
-      },
-    });
-  }
-
-  createCustomer(): void {
-    this.customerService.createCustomer(this.newCustomer).subscribe({
-      next: () => {
-        this.showCreateForm = false;
-        this.resetForm();
-        this.loadCustomers();
-      },
-      error: (err) => {
-        this.error = err.message;
-      },
-    });
-  }
-
-  deleteCustomer(username: string): void {
-    if (confirm('Are you sure you want to delete this customer?')) {
-      this.customerService.deleteCustomer(username).subscribe({
-        next: () => {
-          this.loadCustomers();
-        },
-        error: (err) => {
-          this.error = err.message;
-        },
-      });
-    }
-  }
-
-  resetForm(): void {
-    this.newCustomer = {
-      username: '',
-      firstName: '',
-      lastName: '',
-      emailAddress: '',
+    customers: Customer[] = [];
+    loading = false;
+    error: string | null = null;
+    showCreateForm = false;
+    newCustomer: any = {
+        username: '',
+        firstName: '',
+        lastName: '',
+        emailAddress: '',
     };
-  }
+
+    constructor(private customerService: CustomerService) { }
+
+    ngOnInit(): void {
+        this.loadCustomers();
+    }
+
+    loadCustomers(): void {
+        this.loading = true;
+        this.error = null;
+
+        this.customerService.getCustomers().subscribe({
+            next: (data) => {
+                this.customers = data;
+                this.loading = false;
+            },
+            error: (err) => {
+                this.error = err.message;
+                this.loading = false;
+            },
+        });
+    }
+
+    createCustomer(): void {
+        this.customerService.createCustomer(this.newCustomer).subscribe({
+            next: () => {
+                this.showCreateForm = false;
+                this.resetForm();
+                this.loadCustomers();
+            },
+            error: (err) => {
+                this.error = err.message;
+            },
+        });
+    }
+
+    deleteCustomer(username: string): void {
+        if (confirm('Are you sure you want to delete this customer?')) {
+            this.customerService.deleteCustomer(username).subscribe({
+                next: () => {
+                    this.loadCustomers();
+                },
+                error: (err) => {
+                    this.error = err.message;
+                },
+            });
+        }
+    }
+
+    resetForm(): void {
+        this.newCustomer = {
+            username: '',
+            firstName: '',
+            lastName: '',
+            emailAddress: '',
+        };
+    }
 }

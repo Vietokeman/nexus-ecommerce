@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-home',
-  template: `
+    selector: 'app-home',
+    template: `
     <div class="hero-section text-center py-5">
       <div class="container">
         <h1 class="display-4 mb-4">Welcome to Distributed E-Commerce Platform</h1>
@@ -90,8 +90,8 @@ import { Component } from '@angular/core';
       </div>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .hero-section {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
@@ -112,6 +112,6 @@ import { Component } from '@angular/core';
         font-size: 3rem;
       }
     `,
-  ],
+    ],
 })
-export class HomeComponent {}
+export class HomeComponent { }

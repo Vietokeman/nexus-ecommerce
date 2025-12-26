@@ -7,11 +7,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-// ABP Imports
-import { CoreModule } from '@abp/ng.core';
-import { ThemeSharedModule } from '@abp/ng.theme.shared';
-import { ThemeBasicModule } from '@abp/ng.theme.basic';
-
 import { environment } from '../environments/environment';
 
 // Components
@@ -21,6 +16,7 @@ import { ProductDetailComponent } from './pages/products/product-detail/product-
 import { CustomerListComponent } from './pages/customers/customer-list/customer-list.component';
 import { BasketComponent } from './pages/basket/basket.component';
 import { OrderListComponent } from './pages/orders/order-list/order-list.component';
+import { NavbarComponent } from './shared/navbar/navbar.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +27,7 @@ import { OrderListComponent } from './pages/orders/order-list/order-list.compone
     CustomerListComponent,
     BasketComponent,
     OrderListComponent,
+    NavbarComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,11 +36,6 @@ import { OrderListComponent } from './pages/orders/order-list/order-list.compone
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    CoreModule.forRoot({
-      environment,
-    }),
-    ThemeSharedModule.forRoot(),
-    ThemeBasicModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent],

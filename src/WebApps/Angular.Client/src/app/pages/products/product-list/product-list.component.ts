@@ -3,8 +3,8 @@ import { ProductService } from '../../../services/product.service';
 import { Product } from '../../../models/product.model';
 
 @Component({
-  selector: 'app-product-list',
-  template: `
+    selector: 'app-product-list',
+    template: `
     <div class="container">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Products</h2>
@@ -95,8 +95,8 @@ import { Product } from '../../../models/product.model';
       </div>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .card {
         transition: transform 0.3s ease;
       }
@@ -105,80 +105,80 @@ import { Product } from '../../../models/product.model';
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       }
     `,
-  ],
+    ],
 })
 export class ProductListComponent implements OnInit {
-  products: Product[] = [];
-  loading = false;
-  error: string | null = null;
-  showCreateForm = false;
-  newProduct: any = {
-    no: '',
-    name: '',
-    summary: '',
-    description: '',
-    imageFile: '',
-    price: 0,
-    category: '',
-  };
-
-  constructor(private productService: ProductService) {}
-
-  ngOnInit(): void {
-    this.loadProducts();
-  }
-
-  loadProducts(): void {
-    this.loading = true;
-    this.error = null;
-
-    this.productService.getProducts().subscribe({
-      next: (data) => {
-        this.products = data;
-        this.loading = false;
-      },
-      error: (err) => {
-        this.error = err.message;
-        this.loading = false;
-      },
-    });
-  }
-
-  createProduct(): void {
-    this.productService.createProduct(this.newProduct).subscribe({
-      next: () => {
-        this.showCreateForm = false;
-        this.resetForm();
-        this.loadProducts();
-      },
-      error: (err) => {
-        this.error = err.message;
-      },
-    });
-  }
-
-  deleteProduct(id: string): void {
-    if (confirm('Are you sure you want to delete this product?')) {
-      this.productService.deleteProduct(id).subscribe({
-        next: () => {
-          this.loadProducts();
-        },
-        error: (err) => {
-          this.error = err.message;
-        },
-      });
-    }
-  }
-
-  resetForm(): void {
-    this.newProduct = {
-      no: '',
-      name: '',
-      summary: '',
-      description: '',
-      imageFile: '',
-      price: 0,
-      category: '',
+    products: Product[] = [];
+    loading = false;
+    error: string | null = null;
+    showCreateForm = false;
+    newProduct: any = {
+        no: '',
+        name: '',
+        summary: '',
+        description: '',
+        imageFile: '',
+        price: 0,
+        category: '',
     };
-  }
+
+    constructor(private productService: ProductService) { }
+
+    ngOnInit(): void {
+        this.loadProducts();
+    }
+
+    loadProducts(): void {
+        this.loading = true;
+        this.error = null;
+
+        this.productService.getProducts().subscribe({
+            next: (data) => {
+                this.products = data;
+                this.loading = false;
+            },
+            error: (err) => {
+                this.error = err.message;
+                this.loading = false;
+            },
+        });
+    }
+
+    createProduct(): void {
+        this.productService.createProduct(this.newProduct).subscribe({
+            next: () => {
+                this.showCreateForm = false;
+                this.resetForm();
+                this.loadProducts();
+            },
+            error: (err) => {
+                this.error = err.message;
+            },
+        });
+    }
+
+    deleteProduct(id: string): void {
+        if (confirm('Are you sure you want to delete this product?')) {
+            this.productService.deleteProduct(id).subscribe({
+                next: () => {
+                    this.loadProducts();
+                },
+                error: (err) => {
+                    this.error = err.message;
+                },
+            });
+        }
+    }
+
+    resetForm(): void {
+        this.newProduct = {
+            no: '',
+            name: '',
+            summary: '',
+            description: '',
+            imageFile: '',
+            price: 0,
+            category: '',
+        };
+    }
 }

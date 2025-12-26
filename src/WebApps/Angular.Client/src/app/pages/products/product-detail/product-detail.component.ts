@@ -4,8 +4,8 @@ import { ProductService } from '../../../services/product.service';
 import { Product } from '../../../models/product.model';
 
 @Component({
-  selector: 'app-product-detail',
-  template: `
+    selector: 'app-product-detail',
+    template: `
     <div class="container">
       <button class="btn btn-secondary mb-3" (click)="goBack()">
         <i class="bi bi-arrow-left"></i> Back to Products
@@ -97,80 +97,80 @@ import { Product } from '../../../models/product.model';
       </div>
     </div>
   `,
-  styles: [],
+    styles: [],
 })
 export class ProductDetailComponent implements OnInit {
-  product: Product | null = null;
-  loading = false;
-  error: string | null = null;
-  editMode = false;
+    product: Product | null = null;
+    loading = false;
+    error: string | null = null;
+    editMode = false;
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private productService: ProductService
-  ) {}
+    constructor(
+        private route: ActivatedRoute,
+        private router: Router,
+        private productService: ProductService
+    ) { }
 
-  ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.loadProduct(id);
+    ngOnInit(): void {
+        const id = this.route.snapshot.paramMap.get('id');
+        if (id) {
+            this.loadProduct(id);
+        }
     }
-  }
 
-  loadProduct(id: string): void {
-    this.loading = true;
-    this.error = null;
+    loadProduct(id: string): void {
+        this.loading = true;
+        this.error = null;
 
-    this.productService.getProductById(id).subscribe({
-      next: (data) => {
-        this.product = data;
-        this.loading = false;
-      },
-      error: (err) => {
-        this.error = err.message;
-        this.loading = false;
-      },
-    });
-  }
-
-  updateProduct(): void {
-    if (this.product) {
-      const updateDto = {
-        name: this.product.name,
-        summary: this.product.summary,
-        description: this.product.description,
-        imageFile: this.product.imageFile,
-        price: this.product.price,
-        category: this.product.category,
-      };
-
-      this.productService.updateProduct(this.product.id, updateDto).subscribe({
-        next: () => {
-          this.editMode = false;
-          this.loadProduct(this.product!.id);
-        },
-        error: (err) => {
-          this.error = err.message;
-        },
-      });
+        this.productService.getProductById(id).subscribe({
+            next: (data) => {
+                this.product = data;
+                this.loading = false;
+            },
+            error: (err) => {
+                this.error = err.message;
+                this.loading = false;
+            },
+        });
     }
-  }
 
-  deleteProduct(): void {
-    if (this.product && confirm('Are you sure you want to delete this product?')) {
-      this.productService.deleteProduct(this.product.id).subscribe({
-        next: () => {
-          this.router.navigate(['/products']);
-        },
-        error: (err) => {
-          this.error = err.message;
-        },
-      });
+    updateProduct(): void {
+        if (this.product) {
+            const updateDto = {
+                name: this.product.name,
+                summary: this.product.summary,
+                description: this.product.description,
+                imageFile: this.product.imageFile,
+                price: this.product.price,
+                category: this.product.category,
+            };
+
+            this.productService.updateProduct(this.product.id, updateDto).subscribe({
+                next: () => {
+                    this.editMode = false;
+                    this.loadProduct(this.product!.id);
+                },
+                error: (err) => {
+                    this.error = err.message;
+                },
+            });
+        }
     }
-  }
 
-  goBack(): void {
-    this.router.navigate(['/products']);
-  }
+    deleteProduct(): void {
+        if (this.product && confirm('Are you sure you want to delete this product?')) {
+            this.productService.deleteProduct(this.product.id).subscribe({
+                next: () => {
+                    this.router.navigate(['/products']);
+                },
+                error: (err) => {
+                    this.error = err.message;
+                },
+            });
+        }
+    }
+
+    goBack(): void {
+        this.router.navigate(['/products']);
+    }
 }

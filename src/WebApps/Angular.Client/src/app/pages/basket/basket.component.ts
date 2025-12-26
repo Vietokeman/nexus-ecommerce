@@ -3,8 +3,8 @@ import { BasketService } from '../../services/basket.service';
 import { Cart, CartItem } from '../../models/basket.model';
 
 @Component({
-  selector: 'app-basket',
-  template: `
+    selector: 'app-basket',
+    template: `
     <div class="container">
       <h2 class="mb-4">Shopping Cart</h2>
 
@@ -139,117 +139,117 @@ import { Cart, CartItem } from '../../models/basket.model';
       </div>
     </div>
   `,
-  styles: [],
+    styles: [],
 })
 export class BasketComponent implements OnInit {
-  cart: Cart | null = null;
-  username = 'customer1';
-  loading = false;
-  error: string | null = null;
-  newItem: CartItem = {
-    productId: '',
-    productName: '',
-    price: 0,
-    quantity: 1,
-    color: 'Black',
-  };
-
-  constructor(private basketService: BasketService) {}
-
-  ngOnInit(): void {
-    this.loadBasket();
-  }
-
-  loadBasket(): void {
-    if (!this.username) {
-      this.error = 'Please enter a username';
-      return;
-    }
-
-    this.loading = true;
-    this.error = null;
-
-    this.basketService.getBasket(this.username).subscribe({
-      next: (data) => {
-        this.cart = data;
-        this.loading = false;
-      },
-      error: (err) => {
-        this.error = err.message;
-        this.loading = false;
-        // Initialize empty cart if not found
-        this.cart = {
-          username: this.username,
-          items: [],
-        };
-      },
-    });
-  }
-
-  addItem(): void {
-    if (!this.cart) {
-      this.cart = {
-        username: this.username,
-        items: [],
-      };
-    }
-
-    this.cart.items.push({ ...this.newItem });
-    this.updateCart();
-    this.resetNewItem();
-  }
-
-  removeItem(index: number): void {
-    if (this.cart) {
-      this.cart.items.splice(index, 1);
-      this.updateCart();
-    }
-  }
-
-  updateCart(): void {
-    if (this.cart) {
-      this.basketService.updateBasket(this.cart).subscribe({
-        next: (data) => {
-          this.cart = data;
-        },
-        error: (err) => {
-          this.error = err.message;
-        },
-      });
-    }
-  }
-
-  clearCart(): void {
-    if (this.username && confirm('Are you sure you want to clear the cart?')) {
-      this.basketService.deleteBasket(this.username).subscribe({
-        next: () => {
-          this.cart = {
-            username: this.username,
-            items: [],
-          };
-        },
-        error: (err) => {
-          this.error = err.message;
-        },
-      });
-    }
-  }
-
-  getTotalItems(): number {
-    return this.cart?.items?.reduce((sum, item) => sum + item.quantity, 0) || 0;
-  }
-
-  getTotalPrice(): number {
-    return this.cart?.items?.reduce((sum, item) => sum + item.price * item.quantity, 0) || 0;
-  }
-
-  resetNewItem(): void {
-    this.newItem = {
-      productId: '',
-      productName: '',
-      price: 0,
-      quantity: 1,
-      color: 'Black',
+    cart: Cart | null = null;
+    username = 'customer1';
+    loading = false;
+    error: string | null = null;
+    newItem: CartItem = {
+        productId: '',
+        productName: '',
+        price: 0,
+        quantity: 1,
+        color: 'Black',
     };
-  }
+
+    constructor(private basketService: BasketService) { }
+
+    ngOnInit(): void {
+        this.loadBasket();
+    }
+
+    loadBasket(): void {
+        if (!this.username) {
+            this.error = 'Please enter a username';
+            return;
+        }
+
+        this.loading = true;
+        this.error = null;
+
+        this.basketService.getBasket(this.username).subscribe({
+            next: (data) => {
+                this.cart = data;
+                this.loading = false;
+            },
+            error: (err) => {
+                this.error = err.message;
+                this.loading = false;
+                // Initialize empty cart if not found
+                this.cart = {
+                    username: this.username,
+                    items: [],
+                };
+            },
+        });
+    }
+
+    addItem(): void {
+        if (!this.cart) {
+            this.cart = {
+                username: this.username,
+                items: [],
+            };
+        }
+
+        this.cart.items.push({ ...this.newItem });
+        this.updateCart();
+        this.resetNewItem();
+    }
+
+    removeItem(index: number): void {
+        if (this.cart) {
+            this.cart.items.splice(index, 1);
+            this.updateCart();
+        }
+    }
+
+    updateCart(): void {
+        if (this.cart) {
+            this.basketService.updateBasket(this.cart).subscribe({
+                next: (data) => {
+                    this.cart = data;
+                },
+                error: (err) => {
+                    this.error = err.message;
+                },
+            });
+        }
+    }
+
+    clearCart(): void {
+        if (this.username && confirm('Are you sure you want to clear the cart?')) {
+            this.basketService.deleteBasket(this.username).subscribe({
+                next: () => {
+                    this.cart = {
+                        username: this.username,
+                        items: [],
+                    };
+                },
+                error: (err) => {
+                    this.error = err.message;
+                },
+            });
+        }
+    }
+
+    getTotalItems(): number {
+        return this.cart?.items?.reduce((sum, item) => sum + item.quantity, 0) || 0;
+    }
+
+    getTotalPrice(): number {
+        return this.cart?.items?.reduce((sum, item) => sum + item.price * item.quantity, 0) || 0;
+    }
+
+    resetNewItem(): void {
+        this.newItem = {
+            productId: '',
+            productName: '',
+            price: 0,
+            quantity: 1,
+            color: 'Black',
+        };
+    }
 }
