@@ -19,25 +19,25 @@ import { OrderListComponent } from './pages/orders/order-list/order-list.compone
 import { NavbarComponent } from './shared/navbar/navbar.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    ProductListComponent,
-    ProductDetailComponent,
-    CustomerListComponent,
-    BasketComponent,
-    OrderListComponent,
-    NavbarComponent,
-  ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
-  ],
-  providers: [],
-  bootstrap: [AppComponent],
+    declarations: [
+        AppComponent,
+        HomeComponent,
+        ProductListComponent,
+        ProductDetailComponent,
+        CustomerListComponent,
+        BasketComponent,
+        OrderListComponent,
+        NavbarComponent,
+    ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        HttpClientModule,
+        FormsModule,
+        ReactiveFormsModule,
+    ],
+    providers: [],
+    bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
