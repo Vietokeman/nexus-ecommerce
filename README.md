@@ -43,21 +43,90 @@ Each microservice is expected to run in its own containerized environment, and t
 
 ## 📦 Services Overview
 
+### Infrastructure Services
 ```yaml
 version: '3.8'
 services:
-  orderdb:     # SQL Server
-  productdb:   # MySQL
-  customerdb:  # PostgreSQL
-  basketdb:    # Redis
-  inventorydb: # MongoDB
-  rabbitmq:    # Message Broker
-  pgadmin:     # PostgreSQL UI
-  portainer:   # Docker Management UI
+  orderdb:       # SQL Server
+  productdb:     # MySQL
+  customerdb:    # PostgreSQL
+  basketdb:      # Redis
+  inventorydb:   # MongoDB
+  rabbitmq:      # Message Broker
+  pgadmin:       # PostgreSQL UI
+  portainer:     # Docker Management UI
   elasticsearch: # Logging & Search
-  kibana:      # Log Dashboard
+  kibana:        # Log Dashboard
+```
 
-  💡 How to Run
+### Microservices
+```yaml
+  product.api:   # Product Catalog Service
+  customer.api:  # Customer Management Service
+  basket.api:    # Shopping Cart Service
+  ordering.api:  # Order Processing Service
+```
+
+### API Gateway
+```yaml
+  ocelot.apigw:  # API Gateway (Port 5000)
+    - Routing & Load Balancing
+    - Rate Limiting
+    - Response Caching
+    - Circuit Breaker
+    - Request Logging
+```
+
+---
+
+## 🏗️ Architecture Diagram
+
+```
+┌─────────────────────────────────────────────┐
+│         Client Applications                  │
+│     (Web, Mobile, Desktop, etc.)            │
+└────────────────┬────────────────────────────┘
+                 │
+                 ↓
+┌────────────────────────────────────────────┐
+│      Ocelot API Gateway :5000              │
+│  • Routing & Load Balancing                 │
+│  • Rate Limiting (3-20 req/s)              │
+│  • Response Caching (15-60s TTL)           │
+│  • Circuit Breaker (QoS)                    │
+│  • Request/Response Logging                 │
+│  • CORS Support                             │
+└────┬──────────┬──────────┬─────────┬───────┘
+     │          │          │         │
+     ↓          ↓          ↓         ↓
+┌─────────┐ ┌─────────┐ ┌───────┐ ┌──────────┐
+│Product  │ │Customer │ │Basket │ │Ordering  │
+│API      │ │API      │ │API    │ │API       │
+│:6002    │ │:6003    │ │:6004  │ │:6005     │
+└────┬────┘ └────┬────┘ └───┬───┘ └────┬─────┘
+     │           │           │          │
+     ↓           ↓           ↓          ↓
+┌─────────┐ ┌─────────┐ ┌───────┐ ┌──────────┐
+│ MySQL   │ │Postgres │ │ Redis │ │SQL Server│
+│:3306    │ │:5432    │ │:6379  │ │:1432     │
+└─────────┘ └─────────┘ └───────┘ └──────────┘
+     │           │           │          │
+     └───────────┴───────────┴──────────┘
+                 │
+                 ↓
+┌────────────────────────────────────────────┐
+│         Supporting Services                 │
+│  • RabbitMQ :5672, :15672                  │
+│  • Elasticsearch :9200                      │
+│  • Kibana :5601                             │
+│  • Portainer :9000                          │
+│  • pgAdmin :5050                            │
+└────────────────────────────────────────────┘
+```
+
+---
+
+## 💡 How to Run
 # 1. Clone project từ GitHub
 git clone https://github.com/Vietokeman/distributed-ecommerce-platform.git
 cd distributed-ecommerce-platform
@@ -84,7 +153,12 @@ docker compose down -v
 docker system prune -a --volumes
 
 # 9. Truy cập các dịch vụ qua trình duyệt:
-# SQL Server:        localhost:1433 (qua SSMS hoặc Azure Data Studio)
+# API Gateway:       http://localhost:5000 ⭐
+# Product API:       http://localhost:6002
+# Customer API:      http://localhost:6003
+# Basket API:        http://localhost:6004
+# Ordering API:      http://localhost:6005
+# SQL Server:        localhost:1432 (qua SSMS hoặc Azure Data Studio)
 # MySQL:             localhost:3306
 # PostgreSQL:        localhost:5432
 # Redis:             localhost:6379
@@ -94,3 +168,32 @@ docker system prune -a --volumes
 # Portainer:         http://localhost:9000
 # Elasticsearch:     http://localhost:9200
 # Kibana:            http://localhost:5601
+
+---
+
+## 🌐 API Gateway Usage
+
+### Quick Test via Gateway
+```bash
+# Get all products through gateway
+curl http://localhost:5000/api/products
+
+# Get all customers
+curl http://localhost:5000/api/customers
+
+# Get user's basket
+curl http://localhost:5000/api/baskets/john.doe
+
+# Get all orders
+curl http://localhost:5000/api/v1/orders
+```
+
+### Gateway Features
+- **Routing**: Single entry point for all microservices
+- **Rate Limiting**: 3-20 requests/second (varies by endpoint)
+- **Caching**: 15-60 seconds TTL (reduces database load)
+- **Circuit Breaker**: Prevents cascading failures
+- **Load Balancing**: Round-robin across instances
+- **Logging**: Centralized logs in Elasticsearch
+
+📚 **Full Gateway Documentation**: [src/APIGateWays/OcelotApiGw/README.md](src/APIGateWays/OcelotApiGw/README.md)

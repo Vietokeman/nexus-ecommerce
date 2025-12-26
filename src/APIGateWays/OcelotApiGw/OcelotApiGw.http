@@ -1,6 +1,163 @@
-@OcelotApiGw_HostAddress = http://localhost:5083
+@OcelotApiGw_HostAddress = http://localhost:5000
 
-GET {{OcelotApiGw_HostAddress}}/weatherforecast/
-Accept: application/json
+### Health Check
+GET {{OcelotApiGw_HostAddress}}/
 
-###
+###############################################
+### PRODUCT API ROUTES
+###############################################
+
+### Get All Products
+GET {{OcelotApiGw_HostAddress}}/api/products
+
+### Get Product by ID
+GET {{OcelotApiGw_HostAddress}}/api/products/1
+
+### Get Product by Product Number
+GET {{OcelotApiGw_HostAddress}}/api/products/get-product-by-no/PROD001
+
+### Create Product
+POST {{OcelotApiGw_HostAddress}}/api/products
+Content-Type: application/json
+
+{
+  "name": "Sample Product",
+  "summary": "This is a sample product",
+  "description": "Detailed description of the sample product",
+  "imageFile": "product.jpg",
+  "price": 99.99,
+  "categoryId": 1
+}
+
+### Update Product
+PUT {{OcelotApiGw_HostAddress}}/api/products/1
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "Updated Product",
+  "summary": "Updated summary",
+  "description": "Updated description",
+  "imageFile": "product-updated.jpg",
+  "price": 109.99,
+  "categoryId": 1
+}
+
+### Delete Product
+DELETE {{OcelotApiGw_HostAddress}}/api/products/1
+
+###############################################
+### CUSTOMER API ROUTES
+###############################################
+
+### Get All Customers
+GET {{OcelotApiGw_HostAddress}}/api/customers
+
+### Get Customer by Username
+GET {{OcelotApiGw_HostAddress}}/api/customer/john.doe
+
+### Create Customer
+POST {{OcelotApiGw_HostAddress}}/api/customer
+Content-Type: application/json
+
+{
+  "username": "john.doe",
+  "firstName": "John",
+  "lastName": "Doe",
+  "emailAddress": "john.doe@example.com"
+}
+
+### Delete Customer
+DELETE {{OcelotApiGw_HostAddress}}/api/customer?id=1
+
+###############################################
+### BASKET API ROUTES
+###############################################
+
+### Get Basket by Username
+GET {{OcelotApiGw_HostAddress}}/api/baskets/john.doe
+
+### Update Basket
+POST {{OcelotApiGw_HostAddress}}/api/baskets
+Content-Type: application/json
+
+{
+  "username": "john.doe",
+  "items": [
+    {
+      "quantity": 2,
+      "itemPrice": 99.99,
+      "itemNo": "PROD001",
+      "itemName": "Sample Product"
+    }
+  ]
+}
+
+### Delete Basket
+DELETE {{OcelotApiGw_HostAddress}}/api/baskets/john.doe
+
+###############################################
+### ORDERING API ROUTES
+###############################################
+
+### Get Orders with Pagination
+GET {{OcelotApiGw_HostAddress}}/api/v1/orders?pageIndex=1&pageSize=10
+
+### Get Order by ID
+GET {{OcelotApiGw_HostAddress}}/api/v1/orders/1
+
+### Get Orders by Username
+GET {{OcelotApiGw_HostAddress}}/api/v1/orders/john.doe
+
+### Create Order
+POST {{OcelotApiGw_HostAddress}}/api/v1/orders
+Content-Type: application/json
+
+{
+  "username": "john.doe",
+  "totalPrice": 199.98,
+  "firstName": "John",
+  "lastName": "Doe",
+  "emailAddress": "john.doe@example.com",
+  "shippingAddress": "123 Main St",
+  "invoiceAddress": "123 Main St"
+}
+
+### Update Order
+PUT {{OcelotApiGw_HostAddress}}/api/v1/orders/1
+Content-Type: application/json
+
+{
+  "id": 1,
+  "username": "john.doe",
+  "totalPrice": 249.98,
+  "firstName": "John",
+  "lastName": "Doe",
+  "emailAddress": "john.doe@example.com",
+  "shippingAddress": "456 Oak Ave",
+  "invoiceAddress": "456 Oak Ave"
+}
+
+### Delete Order
+DELETE {{OcelotApiGw_HostAddress}}/api/v1/orders/1
+
+###############################################
+### RATE LIMITING TEST
+###############################################
+
+### Test Rate Limiting - Send multiple requests quickly
+# @name rateLimitTest
+GET {{OcelotApiGw_HostAddress}}/api/products
+
+### Check Rate Limit Headers
+# Look for X-Rate-Limit-Limit, X-Rate-Limit-Remaining headers
+
+###############################################
+### CACHING TEST
+###############################################
+
+### First Request (Cache Miss)
+GET {{OcelotApiGw_HostAddress}}/api/products/1
+
+### Second Request (Cache Hit - should be faster)
+GET {{OcelotApiGw_HostAddress}}/api/products/1
