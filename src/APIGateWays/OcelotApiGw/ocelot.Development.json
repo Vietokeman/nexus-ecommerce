@@ -1,6 +1,5 @@
 {
   "Routes": [
-    // Product API Routes - Development
     {
       "DownstreamPathTemplate": "/api/products",
       "DownstreamScheme": "http",
@@ -11,7 +10,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/products",
-      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "UpstreamHttpMethod": ["GET", "POST"],
       "Key": "products",
       "RateLimitOptions": {
         "ClientWhitelist": [],
@@ -40,7 +39,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/products/{id}",
-      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ],
+      "UpstreamHttpMethod": ["GET", "PUT", "DELETE"],
       "RateLimitOptions": {
         "ClientWhitelist": [],
         "EnableRateLimiting": true,
@@ -63,14 +62,12 @@
         }
       ],
       "UpstreamPathTemplate": "/api/products/get-product-by-no/{productNo}",
-      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamHttpMethod": ["GET"],
       "FileCacheOptions": {
         "TtlSeconds": 60,
         "Region": "product-by-no"
       }
     },
-
-    // Customer API Routes - Development
     {
       "DownstreamPathTemplate": "/api/customers",
       "DownstreamScheme": "http",
@@ -81,7 +78,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/customers",
-      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "UpstreamHttpMethod": ["GET", "POST"],
       "RateLimitOptions": {
         "ClientWhitelist": [],
         "EnableRateLimiting": true,
@@ -104,7 +101,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/customer/{username}",
-      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamHttpMethod": ["GET"],
       "FileCacheOptions": {
         "TtlSeconds": 30,
         "Region": "customer-detail"
@@ -120,7 +117,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/customer",
-      "UpstreamHttpMethod": [ "POST", "DELETE" ],
+      "UpstreamHttpMethod": ["POST", "DELETE"],
       "RateLimitOptions": {
         "ClientWhitelist": [],
         "EnableRateLimiting": true,
@@ -129,8 +126,6 @@
         "Limit": 5
       }
     },
-
-    // Basket API Routes - Development
     {
       "DownstreamPathTemplate": "/api/baskets/{username}",
       "DownstreamScheme": "http",
@@ -141,7 +136,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/baskets/{username}",
-      "UpstreamHttpMethod": [ "GET", "DELETE" ],
+      "UpstreamHttpMethod": ["GET", "DELETE"],
       "RateLimitOptions": {
         "ClientWhitelist": [],
         "EnableRateLimiting": true,
@@ -160,7 +155,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/baskets",
-      "UpstreamHttpMethod": [ "POST" ],
+      "UpstreamHttpMethod": ["POST"],
       "RateLimitOptions": {
         "ClientWhitelist": [],
         "EnableRateLimiting": true,
@@ -169,8 +164,6 @@
         "Limit": 10
       }
     },
-
-    // Ordering API Routes - Development
     {
       "DownstreamPathTemplate": "/api/v1/orders",
       "DownstreamScheme": "http",
@@ -181,7 +174,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/v1/orders",
-      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "UpstreamHttpMethod": ["GET", "POST"],
       "RateLimitOptions": {
         "ClientWhitelist": [],
         "EnableRateLimiting": true,
@@ -204,7 +197,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/v1/orders/{id}",
-      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ],
+      "UpstreamHttpMethod": ["GET", "PUT", "DELETE"],
       "RateLimitOptions": {
         "ClientWhitelist": [],
         "EnableRateLimiting": true,
@@ -223,7 +216,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/v1/orders/{username}",
-      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamHttpMethod": ["GET"],
       "FileCacheOptions": {
         "TtlSeconds": 30,
         "Region": "orders-by-user"

@@ -1,0 +1,51 @@
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+
+// ABP Imports
+import { CoreModule } from '@abp/ng.core';
+import { ThemeSharedModule } from '@abp/ng.theme.shared';
+import { ThemeBasicModule } from '@abp/ng.theme.basic';
+
+import { environment } from '../environments/environment';
+
+// Components
+import { HomeComponent } from './pages/home/home.component';
+import { ProductListComponent } from './pages/products/product-list/product-list.component';
+import { ProductDetailComponent } from './pages/products/product-detail/product-detail.component';
+import { CustomerListComponent } from './pages/customers/customer-list/customer-list.component';
+import { BasketComponent } from './pages/basket/basket.component';
+import { OrderListComponent } from './pages/orders/order-list/order-list.component';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    ProductListComponent,
+    ProductDetailComponent,
+    CustomerListComponent,
+    BasketComponent,
+    OrderListComponent,
+  ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
+    CoreModule.forRoot({
+      environment,
+    }),
+    ThemeSharedModule.forRoot(),
+    ThemeBasicModule.forRoot(),
+  ],
+  providers: [],
+  bootstrap: [AppComponent],
+})
+export class AppModule {}
