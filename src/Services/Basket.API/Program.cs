@@ -27,6 +27,8 @@ try
 
     builder.Services.ConfigureServices();
     builder.Services.ConfigureRedis(builder.Configuration);
+    builder.Services.ConfigureMassTransit(builder.Configuration); // Add MassTransit with RabbitMQ
+    
     // Add services
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();

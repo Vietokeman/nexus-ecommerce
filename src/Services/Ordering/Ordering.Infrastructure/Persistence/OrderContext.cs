@@ -1,13 +1,18 @@
 using Contracts.Domains.Interfaces;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Ordering.Domain.Entities;
+using Ordering.Infrastructure.Extensions;
 
 namespace Ordering.Infrastructure.Persistence
 {
     public class OrderContext : DbContext
     {
-        public OrderContext(DbContextOptions<OrderContext> options) : base(options)
+        private readonly IMediator _mediator;
+        
+        public OrderContext(DbContextOptions<OrderContext> options, IMediator mediator) : base(options)
         {
+            _mediator = mediator;
         }
 
         public DbSet<Order> Orders { get; set; }
@@ -22,9 +27,12 @@ namespace Ordering.Infrastructure.Persistence
             modelBuilder.Entity<Order>().Property(o => o.LastName).IsRequired().HasMaxLength(250);
             modelBuilder.Entity<Order>().Property(o => o.EmailAdress).IsRequired();
             modelBuilder.Entity<Order>().Property(o => o.TotalPrice).HasColumnType("decimal(10,2)");
+            
+            // Ignore DomainEvents navigation property
+            modelBuilder.Entity<Order>().Ignore(e => e.DomainEvents);
         }
 
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             var modified = ChangeTracker.Entries()
                 .Where(e => e.State == EntityState.Modified ||
@@ -54,7 +62,13 @@ namespace Ordering.Infrastructure.Persistence
                 }
             }
 
-            return base.SaveChangesAsync(cancellationToken);
+            // Save changes first
+            var result = await base.SaveChangesAsync(cancellationToken);
+            
+            // Then dispatch domain events after successful save
+            await _mediator.DispatchDomainEventsAsync(this);
+            
+            return result;
         }
     }
 }

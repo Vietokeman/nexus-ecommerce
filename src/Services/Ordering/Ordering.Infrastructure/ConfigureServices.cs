@@ -4,8 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ordering.Application.Common.Interfaces;
+using Ordering.Infrastructure.Configurations;
 using Ordering.Infrastructure.Persistence;
 using Ordering.Infrastructure.Repositories;
+using Ordering.Infrastructure.Services;
 
 namespace Ordering.Infrastructure;
 
@@ -22,6 +24,11 @@ public static class ConfigureServices
         services.AddScoped<OrderContextSeed>();
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped(typeof(IUnitOfWork<>), typeof(UnitOfWork<>));
+        
+        // Configure Email Service with Google SMTP
+        services.Configure<EmailSettings>(configuration.GetSection(EmailSettings.SectionName));
+        services.AddScoped<IEmailService, EmailService>();
+        
         return services;
     }
 }

@@ -1,31 +1,28 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System;
 
-namespace Basket.API.Entities
+namespace EventBus.Messages.Events
 {
     /// <summary>
-    /// DTO for basket checkout request from client
+    /// Integration event that is published when a customer checks out their basket.
+    /// This event is consumed by the Ordering service to create an order.
     /// </summary>
-    public class BasketCheckout
+    public class BasketCheckoutEvent : IntegrationBaseEvent
     {
-        [Required]
+        // User information
         public string UserName { get; set; } = string.Empty;
         
+        // Total price of the basket
         public decimal TotalPrice { get; set; }
         
-        [Required]
+        // Billing address
         public string FirstName { get; set; } = string.Empty;
-        
-        [Required]
         public string LastName { get; set; } = string.Empty;
-        
-        [Required]
-        [EmailAddress]
         public string EmailAddress { get; set; } = string.Empty;
         
         // Shipping address
         public string ShippingAddress { get; set; } = string.Empty;
         
-        // Invoice address  
+        // Invoice address
         public string InvoiceAddress { get; set; } = string.Empty;
     }
 }

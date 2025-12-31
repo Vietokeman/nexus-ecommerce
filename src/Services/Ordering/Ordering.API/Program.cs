@@ -3,6 +3,7 @@ using Contracts.Common.Interfaces;
 using Contracts.Messages;
 using Infrastructure.Common;
 using Infrastructure.Messages;
+using Ordering.API.Extensions;
 using Ordering.Application;
 using Ordering.Infrastructure;
 using Ordering.Infrastructure.Persistence;
@@ -31,7 +32,13 @@ try
     builder.Services.AddInfastructureServices(builder.Configuration);
     builder.Services.AddApplicationServices();
 
-    // test transmit message
+    // Configure MassTransit with RabbitMQ for consuming events
+    builder.Services.ConfigureMassTransit(builder.Configuration);
+    
+    // Register AutoMapper for EventBus mapping
+    builder.Services.AddAutoMapper(typeof(Program).Assembly);
+    
+    // test transmit message (legacy - can be removed later)
     builder.Services.AddScoped<IMessageProducer, RabbitMQProducer>();// dang ki dich vu message producer
     builder.Services.AddScoped<ISerializeService, SeriallizeService>();// dang ki dich vu serialize
 

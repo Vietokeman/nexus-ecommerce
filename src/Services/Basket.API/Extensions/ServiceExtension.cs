@@ -2,6 +2,7 @@
 using Basket.API.Repositories.Interfaces;
 using Contracts.Common.Interfaces;
 using Infrastructure.Common;
+using MassTransit;
 
 namespace Basket.API.Extensions
 {
@@ -9,6 +10,7 @@ namespace Basket.API.Extensions
     {
         public static IServiceCollection ConfigureServices(this IServiceCollection services) => services.AddScoped<IBasketRepository, BasketRepository>()
             .AddTransient<ISerializeService, SeriallizeService>();
+        
         public static void ConfigureRedis(this IServiceCollection services, IConfiguration configuration)
         {
             var redisConnectionString = configuration.GetSection("CacheSettings:ConnectionString").Value;
@@ -21,7 +23,28 @@ namespace Basket.API.Extensions
                 options.ConfigurationOptions = StackExchange.Redis.ConfigurationOptions.Parse(redisConnectionString);
             });
         }
+        
+        /// <summary>
+        /// Configure MassTransit with RabbitMQ for publishing events
+        /// </summary>
+        public static void ConfigureMassTransit(this IServiceCollection services, IConfiguration configuration)
+        {
+            var settings = configuration.GetSection("EventBusSettings");
+            var hostAddress = settings.GetValue<string>("HostAddress") ?? "amqp://guest:guest@localhost:5672";
+
+            services.AddMassTransit(config =>
+            {
+                config.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host(new Uri(hostAddress));
+                    
+                    // Configure endpoints automatically
+                    cfg.ConfigureEndpoints(context);
+                });
+            });
+        }
     };
 
     
 }
+
