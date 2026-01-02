@@ -1,4 +1,10 @@
 using Common.Logging;
+using Inventory.API.Configurations;
+using Inventory.API.GrpcServices;
+using Inventory.API.Repositories;
+using Inventory.API.Repositories.Interfaces;
+using Inventory.API.Services;
+using Inventory.API.Services.Interfaces;
 using Serilog;
 
 
@@ -11,20 +17,24 @@ Log.Information("Starting Inventory API up");
 
 try
 {
+    // Configure MongoDB
+    builder.Services.Configure<MongoDbSettings>(
+        builder.Configuration.GetSection(MongoDbSettings.SectionName));
+    
+    // Register repositories and services
+    builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
+    builder.Services.AddScoped<IInventoryService, InventoryService>();
+    
+    // Add gRPC services
+    builder.Services.AddGrpc();
 
-    // Use serilog cho full project
-    //ctx host builder context
-    //lc: logger configuration
-    //builder.Host.UseSerilog((ctx, lc) => lc
-    //    .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
-    //    .Enrich.FromLogContext()
-    //    .ReadFrom.Configuration(ctx.Configuration)
-    //);
-
-    // Add services
+    // Add API services
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
+    builder.Services.AddSwaggerGen(c =>
+    {
+        c.SwaggerDoc("v1", new() { Title = "Inventory.API", Version = "v1" });
+    });
 
     var app = builder.Build();
 
@@ -34,9 +44,17 @@ try
         app.UseSwaggerUI();
     }
 
+    // Map gRPC service endpoint
+    app.MapGrpcService<StockGrpcService>();
+    
+    // Enable gRPC-Web (optional, for browser clients)
+    app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
+
     app.UseHttpsRedirection();
     app.UseAuthorization();
     app.MapControllers();
+    
+    Log.Information("Inventory API started successfully");
     app.Run();
 }
 catch (Exception ex)
