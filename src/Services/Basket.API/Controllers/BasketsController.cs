@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Basket.API.Entities;
+using Basket.API.GrpcServices;
 using Basket.API.Repositories.Interfaces;
 using EventBus.Messages.Events;
 using MassTransit;
@@ -17,15 +18,18 @@ namespace Basket.API.Controllers
     {
         private readonly IBasketRepository _basketRepository;
         private readonly IPublishEndpoint _publishEndpoint;
+        private readonly StockGrpcClient _stockGrpcClient;
         private readonly ILogger<BasketsController> _logger;
 
         public BasketsController(
             IBasketRepository basketRepository,
             IPublishEndpoint publishEndpoint,
+            StockGrpcClient stockGrpcClient,
             ILogger<BasketsController> logger)
         {
             _basketRepository = basketRepository;
             _publishEndpoint = publishEndpoint;
+            _stockGrpcClient = stockGrpcClient;
             _logger = logger;
         }
 
@@ -59,6 +63,7 @@ namespace Basket.API.Controllers
         /// <summary>
         /// Checkout basket and publish BasketCheckoutEvent to RabbitMQ
         /// The Ordering service will consume this event to create an order
+        /// Validates stock availability via gRPC call to Inventory service
         /// </summary>
         [HttpPost("checkout", Name = "CheckoutBasket")]
         [ProducesResponseType((int)HttpStatusCode.Accepted)]
@@ -71,6 +76,31 @@ namespace Basket.API.Controllers
             {
                 _logger.LogWarning("Basket not found for user: {UserName}", basketCheckout.UserName);
                 return BadRequest($"Basket not found for user: {basketCheckout.UserName}");
+            }
+
+            // ⭐ VALIDATE STOCK VIA gRPC CALL TO INVENTORY SERVICE ⭐
+            try
+            {
+                var itemQuantities = basket.Items.ToDictionary(x => x.ProductId, x => x.Quantity);
+                var stockValidation = await _stockGrpcClient.ValidateCartStockAsync(itemQuantities);
+                
+                var outOfStockItems = stockValidation.Where(x => !x.Value).Select(x => x.Key).ToList();
+                if (outOfStockItems.Any())
+                {
+                    _logger.LogWarning("Items out of stock: {Items}", string.Join(", ", outOfStockItems));
+                    return BadRequest(new
+                    {
+                        error = "Some items are out of stock",
+                        outOfStockItems = outOfStockItems
+                    });
+                }
+                
+                _logger.LogInformation("Stock validation passed for all items in basket");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error validating stock via gRPC");
+                return BadRequest("Unable to validate stock availability. Please try again later.");
             }
 
             // Create integration event to be published through the event bus
@@ -94,6 +124,32 @@ namespace Basket.API.Controllers
             _logger.LogInformation("Basket removed after checkout for user: {UserName}", basketCheckout.UserName);
 
             return Accepted();
+        }
+        
+        /// <summary>
+        /// Check stock availability for an item via gRPC
+        /// Demonstrates gRPC communication between microservices
+        /// </summary>
+        [HttpGet("stock/{itemNo}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<ActionResult> CheckStock(string itemNo)
+        {
+            try
+            {
+                var stock = await _stockGrpcClient.GetStockAsync(itemNo);
+                return Ok(new
+                {
+                    itemNo = stock.ItemNo,
+                    quantity = stock.Quantity,
+                    isAvailable = stock.IsAvailable
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error checking stock for item: {ItemNo}", itemNo);
+                return BadRequest("Unable to check stock");
+            }
+        }
         }
     }
 }

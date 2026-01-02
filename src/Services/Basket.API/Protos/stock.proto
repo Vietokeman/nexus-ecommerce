@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+option csharp_namespace = "Inventory.Grpc";
+
+package stock;
+
+// Stock gRPC Service for inter-service communication
+// Used by other microservices to check inventory availability
+service StockProtoService {
+  // Get stock for a single item
+  rpc GetStock (StockRequest) returns (StockResponse);
+  
+  // Get stock for multiple items (batch operation)
+  rpc GetStocks (StocksRequest) returns (StocksResponse);
+}
+
+// Request for single item stock
+message StockRequest {
+  string itemNo = 1;
+}
+
+// Response for single item stock
+message StockResponse {
+  string itemNo = 1;
+  int32 quantity = 2;
+  bool isAvailable = 3;
+}
+
+// Request for multiple items stock
+message StocksRequest {
+  repeated string itemNos = 1;
+}
+
+// Response for multiple items stock
+message StocksResponse {
+  repeated StockModel stocks = 1;
+}
+
+// Stock model for batch response
+message StockModel {
+  string itemNo = 1;
+  int32 quantity = 2;
+  bool isAvailable = 3;
+}
