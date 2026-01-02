@@ -160,6 +160,23 @@ services:
         restart: 
             always
 
+  inventory.api:
+        container_name: inventory.api
+        environment:
+          - ASPNETCORE_ENVIRONMENT=Development
+          - ASPNETCORE_HTTP_PORTS=80
+          - ASPNETCORE_HTTPS_PORTS=443
+          - "MongoDbSettings:ConnectionString=mongodb://inventorydb:27017"
+          - "MongoDbSettings:DatabaseName=InventoryDb"
+          - "MongoDbSettings:CollectionName=InventoryEntries"
+        depends_on:
+          - inventorydb
+        ports:
+            - "6006:80"
+            - "5005:5005"
+        restart: 
+            always
+
   # API Gateway sections
   ocelot.apigw:
         container_name: ocelot.apigw
@@ -172,6 +189,7 @@ services:
           - customer.api
           - basket.api
           - ordering.api
+          - inventory.api
           - elasticsearch
         ports:
             - "5000:80"

@@ -50,6 +50,12 @@ services:
        context: .
        dockerfile: Services/Ordering/Ordering.API/Dockerfile
 
+  inventory.api:
+     image: ${DOCKER_REGISTRY-}inventory-api:${PLATFORM:-linux}-${TAG:-latest}
+     build:
+       context: .
+       dockerfile: Services/Inventory.Product.API/Dockerfile
+
   # API Gateway section
   ocelot.apigw:
      image: ${DOCKER_REGISTRY-}ocelot-apigw:${PLATFORM:-linux}-${TAG:-latest}
