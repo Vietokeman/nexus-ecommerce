@@ -1,0 +1,50 @@
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL || '',
+  timeout: 30000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+// Request interceptor
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    // Add user id header for payment API
+    const user = localStorage.getItem('auth-storage');
+    if (user) {
+      try {
+        const parsed = JSON.parse(user);
+        if (parsed?.state?.user?.id) {
+          config.headers['X-User-Id'] = parsed.state.user.id;
+        }
+      } catch {
+        // ignore parse errors
+      }
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error),
+);
+
+// Response interceptor
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('auth-storage');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  },
+);
+
+export { api };

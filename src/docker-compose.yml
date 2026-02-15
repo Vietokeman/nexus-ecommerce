@@ -56,12 +56,25 @@ services:
        context: .
        dockerfile: Services/Inventory.Product.API/Dockerfile
 
+  payment.api:
+     image: ${DOCKER_REGISTRY-}payment-api:${PLATFORM:-linux}-${TAG:-latest}
+     build:
+       context: .
+       dockerfile: Services/Payment.API/Dockerfile
+
   # API Gateway section
   ocelot.apigw:
      image: ${DOCKER_REGISTRY-}ocelot-apigw:${PLATFORM:-linux}-${TAG:-latest}
      build:
        context: .
        dockerfile: APIGateWays/OcelotApiGw/Dockerfile
+
+  # WebApps section
+  react.client:
+     image: ${DOCKER_REGISTRY-}react-client:${PLATFORM:-linux}-${TAG:-latest}
+     build:
+       context: ./WebApps/React.Client
+       dockerfile: Dockerfile
        
  #network section
 networks:
