@@ -43,7 +43,7 @@ export default function HomePage() {
     const fetchProducts = async () => {
       try {
         const { data } = await api.get(API_ENDPOINTS.PRODUCTS.LIST);
-        setProducts(Array.isArray(data) ? data : data.result ?? []);
+        setProducts(Array.isArray(data) ? data : (data.result ?? []));
       } catch (err) {
         console.error('Failed to fetch products', err);
       } finally {
@@ -107,7 +107,7 @@ export default function HomePage() {
       {loading ? (
         <Grid container spacing={3}>
           {Array.from({ length: 8 }).map((_, i) => (
-            <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={i}>
+            <Grid item xs={12} sm={6} md={4} lg={3} key={i}>
               <Skeleton variant="rectangular" height={200} sx={{ borderRadius: 2 }} />
               <Skeleton width="60%" sx={{ mt: 1 }} />
               <Skeleton width="40%" />
@@ -118,7 +118,7 @@ export default function HomePage() {
         <motion.div variants={container} initial="hidden" animate="show">
           <Grid container spacing={3}>
             {filtered.map((product) => (
-              <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={product.id}>
+              <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
                 <motion.div variants={item}>
                   <Card
                     sx={{

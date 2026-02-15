@@ -1,15 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import {
-  Box,
-  Typography,
-  Paper,
-  Avatar,
-  Divider,
-  Grid,
-  TextField,
-  Button,
-} from '@mui/material';
-import { Person, Email, Phone, Home } from '@mui/icons-material';
+import { Box, Typography, Paper, Avatar, Divider, Grid, TextField, Button } from '@mui/material';
+import { Email, Phone, Home } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 
 export default function UserProfilePage() {
@@ -29,7 +20,7 @@ export default function UserProfilePage() {
       </Typography>
 
       <Grid container spacing={4}>
-        <Grid size={{ xs: 12, md: 4 }}>
+        <Grid item xs={12} md={4}>
           <Paper sx={{ p: 4, textAlign: 'center', borderRadius: 2 }} elevation={2}>
             <Avatar
               sx={{
@@ -67,35 +58,30 @@ export default function UserProfilePage() {
             </Box>
           </Paper>
 
-          <Button
-            variant="outlined"
-            fullWidth
-            sx={{ mt: 2 }}
-            onClick={() => navigate('/orders')}
-          >
+          <Button variant="outlined" fullWidth sx={{ mt: 2 }} onClick={() => navigate('/orders')}>
             View Orders
           </Button>
         </Grid>
 
-        <Grid size={{ xs: 12, md: 8 }}>
+        <Grid item xs={12} md={8}>
           <Paper sx={{ p: 4, borderRadius: 2 }} elevation={2}>
             <Typography variant="h6" fontWeight={600} gutterBottom>
               Edit Profile
             </Typography>
             <Grid container spacing={2}>
-              <Grid size={{ xs: 12, sm: 6 }}>
+              <Grid item xs={12} sm={6}>
                 <TextField label="First Name" fullWidth defaultValue={user.firstName} />
               </Grid>
-              <Grid size={{ xs: 12, sm: 6 }}>
+              <Grid item xs={12} sm={6}>
                 <TextField label="Last Name" fullWidth defaultValue={user.lastName} />
               </Grid>
-              <Grid size={{ xs: 12 }}>
+              <Grid item xs={12}>
                 <TextField label="Email" fullWidth defaultValue={user.email} disabled />
               </Grid>
-              <Grid size={{ xs: 12 }}>
+              <Grid item xs={12}>
                 <TextField label="Phone" fullWidth defaultValue={user.phone} />
               </Grid>
-              <Grid size={{ xs: 12 }}>
+              <Grid item xs={12}>
                 <TextField
                   label="Address"
                   fullWidth
@@ -104,7 +90,7 @@ export default function UserProfilePage() {
                   defaultValue={user.address}
                 />
               </Grid>
-              <Grid size={{ xs: 12 }}>
+              <Grid item xs={12}>
                 <Button variant="contained" size="large">
                   Save Changes
                 </Button>

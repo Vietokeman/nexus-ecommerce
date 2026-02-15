@@ -1,13 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  Typography,
-  Paper,
-  TextField,
-  Grid,
-  Button,
-  CircularProgress,
-} from '@mui/material';
+import { Typography, Paper, TextField, Grid, Button, CircularProgress } from '@mui/material';
 import { motion } from 'framer-motion';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
@@ -38,7 +31,7 @@ export default function AddProductPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
       toast.success('Product created successfully!');
-      navigate('/admin');
+      navigate('/admin/dashboard');
     },
     onError: () => {
       toast.error('Failed to create product');
@@ -58,7 +51,7 @@ export default function AddProductPage() {
 
       <Paper sx={{ p: 4, borderRadius: 2, maxWidth: 800, mx: 'auto' }} elevation={2}>
         <Grid container spacing={3}>
-          <Grid size={{ xs: 12, sm: 6 }}>
+          <Grid item xs={12} sm={6}>
             <TextField
               label="Product No"
               name="no"
@@ -68,7 +61,7 @@ export default function AddProductPage() {
               required
             />
           </Grid>
-          <Grid size={{ xs: 12, sm: 6 }}>
+          <Grid item xs={12} sm={6}>
             <TextField
               label="Product Name"
               name="name"
@@ -78,7 +71,7 @@ export default function AddProductPage() {
               required
             />
           </Grid>
-          <Grid size={{ xs: 12 }}>
+          <Grid item xs={12}>
             <TextField
               label="Summary"
               name="summary"
@@ -87,7 +80,7 @@ export default function AddProductPage() {
               onChange={handleChange}
             />
           </Grid>
-          <Grid size={{ xs: 12 }}>
+          <Grid item xs={12}>
             <TextField
               label="Description"
               name="description"
@@ -98,7 +91,7 @@ export default function AddProductPage() {
               onChange={handleChange}
             />
           </Grid>
-          <Grid size={{ xs: 12, sm: 6 }}>
+          <Grid item xs={12} sm={6}>
             <TextField
               label="Price"
               name="price"
@@ -107,10 +100,10 @@ export default function AddProductPage() {
               value={form.price}
               onChange={handleChange}
               required
-              slotProps={{ htmlInput: { min: 0, step: 0.01 } }}
+              inputProps={{ min: 0, step: 0.01 }}
             />
           </Grid>
-          <Grid size={{ xs: 12 }}>
+          <Grid item xs={12}>
             <Button
               variant="contained"
               size="large"
@@ -120,7 +113,7 @@ export default function AddProductPage() {
             >
               {mutation.isPending ? 'Creating...' : 'Create Product'}
             </Button>
-            <Button variant="outlined" sx={{ ml: 2 }} onClick={() => navigate('/admin')}>
+            <Button variant="outlined" sx={{ ml: 2 }} onClick={() => navigate('/admin/dashboard')}>
               Cancel
             </Button>
           </Grid>

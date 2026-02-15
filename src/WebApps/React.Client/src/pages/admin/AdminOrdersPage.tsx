@@ -19,6 +19,7 @@ import { motion } from 'framer-motion';
 import { api } from '@/lib/api';
 import { API_ENDPOINTS } from '@/lib/endpoints';
 import EmptyState from '@/components/ui/EmptyState';
+import type { Order } from '@/types/order';
 
 const statusColor: Record<string, 'default' | 'info' | 'warning' | 'success' | 'error'> = {
   Pending: 'warning',
@@ -39,7 +40,7 @@ export default function AdminOrdersPage() {
 
   const orders = Array.isArray(data) ? data : [];
   const tabs = ['All', 'Pending', 'Paid', 'Completed', 'Cancelled'];
-  const filtered = tab === 0 ? orders : orders.filter((o: any) => o.status === tabs[tab]);
+  const filtered = tab === 0 ? orders : orders.filter((o: Order) => o.status === tabs[tab]);
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
@@ -74,7 +75,7 @@ export default function AdminOrdersPage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {filtered.map((order: any) => (
+              {filtered.map((order: Order) => (
                 <TableRow key={order.id} hover>
                   <TableCell>
                     <Typography variant="body2" fontWeight={600}>
@@ -82,9 +83,7 @@ export default function AdminOrdersPage() {
                     </Typography>
                   </TableCell>
                   <TableCell>{order.userName || order.emailAddress || '—'}</TableCell>
-                  <TableCell>
-                    {new Date(order.createdDate || '').toLocaleDateString()}
-                  </TableCell>
+                  <TableCell>{new Date(order.createdDate || '').toLocaleDateString()}</TableCell>
                   <TableCell align="right" sx={{ fontWeight: 600 }}>
                     ${order.totalPrice?.toFixed(2) || '0.00'}
                   </TableCell>

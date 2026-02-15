@@ -9,15 +9,12 @@ type Logger = <
   name?: string,
 ) => StateCreator<T, Mps, Mcs>;
 
-type LoggerImpl = <T>(
-  f: StateCreator<T, [], []>,
-  name?: string,
-) => StateCreator<T, [], []>;
+type LoggerImpl = <T>(f: StateCreator<T, [], []>, name?: string) => StateCreator<T, [], []>;
 
 const loggerImpl: LoggerImpl = (f, name) => (set, get, store) => {
   const loggedSet: typeof set = (...args) => {
     const prev = get();
-    set(...args);
+    (set as (...a: unknown[]) => void)(...args);
     const next = get();
     if (import.meta.env.DEV) {
       console.groupCollapsed(`%c[${name ?? 'store'}]`, 'color: #7B68EE; font-weight: bold');

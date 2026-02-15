@@ -130,13 +130,13 @@ export default function CheckoutPage() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={4}>
           {/* Shipping Info */}
-          <Grid size={{ xs: 12, md: 7 }}>
+          <Grid item xs={12} md={7}>
             <Paper sx={{ p: 3, borderRadius: 2 }}>
               <Typography variant="h6" fontWeight={600} gutterBottom>
                 Shipping Information
               </Typography>
               <Grid container spacing={2}>
-                <Grid size={{ xs: 12, sm: 6 }}>
+                <Grid item xs={12} sm={6}>
                   <TextField
                     label="First Name"
                     fullWidth
@@ -145,7 +145,7 @@ export default function CheckoutPage() {
                     helperText={errors.firstName?.message}
                   />
                 </Grid>
-                <Grid size={{ xs: 12, sm: 6 }}>
+                <Grid item xs={12} sm={6}>
                   <TextField
                     label="Last Name"
                     fullWidth
@@ -154,7 +154,7 @@ export default function CheckoutPage() {
                     helperText={errors.lastName?.message}
                   />
                 </Grid>
-                <Grid size={{ xs: 12 }}>
+                <Grid item xs={12}>
                   <TextField
                     label="Email"
                     fullWidth
@@ -164,10 +164,10 @@ export default function CheckoutPage() {
                     helperText={errors.email?.message}
                   />
                 </Grid>
-                <Grid size={{ xs: 12 }}>
+                <Grid item xs={12}>
                   <TextField label="Phone" fullWidth {...register('phone')} />
                 </Grid>
-                <Grid size={{ xs: 12 }}>
+                <Grid item xs={12}>
                   <TextField
                     label="Shipping Address"
                     fullWidth
@@ -203,7 +203,7 @@ export default function CheckoutPage() {
           </Grid>
 
           {/* Order Summary */}
-          <Grid size={{ xs: 12, md: 5 }}>
+          <Grid item xs={12} md={5}>
             <Paper sx={{ p: 3, borderRadius: 2 }}>
               <Typography variant="h6" fontWeight={600} gutterBottom>
                 Order Summary
