@@ -12,6 +12,8 @@ namespace Ordering.Domain.Enums
         Pending = 2,
         Paid = 3,
         Shipping = 4,
-        Fullfilled = 5
+        Shipped = 5,
+        Fullfilled = 6,
+        Cancelled = 7
     }
 }

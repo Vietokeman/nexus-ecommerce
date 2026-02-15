@@ -6,7 +6,7 @@ namespace EventBus.Messages.Events
     /// Integration event that is published when a customer checks out their basket.
     /// This event is consumed by the Ordering service to create an order.
     /// </summary>
-    public class BasketCheckoutEvent : IntegrationBaseEvent
+    public record BasketCheckoutEvent : IntegrationBaseEvent
     {
         // User information
         public string UserName { get; set; } = string.Empty;
