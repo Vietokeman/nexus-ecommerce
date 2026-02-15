@@ -12,7 +12,7 @@ namespace Inventory.API.Services.Interfaces
         // Query Operations
         Task<IEnumerable<InventoryEntry>> GetAllEntriesAsync();
         Task<PagedList<InventoryEntry>> GetPagedEntriesAsync(int pageNumber, int pageSize);
-        Task<InventoryEntry?> GetEntryByIdAsync(string id);
+        Task<InventoryEntry?> GetEntryByIdAsync(long id);
         Task<IEnumerable<InventoryEntry>> GetEntriesByItemAsync(string itemNo);
         Task<IEnumerable<InventoryEntry>> GetEntriesByDocumentAsync(string documentNo);
         
@@ -21,9 +21,9 @@ namespace Inventory.API.Services.Interfaces
         Task<IEnumerable<StockDto>> GetStockByItemsAsync(IEnumerable<string> itemNos);
         
         // Transaction Operations
-        Task<string> CreatePurchaseOrderAsync(PurchaseOrderDto dto);
-        Task<string> CreateSalesOrderAsync(SalesOrderDto dto);
-        Task<string> CreateInventoryEntryAsync(InventoryEntryDto dto);
-        Task<bool> DeleteEntryAsync(string id);
+        Task<long> CreatePurchaseOrderAsync(PurchaseOrderDto dto);
+        Task<long> CreateSalesOrderAsync(SalesOrderDto dto);
+        Task<long> CreateInventoryEntryAsync(InventoryEntryDto dto);
+        Task<bool> DeleteEntryAsync(long id);
     }
 }

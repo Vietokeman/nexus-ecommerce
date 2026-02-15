@@ -40,7 +40,7 @@ namespace Inventory.API.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(Entities.InventoryEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult<Entities.InventoryEntry>> GetInventoryEntry(string id)
+        public async Task<ActionResult<Entities.InventoryEntry>> GetInventoryEntry(long id)
         {
             var entry = await _inventoryService.GetEntryByIdAsync(id);
             if (entry == null)
@@ -144,8 +144,8 @@ namespace Inventory.API.Controllers
         /// Create a custom inventory entry
         /// </summary>
         [HttpPost]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.Created)]
-        public async Task<ActionResult<string>> CreateInventoryEntry([FromBody] InventoryEntryDto dto)
+        [ProducesResponseType(typeof(long), (int)HttpStatusCode.Created)]
+        public async Task<ActionResult<long>> CreateInventoryEntry([FromBody] InventoryEntryDto dto)
         {
             var id = await _inventoryService.CreateInventoryEntryAsync(dto);
             return CreatedAtAction(nameof(GetInventoryEntry), new { id }, id);
@@ -157,7 +157,7 @@ namespace Inventory.API.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> DeleteInventoryEntry(string id)
+        public async Task<IActionResult> DeleteInventoryEntry(long id)
         {
             var result = await _inventoryService.DeleteEntryAsync(id);
             if (!result)
