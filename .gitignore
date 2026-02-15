@@ -417,3 +417,6 @@ FodyWeavers.xsd
 
 **/*.suo
 **/DocumentLayout*.json
+
+# React build output
+src/WebApps/React.Client/dist/
