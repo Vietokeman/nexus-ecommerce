@@ -56,7 +56,7 @@ export default function ProductUpdatePage() {
       queryClient.invalidateQueries({ queryKey: ['products'] });
       queryClient.invalidateQueries({ queryKey: ['product', id] });
       toast.success('Product updated successfully!');
-      navigate('/admin');
+      navigate('/admin/dashboard');
     },
     onError: () => toast.error('Failed to update product'),
   });
@@ -84,7 +84,7 @@ export default function ProductUpdatePage() {
 
       <Paper sx={{ p: 4, borderRadius: 2, maxWidth: 800, mx: 'auto' }} elevation={2}>
         <Grid container spacing={3}>
-          <Grid size={{ xs: 12 }}>
+          <Grid item xs={12}>
             <TextField
               label="Product Name"
               name="name"
@@ -94,7 +94,7 @@ export default function ProductUpdatePage() {
               required
             />
           </Grid>
-          <Grid size={{ xs: 12 }}>
+          <Grid item xs={12}>
             <TextField
               label="Summary"
               name="summary"
@@ -103,7 +103,7 @@ export default function ProductUpdatePage() {
               onChange={handleChange}
             />
           </Grid>
-          <Grid size={{ xs: 12 }}>
+          <Grid item xs={12}>
             <TextField
               label="Description"
               name="description"
@@ -114,7 +114,7 @@ export default function ProductUpdatePage() {
               onChange={handleChange}
             />
           </Grid>
-          <Grid size={{ xs: 12, sm: 6 }}>
+          <Grid item xs={12} sm={6}>
             <TextField
               label="Price"
               name="price"
@@ -123,10 +123,10 @@ export default function ProductUpdatePage() {
               value={form.price}
               onChange={handleChange}
               required
-              slotProps={{ htmlInput: { min: 0, step: 0.01 } }}
+              inputProps={{ min: 0, step: 0.01 }}
             />
           </Grid>
-          <Grid size={{ xs: 12 }}>
+          <Grid item xs={12}>
             <Button
               variant="contained"
               size="large"
@@ -136,7 +136,7 @@ export default function ProductUpdatePage() {
             >
               {mutation.isPending ? 'Updating...' : 'Update Product'}
             </Button>
-            <Button variant="outlined" sx={{ ml: 2 }} onClick={() => navigate('/admin')}>
+            <Button variant="outlined" sx={{ ml: 2 }} onClick={() => navigate('/admin/dashboard')}>
               Cancel
             </Button>
           </Grid>

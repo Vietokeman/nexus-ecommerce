@@ -11,8 +11,10 @@ import {
 } from '@mui/material';
 import { Delete, ShoppingCart } from '@mui/icons-material';
 import { motion } from 'framer-motion';
+import Lottie from 'lottie-react';
 import { useWishlistStore } from '@/store/wishlist-store';
 import { useCartStore } from '@/store/cart-store';
+import emptyWishlistAnimation from '@/assets/animations/emptyWishlist.json';
 import EmptyState from '@/components/ui/EmptyState';
 
 export default function WishlistPage() {
@@ -27,7 +29,11 @@ export default function WishlistPage() {
         description="Save items you love for later!"
         actionLabel="Browse Products"
         onAction={() => navigate('/')}
-      />
+      >
+        <Box sx={{ width: 200, height: 200, mx: 'auto' }}>
+          <Lottie animationData={emptyWishlistAnimation} />
+        </Box>
+      </EmptyState>
     );
   }
 
@@ -38,15 +44,12 @@ export default function WishlistPage() {
       </Typography>
       <Grid container spacing={3}>
         {items.map((item) => (
-          <Grid key={item.no} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+          <Grid key={item.id} item xs={12} sm={6} md={4} lg={3}>
             <motion.div whileHover={{ y: -4 }} transition={{ duration: 0.2 }}>
               <Card sx={{ borderRadius: 2, height: '100%' }} elevation={2}>
                 <CardContent>
                   <Typography variant="h6" fontWeight={600} noWrap>
                     {item.name}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                    #{item.no}
                   </Typography>
                   <Typography variant="h6" color="primary.dark" fontWeight={700}>
                     ${item.price.toFixed(2)}
@@ -59,17 +62,16 @@ export default function WishlistPage() {
                     startIcon={<ShoppingCart />}
                     onClick={() => {
                       addToCart({
-                        itemNo: item.no,
+                        itemNo: item.id,
                         productName: item.name,
                         price: item.price,
-                        quantity: 1,
                       });
-                      removeItem(item.no);
+                      removeItem(item.id);
                     }}
                   >
                     Add to Cart
                   </Button>
-                  <IconButton color="error" onClick={() => removeItem(item.no)}>
+                  <IconButton color="error" onClick={() => removeItem(item.id)}>
                     <Delete />
                   </IconButton>
                 </CardActions>

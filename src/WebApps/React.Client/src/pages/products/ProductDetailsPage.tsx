@@ -1,14 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import {
-  Box,
-  Typography,
-  Button,
-  Grid,
-  Divider,
-  Chip,
-  IconButton,
-} from '@mui/material';
+import { Box, Typography, Button, Grid, Divider, Chip, IconButton } from '@mui/material';
 import { ShoppingCart, FavoriteBorder, Favorite, ArrowBack } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { api } from '@/lib/api';
@@ -50,7 +42,7 @@ export default function ProductDetailsPage() {
         Back
       </Button>
       <Grid container spacing={4}>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid item xs={12} md={6}>
           <Box
             sx={{
               bgcolor: '#f5f5f5',
@@ -66,7 +58,7 @@ export default function ProductDetailsPage() {
             </Typography>
           </Box>
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid item xs={12} md={6}>
           <Box>
             <Chip label={product.no} size="small" sx={{ mb: 1 }} />
             <Typography variant="h4" fontWeight={700} gutterBottom>

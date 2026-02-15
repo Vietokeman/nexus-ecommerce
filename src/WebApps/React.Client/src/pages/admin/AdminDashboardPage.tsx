@@ -1,16 +1,5 @@
-import {
-  Box,
-  Typography,
-  Grid,
-  Paper,
-  Skeleton,
-} from '@mui/material';
-import {
-  ShoppingCart,
-  People,
-  Inventory,
-  AttachMoney,
-} from '@mui/icons-material';
+import { Box, Typography, Grid, Paper, Skeleton } from '@mui/material';
+import { ShoppingCart, People, Inventory, AttachMoney } from '@mui/icons-material';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { api } from '@/lib/api';
@@ -64,7 +53,7 @@ export default function AdminDashboardPage() {
 
       <Grid container spacing={3} sx={{ mb: 4 }}>
         {stats.map((stat, i) => (
-          <Grid key={i} size={{ xs: 12, sm: 6, md: 3 }}>
+          <Grid key={i} item xs={12} sm={6} md={3}>
             <motion.div
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}

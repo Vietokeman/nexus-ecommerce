@@ -1,9 +1,18 @@
 import { lazy, Suspense } from 'react';
-import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 import RootLayout from '@/components/layouts/RootLayout';
+import Protected from '@/components/auth/Protected';
+import AdminRoute from '@/components/auth/AdminRoute';
 import Spinner from '@/components/ui/Spinner';
 
-/* ─── Lazy Pages ─── */
+/* ─── Lazy Pages: Auth (Public) ─── */
+const LoginPage = lazy(() => import('@/pages/auth/LoginPage'));
+const SignupPage = lazy(() => import('@/pages/auth/SignupPage'));
+const ForgotPasswordPage = lazy(() => import('@/pages/auth/ForgotPasswordPage'));
+const ResetPasswordPage = lazy(() => import('@/pages/auth/ResetPasswordPage'));
+const OtpVerificationPage = lazy(() => import('@/pages/auth/OtpVerificationPage'));
+
+/* ─── Lazy Pages: Protected (User) ─── */
 const HomePage = lazy(() => import('@/pages/products/HomePage'));
 const ProductDetailsPage = lazy(() => import('@/pages/products/ProductDetailsPage'));
 const CartPage = lazy(() => import('@/pages/cart/CartPage'));
@@ -14,146 +23,208 @@ const OrderSuccessPage = lazy(() => import('@/pages/orders/OrderSuccessPage'));
 const UserOrdersPage = lazy(() => import('@/pages/orders/UserOrdersPage'));
 const UserProfilePage = lazy(() => import('@/pages/user/UserProfilePage'));
 const WishlistPage = lazy(() => import('@/pages/user/WishlistPage'));
+
+/* ─── Lazy Pages: Admin ─── */
 const AdminDashboardPage = lazy(() => import('@/pages/admin/AdminDashboardPage'));
 const AddProductPage = lazy(() => import('@/pages/admin/AddProductPage'));
 const ProductUpdatePage = lazy(() => import('@/pages/admin/ProductUpdatePage'));
 const AdminOrdersPage = lazy(() => import('@/pages/admin/AdminOrdersPage'));
+
+/* ─── Lazy Pages: Other ─── */
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 
-function SuspenseWrapper({ children }: { children: React.ReactNode }) {
+function S({ children }: { children: React.ReactNode }) {
   return <Suspense fallback={<Spinner />}>{children}</Suspense>;
 }
 
+function P({ children }: { children: React.ReactNode }) {
+  return (
+    <Protected>
+      <S>{children}</S>
+    </Protected>
+  );
+}
+
+function A({ children }: { children: React.ReactNode }) {
+  return (
+    <AdminRoute>
+      <S>{children}</S>
+    </AdminRoute>
+  );
+}
+
 export const router = createBrowserRouter([
+  /* ─── Public Auth Routes (no layout) ─── */
+  {
+    path: '/signup',
+    element: (
+      <S>
+        <SignupPage />
+      </S>
+    ),
+  },
+  {
+    path: '/login',
+    element: (
+      <S>
+        <LoginPage />
+      </S>
+    ),
+  },
+  {
+    path: '/verify-otp',
+    element: (
+      <S>
+        <OtpVerificationPage />
+      </S>
+    ),
+  },
+  {
+    path: '/forgot-password',
+    element: (
+      <S>
+        <ForgotPasswordPage />
+      </S>
+    ),
+  },
+  {
+    path: '/reset-password/:userId/:passwordResetToken',
+    element: (
+      <S>
+        <ResetPasswordPage />
+      </S>
+    ),
+  },
+
+  /* ─── Protected Routes (with Navbar + Footer layout) ─── */
   {
     path: '/',
     element: <RootLayout />,
     children: [
+      /* User Routes */
       {
         index: true,
         element: (
-          <SuspenseWrapper>
+          <P>
             <HomePage />
-          </SuspenseWrapper>
+          </P>
         ),
       },
       {
-        path: 'products/:id',
+        path: 'product-details/:id',
         element: (
-          <SuspenseWrapper>
+          <P>
             <ProductDetailsPage />
-          </SuspenseWrapper>
+          </P>
         ),
       },
       {
         path: 'cart',
         element: (
-          <SuspenseWrapper>
+          <P>
             <CartPage />
-          </SuspenseWrapper>
+          </P>
         ),
       },
       {
         path: 'checkout',
         element: (
-          <SuspenseWrapper>
+          <P>
             <CheckoutPage />
-          </SuspenseWrapper>
+          </P>
         ),
       },
       {
         path: 'payment/success',
         element: (
-          <SuspenseWrapper>
+          <P>
             <PaymentSuccessPage />
-          </SuspenseWrapper>
+          </P>
         ),
       },
       {
         path: 'payment/cancel',
         element: (
-          <SuspenseWrapper>
+          <P>
             <PaymentCancelPage />
-          </SuspenseWrapper>
+          </P>
         ),
       },
       {
         path: 'order-success/:orderNo',
         element: (
-          <SuspenseWrapper>
+          <P>
             <OrderSuccessPage />
-          </SuspenseWrapper>
+          </P>
         ),
       },
       {
         path: 'orders',
         element: (
-          <SuspenseWrapper>
+          <P>
             <UserOrdersPage />
-          </SuspenseWrapper>
+          </P>
         ),
       },
       {
         path: 'profile',
         element: (
-          <SuspenseWrapper>
+          <P>
             <UserProfilePage />
-          </SuspenseWrapper>
+          </P>
         ),
       },
       {
         path: 'wishlist',
         element: (
-          <SuspenseWrapper>
+          <P>
             <WishlistPage />
-          </SuspenseWrapper>
+          </P>
         ),
       },
-      /* ─── Admin ─── */
+
+      /* ─── Admin Routes ─── */
       {
-        path: 'admin',
+        path: 'admin/dashboard',
         element: (
-          <SuspenseWrapper>
+          <A>
             <AdminDashboardPage />
-          </SuspenseWrapper>
+          </A>
         ),
       },
       {
-        path: 'admin/products/add',
+        path: 'admin/add-product',
         element: (
-          <SuspenseWrapper>
+          <A>
             <AddProductPage />
-          </SuspenseWrapper>
+          </A>
         ),
       },
       {
-        path: 'admin/products/:id/edit',
+        path: 'admin/product-update/:id',
         element: (
-          <SuspenseWrapper>
+          <A>
             <ProductUpdatePage />
-          </SuspenseWrapper>
+          </A>
         ),
       },
       {
         path: 'admin/orders',
         element: (
-          <SuspenseWrapper>
+          <A>
             <AdminOrdersPage />
-          </SuspenseWrapper>
+          </A>
         ),
       },
+
       /* ─── Fallback ─── */
       {
-        path: '404',
-        element: (
-          <SuspenseWrapper>
-            <NotFoundPage />
-          </SuspenseWrapper>
-        ),
-      },
-      {
         path: '*',
-        element: <Navigate to="/404" replace />,
+        element: (
+          <S>
+            <NotFoundPage />
+          </S>
+        ),
       },
     ],
   },
