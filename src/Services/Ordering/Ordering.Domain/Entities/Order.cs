@@ -20,21 +20,21 @@ namespace Ordering.Domain.Entities
     {
         [Required]
         public string UserName { get; set; }
-        [Column(TypeName = "decimal(10,2")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal TotalPrice { get; set; }
         [Required]
-        [Column(TypeName = "nvarchar(50)")]
+        [Column(TypeName = "varchar(50)")]
         public string FirstName { get; set; }
         [Required]
-        [Column(TypeName = "nvarchar(250)")]
+        [Column(TypeName = "varchar(250)")]
         public string LastName { get; set; }
         [Required]
         [EmailAddress]
         public string EmailAdress { get; set; }
-        [Column(TypeName = "nvarchar(max)")]
+        [Column(TypeName = "text")]
 
         public string ShipppingAdress { get; set; }
-        [Column(TypeName = "nvarchar(max)")]
+        [Column(TypeName = "text")]
 
         public string InvoiceAdress { get; set; }
 

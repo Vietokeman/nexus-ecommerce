@@ -24,7 +24,7 @@ namespace Ordering.Infrastructure.Persistence
         {
             try
             {
-                if (_context.Database.IsSqlServer())
+                if (_context.Database.IsNpgsql())
                 {
                     await _context.Database.MigrateAsync();
                 }

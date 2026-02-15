@@ -17,8 +17,8 @@ public static class ConfigureServices
     {
         services.AddDbContext<OrderContext>(options =>
         {
-            options.UseSqlServer(configuration.GetConnectionString("DefaultConnectionString"),
-                sqlServerOptionsAction: builder => builder.MigrationsAssembly(typeof(OrderContext).Assembly.FullName));
+            options.UseNpgsql(configuration.GetConnectionString("DefaultConnectionString"),
+                npgsqlOptions => npgsqlOptions.MigrationsAssembly(typeof(OrderContext).Assembly.FullName));
         });
 
         services.AddScoped<OrderContextSeed>();

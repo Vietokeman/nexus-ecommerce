@@ -2,7 +2,7 @@ using Dapper;
 using Identity.API.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
+using Npgsql;
 
 namespace Identity.API.Controllers;
 
@@ -26,8 +26,8 @@ public class PermissionController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Permission>>> GetAll()
     {
-        await using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnectionString"));
-        var permissions = await connection.QueryAsync<Permission>("SELECT Id, [Function], Command, RoleId FROM Permissions");
+        await using var connection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnectionString"));
+        var permissions = await connection.QueryAsync<Permission>("SELECT \"Id\", \"Function\", \"Command\", \"RoleId\" FROM \"Permissions\"");
         return Ok(permissions);
     }
 
@@ -37,9 +37,9 @@ public class PermissionController : ControllerBase
     [HttpGet("{roleId}")]
     public async Task<ActionResult<IEnumerable<Permission>>> GetByRole(string roleId)
     {
-        await using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnectionString"));
+        await using var connection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnectionString"));
         var permissions = await connection.QueryAsync<Permission>(
-            "SELECT Id, [Function], Command, RoleId FROM Permissions WHERE RoleId = @RoleId",
+            "SELECT \"Id\", \"Function\", \"Command\", \"RoleId\" FROM \"Permissions\" WHERE \"RoleId\" = @RoleId",
             new { RoleId = roleId });
         return Ok(permissions);
     }
@@ -50,9 +50,9 @@ public class PermissionController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Permission>> Create([FromBody] Permission permission)
     {
-        await using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnectionString"));
+        await using var connection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnectionString"));
         var id = await connection.ExecuteScalarAsync<int>(
-            "INSERT INTO Permissions ([Function], Command, RoleId) VALUES (@Function, @Command, @RoleId); SELECT SCOPE_IDENTITY();",
+            "INSERT INTO \"Permissions\" (\"Function\", \"Command\", \"RoleId\") VALUES (@Function, @Command, @RoleId) RETURNING \"Id\"",
             new { permission.Function, permission.Command, permission.RoleId });
 
         permission.Id = id;
@@ -67,8 +67,8 @@ public class PermissionController : ControllerBase
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {
-        await using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnectionString"));
-        var affected = await connection.ExecuteAsync("DELETE FROM Permissions WHERE Id = @Id", new { Id = id });
+        await using var connection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnectionString"));
+        var affected = await connection.ExecuteAsync("DELETE FROM \"Permissions\" WHERE \"Id\" = @Id", new { Id = id });
 
         if (affected == 0)
             return NotFound();
