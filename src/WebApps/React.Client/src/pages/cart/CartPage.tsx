@@ -133,12 +133,7 @@ export default function CartPage() {
               ${total().toFixed(2)}
             </Typography>
           </Box>
-          <Button
-            variant="contained"
-            fullWidth
-            size="large"
-            onClick={() => navigate('/checkout')}
-          >
+          <Button variant="contained" fullWidth size="large" onClick={() => navigate('/checkout')}>
             Proceed to Checkout
           </Button>
         </Paper>

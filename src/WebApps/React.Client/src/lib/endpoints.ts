@@ -1,8 +1,22 @@
 export const API_ENDPOINTS = {
+  AUTH: {
+    LOGIN: '/api/identity/authenticate',
+    REGISTER: '/api/identity/register',
+    REFRESH_TOKEN: '/api/identity/refresh-token',
+    CONFIRM_EMAIL: '/api/identity/confirm-email',
+    FORGOT_PASSWORD: '/api/identity/forgot-password',
+    RESET_PASSWORD: '/api/identity/reset-password',
+    VERIFY_OTP: '/api/identity/verify-otp',
+    RESEND_OTP: '/api/identity/resend-otp',
+    ME: '/api/identity/me',
+  },
   PRODUCTS: {
     LIST: '/api/products',
     DETAIL: (id: string | number) => `/api/products/${id}`,
     BY_NO: (productNo: string) => `/api/products/get-product-by-no/${productNo}`,
+    CREATE: '/api/products',
+    UPDATE: (id: string | number) => `/api/products/${id}`,
+    DELETE: (id: string | number) => `/api/products/${id}`,
   },
   CUSTOMERS: {
     LIST: '/api/customers',

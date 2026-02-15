@@ -4,6 +4,10 @@ import { createRoot } from 'react-dom/client';
 import Providers from '@/providers';
 import App from '@/App';
 import '@/styles/index.css';
+import { useAuthStore } from '@/store/auth-store';
+
+// Check auth state on app load
+useAuthStore.getState().checkAuth();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
