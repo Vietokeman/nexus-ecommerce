@@ -69,13 +69,13 @@
 
 ### Key Design Decisions
 
-| Decision | Choice | Rationale |
-|----------|--------|-----------|
-| Payment Gateway | **PayOS** | Vietnamese payment gateway, sandbox available |
-| Cart State | **Zustand + localStorage** | Offline persistence, instant UI updates |
-| Server Cart | **Basket.API (Redis)** | Server-side validation, cross-device sync |
-| Payment Status | **Webhook + Polling** | Webhook for real-time, polling as fallback |
-| Event Bus | **RabbitMQ (MassTransit)** | Existing infra, reliable delivery |
+| Decision        | Choice                     | Rationale                                     |
+| --------------- | -------------------------- | --------------------------------------------- |
+| Payment Gateway | **PayOS**                  | Vietnamese payment gateway, sandbox available |
+| Cart State      | **Zustand + localStorage** | Offline persistence, instant UI updates       |
+| Server Cart     | **Basket.API (Redis)**     | Server-side validation, cross-device sync     |
+| Payment Status  | **Webhook + Polling**      | Webhook for real-time, polling as fallback    |
+| Event Bus       | **RabbitMQ (MassTransit)** | Existing infra, reliable delivery             |
 
 ---
 
@@ -99,6 +99,7 @@
 ```
 
 ### PayOS SDK
+
 ```xml
 <!-- NuGet -->
 <PackageReference Include="Net.payOS" Version="1.0.*" />
@@ -733,13 +734,8 @@ cd React.Client
     "sass": "^1.85.0"
   },
   "lint-staged": {
-    "src/**/*.{ts,tsx}": [
-      "eslint --fix --no-warn-ignored",
-      "prettier --write"
-    ],
-    "*.{json,md}": [
-      "prettier --write"
-    ]
+    "src/**/*.{ts,tsx}": ["eslint --fix --no-warn-ignored", "prettier --write"],
+    "*.{json,md}": ["prettier --write"]
   },
   "config": {
     "commitizen": {
@@ -752,37 +748,37 @@ cd React.Client
 ### 5.3 vite.config.mjs
 
 ```javascript
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react-swc';
-import tailwindcss from '@tailwindcss/vite';
-import { visualizer } from 'rollup-plugin-visualizer';
-import viteCompression from 'vite-plugin-compression';
-import path from 'path';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react-swc";
+import tailwindcss from "@tailwindcss/vite";
+import { visualizer } from "rollup-plugin-visualizer";
+import viteCompression from "vite-plugin-compression";
+import path from "path";
 
 export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
     viteCompression({
-      algorithm: 'gzip',
+      algorithm: "gzip",
       threshold: 10240,
     }),
     visualizer({
-      filename: 'dist/stats.html',
+      filename: "dist/stats.html",
       gzipSize: true,
       brotliSize: true,
     }),
   ],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      "@": path.resolve(__dirname, "./src"),
     },
   },
   server: {
     port: 3000,
     proxy: {
-      '/api': {
-        target: 'http://localhost:5000',  // Ocelot Gateway
+      "/api": {
+        target: "http://localhost:5000", // Ocelot Gateway
         changeOrigin: true,
       },
     },
@@ -794,17 +790,17 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-          'vendor-mui': ['@mui/material', '@mui/icons-material'],
-          'vendor-state': ['zustand', '@tanstack/react-query'],
-          vendor: ['axios', 'framer-motion', 'lottie-react'],
+          "vendor-react": ["react", "react-dom", "react-router-dom"],
+          "vendor-mui": ["@mui/material", "@mui/icons-material"],
+          "vendor-state": ["zustand", "@tanstack/react-query"],
+          vendor: ["axios", "framer-motion", "lottie-react"],
         },
       },
     },
   },
   css: {
     modules: {
-      localsConvention: 'camelCase',
+      localsConvention: "camelCase",
     },
   },
 });
@@ -944,7 +940,7 @@ src/
 
 ```typescript
 // store/logger.ts
-import { StateCreator, StoreMutatorIdentifier } from 'zustand';
+import { StateCreator, StoreMutatorIdentifier } from "zustand";
 
 type Logger = <
   T,
@@ -952,12 +948,12 @@ type Logger = <
   Mcs extends [StoreMutatorIdentifier, unknown][] = [],
 >(
   f: StateCreator<T, Mps, Mcs>,
-  name?: string
+  name?: string,
 ) => StateCreator<T, Mps, Mcs>;
 
 type LoggerImpl = <T>(
   f: StateCreator<T, [], []>,
-  name?: string
+  name?: string,
 ) => StateCreator<T, [], []>;
 
 const loggerImpl: LoggerImpl = (f, name) => (set, get, store) => {
@@ -966,9 +962,12 @@ const loggerImpl: LoggerImpl = (f, name) => (set, get, store) => {
     set(...args);
     const next = get();
     if (import.meta.env.DEV) {
-      console.groupCollapsed(`%c[${name ?? 'store'}]`, 'color: #7B68EE; font-weight: bold');
-      console.log('prev:', prev);
-      console.log('next:', next);
+      console.groupCollapsed(
+        `%c[${name ?? "store"}]`,
+        "color: #7B68EE; font-weight: bold",
+      );
+      console.log("prev:", prev);
+      console.log("next:", next);
       console.groupEnd();
     }
   };
@@ -982,11 +981,11 @@ export const logger = loggerImpl as Logger;
 
 ```typescript
 // store/auth-store.ts
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { logger } from './logger';
-import { api } from '@/lib/api';
-import { API_ENDPOINTS } from '@/lib/endpoints';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { logger } from "./logger";
+import { api } from "@/lib/api";
+import { API_ENDPOINTS } from "@/lib/endpoints";
 
 interface User {
   id: string;
@@ -1032,18 +1031,21 @@ export const useAuthStore = create<AuthState>()(
         login: async (email, password) => {
           set({ isLoading: true });
           try {
-            const { data } = await api.post(API_ENDPOINTS.AUTH.LOGIN, { email, password });
+            const { data } = await api.post(API_ENDPOINTS.AUTH.LOGIN, {
+              email,
+              password,
+            });
             set({
               user: data.user,
               token: data.accessToken,
               refreshToken: data.refreshToken,
               isAuthenticated: true,
-              isAdmin: data.user.role === 'Admin',
+              isAdmin: data.user.role === "Admin",
               isLoading: false,
             });
           } catch {
             set({ isLoading: false });
-            throw new Error('Invalid credentials');
+            throw new Error("Invalid credentials");
           }
         },
 
@@ -1054,7 +1056,7 @@ export const useAuthStore = create<AuthState>()(
             set({ isLoading: false });
           } catch {
             set({ isLoading: false });
-            throw new Error('Registration failed');
+            throw new Error("Registration failed");
           }
         },
 
@@ -1068,7 +1070,7 @@ export const useAuthStore = create<AuthState>()(
           });
         },
 
-        setUser: (user) => set({ user, isAdmin: user.role === 'Admin' }),
+        setUser: (user) => set({ user, isAdmin: user.role === "Admin" }),
 
         checkAuth: () => {
           const { token } = get();
@@ -1078,7 +1080,7 @@ export const useAuthStore = create<AuthState>()(
           }
           // Check token expiration
           try {
-            const payload = JSON.parse(atob(token.split('.')[1]));
+            const payload = JSON.parse(atob(token.split(".")[1]));
             if (payload.exp * 1000 < Date.now()) {
               get().logout();
             }
@@ -1087,10 +1089,10 @@ export const useAuthStore = create<AuthState>()(
           }
         },
       }),
-      'auth-store'
+      "auth-store",
     ),
     {
-      name: 'auth-storage',
+      name: "auth-storage",
       partialize: (state) => ({
         token: state.token,
         refreshToken: state.refreshToken,
@@ -1098,8 +1100,8 @@ export const useAuthStore = create<AuthState>()(
         isAuthenticated: state.isAuthenticated,
         isAdmin: state.isAdmin,
       }),
-    }
-  )
+    },
+  ),
 );
 ```
 
@@ -1107,9 +1109,9 @@ export const useAuthStore = create<AuthState>()(
 
 ```typescript
 // store/cart-store.ts
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { logger } from './logger';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { logger } from "./logger";
 
 const SHIPPING = 5.55;
 const TAXES = 5; // percentage
@@ -1124,13 +1126,13 @@ interface CartItem {
 
 interface CartState {
   items: CartItem[];
-  
+
   // Actions
-  addItem: (item: Omit<CartItem, 'quantity'>) => void;
+  addItem: (item: Omit<CartItem, "quantity">) => void;
   removeItem: (itemNo: string) => void;
   updateQuantity: (itemNo: string, quantity: number) => void;
   clearCart: () => void;
-  
+
   // Computed (as functions)
   totalItems: () => number;
   subtotal: () => number;
@@ -1151,7 +1153,9 @@ export const useCartStore = create<CartState>()(
             if (existing) {
               return {
                 items: state.items.map((i) =>
-                  i.itemNo === item.itemNo ? { ...i, quantity: i.quantity + 1 } : i
+                  i.itemNo === item.itemNo
+                    ? { ...i, quantity: i.quantity + 1 }
+                    : i,
                 ),
               };
             }
@@ -1172,26 +1176,31 @@ export const useCartStore = create<CartState>()(
           }
           set((state) => ({
             items: state.items.map((i) =>
-              i.itemNo === itemNo ? { ...i, quantity } : i
+              i.itemNo === itemNo ? { ...i, quantity } : i,
             ),
           }));
         },
 
         clearCart: () => set({ items: [] }),
 
-        totalItems: () => get().items.reduce((sum, item) => sum + item.quantity, 0),
-        subtotal: () => get().items.reduce((sum, item) => sum + item.price * item.quantity, 0),
+        totalItems: () =>
+          get().items.reduce((sum, item) => sum + item.quantity, 0),
+        subtotal: () =>
+          get().items.reduce(
+            (sum, item) => sum + item.price * item.quantity,
+            0,
+          ),
         shipping: () => (get().items.length > 0 ? SHIPPING : 0),
         taxAmount: () => (get().subtotal() * TAXES) / 100,
         total: () => get().subtotal() + get().shipping() + get().taxAmount(),
       }),
-      'cart-store'
+      "cart-store",
     ),
     {
-      name: 'cart-storage',
+      name: "cart-storage",
       partialize: (state) => ({ items: state.items }),
-    }
-  )
+    },
+  ),
 );
 ```
 
@@ -1199,9 +1208,9 @@ export const useCartStore = create<CartState>()(
 
 ```typescript
 // store/wishlist-store.ts
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { logger } from './logger';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { logger } from "./logger";
 
 interface WishlistItem {
   id: string;
@@ -1247,12 +1256,12 @@ export const useWishlistStore = create<WishlistState>()(
           }
         },
       }),
-      'wishlist-store'
+      "wishlist-store",
     ),
     {
-      name: 'wishlist-storage',
-    }
-  )
+      name: "wishlist-storage",
+    },
+  ),
 );
 ```
 
@@ -1260,9 +1269,9 @@ export const useWishlistStore = create<WishlistState>()(
 
 ```typescript
 // store/ui-store.ts
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { logger } from './logger';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { logger } from "./logger";
 
 interface UIState {
   isFilterOpen: boolean;
@@ -1279,13 +1288,14 @@ export const useUIStore = create<UIState>()(
         isFilterOpen: false,
         isMobileMenuOpen: false,
         toggleFilter: () => set((s) => ({ isFilterOpen: !s.isFilterOpen })),
-        toggleMobileMenu: () => set((s) => ({ isMobileMenuOpen: !s.isMobileMenuOpen })),
+        toggleMobileMenu: () =>
+          set((s) => ({ isMobileMenuOpen: !s.isMobileMenuOpen })),
         closeAll: () => set({ isFilterOpen: false, isMobileMenuOpen: false }),
       }),
-      'ui-store'
+      "ui-store",
     ),
-    { name: 'ui-storage' }
-  )
+    { name: "ui-storage" },
+  ),
 );
 ```
 
@@ -1299,48 +1309,49 @@ export const useUIStore = create<UIState>()(
 // lib/endpoints.ts
 export const API_ENDPOINTS = {
   AUTH: {
-    LOGIN: '/api/auth/login',
-    REGISTER: '/api/auth/register',
-    REFRESH: '/api/auth/refresh-token',
-    ME: '/api/auth/me',
-    CONFIRM_EMAIL: '/api/auth/confirm-email',
-    FORGOT_PASSWORD: '/api/auth/forgot-password',
-    RESET_PASSWORD: '/api/auth/reset-password',
+    LOGIN: "/api/auth/login",
+    REGISTER: "/api/auth/register",
+    REFRESH: "/api/auth/refresh-token",
+    ME: "/api/auth/me",
+    CONFIRM_EMAIL: "/api/auth/confirm-email",
+    FORGOT_PASSWORD: "/api/auth/forgot-password",
+    RESET_PASSWORD: "/api/auth/reset-password",
   },
   PRODUCTS: {
-    LIST: '/api/products',
+    LIST: "/api/products",
     DETAIL: (id: string) => `/api/products/${id}`,
-    SEARCH: (productNo: string) => `/api/products/get-product-by-no/${productNo}`,
+    SEARCH: (productNo: string) =>
+      `/api/products/get-product-by-no/${productNo}`,
   },
   CUSTOMERS: {
-    LIST: '/api/customers',
+    LIST: "/api/customers",
     DETAIL: (username: string) => `/api/customer/${username}`,
   },
   BASKETS: {
     GET: (username: string) => `/api/baskets/${username}`,
-    UPDATE: '/api/baskets',
+    UPDATE: "/api/baskets",
     DELETE: (username: string) => `/api/baskets/${username}`,
-    CHECKOUT: '/api/baskets/checkout',
+    CHECKOUT: "/api/baskets/checkout",
     STOCK: (itemNo: string) => `/api/baskets/stock/${itemNo}`,
   },
   ORDERS: {
-    LIST: '/api/v1/orders',
+    LIST: "/api/v1/orders",
     BY_USER: (username: string) => `/api/v1/orders/${username}`,
-    CREATE: '/api/v1/orders',
+    CREATE: "/api/v1/orders",
     UPDATE: (id: string) => `/api/v1/orders/${id}`,
     DELETE: (id: string) => `/api/v1/orders/${id}`,
   },
   INVENTORY: {
-    LIST: '/api/inventory',
+    LIST: "/api/inventory",
     STOCK: (itemNo: string) => `/api/inventory/stock/${itemNo}`,
   },
   PAYMENT: {
-    CREATE: '/api/payment/create',
+    CREATE: "/api/payment/create",
     STATUS: (orderNo: string) => `/api/payment/${orderNo}/status`,
     CANCEL: (orderNo: string) => `/api/payment/cancel/${orderNo}`,
   },
   PERMISSIONS: {
-    LIST: '/api/permissions',
+    LIST: "/api/permissions",
     BY_ROLE: (roleId: string) => `/api/permissions/role/${roleId}`,
     ASSIGN: (roleId: string) => `/api/permissions/role/${roleId}/assign`,
   },
@@ -1378,8 +1389,8 @@ export const API_ENDPOINTS = {
 
 ```typescript
 // lib/payment.ts
-import { api } from './api';
-import { API_ENDPOINTS } from './endpoints';
+import { api } from "./api";
+import { API_ENDPOINTS } from "./endpoints";
 
 export interface CreatePaymentData {
   orderNo: string;
@@ -1486,18 +1497,18 @@ export default function PaymentSuccessPage() {
 
 ```typescript
 // theme/theme.ts
-import { createTheme, responsiveFontSizes } from '@mui/material/styles';
+import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 
 let theme = createTheme({
   palette: {
     primary: {
-      main: '#000000',
-      light: '#ffffff',
-      dark: '#DB4444',
+      main: "#000000",
+      light: "#ffffff",
+      dark: "#DB4444",
     },
     background: {
-      default: '#ffffff',
-      paper: '#f5f5f5',
+      default: "#ffffff",
+      paper: "#f5f5f5",
     },
   },
   typography: {
@@ -1513,19 +1524,19 @@ let theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          textTransform: 'none',
+          textTransform: "none",
           borderRadius: 8,
         },
         contained: {
-          backgroundColor: '#000000',
-          '&:hover': { backgroundColor: '#333333' },
+          backgroundColor: "#000000",
+          "&:hover": { backgroundColor: "#333333" },
         },
       },
     },
     MuiAppBar: {
       styleOverrides: {
         root: {
-          backgroundColor: '#000000',
+          backgroundColor: "#000000",
         },
       },
     },
@@ -1539,6 +1550,7 @@ export default theme;
 ### 9.2 Lottie Animations (Copy from mern-ecommerce)
 
 Copy these files from `d:\ki9-lastdancefpt\UI\mern-ecommerce-main\frontend\src\assets\animations\`:
+
 - `ecommerceOutlook.json`
 - `shoppingBag.json`
 - `orderSuccess.json`
@@ -1782,25 +1794,25 @@ server {
 
 ### 12.1 Backend Tests
 
-| Test | Type | Description |
-|------|------|-------------|
-| PaymentService.CreatePayment | Unit | Mock PayOS SDK, verify transaction saved |
-| PaymentService.HandleWebhook | Unit | Mock webhook data, verify status update |
-| PaymentController (integration) | Integration | Full payment flow via HTTP |
-| PayOS webhook verification | Integration | Verify checksum validation |
-| RabbitMQ event publishing | Integration | Verify PaymentCompletedEvent published |
+| Test                            | Type        | Description                              |
+| ------------------------------- | ----------- | ---------------------------------------- |
+| PaymentService.CreatePayment    | Unit        | Mock PayOS SDK, verify transaction saved |
+| PaymentService.HandleWebhook    | Unit        | Mock webhook data, verify status update  |
+| PaymentController (integration) | Integration | Full payment flow via HTTP               |
+| PayOS webhook verification      | Integration | Verify checksum validation               |
+| RabbitMQ event publishing       | Integration | Verify PaymentCompletedEvent published   |
 
 ### 12.2 Frontend Tests
 
-| Test | Type | Description |
-|------|------|-------------|
-| cart-store | Unit (Jest) | Add/remove/update items, computed values |
-| auth-store | Unit (Jest) | Login/logout, token management |
-| wishlist-store | Unit (Jest) | Toggle, persistence |
-| CartPage | Component | Render items, quantity controls |
-| CheckoutPage | Component | Form validation, submission |
-| PaymentSuccessPage | Component | Status check, cart clear |
-| API service layer | Unit | Mock axios, verify endpoints |
+| Test               | Type        | Description                              |
+| ------------------ | ----------- | ---------------------------------------- |
+| cart-store         | Unit (Jest) | Add/remove/update items, computed values |
+| auth-store         | Unit (Jest) | Login/logout, token management           |
+| wishlist-store     | Unit (Jest) | Toggle, persistence                      |
+| CartPage           | Component   | Render items, quantity controls          |
+| CheckoutPage       | Component   | Form validation, submission              |
+| PaymentSuccessPage | Component   | Status check, cart clear                 |
+| API service layer  | Unit        | Mock axios, verify endpoints             |
 
 ### 12.3 E2E Flow
 
@@ -1820,51 +1832,51 @@ server {
 
 ## 13. Implementation Tasks & Timeline
 
-| # | Task | Effort | Priority | Phase |
-|---|------|--------|----------|-------|
-| **Backend** | | | | |
-| 1 | Create Payment.API project structure | 1h | CRITICAL | Setup |
-| 2 | Install NuGet packages (PayOS, EF, MassTransit) | 30m | CRITICAL | Setup |
-| 3 | Create entities (PaymentTransaction, PaymentStatus) | 1h | CRITICAL | Domain |
-| 4 | Create DTOs | 30m | HIGH | Domain |
-| 5 | Create PaymentDbContext + migration | 1h | CRITICAL | Data |
-| 6 | Implement PaymentRepository | 1h | HIGH | Data |
-| 7 | Implement PaymentService (PayOS SDK) | 3h | CRITICAL | Service |
-| 8 | Create PaymentController | 1h | CRITICAL | API |
-| 9 | Add PaymentCompletedEvent to EventBus | 30m | HIGH | Events |
-| 10 | Add PaymentCompletedConsumer to Ordering.API | 1h | HIGH | Events |
-| 11 | Configure Program.cs (Serilog, MassTransit, JWT) | 1h | HIGH | Config |
-| 12 | Create Dockerfile | 30m | HIGH | Docker |
-| 13 | Add to docker-compose | 30m | HIGH | Docker |
-| 14 | Add routes to Ocelot | 30m | HIGH | Gateway |
-| **Frontend** | | | | |
-| 15 | Initialize React + Vite + TypeScript project | 1h | CRITICAL | Setup |
-| 16 | Configure tooling (ESLint, Prettier, Husky, commitlint) | 2h | HIGH | Setup |
-| 17 | Setup MUI theme (clone mern-ecommerce) | 1h | HIGH | UI |
-| 18 | Copy Lottie animations from mern-ecommerce | 30m | MEDIUM | Assets |
-| 19 | Copy banner images from mern-ecommerce | 30m | MEDIUM | Assets |
-| 20 | Create Zustand stores (auth, cart, wishlist, ui) | 3h | CRITICAL | State |
-| 21 | Create API layer (axios, endpoints) | 1h | CRITICAL | API |
-| 22 | Create routes with lazy loading | 1h | HIGH | Routes |
-| 23 | Build Navbar component | 2h | HIGH | UI |
-| 24 | Build Footer component | 1h | MEDIUM | UI |
-| 25 | Build ProductCard + ProductList + ProductBanner | 4h | CRITICAL | UI |
-| 26 | Build ProductDetailsPage | 3h | HIGH | UI |
-| 27 | Build CartPage + CartItem | 2h | CRITICAL | UI |
-| 28 | Build CheckoutPage (address form, payment select) | 3h | CRITICAL | UI |
-| 29 | Build LoginPage + SignupPage | 2h | HIGH | UI |
-| 30 | Build PaymentSuccess/Cancel pages | 1h | HIGH | UI |
-| 31 | Build OrdersPage, ProfilePage, WishlistPage | 3h | MEDIUM | UI |
-| 32 | Build Admin pages (Dashboard, AddProduct, Orders) | 4h | MEDIUM | UI |
-| 33 | Build NotFoundPage | 30m | LOW | UI |
-| 34 | Cart ↔ Basket.API sync | 2h | HIGH | Integration |
-| 35 | PayOS payment flow integration | 2h | CRITICAL | Integration |
-| **Testing** | | | | |
-| 36 | Unit tests for Zustand stores | 2h | HIGH | Test |
-| 37 | Unit tests for PaymentService | 2h | HIGH | Test |
-| 38 | Integration tests for payment flow | 3h | CRITICAL | Test |
-| 39 | Docker build & smoke test | 2h | CRITICAL | Build |
-| 40 | Create React.Client Dockerfile + nginx.conf | 1h | HIGH | Docker |
+| #            | Task                                                    | Effort | Priority | Phase       |
+| ------------ | ------------------------------------------------------- | ------ | -------- | ----------- |
+| **Backend**  |                                                         |        |          |             |
+| 1            | Create Payment.API project structure                    | 1h     | CRITICAL | Setup       |
+| 2            | Install NuGet packages (PayOS, EF, MassTransit)         | 30m    | CRITICAL | Setup       |
+| 3            | Create entities (PaymentTransaction, PaymentStatus)     | 1h     | CRITICAL | Domain      |
+| 4            | Create DTOs                                             | 30m    | HIGH     | Domain      |
+| 5            | Create PaymentDbContext + migration                     | 1h     | CRITICAL | Data        |
+| 6            | Implement PaymentRepository                             | 1h     | HIGH     | Data        |
+| 7            | Implement PaymentService (PayOS SDK)                    | 3h     | CRITICAL | Service     |
+| 8            | Create PaymentController                                | 1h     | CRITICAL | API         |
+| 9            | Add PaymentCompletedEvent to EventBus                   | 30m    | HIGH     | Events      |
+| 10           | Add PaymentCompletedConsumer to Ordering.API            | 1h     | HIGH     | Events      |
+| 11           | Configure Program.cs (Serilog, MassTransit, JWT)        | 1h     | HIGH     | Config      |
+| 12           | Create Dockerfile                                       | 30m    | HIGH     | Docker      |
+| 13           | Add to docker-compose                                   | 30m    | HIGH     | Docker      |
+| 14           | Add routes to Ocelot                                    | 30m    | HIGH     | Gateway     |
+| **Frontend** |                                                         |        |          |             |
+| 15           | Initialize React + Vite + TypeScript project            | 1h     | CRITICAL | Setup       |
+| 16           | Configure tooling (ESLint, Prettier, Husky, commitlint) | 2h     | HIGH     | Setup       |
+| 17           | Setup MUI theme (clone mern-ecommerce)                  | 1h     | HIGH     | UI          |
+| 18           | Copy Lottie animations from mern-ecommerce              | 30m    | MEDIUM   | Assets      |
+| 19           | Copy banner images from mern-ecommerce                  | 30m    | MEDIUM   | Assets      |
+| 20           | Create Zustand stores (auth, cart, wishlist, ui)        | 3h     | CRITICAL | State       |
+| 21           | Create API layer (axios, endpoints)                     | 1h     | CRITICAL | API         |
+| 22           | Create routes with lazy loading                         | 1h     | HIGH     | Routes      |
+| 23           | Build Navbar component                                  | 2h     | HIGH     | UI          |
+| 24           | Build Footer component                                  | 1h     | MEDIUM   | UI          |
+| 25           | Build ProductCard + ProductList + ProductBanner         | 4h     | CRITICAL | UI          |
+| 26           | Build ProductDetailsPage                                | 3h     | HIGH     | UI          |
+| 27           | Build CartPage + CartItem                               | 2h     | CRITICAL | UI          |
+| 28           | Build CheckoutPage (address form, payment select)       | 3h     | CRITICAL | UI          |
+| 29           | Build LoginPage + SignupPage                            | 2h     | HIGH     | UI          |
+| 30           | Build PaymentSuccess/Cancel pages                       | 1h     | HIGH     | UI          |
+| 31           | Build OrdersPage, ProfilePage, WishlistPage             | 3h     | MEDIUM   | UI          |
+| 32           | Build Admin pages (Dashboard, AddProduct, Orders)       | 4h     | MEDIUM   | UI          |
+| 33           | Build NotFoundPage                                      | 30m    | LOW      | UI          |
+| 34           | Cart ↔ Basket.API sync                                  | 2h     | HIGH     | Integration |
+| 35           | PayOS payment flow integration                          | 2h     | CRITICAL | Integration |
+| **Testing**  |                                                         |        |          |             |
+| 36           | Unit tests for Zustand stores                           | 2h     | HIGH     | Test        |
+| 37           | Unit tests for PaymentService                           | 2h     | HIGH     | Test        |
+| 38           | Integration tests for payment flow                      | 3h     | CRITICAL | Test        |
+| 39           | Docker build & smoke test                               | 2h     | CRITICAL | Build       |
+| 40           | Create React.Client Dockerfile + nginx.conf             | 1h     | HIGH     | Docker      |
 
 **Total estimated effort: ~62 hours (8-9 days)**
 

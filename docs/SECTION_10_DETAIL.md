@@ -23,7 +23,9 @@
 ## 1. Transaction Management Across Microservices
 
 ### The Problem
+
 In a microservices architecture, a single business operation (e.g., checkout) spans multiple services:
+
 1. **Basket.API** → Remove items from cart
 2. **Ordering.API** → Create order
 3. **Inventory.API** → Deduct stock
@@ -138,12 +140,14 @@ public record PaymentRefundEvent : IntegrationBaseEvent
 ## 2. Elasticsearch & Kibana Integration
 
 ### Current State
+
 - **Elasticsearch** container running at `:9200` (docker-compose.override.yml)
 - **Kibana** container running at `:5601`
 - **Ocelot Gateway** already pushes logs to ES (`ocelot-gateway-logs-*` index)
 - Other services log to Console/Debug only
 
 ### Goal
+
 Push ALL microservice logs to Elasticsearch for centralized monitoring.
 
 ### 2.1 NuGet Packages Required (per service)
@@ -206,11 +210,11 @@ public static class SeriLogger
     public static Action<HostBuilderContext, LoggerConfiguration> Configure =>
         (context, configuration) =>
         {
-            var elasticUri = context.Configuration.GetValue<string>("ElasticConfiguration:Uri") 
+            var elasticUri = context.Configuration.GetValue<string>("ElasticConfiguration:Uri")
                              ?? "http://localhost:9200";
-            var applicationName = context.HostingEnvironment.ApplicationName?.ToLower().Replace(".", "-") 
+            var applicationName = context.HostingEnvironment.ApplicationName?.ToLower().Replace(".", "-")
                                   ?? "unknown";
-            var environment = context.HostingEnvironment.EnvironmentName?.ToLower().Replace(".", "-") 
+            var environment = context.HostingEnvironment.EnvironmentName?.ToLower().Replace(".", "-")
                               ?? "development";
 
             configuration
@@ -234,16 +238,16 @@ public static class SeriLogger
 
 ### 2.4 Index Naming Convention
 
-| Service | Index Pattern |
-|---------|--------------|
-| Product.API | `product-api-development-logs-2026.02.15` |
-| Customer.API | `customer-api-development-logs-2026.02.15` |
-| Basket.API | `basket-api-development-logs-2026.02.15` |
-| Ordering.API | `ordering-api-development-logs-2026.02.15` |
-| Inventory.API | `inventory-api-development-logs-2026.02.15` |
-| Payment.API | `payment-api-development-logs-2026.02.15` |
-| Identity.API | `identity-api-development-logs-2026.02.15` |
-| Ocelot Gateway | `ocelot-gateway-logs-2026.02.15` |
+| Service        | Index Pattern                               |
+| -------------- | ------------------------------------------- |
+| Product.API    | `product-api-development-logs-2026.02.15`   |
+| Customer.API   | `customer-api-development-logs-2026.02.15`  |
+| Basket.API     | `basket-api-development-logs-2026.02.15`    |
+| Ordering.API   | `ordering-api-development-logs-2026.02.15`  |
+| Inventory.API  | `inventory-api-development-logs-2026.02.15` |
+| Payment.API    | `payment-api-development-logs-2026.02.15`   |
+| Identity.API   | `identity-api-development-logs-2026.02.15`  |
+| Ocelot Gateway | `ocelot-gateway-logs-2026.02.15`            |
 
 ---
 
@@ -482,14 +486,14 @@ builder.Services.AddHttpClient("PayOS", c =>
 
 ### 5.4 Polly Policy Summary
 
-| Policy | Config | Applied To |
-|--------|--------|-----------|
-| **Retry** | 3x exponential (2s, 4s, 8s) | All HTTP clients |
-| **Circuit Breaker** | 5 failures → 30s open | All HTTP clients |
-| **Timeout** | 30s (60s for PayOS) | All HTTP clients |
-| **Bulkhead** | 10 concurrent, 25 queued | High-traffic endpoints |
-| **Fallback** | Return cached/default value | Product catalog queries |
-| **Cache** | In-memory 5min TTL | Product list, categories |
+| Policy              | Config                      | Applied To               |
+| ------------------- | --------------------------- | ------------------------ |
+| **Retry**           | 3x exponential (2s, 4s, 8s) | All HTTP clients         |
+| **Circuit Breaker** | 5 failures → 30s open       | All HTTP clients         |
+| **Timeout**         | 30s (60s for PayOS)         | All HTTP clients         |
+| **Bulkhead**        | 10 concurrent, 25 queued    | High-traffic endpoints   |
+| **Fallback**        | Return cached/default value | Product catalog queries  |
+| **Cache**           | In-memory 5min TTL          | Product list, categories |
 
 ---
 
@@ -545,6 +549,7 @@ app.MapHealthChecks("/health/live", new HealthCheckOptions
 ```
 
 #### Customer.API (PostgreSQL)
+
 ```csharp
 builder.Services.AddHealthChecks()
     .AddNpgSql(
@@ -555,6 +560,7 @@ builder.Services.AddHealthChecks()
 ```
 
 #### Basket.API (Redis + RabbitMQ)
+
 ```csharp
 builder.Services.AddHealthChecks()
     .AddRedis(
@@ -569,6 +575,7 @@ builder.Services.AddHealthChecks()
 ```
 
 #### Ordering.API (SQL Server + RabbitMQ)
+
 ```csharp
 builder.Services.AddHealthChecks()
     .AddSqlServer(
@@ -580,6 +587,7 @@ builder.Services.AddHealthChecks()
 ```
 
 #### Inventory.API (MongoDB)
+
 ```csharp
 builder.Services.AddHealthChecks()
     .AddMongoDb(
@@ -591,16 +599,16 @@ builder.Services.AddHealthChecks()
 
 ### 6.3 Health Check Endpoints Summary
 
-| Service | URL | Checks |
-|---------|-----|--------|
-| Product.API | `:6002/health` | MySQL, Elasticsearch |
-| Customer.API | `:6003/health` | PostgreSQL, Elasticsearch |
-| Basket.API | `:6004/health` | Redis, RabbitMQ, Elasticsearch |
-| Ordering.API | `:6005/health` | SQL Server, RabbitMQ, Elasticsearch |
-| Inventory.API | `:6006/health` | MongoDB, Elasticsearch |
-| Payment.API | `:6007/health` | SQL Server, PayOS API, Elasticsearch |
-| Identity.API | `:6009/health` | SQL Server, Elasticsearch |
-| Ocelot Gateway | `:5000/health` | Elasticsearch |
+| Service        | URL            | Checks                               |
+| -------------- | -------------- | ------------------------------------ |
+| Product.API    | `:6002/health` | MySQL, Elasticsearch                 |
+| Customer.API   | `:6003/health` | PostgreSQL, Elasticsearch            |
+| Basket.API     | `:6004/health` | Redis, RabbitMQ, Elasticsearch       |
+| Ordering.API   | `:6005/health` | SQL Server, RabbitMQ, Elasticsearch  |
+| Inventory.API  | `:6006/health` | MongoDB, Elasticsearch               |
+| Payment.API    | `:6007/health` | SQL Server, PayOS API, Elasticsearch |
+| Identity.API   | `:6009/health` | SQL Server, Elasticsearch            |
+| Ocelot Gateway | `:5000/health` | Elasticsearch                        |
 
 ### 6.4 Health Check Response Format
 
@@ -682,14 +690,14 @@ app.Run();
 {
   "HealthChecksUI": {
     "HealthChecks": [
-      { "Name": "Product.API",    "Uri": "http://product.api:80/health" },
-      { "Name": "Customer.API",   "Uri": "http://customer.api:80/health" },
-      { "Name": "Basket.API",     "Uri": "http://basket.api:80/health" },
-      { "Name": "Ordering.API",   "Uri": "http://ordering.api:80/health" },
-      { "Name": "Inventory.API",  "Uri": "http://inventory.api:80/health" },
-      { "Name": "Payment.API",    "Uri": "http://payment.api:80/health" },
-      { "Name": "Identity.API",   "Uri": "http://identity.api:80/health" },
-      { "Name": "API Gateway",    "Uri": "http://ocelot.apigw:80/health" }
+      { "Name": "Product.API", "Uri": "http://product.api:80/health" },
+      { "Name": "Customer.API", "Uri": "http://customer.api:80/health" },
+      { "Name": "Basket.API", "Uri": "http://basket.api:80/health" },
+      { "Name": "Ordering.API", "Uri": "http://ordering.api:80/health" },
+      { "Name": "Inventory.API", "Uri": "http://inventory.api:80/health" },
+      { "Name": "Payment.API", "Uri": "http://payment.api:80/health" },
+      { "Name": "Identity.API", "Uri": "http://identity.api:80/health" },
+      { "Name": "API Gateway", "Uri": "http://ocelot.apigw:80/health" }
     ],
     "EvaluationTimeInSeconds": 30,
     "MinimumSecondsBetweenFailureNotifications": 60
@@ -723,13 +731,13 @@ webhealthstatus:
 
 ### 7.6 Dashboard Features
 
-| Feature | Description |
-|---------|-------------|
-| **Service list** | All 8 services with status icons (✅/❌/⚠️) |
-| **History** | Last 50 health check results per service |
-| **Details** | Expandable view showing individual check results |
-| **Auto-refresh** | Updates every 30 seconds |
-| **Failure alerts** | Visual alerts when a service goes down |
+| Feature            | Description                                      |
+| ------------------ | ------------------------------------------------ |
+| **Service list**   | All 8 services with status icons (✅/❌/⚠️)      |
+| **History**        | Last 50 health check results per service         |
+| **Details**        | Expandable view showing individual check results |
+| **Auto-refresh**   | Updates every 30 seconds                         |
+| **Failure alerts** | Visual alerts when a service goes down           |
 
 Access at: `http://localhost:6010/health-ui`
 
@@ -776,13 +784,13 @@ elasticsearch:
   environment:
     - xpack.monitoring.enabled=true
     - xpack.watcher.enabled=false
-    - "ES_JAVA_OPTS=-Xms512m -Xmx512m"    # Limit memory to 512MB
+    - "ES_JAVA_OPTS=-Xms512m -Xmx512m" # Limit memory to 512MB
     - discovery.type=single-node
   ports:
     - "9200:9200"
   volumes:
     - elasticsearch_data:/usr/share/elasticsearch/data
-  mem_limit: 1g                             # Hard limit 1GB
+  mem_limit: 1g # Hard limit 1GB
   healthcheck:
     test: ["CMD", "curl", "-f", "http://localhost:9200"]
     interval: 30s
@@ -796,28 +804,28 @@ elasticsearch:
 
 ### Phase 1C Task Breakdown
 
-| # | Task | Effort | Priority | Dependencies |
-|---|------|--------|----------|-------------|
-| 1 | Update `Common.Logging/SeriLogger.cs` with ES sink | 1h | HIGH | None |
-| 2 | Add `Serilog.Sinks.Elasticsearch` NuGet to all services | 30m | HIGH | None |
-| 3 | Add ES configuration to all `appsettings.json` | 1h | HIGH | #1, #2 |
-| 4 | Update docker-compose with ES env vars | 30m | HIGH | #3 |
-| 5 | Verify Kibana index patterns & create dashboards | 2h | MEDIUM | #4 |
-| 6 | Create `CorrelationIdDelegatingHandler` in BuildingBlocks | 1h | HIGH | None |
-| 7 | Register correlation handler in all services | 1h | HIGH | #6 |
-| 8 | Create `HttpClientPolicies.cs` in BuildingBlocks | 2h | HIGH | None |
-| 9 | Apply Polly to Basket→Inventory HTTP client | 1h | HIGH | #8 |
-| 10 | Apply Polly to all inter-service HTTP clients | 2h | HIGH | #8 |
-| 11 | Add HealthCheck NuGet packages to all services | 30m | HIGH | None |
-| 12 | Configure health checks per service | 3h | HIGH | #11 |
-| 13 | Map `/health` endpoints in all services | 1h | HIGH | #12 |
-| 14 | Update WebHealthStatus with HealthChecksUI | 2h | MEDIUM | #13 |
-| 15 | Create WebHealthStatus Dockerfile | 30m | MEDIUM | #14 |
-| 16 | Add WebHealthStatus to docker-compose | 30m | MEDIUM | #15 |
-| 17 | Create Outbox table migration | 1h | HIGH | None |
-| 18 | Implement OutboxProcessor background service | 2h | HIGH | #17 |
-| 19 | Implement compensation events | 2h | HIGH | #18 |
-| 20 | Integration testing (all health checks, ELK, Polly) | 3h | CRITICAL | All |
+| #   | Task                                                      | Effort | Priority | Dependencies |
+| --- | --------------------------------------------------------- | ------ | -------- | ------------ |
+| 1   | Update `Common.Logging/SeriLogger.cs` with ES sink        | 1h     | HIGH     | None         |
+| 2   | Add `Serilog.Sinks.Elasticsearch` NuGet to all services   | 30m    | HIGH     | None         |
+| 3   | Add ES configuration to all `appsettings.json`            | 1h     | HIGH     | #1, #2       |
+| 4   | Update docker-compose with ES env vars                    | 30m    | HIGH     | #3           |
+| 5   | Verify Kibana index patterns & create dashboards          | 2h     | MEDIUM   | #4           |
+| 6   | Create `CorrelationIdDelegatingHandler` in BuildingBlocks | 1h     | HIGH     | None         |
+| 7   | Register correlation handler in all services              | 1h     | HIGH     | #6           |
+| 8   | Create `HttpClientPolicies.cs` in BuildingBlocks          | 2h     | HIGH     | None         |
+| 9   | Apply Polly to Basket→Inventory HTTP client               | 1h     | HIGH     | #8           |
+| 10  | Apply Polly to all inter-service HTTP clients             | 2h     | HIGH     | #8           |
+| 11  | Add HealthCheck NuGet packages to all services            | 30m    | HIGH     | None         |
+| 12  | Configure health checks per service                       | 3h     | HIGH     | #11          |
+| 13  | Map `/health` endpoints in all services                   | 1h     | HIGH     | #12          |
+| 14  | Update WebHealthStatus with HealthChecksUI                | 2h     | MEDIUM   | #13          |
+| 15  | Create WebHealthStatus Dockerfile                         | 30m    | MEDIUM   | #14          |
+| 16  | Add WebHealthStatus to docker-compose                     | 30m    | MEDIUM   | #15          |
+| 17  | Create Outbox table migration                             | 1h     | HIGH     | None         |
+| 18  | Implement OutboxProcessor background service              | 2h     | HIGH     | #17          |
+| 19  | Implement compensation events                             | 2h     | HIGH     | #18          |
+| 20  | Integration testing (all health checks, ELK, Polly)       | 3h     | CRITICAL | All          |
 
 **Total estimated effort: ~25 hours (3-4 days)**
 
