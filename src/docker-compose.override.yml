@@ -1,58 +1,25 @@
 version: "3.8"
 
 services:
-  #database section
-  #orderdb: sql server
-  orderdb:
-    container_name: orderdb
-    environment:
-      SA_PASSWORD: "Passw0rd!"
-      ACCEPT_EULA: "Y"
-    restart: always
-    volumes:
-      - sqlserver_data:/var/opt/mssql
-    ports:
-      - "1432:1433"
-
-  #productdb: mysql
-  productdb:
-    container_name: productdb
-    environment:
-      MYSQL_ROOT_PASSWORD: "Passw0rd!"
-    restart: always
-    volumes:
-      - mysql_data:/var/lib/mysql
-    ports:
-      - "3306:3306"
-
-  #customerdb: postgres
-  customerdb:
-    container_name: customerdb
+  #database section — unified PostgreSQL + PostGIS (nexusdb)
+  nexusdb:
+    container_name: nexusdb
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin1234
-      - POSTGRES_DB=CustomerDb
+      - POSTGRES_DB=NexusDb
     restart: always
     ports:
       - "5433:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - nexusdb_data:/var/lib/postgresql/data
 
-  #basketdb: redis
+  #basketdb: redis (also used for FlashSale Lua Script stock)
   basketdb:
     container_name: basketdb
     restart: always
     ports:
       - "6379:6379"
-
-  #inventorydb: mongo
-  inventorydb:
-    container_name: inventorydb
-    restart: always
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
 
   #infrastructure section
   rabbitmq:
@@ -111,9 +78,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - AspNetCore_Urls=http://+:80
-      - "ConnectionStrings:DefaultConnectionString=Server=productdb;Port=3306;Database=ProductDB;Uid=root;Pwd=Passw0rd!;"
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=ProductDb;Username=admin;Password=admin1234;"
     depends_on:
-      - productdb
+      - nexusdb
     ports:
       - "6002:80"
     restart: always
@@ -123,9 +90,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - AspNetCore_Urls=http://+:80
-      - "ConnectionStrings:DefaultConnectionString=Server=customerdb;Port=5432;Database=CustomerDb;User Id=admin;Password=admin1234"
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=CustomerDb;Username=admin;Password=admin1234;"
     depends_on:
-      - customerdb
+      - nexusdb
     ports:
       - "6003:80"
     restart: always
@@ -149,9 +116,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - AspNetCore_Urls=http://+:80
-      - "ConnectionStrings:DefaultConnectionString=Server=orderdb;Database=OrderDb;User Id=sa;Password=Passw0rd!;Encrypt=False;TrustServerCertificate=True"
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=OrderDb;Username=admin;Password=admin1234;"
     depends_on:
-      - orderdb
+      - nexusdb
     ports:
       - "6005:80"
     restart: always
@@ -162,11 +129,9 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=80
       - ASPNETCORE_HTTPS_PORTS=443
-      - "MongoDbSettings:ConnectionString=mongodb://inventorydb:27017"
-      - "MongoDbSettings:DatabaseName=InventoryDb"
-      - "MongoDbSettings:CollectionName=InventoryEntries"
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=InventoryDb;Username=admin;Password=admin1234;"
     depends_on:
-      - inventorydb
+      - nexusdb
     ports:
       - "6006:80"
       - "5005:5005"
@@ -178,7 +143,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - AspNetCore_Urls=http://+:80
-      - "ConnectionStrings:DefaultConnectionString=Server=orderdb;Database=PaymentDb;User Id=sa;Password=Passw0rd!;Encrypt=False;TrustServerCertificate=True"
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=PaymentDb;Username=admin;Password=admin1234;"
       - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
       - "PayOSSettings:ClientId=change_me_with_payos_client_id"
       - "PayOSSettings:ApiKey=change_me_with_payos_api_key"
@@ -192,7 +157,7 @@ services:
       - "Serilog:Using:0=Serilog.Sinks.Elasticsearch"
       - "Serilog:WriteTo:0:Args:nodeUris=http://elasticsearch:9200"
     depends_on:
-      - orderdb
+      - nexusdb
       - rabbitmq
       - elasticsearch
     ports:
@@ -205,7 +170,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - AspNetCore_Urls=http://+:80
-      - "ConnectionStrings:HangfireConnection=Server=orderdb;Database=HangfireDb;User Id=sa;Password=Passw0rd!;Encrypt=False;TrustServerCertificate=True"
+      - "ConnectionStrings:HangfireConnection=Host=nexusdb;Port=5432;Database=HangfireDb;Username=admin;Password=admin1234;"
       - "SmtpSettings:Host=smtp.gmail.com"
       - "SmtpSettings:Port=587"
       - "SmtpSettings:UserName=vietbmt19@gmail.com"
@@ -213,7 +178,7 @@ services:
       - "GatewayUrl=http://ocelot.apigw:80"
       - "ElasticConfiguration:Uri=http://elasticsearch:9200"
     depends_on:
-      - orderdb
+      - nexusdb
       - elasticsearch
     ports:
       - "6008:80"
@@ -225,7 +190,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - AspNetCore_Urls=http://+:80
-      - "ConnectionStrings:DefaultConnectionString=Server=orderdb;Database=IdentityDb;User Id=sa;Password=Passw0rd!;Encrypt=False;TrustServerCertificate=True"
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=IdentityDb;Username=admin;Password=admin1234;"
       - "JwtSettings:Secret=YourSuperSecretKeyHere_MustBeAtLeast32Characters!"
       - "JwtSettings:Issuer=distributed-ecommerce-platform"
       - "JwtSettings:Audience=distributed-ecommerce-client"
@@ -235,10 +200,44 @@ services:
       - "SmtpSettings:Password=change_me_with_smtp_password"
       - "ElasticConfiguration:Uri=http://elasticsearch:9200"
     depends_on:
-      - orderdb
+      - nexusdb
       - elasticsearch
     ports:
       - "6009:80"
+    restart: always
+
+  # flash sale api (Redis Lua Script + PostgreSQL)
+  flashsale.api:
+    container_name: flashsale.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - AspNetCore_Urls=http://+:80
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=FlashSaleDb;Username=admin;Password=admin1234;"
+      - "ConnectionStrings:Redis=basketdb:6379"
+      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
+    depends_on:
+      - nexusdb
+      - basketdb
+      - elasticsearch
+    ports:
+      - "6011:80"
+    restart: always
+
+  # group buy api (Pinduoduo social buying model)
+  groupbuy.api:
+    container_name: groupbuy.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - AspNetCore_Urls=http://+:80
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=GroupBuyDb;Username=admin;Password=admin1234;"
+      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
+      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
+    depends_on:
+      - nexusdb
+      - rabbitmq
+      - elasticsearch
+    ports:
+      - "6012:80"
     restart: always
 
   # API Gateway sections
@@ -256,6 +255,8 @@ services:
       - inventory.api
       - payment.api
       - identity.api
+      - flashsale.api
+      - groupbuy.api
       - elasticsearch
     ports:
       - "5000:80"
