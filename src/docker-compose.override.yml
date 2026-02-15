@@ -177,6 +177,34 @@ services:
         restart: 
             always
 
+  # payment api sections
+  payment.api:
+        container_name: payment.api
+        environment:
+          - ASPNETCORE_ENVIRONMENT=Development
+          - AspNetCore_Urls=http://+:80
+          - "ConnectionStrings:DefaultConnectionString=Server=orderdb;Database=PaymentDb;User Id=sa;Password=Passw0rd!;Encrypt=False;TrustServerCertificate=True"
+          - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
+          - "PayOSSettings:ClientId=0386ff7b-5d12-419f-8471-5015b22aff94"
+          - "PayOSSettings:ApiKey=6d78ef9e-4c3c-47be-b750-89583c33948a"
+          - "PayOSSettings:ChecksumKey=8babdef8d145850c9e2af2b7f2be7e5d340a8f46fe1756ed11b40ed0c7d010f1"
+          - "PayOSSettings:WebReturnUrl=http://localhost:3000/payment/success"
+          - "PayOSSettings:WebCancelUrl=http://localhost:3000/payment/cancel"
+          - "SmtpSettings:Host=smtp.gmail.com"
+          - "SmtpSettings:Port=587"
+          - "SmtpSettings:UserName=vietbmt19@gmail.com"
+          - "SmtpSettings:Password=raka azkp yhzv ltgd"
+          - "Serilog:Using:0=Serilog.Sinks.Elasticsearch"
+          - "Serilog:WriteTo:0:Args:nodeUris=http://elasticsearch:9200"
+        depends_on:
+          - orderdb
+          - rabbitmq
+          - elasticsearch
+        ports:
+            - "6007:80"
+        restart: 
+            always
+
   # API Gateway sections
   ocelot.apigw:
         container_name: ocelot.apigw
@@ -190,8 +218,19 @@ services:
           - basket.api
           - ordering.api
           - inventory.api
+          - payment.api
           - elasticsearch
         ports:
             - "5000:80"
+        restart: 
+            always
+
+  # WebApps section
+  react.client:
+        container_name: react.client
+        depends_on:
+          - ocelot.apigw
+        ports:
+            - "3000:80"
         restart: 
             always
