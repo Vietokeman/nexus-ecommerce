@@ -1,7 +1,6 @@
 ﻿using Contracts.Common.Interfaces;
 using Infrastructure.Common;
 using Microsoft.EntityFrameworkCore;
-using MySqlConnector;
 using Product.API.Persistence;
 using Product.API.Repositories;
 using Product.API.Repositories.Interfaces;
@@ -39,12 +38,10 @@ namespace Product.API.Extensions
         private static IServiceCollection ConfigureProductionDbContext(this IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("DefaultConnectionString");
-            var builder = new MySqlConnectionStringBuilder(connectionString);
 
-            services.AddDbContext<ProductContext>(options => options.UseMySql(builder.ConnectionString, ServerVersion.AutoDetect(builder.ConnectionString), e =>
+            services.AddDbContext<ProductContext>(options => options.UseNpgsql(connectionString, npgsqlOptions =>
             {
-                e.MigrationsAssembly("Product.API");
-                e.SchemaBehavior(Pomelo.EntityFrameworkCore.MySql.Infrastructure.MySqlSchemaBehavior.Ignore);
+                npgsqlOptions.MigrationsAssembly("Product.API");
             }));
 
 

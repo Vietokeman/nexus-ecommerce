@@ -1,5 +1,5 @@
 using Hangfire;
-using Hangfire.SqlServer;
+using Hangfire.PostgreSql;
 using Hangfire.API.Services;
 using Hangfire.API.Services.Interfaces;
 using Serilog;
@@ -31,24 +31,16 @@ Log.Information("Starting Hangfire API up");
 
 try
 {
-    // Hangfire Configuration
+    // Hangfire Configuration - PostgreSQL
     var hangfireConnectionString = builder.Configuration.GetConnectionString("HangfireConnection")
-        ?? "Server=orderdb;Database=HangfireDb;User Id=sa;Password=Passw0rd!;Encrypt=False;TrustServerCertificate=True";
+        ?? "Host=nexusdb;Port=5432;Database=HangfireDb;Username=postgres;Password=Passw0rd!";
 
     builder.Services.AddHangfire(config => config
         .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
         .UseSimpleAssemblyNameTypeSerializer()
         .UseRecommendedSerializerSettings()
-        .UseSqlServerStorage(hangfireConnectionString, new SqlServerStorageOptions
-        {
-            CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
-            SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
-            QueuePollInterval = TimeSpan.Zero,
-            UseRecommendedIsolationLevel = true,
-            DisableGlobalLocks = true,
-            PrepareSchemaIfNecessary = true,
-            SchemaName = "hangfire"
-        }));
+        .UsePostgreSqlStorage(options =>
+            options.UseNpgsqlConnection(hangfireConnectionString)));
 
     builder.Services.AddHangfireServer(options =>
     {

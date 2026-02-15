@@ -40,15 +40,15 @@ try
 {
     // Database
     builder.Services.AddDbContext<IdentityDbContext>(options =>
-        options.UseSqlServer(
+        options.UseNpgsql(
             builder.Configuration.GetConnectionString("DefaultConnectionString"),
-            sqlOptions =>
+            npgsqlOptions =>
             {
-                sqlOptions.EnableRetryOnFailure(
+                npgsqlOptions.EnableRetryOnFailure(
                     maxRetryCount: 5,
                     maxRetryDelay: TimeSpan.FromSeconds(30),
-                    errorNumbersToAdd: null);
-                sqlOptions.MigrationsAssembly(typeof(IdentityDbContext).Assembly.FullName);
+                    errorCodesToAdd: null);
+                npgsqlOptions.MigrationsAssembly(typeof(IdentityDbContext).Assembly.FullName);
             }));
 
     // ASP.NET Core Identity
@@ -111,10 +111,10 @@ try
 
     // Health Checks
     builder.Services.AddHealthChecks()
-        .AddSqlServer(
+        .AddNpgSql(
             builder.Configuration.GetConnectionString("DefaultConnectionString")!,
-            name: "sqlserver",
-            tags: new[] { "db", "sql" });
+            name: "postgresql",
+            tags: new[] { "db", "postgresql" });
 
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
