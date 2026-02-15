@@ -1,27 +1,28 @@
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddHealthChecksUI(opt =>
+{
+    opt.SetEvaluationTimeInSeconds(30);
+    opt.MaximumHistoryEntriesPerEndpoint(60);
+
+    opt.AddHealthCheckEndpoint("Product API", "http://product.api:80/health");
+    opt.AddHealthCheckEndpoint("Customer API", "http://customer.api:80/health");
+    opt.AddHealthCheckEndpoint("Basket API", "http://basket.api:80/health");
+    opt.AddHealthCheckEndpoint("Ordering API", "http://ordering.api:80/health");
+    opt.AddHealthCheckEndpoint("Inventory API", "http://inventory.api:80/health");
+    opt.AddHealthCheckEndpoint("Payment API", "http://payment.api:80/health");
+    opt.AddHealthCheckEndpoint("Identity API", "http://identity.api:80/health");
+    opt.AddHealthCheckEndpoint("Hangfire API", "http://hangfire.api:80/health");
+    opt.AddHealthCheckEndpoint("Ocelot Gateway", "http://ocelot.apigw:80/health");
+}).AddInMemoryStorage();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+app.MapHealthChecksUI(options =>
 {
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
+    options.UIPath = "/healthcheck-dashboard";
+});
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.UseAuthorization();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapGet("/", () => Results.Redirect("/healthcheck-dashboard"));
 
 app.Run();
