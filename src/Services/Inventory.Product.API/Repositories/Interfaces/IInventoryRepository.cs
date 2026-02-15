@@ -11,12 +11,12 @@ namespace Inventory.API.Repositories.Interfaces
         // CRUD Operations
         Task<IEnumerable<InventoryEntry>> GetAllAsync();
         Task<PagedList<InventoryEntry>> GetPagedAsync(int pageNumber, int pageSize);
-        Task<InventoryEntry?> GetByIdAsync(string id);
+        Task<InventoryEntry?> GetByIdAsync(long id);
         Task<IEnumerable<InventoryEntry>> GetByItemNoAsync(string itemNo);
         Task CreateAsync(InventoryEntry entry);
         Task CreateManyAsync(IEnumerable<InventoryEntry> entries);
         Task<bool> UpdateAsync(InventoryEntry entry);
-        Task<bool> DeleteAsync(string id);
+        Task<bool> DeleteAsync(long id);
         
         // Business Operations
         Task<int> GetStockQuantityAsync(string itemNo);

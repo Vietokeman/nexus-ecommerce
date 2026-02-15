@@ -2,14 +2,13 @@ using Inventory.API.DTOs;
 using Inventory.API.Entities;
 using Inventory.API.Repositories.Interfaces;
 using Inventory.API.Services.Interfaces;
-using MongoDB.Bson;
 using Shared.SeedWork;
 
 namespace Inventory.API.Services
 {
     /// <summary>
-    /// Service layer implementing inventory business logic
-    /// Handles stock calculations and transaction management
+    /// Service layer implementing inventory business logic.
+    /// Migrated from MongoDB to PostgreSQL EF Core.
     /// </summary>
     public class InventoryService : IInventoryService
     {
@@ -34,7 +33,7 @@ namespace Inventory.API.Services
             return await _repository.GetPagedAsync(pageNumber, pageSize);
         }
 
-        public async Task<InventoryEntry?> GetEntryByIdAsync(string id)
+        public async Task<InventoryEntry?> GetEntryByIdAsync(long id)
         {
             return await _repository.GetByIdAsync(id);
         }
@@ -70,13 +69,12 @@ namespace Inventory.API.Services
             });
         }
 
-        public async Task<string> CreatePurchaseOrderAsync(PurchaseOrderDto dto)
+        public async Task<long> CreatePurchaseOrderAsync(PurchaseOrderDto dto)
         {
             _logger.LogInformation("Creating purchase order: {DocumentNo}", dto.DocumentNo);
 
             var entries = dto.Items.Select(item => new InventoryEntry
             {
-                Id = ObjectId.GenerateNewId().ToString(),
                 DocumentNo = dto.DocumentNo,
                 ItemNo = item.ItemNo,
                 Quantity = item.Quantity, // Positive for purchase (IN)
@@ -84,17 +82,17 @@ namespace Inventory.API.Services
                 ExternalDocumentNo = dto.DocumentNo,
                 CreatedDate = DateTime.UtcNow,
                 CreatedBy = "system"
-            });
+            }).ToList();
 
             await _repository.CreateManyAsync(entries);
             
             _logger.LogInformation("Purchase order created successfully: {DocumentNo} with {Count} items", 
-                dto.DocumentNo, entries.Count());
+                dto.DocumentNo, entries.Count);
             
-            return dto.DocumentNo;
+            return entries.First().Id;
         }
 
-        public async Task<string> CreateSalesOrderAsync(SalesOrderDto dto)
+        public async Task<long> CreateSalesOrderAsync(SalesOrderDto dto)
         {
             _logger.LogInformation("Creating sales order: {DocumentNo}", dto.DocumentNo);
 
@@ -116,7 +114,6 @@ namespace Inventory.API.Services
 
             var entries = dto.Items.Select(item => new InventoryEntry
             {
-                Id = ObjectId.GenerateNewId().ToString(),
                 DocumentNo = dto.DocumentNo,
                 ItemNo = item.ItemNo,
                 Quantity = -item.Quantity, // Negative for sales (OUT)
@@ -124,21 +121,20 @@ namespace Inventory.API.Services
                 ExternalDocumentNo = dto.DocumentNo,
                 CreatedDate = DateTime.UtcNow,
                 CreatedBy = "system"
-            });
+            }).ToList();
 
             await _repository.CreateManyAsync(entries);
             
             _logger.LogInformation("Sales order created successfully: {DocumentNo} with {Count} items", 
-                dto.DocumentNo, entries.Count());
+                dto.DocumentNo, entries.Count);
             
-            return dto.DocumentNo;
+            return entries.First().Id;
         }
 
-        public async Task<string> CreateInventoryEntryAsync(InventoryEntryDto dto)
+        public async Task<long> CreateInventoryEntryAsync(InventoryEntryDto dto)
         {
             var entry = new InventoryEntry
             {
-                Id = ObjectId.GenerateNewId().ToString(),
                 DocumentNo = dto.DocumentNo,
                 ItemNo = dto.ItemNo,
                 Quantity = dto.Quantity,
@@ -152,7 +148,7 @@ namespace Inventory.API.Services
             return entry.Id;
         }
 
-        public async Task<bool> DeleteEntryAsync(string id)
+        public async Task<bool> DeleteEntryAsync(long id)
         {
             return await _repository.DeleteAsync(id);
         }
