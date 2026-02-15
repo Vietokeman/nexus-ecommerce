@@ -78,6 +78,13 @@ try
         });
     });
 
+    // Health Checks
+    builder.Services.AddHealthChecks()
+        .AddSqlServer(
+            builder.Configuration.GetConnectionString("DefaultConnectionString")!,
+            name: "sqlserver",
+            tags: new[] { "db", "sql" });
+
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
@@ -94,6 +101,7 @@ try
     app.UseSerilogRequestLogging();
     app.UseAuthorization();
     app.MapControllers();
+    app.MapHealthChecks("/health");
 
     // Auto-migrate
     using (var scope = app.Services.CreateScope())
