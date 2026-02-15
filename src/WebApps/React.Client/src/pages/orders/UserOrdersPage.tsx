@@ -48,8 +48,7 @@ export default function UserOrdersPage() {
   const orders = data || [];
 
   const tabs = ['All', 'Pending', 'Paid', 'Completed', 'Cancelled'];
-  const filtered =
-    tab === 0 ? orders : orders.filter((o) => o.status === tabs[tab]);
+  const filtered = tab === 0 ? orders : orders.filter((o) => o.status === tabs[tab]);
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
@@ -97,9 +96,7 @@ export default function UserOrdersPage() {
                       {order.documentNo}
                     </Typography>
                   </TableCell>
-                  <TableCell>
-                    {new Date(order.createdDate || '').toLocaleDateString()}
-                  </TableCell>
+                  <TableCell>{new Date(order.createdDate || '').toLocaleDateString()}</TableCell>
                   <TableCell align="center">{order.orderItems?.length || 0}</TableCell>
                   <TableCell align="right" sx={{ fontWeight: 600 }}>
                     ${order.totalPrice?.toFixed(2)}
