@@ -108,35 +108,35 @@ export default function LoginPage() {
           </LoadingButton>
 
           <Stack flexDirection="row" justifyContent="space-between" mt={1}>
-              <motion.div whileHover={{ y: -2 }}>
-                <Typography
-                  component={RouterLink}
-                  to="/forgot-password"
-                  variant="body2"
-                  sx={{
-                    color: '#DB4444',
-                    textDecoration: 'none',
-                    cursor: 'pointer',
-                  }}
-                >
-                  Forgot Password?
-                </Typography>
-              </motion.div>
-              <motion.div whileHover={{ y: -2 }}>
-                <Typography
-                  component={RouterLink}
-                  to="/signup"
-                  variant="body2"
-                  sx={{
-                    color: '#DB4444',
-                    textDecoration: 'none',
-                    cursor: 'pointer',
-                  }}
-                >
-                  Don&apos;t have an account? Sign Up
-                </Typography>
-              </motion.div>
-            </Stack>
+            <motion.div whileHover={{ y: -2 }}>
+              <Typography
+                component={RouterLink}
+                to="/forgot-password"
+                variant="body2"
+                sx={{
+                  color: '#DB4444',
+                  textDecoration: 'none',
+                  cursor: 'pointer',
+                }}
+              >
+                Forgot Password?
+              </Typography>
+            </motion.div>
+            <motion.div whileHover={{ y: -2 }}>
+              <Typography
+                component={RouterLink}
+                to="/signup"
+                variant="body2"
+                sx={{
+                  color: '#DB4444',
+                  textDecoration: 'none',
+                  cursor: 'pointer',
+                }}
+              >
+                Don&apos;t have an account? Sign Up
+              </Typography>
+            </motion.div>
+          </Stack>
         </Stack>
       </Stack>
     </Stack>
