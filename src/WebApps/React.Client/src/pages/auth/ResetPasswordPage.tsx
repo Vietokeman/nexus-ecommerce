@@ -67,36 +67,36 @@ export default function ResetPasswordPage() {
             <Typography color="GrayText">Please enter and confirm new password</Typography>
           </Stack>
 
-            <motion.div whileHover={{ y: -2 }}>
-              <TextField
-                label="New Password"
-                type="password"
-                fullWidth
-                {...register('password', {
-                  required: 'Password is required',
-                  minLength: {
-                    value: 6,
-                    message: 'Minimum 6 characters',
-                  },
-                })}
-                error={!!errors.password}
-                helperText={errors.password?.message}
-              />
-            </motion.div>
+          <motion.div whileHover={{ y: -2 }}>
+            <TextField
+              label="New Password"
+              type="password"
+              fullWidth
+              {...register('password', {
+                required: 'Password is required',
+                minLength: {
+                  value: 6,
+                  message: 'Minimum 6 characters',
+                },
+              })}
+              error={!!errors.password}
+              helperText={errors.password?.message}
+            />
+          </motion.div>
 
-            <motion.div whileHover={{ y: -2 }}>
-              <TextField
-                label="Confirm Password"
-                type="password"
-                fullWidth
-                {...register('confirmPassword', {
-                  required: 'Please confirm password',
-                  validate: (v) => v === password || 'Passwords do not match',
-                })}
-                error={!!errors.confirmPassword}
-                helperText={errors.confirmPassword?.message}
-              />
-            </motion.div>
+          <motion.div whileHover={{ y: -2 }}>
+            <TextField
+              label="Confirm Password"
+              type="password"
+              fullWidth
+              {...register('confirmPassword', {
+                required: 'Please confirm password',
+                validate: (v) => v === password || 'Passwords do not match',
+              })}
+              error={!!errors.confirmPassword}
+              helperText={errors.confirmPassword?.message}
+            />
+          </motion.div>
 
           <LoadingButton
             type="submit"

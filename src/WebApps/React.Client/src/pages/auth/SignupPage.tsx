@@ -134,35 +134,35 @@ export default function SignupPage() {
           </LoadingButton>
 
           <Stack flexDirection="row" justifyContent="space-between" mt={1}>
-              <motion.div whileHover={{ y: -2 }}>
-                <Typography
-                  component={RouterLink}
-                  to="/forgot-password"
-                  variant="body2"
-                  sx={{
-                    color: '#DB4444',
-                    textDecoration: 'none',
-                    cursor: 'pointer',
-                  }}
-                >
-                  Forgot Password?
-                </Typography>
-              </motion.div>
-              <motion.div whileHover={{ y: -2 }}>
-                <Typography
-                  component={RouterLink}
-                  to="/login"
-                  variant="body2"
-                  sx={{
-                    color: '#DB4444',
-                    textDecoration: 'none',
-                    cursor: 'pointer',
-                  }}
-                >
-                  Already have an account? Log in
-                </Typography>
-              </motion.div>
-            </Stack>
+            <motion.div whileHover={{ y: -2 }}>
+              <Typography
+                component={RouterLink}
+                to="/forgot-password"
+                variant="body2"
+                sx={{
+                  color: '#DB4444',
+                  textDecoration: 'none',
+                  cursor: 'pointer',
+                }}
+              >
+                Forgot Password?
+              </Typography>
+            </motion.div>
+            <motion.div whileHover={{ y: -2 }}>
+              <Typography
+                component={RouterLink}
+                to="/login"
+                variant="body2"
+                sx={{
+                  color: '#DB4444',
+                  textDecoration: 'none',
+                  cursor: 'pointer',
+                }}
+              >
+                Already have an account? Log in
+              </Typography>
+            </motion.div>
+          </Stack>
         </Stack>
       </Stack>
     </Stack>
