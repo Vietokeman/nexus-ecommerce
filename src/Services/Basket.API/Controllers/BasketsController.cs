@@ -81,7 +81,7 @@ namespace Basket.API.Controllers
             // ⭐ VALIDATE STOCK VIA gRPC CALL TO INVENTORY SERVICE ⭐
             try
             {
-                var itemQuantities = basket.Items.ToDictionary(x => x.ProductId, x => x.Quantity);
+                var itemQuantities = basket.Items.ToDictionary(x => x.ItemNo, x => x.Quantity);
                 var stockValidation = await _stockGrpcClient.ValidateCartStockAsync(itemQuantities);
                 
                 var outOfStockItems = stockValidation.Where(x => !x.Value).Select(x => x.Key).ToList();
@@ -149,7 +149,6 @@ namespace Basket.API.Controllers
                 _logger.LogError(ex, "Error checking stock for item: {ItemNo}", itemNo);
                 return BadRequest("Unable to check stock");
             }
-        }
         }
     }
 }
