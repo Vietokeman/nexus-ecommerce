@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   #database section
@@ -72,8 +72,8 @@ services:
       - "5050:80"
     volumes:
       - pgadmin_data:/root/pgadmin
-# web ui for docker compose 
-  portainer:            
+  # web ui for docker compose
+  portainer:
     container_name: portainer
     restart: always
     ports:
@@ -107,130 +107,176 @@ services:
       - "5601:5601"
   # microservices api sections
   product.api:
-        container_name: product.api
-        environment:
-          - ASPNETCORE_ENVIRONMENT=Development
-          - AspNetCore_Urls=http://+:80
-          - "ConnectionStrings:DefaultConnectionString=Server=productdb;Port=3306;Database=ProductDB;Uid=root;Pwd=Passw0rd!;"
-        depends_on:
-          - productdb
-        ports:
-            - "6002:80"
-        restart: 
-            always
+    container_name: product.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - AspNetCore_Urls=http://+:80
+      - "ConnectionStrings:DefaultConnectionString=Server=productdb;Port=3306;Database=ProductDB;Uid=root;Pwd=Passw0rd!;"
+    depends_on:
+      - productdb
+    ports:
+      - "6002:80"
+    restart: always
   # customer api sections
   customer.api:
-        container_name: customer.api
-        environment:
-          - ASPNETCORE_ENVIRONMENT=Development
-          - AspNetCore_Urls=http://+:80
-          - "ConnectionStrings:DefaultConnectionString=Server=customerdb;Port=5432;Database=CustomerDb;User Id=admin;Password=admin1234"
-        depends_on:
-          - customerdb
-        ports:
-            - "6003:80"
-        restart: 
-            always
-  
+    container_name: customer.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - AspNetCore_Urls=http://+:80
+      - "ConnectionStrings:DefaultConnectionString=Server=customerdb;Port=5432;Database=CustomerDb;User Id=admin;Password=admin1234"
+    depends_on:
+      - customerdb
+    ports:
+      - "6003:80"
+    restart: always
+
   # basket api sections
   basket.api:
-        container_name: basket.api
-        environment:
-          - ASPNETCORE_ENVIRONMENT=Development
-          - AspNetCore_Urls=http://+:80
-          - "CacheSettings:ConnectionString=basketdb:6379"
-        depends_on:
-          - basketdb
-        ports:
-            - "6004:80"
-        restart: 
-            always
-  
+    container_name: basket.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - AspNetCore_Urls=http://+:80
+      - "CacheSettings:ConnectionString=basketdb:6379"
+    depends_on:
+      - basketdb
+    ports:
+      - "6004:80"
+    restart: always
+
   # ordering api sections
   ordering.api:
-        container_name: ordering.api
-        environment:
-          - ASPNETCORE_ENVIRONMENT=Development
-          - AspNetCore_Urls=http://+:80
-          - "ConnectionStrings:DefaultConnectionString=Server=orderdb;Database=OrderDb;User Id=sa;Password=Passw0rd!;Encrypt=False;TrustServerCertificate=True"
-        depends_on:
-          - orderdb
-        ports:
-            - "6005:80"
-        restart: 
-            always
+    container_name: ordering.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - AspNetCore_Urls=http://+:80
+      - "ConnectionStrings:DefaultConnectionString=Server=orderdb;Database=OrderDb;User Id=sa;Password=Passw0rd!;Encrypt=False;TrustServerCertificate=True"
+    depends_on:
+      - orderdb
+    ports:
+      - "6005:80"
+    restart: always
 
   inventory.api:
-        container_name: inventory.api
-        environment:
-          - ASPNETCORE_ENVIRONMENT=Development
-          - ASPNETCORE_HTTP_PORTS=80
-          - ASPNETCORE_HTTPS_PORTS=443
-          - "MongoDbSettings:ConnectionString=mongodb://inventorydb:27017"
-          - "MongoDbSettings:DatabaseName=InventoryDb"
-          - "MongoDbSettings:CollectionName=InventoryEntries"
-        depends_on:
-          - inventorydb
-        ports:
-            - "6006:80"
-            - "5005:5005"
-        restart: 
-            always
+    container_name: inventory.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=80
+      - ASPNETCORE_HTTPS_PORTS=443
+      - "MongoDbSettings:ConnectionString=mongodb://inventorydb:27017"
+      - "MongoDbSettings:DatabaseName=InventoryDb"
+      - "MongoDbSettings:CollectionName=InventoryEntries"
+    depends_on:
+      - inventorydb
+    ports:
+      - "6006:80"
+      - "5005:5005"
+    restart: always
 
   # payment api sections
   payment.api:
-        container_name: payment.api
-        environment:
-          - ASPNETCORE_ENVIRONMENT=Development
-          - AspNetCore_Urls=http://+:80
-          - "ConnectionStrings:DefaultConnectionString=Server=orderdb;Database=PaymentDb;User Id=sa;Password=Passw0rd!;Encrypt=False;TrustServerCertificate=True"
-          - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
-          - "PayOSSettings:ClientId=change_me_with_payos_client_id"
-          - "PayOSSettings:ApiKey=change_me_with_payos_api_key"
-          - "PayOSSettings:ChecksumKey=change_me_with_payos_checksum_key"
-          - "PayOSSettings:WebReturnUrl=http://localhost:3000/payment/success"
-          - "PayOSSettings:WebCancelUrl=http://localhost:3000/payment/cancel"
-          - "SmtpSettings:Host=smtp.gmail.com"
-          - "SmtpSettings:Port=587"
-          - "SmtpSettings:UserName=vietbmt19@gmail.com"
-          - "SmtpSettings:Password=change_me_with_smtp_password"
-          - "Serilog:Using:0=Serilog.Sinks.Elasticsearch"
-          - "Serilog:WriteTo:0:Args:nodeUris=http://elasticsearch:9200"
-        depends_on:
-          - orderdb
-          - rabbitmq
-          - elasticsearch
-        ports:
-            - "6007:80"
-        restart: 
-            always
+    container_name: payment.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - AspNetCore_Urls=http://+:80
+      - "ConnectionStrings:DefaultConnectionString=Server=orderdb;Database=PaymentDb;User Id=sa;Password=Passw0rd!;Encrypt=False;TrustServerCertificate=True"
+      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
+      - "PayOSSettings:ClientId=change_me_with_payos_client_id"
+      - "PayOSSettings:ApiKey=change_me_with_payos_api_key"
+      - "PayOSSettings:ChecksumKey=change_me_with_payos_checksum_key"
+      - "PayOSSettings:WebReturnUrl=http://localhost:3000/payment/success"
+      - "PayOSSettings:WebCancelUrl=http://localhost:3000/payment/cancel"
+      - "SmtpSettings:Host=smtp.gmail.com"
+      - "SmtpSettings:Port=587"
+      - "SmtpSettings:UserName=vietbmt19@gmail.com"
+      - "SmtpSettings:Password=change_me_with_smtp_password"
+      - "Serilog:Using:0=Serilog.Sinks.Elasticsearch"
+      - "Serilog:WriteTo:0:Args:nodeUris=http://elasticsearch:9200"
+    depends_on:
+      - orderdb
+      - rabbitmq
+      - elasticsearch
+    ports:
+      - "6007:80"
+    restart: always
+
+  # hangfire api sections
+  hangfire.api:
+    container_name: hangfire.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - AspNetCore_Urls=http://+:80
+      - "ConnectionStrings:HangfireConnection=Server=orderdb;Database=HangfireDb;User Id=sa;Password=Passw0rd!;Encrypt=False;TrustServerCertificate=True"
+      - "SmtpSettings:Host=smtp.gmail.com"
+      - "SmtpSettings:Port=587"
+      - "SmtpSettings:UserName=vietbmt19@gmail.com"
+      - "SmtpSettings:Password=change_me_with_smtp_password"
+      - "GatewayUrl=http://ocelot.apigw:80"
+      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
+    depends_on:
+      - orderdb
+      - elasticsearch
+    ports:
+      - "6008:80"
+    restart: always
+
+  # identity api sections
+  identity.api:
+    container_name: identity.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - AspNetCore_Urls=http://+:80
+      - "ConnectionStrings:DefaultConnectionString=Server=orderdb;Database=IdentityDb;User Id=sa;Password=Passw0rd!;Encrypt=False;TrustServerCertificate=True"
+      - "JwtSettings:Secret=YourSuperSecretKeyHere_MustBeAtLeast32Characters!"
+      - "JwtSettings:Issuer=distributed-ecommerce-platform"
+      - "JwtSettings:Audience=distributed-ecommerce-client"
+      - "SmtpSettings:Host=smtp.gmail.com"
+      - "SmtpSettings:Port=587"
+      - "SmtpSettings:UserName=vietbmt19@gmail.com"
+      - "SmtpSettings:Password=change_me_with_smtp_password"
+      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
+    depends_on:
+      - orderdb
+      - elasticsearch
+    ports:
+      - "6009:80"
+    restart: always
 
   # API Gateway sections
   ocelot.apigw:
-        container_name: ocelot.apigw
-        environment:
-          - ASPNETCORE_ENVIRONMENT=Development
-          - AspNetCore_Urls=http://+:80
-          - "ElasticConfiguration:Uri=http://elasticsearch:9200"
-        depends_on:
-          - product.api
-          - customer.api
-          - basket.api
-          - ordering.api
-          - inventory.api
-          - payment.api
-          - elasticsearch
-        ports:
-            - "5000:80"
-        restart: 
-            always
+    container_name: ocelot.apigw
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - AspNetCore_Urls=http://+:80
+      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
+    depends_on:
+      - product.api
+      - customer.api
+      - basket.api
+      - ordering.api
+      - inventory.api
+      - payment.api
+      - identity.api
+      - elasticsearch
+    ports:
+      - "5000:80"
+    restart: always
 
   # WebApps section
   react.client:
-        container_name: react.client
-        depends_on:
-          - ocelot.apigw
-        ports:
-            - "3000:80"
-        restart: 
-            always
+    container_name: react.client
+    depends_on:
+      - ocelot.apigw
+    ports:
+      - "3000:80"
+    restart: always
+
+  webhealthstatus:
+    container_name: webhealthstatus
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - AspNetCore_Urls=http://+:80
+    depends_on:
+      - ocelot.apigw
+    ports:
+      - "6010:80"
+    restart: always
