@@ -27,26 +27,28 @@
 ## 1. Current State Analysis
 
 ### ✅ Already Implemented
+
 The Ocelot API Gateway is **fully functional** with the following features:
 
-| Feature | Status | Configuration |
-|---------|--------|--------------|
-| Routing | ✅ 11 routes | 5 services mapped |
-| Rate Limiting | ✅ Per-route | 3-10 req/s per endpoint |
-| Response Caching | ✅ CacheManager | 15-60s TTL by region |
-| Circuit Breaker (QoS) | ✅ | 3 failures → 1s break |
-| Load Balancing | ✅ | Round-robin (global config) |
-| CORS | ✅ | AllowAny (development) |
-| Serilog → Elasticsearch | ✅ | `ocelot-gateway-logs-*` index |
-| Environment Configs | ✅ | Docker + Development JSON files |
+| Feature                 | Status          | Configuration                   |
+| ----------------------- | --------------- | ------------------------------- |
+| Routing                 | ✅ 11 routes    | 5 services mapped               |
+| Rate Limiting           | ✅ Per-route    | 3-10 req/s per endpoint         |
+| Response Caching        | ✅ CacheManager | 15-60s TTL by region            |
+| Circuit Breaker (QoS)   | ✅              | 3 failures → 1s break           |
+| Load Balancing          | ✅              | Round-robin (global config)     |
+| CORS                    | ✅              | AllowAny (development)          |
+| Serilog → Elasticsearch | ✅              | `ocelot-gateway-logs-*` index   |
+| Environment Configs     | ✅              | Docker + Development JSON files |
 
 ### 🔲 To Implement
-| Feature | Priority | Section |
-|---------|----------|---------|
-| JWT Authentication | CRITICAL | Required for Section 12 integration |
-| New Routes (Payment, Identity) | HIGH | Needed for new services |
-| Request Correlation IDs | HIGH | Cross-service tracing |
-| Aggregation (optional) | LOW | Multi-route request aggregation |
+
+| Feature                        | Priority | Section                             |
+| ------------------------------ | -------- | ----------------------------------- |
+| JWT Authentication             | CRITICAL | Required for Section 12 integration |
+| New Routes (Payment, Identity) | HIGH     | Needed for new services             |
+| Request Correlation IDs        | HIGH     | Cross-service tracing               |
+| Aggregation (optional)         | LOW      | Multi-route request aggregation     |
 
 ---
 
@@ -85,6 +87,7 @@ Client Request → Ocelot Gateway → Rate Limit Check → Authentication Check
 ```
 
 Each route in `ocelot.json` defines:
+
 ```json
 {
   "DownstreamPathTemplate": "/api/products",          // internal service path
@@ -254,25 +257,26 @@ Add `AuthenticationOptions` to protected routes in `ocelot.json`:
 
 ### Current Rate Limits
 
-| Route | Limit | Period | HTTP 429 Message |
-|-------|-------|--------|-----------------|
-| Products (list) | 10/s | 1s | "Rate limit exceeded..." |
-| Customers (list) | 5/s | 1s | "Rate limit exceeded..." |
-| Customer (CUD) | 3/s | 1s | "Rate limit exceeded..." |
-| Baskets | 5-10/s | 1s | "Rate limit exceeded..." |
-| Orders | 5/s | 1s | "Rate limit exceeded..." |
+| Route            | Limit  | Period | HTTP 429 Message         |
+| ---------------- | ------ | ------ | ------------------------ |
+| Products (list)  | 10/s   | 1s     | "Rate limit exceeded..." |
+| Customers (list) | 5/s    | 1s     | "Rate limit exceeded..." |
+| Customer (CUD)   | 3/s    | 1s     | "Rate limit exceeded..." |
+| Baskets          | 5-10/s | 1s     | "Rate limit exceeded..." |
+| Orders           | 5/s    | 1s     | "Rate limit exceeded..." |
 
 ### Recommended New Route Limits
 
-| Route | Limit | Period | Rationale |
-|-------|-------|--------|-----------|
-| Payment Create | 3/s | 1s | Prevent payment abuse |
-| Payment Callback | 20/s | 1s | PayOS webhooks |
-| Identity Login | 5/s | 5s | Brute-force protection |
-| Identity Register | 2/s | 10s | Registration spam |
-| Inventory Stock | 20/s | 1s | Allow batch stock checks |
+| Route             | Limit | Period | Rationale                |
+| ----------------- | ----- | ------ | ------------------------ |
+| Payment Create    | 3/s   | 1s     | Prevent payment abuse    |
+| Payment Callback  | 20/s  | 1s     | PayOS webhooks           |
+| Identity Login    | 5/s   | 5s     | Brute-force protection   |
+| Identity Register | 2/s   | 10s    | Registration spam        |
+| Inventory Stock   | 20/s  | 1s     | Allow batch stock checks |
 
 ### Global Rate Limit Configuration
+
 ```json
 "GlobalConfiguration": {
   "RateLimitOptions": {
@@ -295,6 +299,7 @@ Normal → [3 failures] → OPEN (reject all for 1s) → HALF-OPEN (allow 1 test
 ```
 
 ### Current QoS Settings
+
 ```json
 "QoSOptions": {
   "ExceptionsAllowedBeforeBreaking": 3,  // failures before opening circuit
@@ -305,11 +310,11 @@ Normal → [3 failures] → OPEN (reject all for 1s) → HALF-OPEN (allow 1 test
 
 ### Recommended Adjustments for New Services
 
-| Service | Timeout | Failures Before Break | Break Duration |
-|---------|---------|----------------------|----------------|
-| Payment.API | 30s | 2 | 5s |
-| Identity.API | 10s | 3 | 2s |
-| Inventory (gRPC passthrough) | 5s | 3 | 1s |
+| Service                      | Timeout | Failures Before Break | Break Duration |
+| ---------------------------- | ------- | --------------------- | -------------- |
+| Payment.API                  | 30s     | 2                     | 5s             |
+| Identity.API                 | 10s     | 3                     | 2s             |
+| Inventory (gRPC passthrough) | 5s      | 3                     | 1s             |
 
 Payment needs longer timeout because PayOS API calls are external and may be slower.
 
@@ -319,26 +324,27 @@ Payment needs longer timeout because PayOS API calls are external and may be slo
 
 ### Current Cache Configuration
 
-| Region | TTL | Route |
-|--------|-----|-------|
-| `products` | 30s | Product list |
-| `product-detail` | 30s | Product by ID |
-| `product-by-no` | 60s | Product by number |
-| `customers` | 15s | Customer list |
+| Region            | TTL | Route                |
+| ----------------- | --- | -------------------- |
+| `products`        | 30s | Product list         |
+| `product-detail`  | 30s | Product by ID        |
+| `product-by-no`   | 60s | Product by number    |
+| `customers`       | 15s | Customer list        |
 | `customer-detail` | 30s | Customer by username |
-| `orders` | 15s | Order list |
-| `orders-by-user` | 30s | Orders by user |
+| `orders`          | 15s | Order list           |
+| `orders-by-user`  | 30s | Orders by user       |
 
 ### Routes That Should NOT Be Cached
 
-| Route | Reason |
-|-------|--------|
-| `POST/PUT/DELETE` (all) | Mutation operations |
-| Basket operations | Real-time cart state |
-| Payment status | Must be live |
-| Identity tokens | Security risk |
+| Route                   | Reason               |
+| ----------------------- | -------------------- |
+| `POST/PUT/DELETE` (all) | Mutation operations  |
+| Basket operations       | Real-time cart state |
+| Payment status          | Must be live         |
+| Identity tokens         | Security risk        |
 
 ### Cache Invalidation Strategy
+
 - CacheManager uses in-memory dictionary handle
 - Cache auto-expires via TTL
 - For production: Consider Redis distributed cache (`Ocelot.Provider.Redis`)
@@ -348,6 +354,7 @@ Payment needs longer timeout because PayOS API calls are external and may be slo
 ## 7. Load Balancing
 
 ### Current Configuration
+
 ```json
 "GlobalConfiguration": {
   "LoadBalancerOptions": {
@@ -357,14 +364,16 @@ Payment needs longer timeout because PayOS API calls are external and may be slo
 ```
 
 ### Supported Strategies
-| Strategy | Use Case |
-|----------|----------|
-| `RoundRobin` | Equal distribution (current) |
-| `LeastConnection` | Route to least busy server |
-| `NoLoadBalancer` | Single instance (default) |
-| `CookieStickySessions` | Session affinity |
+
+| Strategy               | Use Case                     |
+| ---------------------- | ---------------------------- |
+| `RoundRobin`           | Equal distribution (current) |
+| `LeastConnection`      | Route to least busy server   |
+| `NoLoadBalancer`       | Single instance (default)    |
+| `CookieStickySessions` | Session affinity             |
 
 ### Multi-Instance Configuration (for scaling)
+
 ```json
 {
   "DownstreamPathTemplate": "/api/products",
@@ -537,11 +546,13 @@ public class CorrelationIdMiddleware
 ### 9.2 Request/Response Logging
 
 Serilog request logging is already configured via `app.UseSerilogRequestLogging()`. The logs flow to:
+
 1. Console (development)
 2. Debug output
 3. **Elasticsearch** (`ocelot-gateway-logs-{date}` index)
 
 ### 9.3 Kibana Dashboard
+
 - Access at `http://localhost:5601`
 - Create index pattern: `ocelot-gateway-logs-*`
 - Visualize: request counts by route, response times, error rates, correlation ID tracing
@@ -575,6 +586,7 @@ ENTRYPOINT ["dotnet", "OcelotApiGw.dll"]
 ```
 
 ### Docker Compose Entry (existing)
+
 ```yaml
 ocelot.apigw:
   container_name: ocelot.apigw
@@ -595,6 +607,7 @@ ocelot.apigw:
 ```
 
 ### Updated depends_on (after all sections)
+
 ```yaml
 ocelot.apigw:
   depends_on:
@@ -603,8 +616,8 @@ ocelot.apigw:
     - basket.api
     - ordering.api
     - inventory.api
-    - payment.api       # NEW
-    - identity.api      # NEW
+    - payment.api # NEW
+    - identity.api # NEW
     - elasticsearch
 ```
 
@@ -613,28 +626,30 @@ ocelot.apigw:
 ## 11. Testing Checklist
 
 ### Route Testing
-| # | Test | Method | Expected |
-|---|------|--------|----------|
-| 1 | Gateway health | `GET :5000/health` | 200 OK |
-| 2 | Product list via GW | `GET :5000/api/products` | Product JSON array |
-| 3 | Product by ID via GW | `GET :5000/api/products/1` | Product JSON |
-| 4 | Customer list via GW | `GET :5000/api/customers` | Customer JSON array |
-| 5 | Basket get via GW | `GET :5000/api/baskets/testuser` | Basket JSON |
-| 6 | Orders via GW | `GET :5000/api/v1/orders` | Orders JSON |
-| 7 | Rate limit test | 11x `GET :5000/api/products` in 1s | 429 on 11th |
-| 8 | Cache test | 2x `GET :5000/api/products` | 2nd hits cache |
-| 9 | Auth required | `POST :5000/api/products` (no token) | 401 Unauthorized |
-| 10 | Auth valid | `POST :5000/api/products` (with token) | 201 Created |
-| 11 | Payment create | `POST :5000/api/payment/create` | Payment link |
-| 12 | Identity login | `POST :5000/api/auth/login` | JWT token |
+
+| #   | Test                 | Method                                 | Expected            |
+| --- | -------------------- | -------------------------------------- | ------------------- |
+| 1   | Gateway health       | `GET :5000/health`                     | 200 OK              |
+| 2   | Product list via GW  | `GET :5000/api/products`               | Product JSON array  |
+| 3   | Product by ID via GW | `GET :5000/api/products/1`             | Product JSON        |
+| 4   | Customer list via GW | `GET :5000/api/customers`              | Customer JSON array |
+| 5   | Basket get via GW    | `GET :5000/api/baskets/testuser`       | Basket JSON         |
+| 6   | Orders via GW        | `GET :5000/api/v1/orders`              | Orders JSON         |
+| 7   | Rate limit test      | 11x `GET :5000/api/products` in 1s     | 429 on 11th         |
+| 8   | Cache test           | 2x `GET :5000/api/products`            | 2nd hits cache      |
+| 9   | Auth required        | `POST :5000/api/products` (no token)   | 401 Unauthorized    |
+| 10  | Auth valid           | `POST :5000/api/products` (with token) | 201 Created         |
+| 11  | Payment create       | `POST :5000/api/payment/create`        | Payment link        |
+| 12  | Identity login       | `POST :5000/api/auth/login`            | JWT token           |
 
 ### Performance Testing
-| Metric | Target |
-|--------|--------|
-| Response time (cached) | < 10ms |
-| Response time (proxy) | < 200ms |
-| Throughput | > 1000 req/s |
-| Circuit breaker recovery | < 2s |
+
+| Metric                   | Target       |
+| ------------------------ | ------------ |
+| Response time (cached)   | < 10ms       |
+| Response time (proxy)    | < 200ms      |
+| Throughput               | > 1000 req/s |
+| Circuit breaker recovery | < 2s         |
 
 ---
 
@@ -642,19 +657,19 @@ ocelot.apigw:
 
 ### Priority Order
 
-| # | Task | Effort | Depends On |
-|---|------|--------|------------|
-| 1 | Verify current routing works in Docker | 1h | None |
-| 2 | Add Inventory routes to `ocelot.json` | 30m | None |
-| 3 | Add Correlation ID middleware | 1h | None |
-| 4 | Install JWT NuGet & update `Program.cs` | 1h | None |
-| 5 | Configure JWT settings in `appsettings.json` | 30m | #4 |
-| 6 | Add Payment.API routes (after S13 created) | 1h | Section 13 |
-| 7 | Add Identity.API routes (after S11 created) | 1h | Section 11 |
-| 8 | Add `AuthenticationOptions` to protected routes | 2h | #4, #7 |
-| 9 | Update `docker-compose.yml` dependencies | 30m | #6, #7 |
-| 10 | Full route testing | 2h | All above |
-| 11 | Performance testing | 1h | #10 |
-| 12 | Document all routes and auth requirements | 1h | All |
+| #   | Task                                            | Effort | Depends On |
+| --- | ----------------------------------------------- | ------ | ---------- |
+| 1   | Verify current routing works in Docker          | 1h     | None       |
+| 2   | Add Inventory routes to `ocelot.json`           | 30m    | None       |
+| 3   | Add Correlation ID middleware                   | 1h     | None       |
+| 4   | Install JWT NuGet & update `Program.cs`         | 1h     | None       |
+| 5   | Configure JWT settings in `appsettings.json`    | 30m    | #4         |
+| 6   | Add Payment.API routes (after S13 created)      | 1h     | Section 13 |
+| 7   | Add Identity.API routes (after S11 created)     | 1h     | Section 11 |
+| 8   | Add `AuthenticationOptions` to protected routes | 2h     | #4, #7     |
+| 9   | Update `docker-compose.yml` dependencies        | 30m    | #6, #7     |
+| 10  | Full route testing                              | 2h     | All above  |
+| 11  | Performance testing                             | 1h     | #10        |
+| 12  | Document all routes and auth requirements       | 1h     | All        |
 
 **Total estimated effort: ~12 hours**

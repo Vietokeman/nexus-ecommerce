@@ -161,30 +161,30 @@ src/Services/Identity.API/
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.*" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.*" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.*" />
-    
+
     <!-- Duende Identity Server -->
     <PackageReference Include="Duende.IdentityServer" Version="7.0.*" />
     <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="7.0.*" />
     <PackageReference Include="Duende.IdentityServer.EntityFramework" Version="7.0.*" />
-    
+
     <!-- Database -->
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.*" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.*" />
     <PackageReference Include="Dapper" Version="2.1.*" />
-    
+
     <!-- Logging -->
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.*" />
     <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="10.0.*" />
-    
+
     <!-- Email -->
     <PackageReference Include="MailKit" Version="4.3.*" />
-    
+
     <!-- Mapping -->
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.*" />
-    
+
     <!-- Validation -->
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.*" />
-    
+
     <!-- Health Checks -->
     <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="8.0.*" />
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="8.0.*" />
@@ -351,7 +351,7 @@ public class AppUser : IdentityUser
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; set; }
     public bool IsActive { get; set; } = true;
-    
+
     // Navigation
     public virtual ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
 }
@@ -371,7 +371,7 @@ public class RefreshToken
     public DateTime ExpiryDate { get; set; }
     public bool IsRevoked { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    
+
     public virtual AppUser User { get; set; } = null!;
 }
 ```
@@ -566,11 +566,11 @@ public static class IdentityServerConfig
 
 ### 6.1 Three Database Contexts
 
-| Context | Purpose | Tables |
-|---------|---------|--------|
-| **IdentityDbContext** | User management | AspNetUsers, AspNetRoles, Permissions, RolePermissions, RefreshTokens |
-| **ConfigurationDbContext** | IS config | Clients, ApiScopes, ApiResources, IdentityResources |
-| **PersistedGrantDbContext** | IS runtime | PersistedGrants, DeviceFlowCodes |
+| Context                     | Purpose         | Tables                                                                |
+| --------------------------- | --------------- | --------------------------------------------------------------------- |
+| **IdentityDbContext**       | User management | AspNetUsers, AspNetRoles, Permissions, RolePermissions, RefreshTokens |
+| **ConfigurationDbContext**  | IS config       | Clients, ApiScopes, ApiResources, IdentityResources                   |
+| **PersistedGrantDbContext** | IS runtime      | PersistedGrants, DeviceFlowCodes                                      |
 
 ### 6.2 Migration Commands
 
@@ -754,7 +754,7 @@ public class RepositoryManager : IRepositoryManager
 {
     private readonly IdentityDbContext _context;
     private readonly IConfiguration _configuration;
-    
+
     private readonly Lazy<IUserRepository> _userRepository;
     private readonly Lazy<IPermissionRepository> _permissionRepository;
 
@@ -762,10 +762,10 @@ public class RepositoryManager : IRepositoryManager
     {
         _context = context;
         _configuration = configuration;
-        
-        _userRepository = new Lazy<IUserRepository>(() => 
+
+        _userRepository = new Lazy<IUserRepository>(() =>
             new UserRepository(context));
-        _permissionRepository = new Lazy<IPermissionRepository>(() => 
+        _permissionRepository = new Lazy<IPermissionRepository>(() =>
             new PermissionRepository(CreateDapperConnection()));
     }
 
@@ -1033,7 +1033,7 @@ public class AuthController : ControllerBase
         var result = await _authService.RegisterAsync(request);
         if (!result.Succeeded)
             return BadRequest(result.Errors);
-        
+
         // Send confirmation email
         return Ok(new { message = "Registration successful. Please confirm your email." });
     }
@@ -1044,7 +1044,7 @@ public class AuthController : ControllerBase
         var response = await _authService.LoginAsync(request);
         if (response == null)
             return Unauthorized(new { message = "Invalid credentials" });
-        
+
         return Ok(response);  // { accessToken, refreshToken, expiresIn }
     }
 
@@ -1054,7 +1054,7 @@ public class AuthController : ControllerBase
         var response = await _authService.RefreshTokenAsync(request.RefreshToken);
         if (response == null)
             return Unauthorized(new { message = "Invalid or expired refresh token" });
-        
+
         return Ok(response);
     }
 
@@ -1203,15 +1203,15 @@ Repeat for: Customer.API, Basket.API, Ordering.API, Inventory.API, Payment.API
 
 ### 11.4 Auth per Service Summary
 
-| Service | Public Endpoints | Protected Endpoints |
-|---------|-----------------|-------------------|
-| Product.API | `GET /api/products`, `GET /api/products/{id}` | `POST`, `PUT`, `DELETE` |
-| Customer.API | None | All endpoints |
-| Basket.API | None | All endpoints (user's own basket) |
-| Ordering.API | None | All endpoints |
-| Inventory.API | `GET /api/inventory/stock/*` | `POST` (purchase orders) |
-| Payment.API | `POST /api/payment/payos-callback` (webhook) | Create, Status |
-| Identity.API | Login, Register, ConfirmEmail, ForgotPassword | Me, Permissions |
+| Service       | Public Endpoints                              | Protected Endpoints               |
+| ------------- | --------------------------------------------- | --------------------------------- |
+| Product.API   | `GET /api/products`, `GET /api/products/{id}` | `POST`, `PUT`, `DELETE`           |
+| Customer.API  | None                                          | All endpoints                     |
+| Basket.API    | None                                          | All endpoints (user's own basket) |
+| Ordering.API  | None                                          | All endpoints                     |
+| Inventory.API | `GET /api/inventory/stock/*`                  | `POST` (purchase orders)          |
+| Payment.API   | `POST /api/payment/payos-callback` (webhook)  | Create, Status                    |
+| Identity.API  | Login, Register, ConfirmEmail, ForgotPassword | Me, Permissions                   |
 
 ---
 
@@ -1220,6 +1220,7 @@ Repeat for: Customer.API, Basket.API, Ordering.API, Inventory.API, Payment.API
 See [SECTION_8_DETAIL.md](./SECTION_8_DETAIL.md) Section 3 for full Ocelot JWT configuration.
 
 Key points:
+
 - Ocelot validates JWT token on protected routes
 - `AuthenticationOptions.AuthenticationProviderKey = "Bearer"`
 - Token is forwarded to downstream services via HTTP headers
@@ -1294,66 +1295,66 @@ identity.api:
 
 ### Task Breakdown
 
-| # | Task | Effort | Priority | Phase |
-|---|------|--------|----------|-------|
-| 1 | Create Identity.API project & folder structure | 1h | CRITICAL | Setup |
-| 2 | Install NuGet packages | 30m | CRITICAL | Setup |
-| 3 | Create AppUser, Permission, RefreshToken entities | 1h | CRITICAL | Domain |
-| 4 | Create IdentityDbContext | 1h | CRITICAL | Data |
-| 5 | Create & apply EF Core migrations | 1h | CRITICAL | Data |
-| 6 | Configure Serilog + Elasticsearch | 30m | HIGH | Infra |
-| 7 | Implement TokenService (JWT generation) | 2h | CRITICAL | Auth |
-| 8 | Implement AuthService (register, login, refresh) | 3h | CRITICAL | Auth |
-| 9 | Implement EmailService (MailKit) | 1h | HIGH | Auth |
-| 10 | Create AuthController APIs | 2h | CRITICAL | API |
-| 11 | Create seed data (admin user, roles) | 1h | HIGH | Data |
-| 12 | Create stored procedures | 1h | HIGH | Permission |
-| 13 | Implement PermissionRepository (Dapper) | 2h | HIGH | Permission |
-| 14 | Implement RepositoryManager (lazy loading) | 1h | HIGH | Pattern |
-| 15 | Implement PermissionService | 1h | HIGH | Permission |
-| 16 | Create PermissionController APIs | 1h | HIGH | API |
-| 17 | Create PermissionAuthorizationHandler | 2h | HIGH | Auth |
-| 18 | Create shared AuthenticationExtensions | 1h | HIGH | Shared |
-| 19 | Apply JWT to Product.API | 1h | HIGH | Apply |
-| 20 | Apply JWT to Customer.API | 30m | HIGH | Apply |
-| 21 | Apply JWT to Basket.API | 30m | HIGH | Apply |
-| 22 | Apply JWT to Ordering.API | 30m | HIGH | Apply |
-| 23 | Apply JWT to Inventory.API | 30m | HIGH | Apply |
-| 24 | Apply JWT to Payment.API | 30m | HIGH | Apply |
-| 25 | Configure Ocelot Gateway Auth | 1h | CRITICAL | Gateway |
-| 26 | Create Dockerfile | 30m | HIGH | Docker |
-| 27 | Add to docker-compose | 30m | HIGH | Docker |
-| 28 | Seed permissions data | 1h | MEDIUM | Data |
-| 29 | End-to-end auth flow testing | 3h | CRITICAL | Testing |
-| 30 | Document API endpoints | 1h | MEDIUM | Docs |
+| #   | Task                                              | Effort | Priority | Phase      |
+| --- | ------------------------------------------------- | ------ | -------- | ---------- |
+| 1   | Create Identity.API project & folder structure    | 1h     | CRITICAL | Setup      |
+| 2   | Install NuGet packages                            | 30m    | CRITICAL | Setup      |
+| 3   | Create AppUser, Permission, RefreshToken entities | 1h     | CRITICAL | Domain     |
+| 4   | Create IdentityDbContext                          | 1h     | CRITICAL | Data       |
+| 5   | Create & apply EF Core migrations                 | 1h     | CRITICAL | Data       |
+| 6   | Configure Serilog + Elasticsearch                 | 30m    | HIGH     | Infra      |
+| 7   | Implement TokenService (JWT generation)           | 2h     | CRITICAL | Auth       |
+| 8   | Implement AuthService (register, login, refresh)  | 3h     | CRITICAL | Auth       |
+| 9   | Implement EmailService (MailKit)                  | 1h     | HIGH     | Auth       |
+| 10  | Create AuthController APIs                        | 2h     | CRITICAL | API        |
+| 11  | Create seed data (admin user, roles)              | 1h     | HIGH     | Data       |
+| 12  | Create stored procedures                          | 1h     | HIGH     | Permission |
+| 13  | Implement PermissionRepository (Dapper)           | 2h     | HIGH     | Permission |
+| 14  | Implement RepositoryManager (lazy loading)        | 1h     | HIGH     | Pattern    |
+| 15  | Implement PermissionService                       | 1h     | HIGH     | Permission |
+| 16  | Create PermissionController APIs                  | 1h     | HIGH     | API        |
+| 17  | Create PermissionAuthorizationHandler             | 2h     | HIGH     | Auth       |
+| 18  | Create shared AuthenticationExtensions            | 1h     | HIGH     | Shared     |
+| 19  | Apply JWT to Product.API                          | 1h     | HIGH     | Apply      |
+| 20  | Apply JWT to Customer.API                         | 30m    | HIGH     | Apply      |
+| 21  | Apply JWT to Basket.API                           | 30m    | HIGH     | Apply      |
+| 22  | Apply JWT to Ordering.API                         | 30m    | HIGH     | Apply      |
+| 23  | Apply JWT to Inventory.API                        | 30m    | HIGH     | Apply      |
+| 24  | Apply JWT to Payment.API                          | 30m    | HIGH     | Apply      |
+| 25  | Configure Ocelot Gateway Auth                     | 1h     | CRITICAL | Gateway    |
+| 26  | Create Dockerfile                                 | 30m    | HIGH     | Docker     |
+| 27  | Add to docker-compose                             | 30m    | HIGH     | Docker     |
+| 28  | Seed permissions data                             | 1h     | MEDIUM   | Data       |
+| 29  | End-to-end auth flow testing                      | 3h     | CRITICAL | Testing    |
+| 30  | Document API endpoints                            | 1h     | MEDIUM   | Docs       |
 
 **Total estimated effort: ~34 hours (4-5 days)**
 
 ### Default Permissions to Seed
 
-| Module | Permission | Description |
-|--------|-----------|-------------|
-| Product | `product.read` | View products |
-| Product | `product.write` | Create/update products |
-| Product | `product.delete` | Delete products |
-| Customer | `customer.read` | View customers |
-| Customer | `customer.write` | Manage customers |
-| Basket | `basket.read` | View basket |
-| Basket | `basket.write` | Modify basket |
-| Order | `order.read` | View orders |
-| Order | `order.write` | Create/update orders |
-| Order | `order.delete` | Delete orders |
-| Inventory | `inventory.read` | View inventory |
-| Inventory | `inventory.write` | Manage inventory |
-| Payment | `payment.read` | View payments |
-| Payment | `payment.write` | Create payments |
-| User | `user.read` | View users |
-| User | `user.write` | Manage users |
-| Permission | `permission.manage` | Manage permissions |
+| Module     | Permission          | Description            |
+| ---------- | ------------------- | ---------------------- |
+| Product    | `product.read`      | View products          |
+| Product    | `product.write`     | Create/update products |
+| Product    | `product.delete`    | Delete products        |
+| Customer   | `customer.read`     | View customers         |
+| Customer   | `customer.write`    | Manage customers       |
+| Basket     | `basket.read`       | View basket            |
+| Basket     | `basket.write`      | Modify basket          |
+| Order      | `order.read`        | View orders            |
+| Order      | `order.write`       | Create/update orders   |
+| Order      | `order.delete`      | Delete orders          |
+| Inventory  | `inventory.read`    | View inventory         |
+| Inventory  | `inventory.write`   | Manage inventory       |
+| Payment    | `payment.read`      | View payments          |
+| Payment    | `payment.write`     | Create payments        |
+| User       | `user.read`         | View users             |
+| User       | `user.write`        | Manage users           |
+| Permission | `permission.manage` | Manage permissions     |
 
 ### Test Accounts
 
-| Email | Password | Role | Permissions |
-|-------|----------|------|------------|
-| admin@microservices.com | Admin@123 | Admin | All |
-| customer@microservices.com | Customer@123 | Customer | product.read, basket.*, order.read, order.write, payment.* |
+| Email                      | Password     | Role     | Permissions                                                |
+| -------------------------- | ------------ | -------- | ---------------------------------------------------------- |
+| admin@microservices.com    | Admin@123    | Admin    | All                                                        |
+| customer@microservices.com | Customer@123 | Customer | product.read, basket._, order.read, order.write, payment._ |
