@@ -3,6 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
+# Nexus Commerce - Microservices Platform
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution.items", "Solution.items", "{C9276B55-AAEA-4B5E-8A1F-EBAF2083D245}"
 	ProjectSection(SolutionItems) = preProject
 		.dockerignore = .dockerignore

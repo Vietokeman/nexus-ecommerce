@@ -1,6 +1,6 @@
-# 🏗️ MASTER IMPLEMENTATION PLAN — Distributed E-Commerce Platform
+# 🏗️ MASTER IMPLEMENTATION PLAN — Nexus Commerce
 
-**Project:** Distributed E-Commerce Platform Microservices  
+**Project:** Nexus Commerce Microservices Platform  
 **Current Status:** Sections 1-7 ✅ Completed  
 **Remaining:** Sections 8-13  
 **Author:** Senior Full-Stack .NET & React Engineer (10+ YoE)  
@@ -26,7 +26,7 @@
 
 ## 1. Executive Summary
 
-This plan covers the full implementation of Sections 8-13 of the Distributed E-Commerce Platform course, plus:
+This plan covers the full implementation of Sections 8-13 of the Nexus Commerce Platform course, plus:
 
 - **Replace Angular.Client** with a modern **React + Vite + TypeScript** frontend (setup mirroring AURA-FE)
 - **Replicate mern-ecommerce UI/UX** (MUI theme, Lottie animations, layout structure)

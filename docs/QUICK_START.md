@@ -22,7 +22,7 @@ dotnet run --project Inventory.API    # Port 6006
 
 ```powershell
 # CHỈ 1 LỆNH DUY NHẤT
-cd d:\Git-Repo\Microservice\distributed-ecommerce-platform\src
+cd d:\Git-Repo\Microservice\nexus-commerce\src
 docker-compose up -d
 
 # TẤT CẢ services chạy qua port 5000
@@ -41,7 +41,7 @@ http://localhost:5000/api/v1/orders       # → Ordering.API
 
 ```powershell
 # Di chuyển vào thư mục chứa docker-compose.yml
-cd d:\Git-Repo\Microservice\distributed-ecommerce-platform\src
+cd d:\Git-Repo\Microservice\nexus-commerce\src
 
 # Khởi động TẤT CẢ services với 1 lệnh duy nhất
 docker-compose up -d
