@@ -72,7 +72,10 @@ services:
       - elasticsearch
     ports:
       - "5601:5601"
-  # microservices api sections
+  # ==================== MICROSERVICES API SECTIONS ====================
+  # Note: Microservices do NOT expose ports directly
+  # All traffic must go through Ocelot API Gateway on port 5000
+  
   product.api:
     container_name: product.api
     environment:
@@ -81,10 +84,10 @@ services:
       - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=ProductDb;Username=admin;Password=admin1234;"
     depends_on:
       - nexusdb
-    ports:
-      - "6002:80"
+    # ports: # REMOVED - Access via Gateway only
+    #   - "6002:80"
     restart: always
-  # customer api sections
+    
   customer.api:
     container_name: customer.api
     environment:
@@ -93,8 +96,8 @@ services:
       - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=CustomerDb;Username=admin;Password=admin1234;"
     depends_on:
       - nexusdb
-    ports:
-      - "6003:80"
+    # ports: # REMOVED - Access via Gateway only
+    #   - "6003:80"
     restart: always
 
   # basket api sections
@@ -106,8 +109,8 @@ services:
       - "CacheSettings:ConnectionString=basketdb:6379"
     depends_on:
       - basketdb
-    ports:
-      - "6004:80"
+    # ports: # REMOVED - Access via Gateway only
+    #   - "6004:80"
     restart: always
 
   # ordering api sections
@@ -119,8 +122,8 @@ services:
       - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=OrderDb;Username=admin;Password=admin1234;"
     depends_on:
       - nexusdb
-    ports:
-      - "6005:80"
+    # ports: # REMOVED - Access via Gateway only
+    #   - "6005:80"
     restart: always
 
   inventory.api:
@@ -132,9 +135,9 @@ services:
       - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=InventoryDb;Username=admin;Password=admin1234;"
     depends_on:
       - nexusdb
-    ports:
-      - "6006:80"
-      - "5005:5005"
+    # ports: # REMOVED - Access via Gateway only
+    #   - "6006:80"
+    #   - "5005:5005" # gRPC port also internal
     restart: always
 
   # payment api sections
@@ -160,8 +163,8 @@ services:
       - nexusdb
       - rabbitmq
       - elasticsearch
-    ports:
-      - "6007:80"
+    # ports: # REMOVED - Access via Gateway only
+    #   - "6007:80"
     restart: always
 
   # hangfire api sections
@@ -180,8 +183,8 @@ services:
     depends_on:
       - nexusdb
       - elasticsearch
-    ports:
-      - "6008:80"
+    # ports: # REMOVED - Access via Gateway only (except Hangfire dashboard - keep for admin access)
+    #   - "6008:80"
     restart: always
 
   # identity api sections
@@ -202,8 +205,8 @@ services:
     depends_on:
       - nexusdb
       - elasticsearch
-    ports:
-      - "6009:80"
+    # ports: # REMOVED - Access via Gateway only
+    #   - "6009:80"
     restart: always
 
   # flash sale api (Redis Lua Script + PostgreSQL)
@@ -219,8 +222,8 @@ services:
       - nexusdb
       - basketdb
       - elasticsearch
-    ports:
-      - "6011:80"
+    # ports: # REMOVED - Access via Gateway only
+    #   - "6011:80"
     restart: always
 
   # group buy api (Pinduoduo social buying model)
@@ -236,11 +239,12 @@ services:
       - nexusdb
       - rabbitmq
       - elasticsearch
-    ports:
-      - "6012:80"
+    # ports: # REMOVED - Access via Gateway only
+    #   - "6012:80"
     restart: always
 
-  # API Gateway sections
+  # ==================== API GATEWAY ====================
+  # This is the ONLY entry point for all API requests
   ocelot.apigw:
     container_name: ocelot.apigw
     environment:
@@ -259,16 +263,16 @@ services:
       - groupbuy.api
       - elasticsearch
     ports:
-      - "5000:80"
+      - "5000:80"  # ⭐ MAIN API ENTRY POINT - All microservices accessible via http://localhost:5000
     restart: always
 
-  # WebApps section
+  # ==================== WEB APPLICATIONS ====================
   react.client:
     container_name: react.client
     depends_on:
       - ocelot.apigw
     ports:
-      - "3000:80"
+      - "3000:80"  # Frontend application
     restart: always
 
   webhealthstatus:
@@ -279,5 +283,5 @@ services:
     depends_on:
       - ocelot.apigw
     ports:
-      - "6010:80"
+      - "6010:80"  # Health monitoring dashboard
     restart: always
