@@ -1,85 +1,150 @@
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import {
-  Box,
-  Typography,
-  Grid,
-  Card,
-  CardContent,
-  CardActions,
   Button,
+  Checkbox,
+  Grid,
   IconButton,
+  Paper,
+  Stack,
+  Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
-import { Delete, ShoppingCart } from '@mui/icons-material';
-import { motion } from 'framer-motion';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
+import Favorite from '@mui/icons-material/Favorite';
 import Lottie from 'lottie-react';
+import { motion } from 'framer-motion';
+import { toast } from 'react-toastify';
 import { useWishlistStore } from '@/store/wishlist-store';
 import { useCartStore } from '@/store/cart-store';
 import emptyWishlistAnimation from '@/assets/animations/emptyWishlist.json';
-import EmptyState from '@/components/ui/EmptyState';
 
 export default function WishlistPage() {
-  const { items, removeItem } = useWishlistStore();
+  const wishlistItems = useWishlistStore((s) => s.items);
+  const removeFromWishlist = useWishlistStore((s) => s.removeItem);
+  const cartItems = useCartStore((s) => s.items);
   const addToCart = useCartStore((s) => s.addItem);
   const navigate = useNavigate();
+  const theme = useTheme();
+  const is1130 = useMediaQuery(theme.breakpoints.down(1130));
+  const is480 = useMediaQuery(theme.breakpoints.down(480));
+  const is642 = useMediaQuery(theme.breakpoints.down(642));
 
-  if (items.length === 0) {
-    return (
-      <EmptyState
-        title="Your wishlist is empty"
-        description="Save items you love for later!"
-        actionLabel="Browse Products"
-        onAction={() => navigate('/')}
-      >
-        <Box sx={{ width: 200, height: 200, mx: 'auto' }}>
-          <Lottie animationData={emptyWishlistAnimation} />
-        </Box>
-      </EmptyState>
-    );
-  }
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+  }, []);
+
+  const handleAddRemoveFromWishlist = (productId: string, checked: boolean) => {
+    if (!checked) {
+      removeFromWishlist(productId);
+      toast.success('Product removed from wishlist');
+    }
+  };
+
+  const handleAddToCart = (item: { id: string; name: string; price: number }) => {
+    addToCart({ itemNo: item.id, productName: item.name, price: item.price });
+    toast.success('Product added to cart');
+  };
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-      <Typography variant="h4" fontWeight={700} gutterBottom>
-        Wishlist ({items.length})
-      </Typography>
-      <Grid container spacing={3}>
-        {items.map((item) => (
-          <Grid key={item.id} item xs={12} sm={6} md={4} lg={3}>
-            <motion.div whileHover={{ y: -4 }} transition={{ duration: 0.2 }}>
-              <Card sx={{ borderRadius: 2, height: '100%' }} elevation={2}>
-                <CardContent>
-                  <Typography variant="h6" fontWeight={600} noWrap>
-                    {item.name}
-                  </Typography>
-                  <Typography variant="h6" color="primary.dark" fontWeight={700}>
-                    ${item.price.toFixed(2)}
-                  </Typography>
-                </CardContent>
-                <CardActions sx={{ px: 2, pb: 2, justifyContent: 'space-between' }}>
-                  <Button
-                    size="small"
-                    variant="contained"
-                    startIcon={<ShoppingCart />}
-                    onClick={() => {
-                      addToCart({
-                        itemNo: item.id,
-                        productName: item.name,
-                        price: item.price,
-                      });
-                      removeItem(item.id);
-                    }}
-                  >
-                    Add to Cart
-                  </Button>
-                  <IconButton color="error" onClick={() => removeItem(item.id)}>
-                    <Delete />
-                  </IconButton>
-                </CardActions>
-              </Card>
-            </motion.div>
-          </Grid>
-        ))}
-      </Grid>
-    </motion.div>
+    <Stack justifyContent="flex-start" mt={is480 ? 3 : 5} mb="14rem" alignItems="center">
+      <Stack width={is1130 ? 'auto' : '70rem'} rowGap={is480 ? 2 : 4}>
+        {/* heading area and back button */}
+        <Stack
+          alignSelf="flex-start"
+          flexDirection="row"
+          columnGap={1}
+          justifyContent="center"
+          alignItems="center"
+        >
+          <motion.div whileHover={{ x: -5 }}>
+            <IconButton component={Link} to="/">
+              <ArrowBackIcon fontSize={is480 ? 'medium' : 'large'} />
+            </IconButton>
+          </motion.div>
+          <Typography variant="h4" fontWeight={500}>
+            Your wishlist
+          </Typography>
+        </Stack>
+
+        {/* product grid */}
+        <Stack>
+          {wishlistItems.length === 0 ? (
+            <Stack
+              minHeight="60vh"
+              width={is642 ? 'auto' : '40rem'}
+              justifySelf="center"
+              alignSelf="center"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <Lottie animationData={emptyWishlistAnimation} />
+              <Typography variant="h6" fontWeight={300}>
+                You have no items in your wishlist
+              </Typography>
+            </Stack>
+          ) : (
+            <Grid container gap={1} justifyContent="center" alignContent="center">
+              {wishlistItems.map((item) => (
+                <Stack key={item.id} component={is480 ? 'div' : Paper} elevation={1}>
+                  {/* product card */}
+                  <Stack p={2} width={is480 ? '100%' : '18rem'}>
+                    <Stack flexDirection="row" justifyContent="flex-end">
+                      <Checkbox
+                        checked
+                        icon={<FavoriteBorder />}
+                        checkedIcon={<Favorite sx={{ color: 'red' }} />}
+                        onChange={(e) =>
+                          handleAddRemoveFromWishlist(item.id, e.target.checked)
+                        }
+                      />
+                    </Stack>
+                    <Stack
+                      component={Link}
+                      to={`/product-details/${item.id}`}
+                      sx={{ textDecoration: 'none', color: 'inherit' }}
+                      alignItems="center"
+                    >
+                      <Typography variant="h6" fontWeight={500} noWrap>
+                        {item.name}
+                      </Typography>
+                      <Typography variant="h6" fontWeight={600}>
+                        ${item.price}
+                      </Typography>
+                    </Stack>
+                  </Stack>
+
+                  {/* actions */}
+                  <Stack paddingLeft={2} paddingRight={2} paddingBottom={2}>
+                    {cartItems.some((cartItem) => cartItem.itemNo === item.id) ? (
+                      <Button
+                        sx={{ mt: 2 }}
+                        size="small"
+                        variant="outlined"
+                        component={Link}
+                        to="/cart"
+                      >
+                        Already in cart
+                      </Button>
+                    ) : (
+                      <Button
+                        sx={{ mt: 2 }}
+                        size="small"
+                        onClick={() => handleAddToCart(item)}
+                        variant="outlined"
+                      >
+                        Add To Cart
+                      </Button>
+                    )}
+                  </Stack>
+                </Stack>
+              ))}
+            </Grid>
+          )}
+        </Stack>
+      </Stack>
+    </Stack>
   );
 }
