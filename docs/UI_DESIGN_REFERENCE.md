@@ -6,22 +6,23 @@
 
 ## 📋 Stack Conversion
 
-| Aspect | MERN Ecommerce (Original) | Distributed Ecommerce (New) |
-|--------|---------------------------|------------------------------|
-| **State Management** | Redux Toolkit | Zustand |
-| **UI Framework** | Material-UI (MUI) | Tailwind CSS |
-| **Forms** | react-hook-form | react-hook-form (giữ nguyên) |
-| **Animations** | Framer Motion | Framer Motion (giữ nguyên) |
-| **Notifications** | react-toastify | react-toastify (giữ nguyên) |
-| **Routing** | react-router-dom v6 | react-router-dom v7 |
-| **HTTP Client** | axios | axios (giữ nguyên) |
-| **Icons** | MUI Icons | Lucide React / Heroicons |
+| Aspect               | MERN Ecommerce (Original) | Distributed Ecommerce (New)  |
+| -------------------- | ------------------------- | ---------------------------- |
+| **State Management** | Redux Toolkit             | Zustand                      |
+| **UI Framework**     | Material-UI (MUI)         | Tailwind CSS                 |
+| **Forms**            | react-hook-form           | react-hook-form (giữ nguyên) |
+| **Animations**       | Framer Motion             | Framer Motion (giữ nguyên)   |
+| **Notifications**    | react-toastify            | react-toastify (giữ nguyên)  |
+| **Routing**          | react-router-dom v6       | react-router-dom v7          |
+| **HTTP Client**      | axios                     | axios (giữ nguyên)           |
+| **Icons**            | MUI Icons                 | Lucide React / Heroicons     |
 
 ---
 
 ## 🏗️ Project Structure Mapping
 
 ### MERN Ecommerce Structure
+
 ```
 src/
 ├── features/
@@ -52,6 +53,7 @@ src/
 ```
 
 ### Distributed Ecommerce Structure (Zustand + Tailwind)
+
 ```
 src/
 ├── components/      # Reusable UI components
@@ -65,7 +67,7 @@ src/
 │   │   ├── CartSummary.tsx
 │   │   └── CartDrawer.tsx
 │   ├── navigation/
-│   │   ├── Navbar.tsx  
+│   │   ├── Navbar.tsx
 │   │   ├── Sidebar.tsx
 │   │   └── CategoryMenu.tsx
 │   ├── ui/          # Generic UI components
@@ -104,20 +106,21 @@ src/
 ### 1. ProductCard Component
 
 #### Original (MUI + Redux):
+
 ```jsx
 // features/products/components/ProductCard.jsx
-import { Paper, Stack, Typography, Checkbox } from '@mui/material';
-import { useSelector, useDispatch } from 'react-redux';
-import { selectWishlistItems } from '../../wishlist/WishlistSlice';
-import { addToCartAsync } from '../../cart/CartSlice';
-import { motion } from 'framer-motion';
-import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
-import Favorite from '@mui/icons-material/Favorite';
+import { Paper, Stack, Typography, Checkbox } from "@mui/material";
+import { useSelector, useDispatch } from "react-redux";
+import { selectWishlistItems } from "../../wishlist/WishlistSlice";
+import { addToCartAsync } from "../../cart/CartSlice";
+import { motion } from "framer-motion";
+import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
+import Favorite from "@mui/icons-material/Favorite";
 
 export const ProductCard = ({ id, title, price, thumbnail, brand }) => {
   const dispatch = useDispatch();
   const wishlistItems = useSelector(selectWishlistItems);
-  const isInWishlist = wishlistItems.some(item => item.product._id === id);
+  const isInWishlist = wishlistItems.some((item) => item.product._id === id);
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
@@ -132,19 +135,16 @@ export const ProductCard = ({ id, title, price, thumbnail, brand }) => {
       <Stack spacing={1}>
         <Stack flexDirection="row" justifyContent="space-between">
           <Typography variant="h6">{title}</Typography>
-          <Checkbox 
+          <Checkbox
             checked={isInWishlist}
-            icon={<FavoriteBorder />} 
-            checkedIcon={<Favorite sx={{ color: 'red' }} />} 
+            icon={<FavoriteBorder />}
+            checkedIcon={<Favorite sx={{ color: "red" }} />}
           />
         </Stack>
         <Typography color="text.secondary">{brand}</Typography>
         <Stack flexDirection="row" justifyContent="space-between">
           <Typography>${price}</Typography>
-          <motion.button 
-            whileHover={{ scale: 1.03 }}
-            onClick={handleAddToCart}
-          >
+          <motion.button whileHover={{ scale: 1.03 }} onClick={handleAddToCart}>
             Add To Cart
           </motion.button>
         </Stack>
@@ -155,13 +155,14 @@ export const ProductCard = ({ id, title, price, thumbnail, brand }) => {
 ```
 
 #### New (Tailwind + Zustand):
+
 ```tsx
 // src/components/products/ProductCard.tsx
-import { motion } from 'framer-motion';
-import { Heart } from 'lucide-react';
-import { useCartStore } from '@/store/cart-store';
-import { useWishlistStore } from '@/store/wishlist-store';
-import { Product } from '@/types/product';
+import { motion } from "framer-motion";
+import { Heart } from "lucide-react";
+import { useCartStore } from "@/store/cart-store";
+import { useWishlistStore } from "@/store/wishlist-store";
+import { Product } from "@/types/product";
 
 interface ProductCardProps {
   product: Product;
@@ -170,7 +171,7 @@ interface ProductCardProps {
 export const ProductCard = ({ product }: ProductCardProps) => {
   const { addToCart } = useCartStore();
   const { wishlistItems, toggleWishlist } = useWishlistStore();
-  const isInWishlist = wishlistItems.some(item => item.id === product.id);
+  const isInWishlist = wishlistItems.some((item) => item.id === product.id);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -178,15 +179,15 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   };
 
   return (
-    <motion.div 
+    <motion.div
       className="bg-white rounded-lg shadow-sm p-4 w-full max-w-[340px] hover:shadow-md transition-shadow cursor-pointer"
       whileHover={{ y: -4 }}
       transition={{ duration: 0.2 }}
     >
       {/* Image */}
       <div className="aspect-square w-full overflow-hidden rounded-md mb-4">
-        <img 
-          src={product.imageUrl} 
+        <img
+          src={product.imageUrl}
           alt={product.name}
           className="w-full h-full object-contain"
         />
@@ -196,28 +197,26 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       <div className="space-y-2">
         {/* Title & Wishlist */}
         <div className="flex items-start justify-between gap-2">
-          <h3 className="text-lg font-normal line-clamp-1">
-            {product.name}
-          </h3>
+          <h3 className="text-lg font-normal line-clamp-1">{product.name}</h3>
           <motion.button
             whileHover={{ scale: 1.3, y: -10 }}
             whileTap={{ scale: 1 }}
-            transition={{ duration: 0.4, type: 'spring' }}
+            transition={{ duration: 0.4, type: "spring" }}
             onClick={(e) => {
               e.stopPropagation();
               toggleWishlist(product.id);
             }}
             className="flex-shrink-0"
           >
-            <Heart 
-              className={`w-5 h-5 ${isInWishlist ? 'fill-red-500 text-red-500' : 'text-gray-400'}`}
+            <Heart
+              className={`w-5 h-5 ${isInWishlist ? "fill-red-500 text-red-500" : "text-gray-400"}`}
             />
           </motion.button>
         </div>
 
         {/* Brand */}
         <p className="text-sm text-gray-500">
-          {product.attributes?.brand || 'Unknown Brand'}
+          {product.attributes?.brand || "Unknown Brand"}
         </p>
 
         {/* Price & Add to Cart */}
@@ -236,13 +235,14 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         </div>
 
         {/* Stock Warning */}
-        {product.attributes?.stockQuantity && product.attributes.stockQuantity <= 20 && (
-          <p className="text-sm text-red-500">
-            {product.attributes.stockQuantity === 1 
-              ? 'Only 1 stock is left' 
-              : 'Only few are left'}
-          </p>
-        )}
+        {product.attributes?.stockQuantity &&
+          product.attributes.stockQuantity <= 20 && (
+            <p className="text-sm text-red-500">
+              {product.attributes.stockQuantity === 1
+                ? "Only 1 stock is left"
+                : "Only few are left"}
+            </p>
+          )}
       </div>
     </motion.div>
   );
@@ -254,36 +254,37 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 ### 2. Zustand Store Setup
 
 #### Redux Slice (Original):
+
 ```javascript
 // features/cart/CartSlice.jsx
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { addToCart, fetchCartItems } from './CartApi';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { addToCart, fetchCartItems } from "./CartApi";
 
 export const addToCartAsync = createAsyncThunk(
-  'cart/addToCart',
+  "cart/addToCart",
   async (data) => {
     const response = await addToCart(data);
     return response.data;
-  }
+  },
 );
 
 const cartSlice = createSlice({
-  name: 'cart',
+  name: "cart",
   initialState: {
     items: [],
-    status: 'idle'
+    status: "idle",
   },
   reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(addToCartAsync.pending, (state) => {
-        state.status = 'pending';
+        state.status = "pending";
       })
       .addCase(addToCartAsync.fulfilled, (state, action) => {
         state.items.push(action.payload);
-        state.status = 'fulfilled';
+        state.status = "fulfilled";
       });
-  }
+  },
 });
 
 export const selectCartItems = (state) => state.cart.items;
@@ -291,13 +292,14 @@ export default cartSlice.reducer;
 ```
 
 #### Zustand Store (New):
+
 ```typescript
 // src/store/cart-store.ts
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { Product } from '@/types/product';
-import { apiClient } from '@/lib/api';
-import { toast } from 'react-toastify';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { Product } from "@/types/product";
+import { apiClient } from "@/lib/api";
+import { toast } from "react-toastify";
 
 interface CartItem {
   product: Product;
@@ -308,7 +310,7 @@ interface CartStore {
   items: CartItem[];
   isLoading: boolean;
   error: string | null;
-  
+
   // Actions
   addToCart: (product: Product, quantity?: number) => Promise<void>;
   removeFromCart: (productId: number) => Promise<void>;
@@ -328,39 +330,39 @@ export const useCartStore = create<CartStore>()(
         set({ isLoading: true, error: null });
         try {
           // Call API
-          await apiClient.post('/api/v1/baskets', {
+          await apiClient.post("/api/v1/baskets", {
             productId: product.id,
-            quantity
+            quantity,
           });
 
           // Update local state
           const existingItem = get().items.find(
-            item => item.product.id === product.id
+            (item) => item.product.id === product.id,
           );
 
           if (existingItem) {
             set({
-              items: get().items.map(item =>
+              items: get().items.map((item) =>
                 item.product.id === product.id
                   ? { ...item, quantity: item.quantity + quantity }
-                  : item
+                  : item,
               ),
-              isLoading: false
+              isLoading: false,
             });
           } else {
             set({
               items: [...get().items, { product, quantity }],
-              isLoading: false
+              isLoading: false,
             });
           }
 
-          toast.success('Added to cart successfully!');
+          toast.success("Added to cart successfully!");
         } catch (error) {
-          set({ 
-            error: 'Failed to add to cart', 
-            isLoading: false 
+          set({
+            error: "Failed to add to cart",
+            isLoading: false,
           });
-          toast.error('Failed to add to cart');
+          toast.error("Failed to add to cart");
         }
       },
 
@@ -369,30 +371,28 @@ export const useCartStore = create<CartStore>()(
         try {
           await apiClient.delete(`/api/v1/baskets/${productId}`);
           set({
-            items: get().items.filter(item => item.product.id !== productId),
-            isLoading: false
+            items: get().items.filter((item) => item.product.id !== productId),
+            isLoading: false,
           });
-          toast.success('Removed from cart');
+          toast.success("Removed from cart");
         } catch (error) {
-          set({ error: 'Failed to remove from cart', isLoading: false });
-          toast.error('Failed to remove from cart');
+          set({ error: "Failed to remove from cart", isLoading: false });
+          toast.error("Failed to remove from cart");
         }
       },
 
       updateQuantity: async (productId, quantity) => {
         set({ isLoading: true });
         try {
-          await apiClient.put('/api/v1/baskets', { productId, quantity });
+          await apiClient.put("/api/v1/baskets", { productId, quantity });
           set({
-            items: get().items.map(item =>
-              item.product.id === productId
-                ? { ...item, quantity }
-                : item
+            items: get().items.map((item) =>
+              item.product.id === productId ? { ...item, quantity } : item,
             ),
-            isLoading: false
+            isLoading: false,
           });
         } catch (error) {
-          set({ error: 'Failed to update quantity', isLoading: false });
+          set({ error: "Failed to update quantity", isLoading: false });
         }
       },
 
@@ -401,18 +401,18 @@ export const useCartStore = create<CartStore>()(
       fetchCartItems: async () => {
         set({ isLoading: true });
         try {
-          const response = await apiClient.get('/api/v1/baskets');
+          const response = await apiClient.get("/api/v1/baskets");
           set({ items: response.data, isLoading: false });
         } catch (error) {
-          set({ error: 'Failed to fetch cart', isLoading: false });
+          set({ error: "Failed to fetch cart", isLoading: false });
         }
-      }
+      },
     }),
     {
-      name: 'cart-storage',
-      partialize: (state) => ({ items: state.items })
-    }
-  )
+      name: "cart-storage",
+      partialize: (state) => ({ items: state.items }),
+    },
+  ),
 );
 ```
 
@@ -421,21 +421,22 @@ export const useCartStore = create<CartStore>()(
 ### 3. Navbar Component
 
 #### Original (MUI):
+
 ```jsx
 // features/navigation/components/Navbar.jsx
-import { AppBar, Toolbar, IconButton, Badge, Avatar } from '@mui/material';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { useSelector } from 'react-redux';
-import { selectCartItems } from '../../cart/CartSlice';
+import { AppBar, Toolbar, IconButton, Badge, Avatar } from "@mui/material";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { useSelector } from "react-redux";
+import { selectCartItems } from "../../cart/CartSlice";
 
 export const Navbar = () => {
   const cartItem = useSelector(selectCartItems);
-  
+
   return (
-    <AppBar position="sticky" sx={{ backgroundColor: 'black' }}>
-      <Toolbar sx={{ justifyContent: 'space-between' }}>
+    <AppBar position="sticky" sx={{ backgroundColor: "black" }}>
+      <Toolbar sx={{ justifyContent: "space-between" }}>
         <Typography variant="h6">E-Commerce</Typography>
-        <Box sx={{ display: 'flex', gap: 2 }}>
+        <Box sx={{ display: "flex", gap: 2 }}>
           <IconButton color="inherit">
             <Badge badgeContent={cartItems.length} color="error">
               <ShoppingCartIcon />
@@ -450,12 +451,13 @@ export const Navbar = () => {
 ```
 
 #### New (Tailwind):
+
 ```tsx
 // src/components/navigation/Navbar.tsx
-import { ShoppingCart, User, Search } from 'lucide-react';
-import { useCartStore } from '@/store/cart-store';
-import { useAuthStore } from '@/store/auth-store';
-import { Link } from 'react-router-dom';
+import { ShoppingCart, User, Search } from "lucide-react";
+import { useCartStore } from "@/store/cart-store";
+import { useAuthStore } from "@/store/auth-store";
+import { Link } from "react-router-dom";
 
 export const Navbar = () => {
   const { items: cartItems } = useCartStore();
@@ -485,7 +487,10 @@ export const Navbar = () => {
           {/* Right Actions */}
           <div className="flex items-center gap-4">
             {/* Cart */}
-            <Link to="/cart" className="relative p-2 hover:bg-gray-800 rounded-full transition-colors">
+            <Link
+              to="/cart"
+              className="relative p-2 hover:bg-gray-800 rounded-full transition-colors"
+            >
               <ShoppingCart className="w-6 h-6" />
               {cartItems.length > 0 && (
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
@@ -497,8 +502,8 @@ export const Navbar = () => {
             {/* User Avatar */}
             <Link to="/profile" className="p-1">
               {user?.avatar ? (
-                <img 
-                  src={user.avatar} 
+                <img
+                  src={user.avatar}
                   alt={user.name}
                   className="w-8 h-8 rounded-full object-cover"
                 />
@@ -521,39 +526,37 @@ export const Navbar = () => {
 ## 🎨 Tailwind CSS Theme Configuration
 
 ### tailwind.config.js
+
 ```javascript
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       colors: {
         primary: {
-          50: '#f0f9ff',
-          100: '#e0f2fe',
-          500: '#0ea5e9',
-          600: '#0284c7',
-          700: '#0369a1',
+          50: "#f0f9ff",
+          100: "#e0f2fe",
+          500: "#0ea5e9",
+          600: "#0284c7",
+          700: "#0369a1",
         },
         secondary: {
-          500: '#8b5cf6',
-          600: '#7c3aed',
-        }
+          500: "#8b5cf6",
+          600: "#7c3aed",
+        },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ["Inter", "system-ui", "sans-serif"],
       },
       boxShadow: {
-        'card': '0 1px 3px 0 rgb(0 0 0 / 0.1)',
-        'card-hover': '0 4px 6px -1px rgb(0 0 0 / 0.1)',
-      }
+        card: "0 1px 3px 0 rgb(0 0 0 / 0.1)",
+        "card-hover": "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+      },
     },
   },
   plugins: [],
-}
+};
 ```
 
 ---
@@ -564,12 +567,12 @@ export default {
 
 ```tsx
 // src/pages/products/HomePage.tsx
-import { useEffect } from 'react';
-import { Navbar } from '@/components/navigation/Navbar';
-import { ProductGrid } from '@/components/products/ProductGrid';
-import { Footer } from '@/components/Footer';
-import { useProductStore } from '@/store/product-store';
-import { Spinner } from '@/components/ui/Spinner';
+import { useEffect } from "react";
+import { Navbar } from "@/components/navigation/Navbar";
+import { ProductGrid } from "@/components/products/ProductGrid";
+import { Footer } from "@/components/Footer";
+import { useProductStore } from "@/store/product-store";
+import { Spinner } from "@/components/ui/Spinner";
 
 export const HomePage = () => {
   const { products, isLoading, fetchProducts } = useProductStore();
@@ -607,24 +610,24 @@ export const HomePage = () => {
 ```typescript
 // Icon mapping reference
 import {
-  ShoppingCart,        // ShoppingCartIcon
-  Heart,               // FavoriteIcon / FavoriteBorderIcon
-  User,                // PersonIcon / AccountCircleIcon
-  Search,              // SearchIcon
-  Menu,                // MenuIcon
-  X,                   // CloseIcon
-  ChevronRight,        // ChevronRightIcon
-  ChevronLeft,         // ChevronLeftIcon
-  Star,                // StarIcon / StarBorderIcon
-  Trash2,              // DeleteIcon
-  Edit,                // EditIcon
-  Plus,                // AddIcon
-  Minus,               // RemoveIcon
-  Home,                // HomeIcon
-  Package,             // InventoryIcon
-  CreditCard,          // PaymentIcon
-  Truck,               // LocalShippingIcon
-} from 'lucide-react';
+  ShoppingCart, // ShoppingCartIcon
+  Heart, // FavoriteIcon / FavoriteBorderIcon
+  User, // PersonIcon / AccountCircleIcon
+  Search, // SearchIcon
+  Menu, // MenuIcon
+  X, // CloseIcon
+  ChevronRight, // ChevronRightIcon
+  ChevronLeft, // ChevronLeftIcon
+  Star, // StarIcon / StarBorderIcon
+  Trash2, // DeleteIcon
+  Edit, // EditIcon
+  Plus, // AddIcon
+  Minus, // RemoveIcon
+  Home, // HomeIcon
+  Package, // InventoryIcon
+  CreditCard, // PaymentIcon
+  Truck, // LocalShippingIcon
+} from "lucide-react";
 ```
 
 ---
@@ -632,6 +635,7 @@ import {
 ## 🚀 Next Steps
 
 1. **Setup Project Dependencies**
+
    ```bash
    npm install zustand lucide-react clsx tailwind-merge
    npm install framer-motion react-toastify axios react-hook-form

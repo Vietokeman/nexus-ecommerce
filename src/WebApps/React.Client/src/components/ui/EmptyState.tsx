@@ -25,7 +25,17 @@ export default function EmptyState({
       textAlign="center"
     >
       {children}
-      <Typography variant="h5" fontWeight={600} mt={2}>
+      <Typography
+        variant="h5"
+        fontWeight={600}
+        mt={2}
+        sx={{
+          background: 'linear-gradient(135deg, #7C3AED 0%, #A855F7 40%, #F97316 100%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text',
+        }}
+      >
         {title}
       </Typography>
       {description && (

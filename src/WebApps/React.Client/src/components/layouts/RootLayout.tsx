@@ -11,23 +11,19 @@ import {
   Menu,
   MenuItem,
   Stack,
-  TextField,
   Tooltip,
   Button,
-  Chip,
   Container,
-  useTheme,
-  useMediaQuery,
 } from '@mui/material';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import TuneIcon from '@mui/icons-material/Tune';
-import SendIcon from '@mui/icons-material/Send';
-import { MotionConfig, motion } from 'framer-motion';
 import { useCartStore } from '@/store/cart-store';
 import { useWishlistStore } from '@/store/wishlist-store';
 import { useAuthStore } from '@/store/auth-store';
 import { useUIStore } from '@/store/ui-store';
+import { nexus } from '@/theme/theme';
+import NexusCartLogo from '@/components/auth/NexusCartLogo';
 
 export default function RootLayout() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -40,9 +36,6 @@ export default function RootLayout() {
   const toggleFilter = useUIStore((s) => s.toggleFilter);
   const navigate = useNavigate();
   const location = useLocation();
-  const theme = useTheme();
-  const is480 = useMediaQuery(theme.breakpoints.down(480));
-  const is700 = useMediaQuery(theme.breakpoints.down(700));
 
   const isProductList = location.pathname === '/';
 
@@ -63,40 +56,72 @@ export default function RootLayout() {
   const settings = [
     { name: 'Home', to: '/' },
     { name: 'Profile', to: user?.isAdmin ? '/admin/profile' : '/profile' },
-    { name: user?.isAdmin ? 'Orders' : 'My orders', to: user?.isAdmin ? '/admin/orders' : '/orders' },
+    {
+      name: user?.isAdmin ? 'Orders' : 'My orders',
+      to: user?.isAdmin ? '/admin/orders' : '/orders',
+    },
   ];
 
   const displayName = user?.firstName || user?.userName || 'User';
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      {/* Navbar — matching mern-ecommerce exactly */}
+      {/* ─── Navbar — Nexus glassmorphism ─── */}
       <AppBar
         position="sticky"
-        sx={{ backgroundColor: 'white', boxShadow: 'none', color: 'text.primary' }}
+        sx={{
+          background: nexus.glass.background,
+          backdropFilter: nexus.glass.blur,
+          WebkitBackdropFilter: nexus.glass.blur,
+          borderBottom: `1px solid ${nexus.neutral[200]}`,
+          boxShadow: 'none',
+          color: nexus.neutral[900],
+        }}
       >
-        <Toolbar sx={{ p: 1, height: '4rem', display: 'flex', justifyContent: 'space-around' }}>
-          <Typography
-            variant="h6"
-            noWrap
+        <Toolbar sx={{ px: { xs: 2, md: 4 }, height: '4rem', justifyContent: 'space-between' }}>
+          {/* Brand */}
+          <Stack
+            direction="row"
+            alignItems="center"
+            spacing={1}
             component="a"
             href="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
+            sx={{ textDecoration: 'none', color: 'inherit' }}
           >
-            E-COMMERCE
-          </Typography>
+            <NexusCartLogo size={32} />
+            <Typography
+              variant="h6"
+              noWrap
+              sx={{
+                fontWeight: 700,
+                letterSpacing: '-0.01em',
+                display: { xs: 'none', sm: 'block' },
+                background: nexus.gradient.primary,
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}
+            >
+              Nexus Commerce
+            </Typography>
+          </Stack>
 
-          <Stack flexDirection="row" alignItems="center" justifyContent="center" columnGap={2}>
-            <Tooltip title="Open settings">
+          {/* Actions */}
+          <Stack direction="row" alignItems="center" spacing={1.5}>
+            <Tooltip title="Settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt={displayName} src="/broken-image.jpg" />
+                <Avatar
+                  alt={displayName}
+                  sx={{
+                    width: 36,
+                    height: 36,
+                    background: nexus.gradient.button,
+                    fontSize: '0.875rem',
+                    fontWeight: 600,
+                  }}
+                >
+                  {displayName.charAt(0).toUpperCase()}
+                </Avatar>
               </IconButton>
             </Tooltip>
             <Menu
@@ -113,10 +138,8 @@ export default function RootLayout() {
                 <MenuItem onClick={handleCloseUserMenu}>
                   <Typography
                     component={Link}
-                    color="text.primary"
-                    sx={{ textDecoration: 'none' }}
+                    sx={{ textDecoration: 'none', color: nexus.neutral[900] }}
                     to="/admin/add-product"
-                    textAlign="center"
                   >
                     Add new Product
                   </Typography>
@@ -126,187 +149,173 @@ export default function RootLayout() {
                 <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
                   <Typography
                     component={Link}
-                    color="text.primary"
-                    sx={{ textDecoration: 'none' }}
+                    sx={{ textDecoration: 'none', color: nexus.neutral[900] }}
                     to={setting.to}
-                    textAlign="center"
                   >
                     {setting.name}
                   </Typography>
                 </MenuItem>
               ))}
               <MenuItem onClick={handleLogout}>
-                <Typography textAlign="center">Logout</Typography>
+                <Typography sx={{ color: '#EF4444' }}>Logout</Typography>
               </MenuItem>
             </Menu>
 
-            <Typography variant="h6" fontWeight={300}>
-              {is480 ? displayName.split(' ')[0] : `Hey👋, ${displayName}`}
-            </Typography>
-
-            {user?.isAdmin && <Button variant="contained">Admin</Button>}
-
-            <Stack
+            <Typography
+              variant="body2"
+              fontWeight={500}
               sx={{
-                flexDirection: 'row',
-                columnGap: '1rem',
-                alignItems: 'center',
-                justifyContent: 'center',
+                display: { xs: 'none', sm: 'block' },
+                color: nexus.neutral[600],
               }}
             >
-              {cartItems.length > 0 && (
-                <Badge badgeContent={totalItems()} color="error">
-                  <IconButton onClick={() => navigate('/cart')}>
-                    <ShoppingCartOutlinedIcon />
-                  </IconButton>
-                </Badge>
-              )}
+              Hey, {displayName}
+            </Typography>
 
-              {!user?.isAdmin && (
-                <Stack>
-                  <Badge badgeContent={wishlistItems.length} color="error">
-                    <IconButton component={Link} to="/wishlist">
-                      <FavoriteBorderIcon />
-                    </IconButton>
-                  </Badge>
-                </Stack>
-              )}
+            {user?.isAdmin && (
+              <Button variant="contained" size="small" sx={{ fontSize: '0.75rem' }}>
+                Admin
+              </Button>
+            )}
 
-              {isProductList && (
-                <IconButton onClick={toggleFilter}>
-                  <TuneIcon sx={{ color: isFilterOpen ? 'black' : '' }} />
+            {cartItems.length > 0 && (
+              <Badge badgeContent={totalItems()} color="secondary">
+                <IconButton onClick={() => navigate('/cart')} size="small">
+                  <ShoppingCartOutlinedIcon sx={{ color: nexus.neutral[700] }} />
                 </IconButton>
-              )}
-            </Stack>
+              </Badge>
+            )}
+
+            {!user?.isAdmin && (
+              <Badge badgeContent={wishlistItems.length} color="secondary">
+                <IconButton component={Link} to="/wishlist" size="small">
+                  <FavoriteBorderIcon sx={{ color: nexus.neutral[700] }} />
+                </IconButton>
+              </Badge>
+            )}
+
+            {isProductList && (
+              <IconButton onClick={toggleFilter} size="small">
+                <TuneIcon sx={{ color: isFilterOpen ? nexus.purple[700] : nexus.neutral[500] }} />
+              </IconButton>
+            )}
           </Stack>
         </Toolbar>
       </AppBar>
 
-      {/* Main Content */}
+      {/* ─── Main Content ─── */}
       <Box component="main" sx={{ flex: 1 }}>
         <Container maxWidth="xl" sx={{ py: 3 }}>
           <Outlet />
         </Container>
       </Box>
 
-      {/* Footer — matching mern-ecommerce exactly */}
-      <Stack
+      {/* ─── Footer — Nexus dark gradient ─── */}
+      <Box
+        component="footer"
+        className="nx-auth-panel"
         sx={{
-          backgroundColor: theme.palette.primary.main,
-          paddingTop: '3rem',
-          paddingLeft: is700 ? '1rem' : '3rem',
-          paddingRight: is700 ? '1rem' : '3rem',
-          paddingBottom: '1.5rem',
-          rowGap: '5rem',
-          color: theme.palette.primary.light,
-          justifyContent: 'space-around',
+          pt: 6,
+          pb: 3,
+          px: { xs: 2, md: 6 },
+          color: 'rgba(255,255,255,0.8)',
         }}
       >
-        {/* Upper */}
         <Stack
-          flexDirection="row"
-          rowGap="1rem"
-          justifyContent={is700 ? undefined : 'space-around'}
+          direction={{ xs: 'column', md: 'row' }}
+          justifyContent="space-between"
           flexWrap="wrap"
+          spacing={4}
+          mb={5}
         >
-          <Stack rowGap="1rem" padding="1rem">
-            <Typography variant="h6" fontSize="1.5rem">
-              Exclusive
-            </Typography>
-            <Typography variant="h6">Subscribe</Typography>
-            <Typography sx={{ fontWeight: 300, cursor: 'pointer' }}>
-              Get 10% off your first order
-            </Typography>
-            <TextField
-              placeholder="Enter your email"
-              sx={{
-                border: '1px solid white',
-                borderRadius: '6px',
-              }}
-              InputProps={{
-                endAdornment: (
-                  <IconButton>
-                    <SendIcon sx={{ color: theme.palette.primary.light }} />
-                  </IconButton>
-                ),
-                style: { color: 'whitesmoke' },
-              }}
-            />
-          </Stack>
-
-          <Stack rowGap="1rem" padding="1rem">
-            <Typography variant="h6">Support</Typography>
-            <Typography sx={{ fontWeight: 300, cursor: 'pointer' }}>
-              11th Main Street, Dhaka, DH 1515, California.
-            </Typography>
-            <Typography sx={{ fontWeight: 300, cursor: 'pointer' }}>
-              exclusive@gmail.com
-            </Typography>
-            <Typography sx={{ fontWeight: 300, cursor: 'pointer' }}>
-              +88015-88888-9999
-            </Typography>
-          </Stack>
-
-          <Stack rowGap="1rem" padding="1rem">
-            <Typography variant="h6">Account</Typography>
-            <Typography
-              sx={{ fontWeight: 300, cursor: 'pointer' }}
-              onClick={() => navigate('/profile')}
-            >
-              My Account
-            </Typography>
-            <Typography
-              sx={{ fontWeight: 300, cursor: 'pointer' }}
-              onClick={() => navigate('/login')}
-            >
-              Login / Register
-            </Typography>
-            <Typography
-              sx={{ fontWeight: 300, cursor: 'pointer' }}
-              onClick={() => navigate('/cart')}
-            >
-              Cart
-            </Typography>
-            <Typography
-              sx={{ fontWeight: 300, cursor: 'pointer' }}
-              onClick={() => navigate('/wishlist')}
-            >
-              Wishlist
-            </Typography>
-            <Typography sx={{ fontWeight: 300, cursor: 'pointer' }}>Shop</Typography>
-          </Stack>
-
-          <Stack rowGap="1rem" padding="1rem">
-            <Typography variant="h6">Quick Links</Typography>
-            <Typography sx={{ fontWeight: 300, cursor: 'pointer' }}>Privacy Policy</Typography>
-            <Typography sx={{ fontWeight: 300, cursor: 'pointer' }}>Terms Of Use</Typography>
-            <Typography sx={{ fontWeight: 300, cursor: 'pointer' }}>FAQ</Typography>
-            <Typography sx={{ fontWeight: 300, cursor: 'pointer' }}>Contact</Typography>
-          </Stack>
-
-          <Stack rowGap="1rem" padding="1rem">
-            <Typography variant="h6">Download App</Typography>
-            <Typography sx={{ fontWeight: 300, color: 'graytext', fontWeight2: 500 }}>
-              Save $3 with App New User Only
-            </Typography>
-            <Stack mt={0.6} flexDirection="row" columnGap="2rem">
-              <MotionConfig whileHover={{ scale: 1.1 }} whileTap={{ scale: 1 }}>
-                <motion.span style={{ cursor: 'pointer', fontSize: '1.5rem' }}>📘</motion.span>
-                <motion.span style={{ cursor: 'pointer', fontSize: '1.5rem' }}>🐦</motion.span>
-                <motion.span style={{ cursor: 'pointer', fontSize: '1.5rem' }}>📷</motion.span>
-                <motion.span style={{ cursor: 'pointer', fontSize: '1.5rem' }}>💼</motion.span>
-              </MotionConfig>
+          {/* Brand column */}
+          <Stack spacing={1.5} maxWidth="16rem">
+            <Stack direction="row" alignItems="center" spacing={1}>
+              <NexusCartLogo size={28} />
+              <Typography
+                variant="h6"
+                fontWeight={700}
+                sx={{
+                  background: nexus.gradient.primary,
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                }}
+              >
+                Nexus Commerce
+              </Typography>
             </Stack>
+            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', lineHeight: 1.7 }}>
+              Where smart shopping meets seamless experience. Get 10% off your first order.
+            </Typography>
+          </Stack>
+
+          {/* Support */}
+          <Stack spacing={1}>
+            <Typography variant="body1" fontWeight={600} sx={{ color: 'rgba(255,255,255,0.9)' }}>
+              Support
+            </Typography>
+            {['support@nexus.com', '+84 888-888-999', 'Ho Chi Minh City, Vietnam'].map((t) => (
+              <Typography
+                key={t}
+                variant="body2"
+                sx={{ color: 'rgba(255,255,255,0.5)', cursor: 'pointer', '&:hover': { color: nexus.purple[300] } }}
+              >
+                {t}
+              </Typography>
+            ))}
+          </Stack>
+
+          {/* Account */}
+          <Stack spacing={1}>
+            <Typography variant="body1" fontWeight={600} sx={{ color: 'rgba(255,255,255,0.9)' }}>
+              Account
+            </Typography>
+            {[
+              { label: 'My Account', to: '/profile' },
+              { label: 'Login / Register', to: '/login' },
+              { label: 'Cart', to: '/cart' },
+              { label: 'Wishlist', to: '/wishlist' },
+            ].map((item) => (
+              <Typography
+                key={item.label}
+                variant="body2"
+                sx={{
+                  color: 'rgba(255,255,255,0.5)',
+                  cursor: 'pointer',
+                  '&:hover': { color: nexus.purple[300] },
+                }}
+                onClick={() => navigate(item.to)}
+              >
+                {item.label}
+              </Typography>
+            ))}
+          </Stack>
+
+          {/* Quick Links */}
+          <Stack spacing={1}>
+            <Typography variant="body1" fontWeight={600} sx={{ color: 'rgba(255,255,255,0.9)' }}>
+              Quick Links
+            </Typography>
+            {['Privacy Policy', 'Terms Of Use', 'FAQ', 'Contact'].map((t) => (
+              <Typography
+                key={t}
+                variant="body2"
+                sx={{ color: 'rgba(255,255,255,0.5)', cursor: 'pointer', '&:hover': { color: nexus.purple[300] } }}
+              >
+                {t}
+              </Typography>
+            ))}
           </Stack>
         </Stack>
 
-        {/* Lower */}
-        <Stack alignSelf="center">
-          <Typography color="GrayText">
-            &copy; E-Commerce Store {new Date().getFullYear()}. All right reserved
+        {/* Divider & Copyright */}
+        <Box sx={{ borderTop: '1px solid rgba(255,255,255,0.1)', pt: 2, textAlign: 'center' }}>
+          <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.35)' }}>
+            &copy; Nexus Commerce {new Date().getFullYear()}. All rights reserved.
           </Typography>
-        </Stack>
-      </Stack>
+        </Box>
+      </Box>
     </Box>
   );
 }

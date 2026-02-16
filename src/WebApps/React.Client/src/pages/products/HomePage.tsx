@@ -127,7 +127,7 @@ function ProductCard({
           width="100%"
           style={{ aspectRatio: '1/1', objectFit: 'contain' }}
           height="100%"
-          src={product.thumbnail || `https://via.placeholder.com/300?text=${product.name[0]}`}
+          src={product.imageUrl || `https://via.placeholder.com/300?text=${product.name[0]}`}
           alt={`${product.name}`}
         />
       </Stack>
@@ -197,7 +197,7 @@ export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [totalResults, setTotalResults] = useState(0);
+  const [_totalResults, setTotalResults] = useState(0);
   const [sort, setSortValue] = useState<string>('');
   const [brandFilters, setBrandFilters] = useState<Set<string>>(new Set());
   const [categoryFilters, setCategoryFilters] = useState<Set<string>>(new Set());
@@ -224,7 +224,7 @@ export default function HomePage() {
       setLoading(true);
       try {
         const { data } = await api.get(API_ENDPOINTS.PRODUCTS.LIST);
-        const list = Array.isArray(data) ? data : data.result ?? [];
+        const list = Array.isArray(data) ? data : (data.result ?? []);
         setProducts(list);
         setTotalResults(list.length);
       } catch {
@@ -240,14 +240,14 @@ export default function HomePage() {
   const filtered = products
     .filter((p) => {
       if (brandFilters.size > 0) {
-        const match = Array.from(brandFilters).some(
-          (b) => p.summary?.toLowerCase().includes(b.toLowerCase()),
+        const match = Array.from(brandFilters).some((b) =>
+          p.summary?.toLowerCase().includes(b.toLowerCase()),
         );
         if (!match) return false;
       }
       if (categoryFilters.size > 0) {
-        const match = Array.from(categoryFilters).some(
-          (c) => p.name?.toLowerCase().includes(c.toLowerCase()),
+        const match = Array.from(categoryFilters).some((c) =>
+          p.name?.toLowerCase().includes(c.toLowerCase()),
         );
         if (!match) return false;
       }
@@ -259,10 +259,7 @@ export default function HomePage() {
       return 0;
     });
 
-  const paginatedProducts = filtered.slice(
-    (page - 1) * ITEMS_PER_PAGE,
-    page * ITEMS_PER_PAGE,
-  );
+  const paginatedProducts = filtered.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
 
   const handleBrandFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newSet = new Set(brandFilters);
@@ -323,21 +320,28 @@ export default function HomePage() {
         <Stack mb="5rem" sx={{ scrollBehavior: 'smooth', overflowY: 'scroll' }}>
           <Typography variant="h4">New Arrivals</Typography>
 
-          <IconButton
-            onClick={toggleFilter}
-            style={{ position: 'absolute', top: 15, right: 15 }}
-          >
+          <IconButton onClick={toggleFilter} style={{ position: 'absolute', top: 15, right: 15 }}>
             <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
               <ClearIcon fontSize="medium" />
             </motion.div>
           </IconButton>
 
           <Stack rowGap={2} mt={4}>
-            <Typography sx={{ cursor: 'pointer' }} variant="body2">Totes</Typography>
-            <Typography sx={{ cursor: 'pointer' }} variant="body2">Backpacks</Typography>
-            <Typography sx={{ cursor: 'pointer' }} variant="body2">Travel Bags</Typography>
-            <Typography sx={{ cursor: 'pointer' }} variant="body2">Hip Bags</Typography>
-            <Typography sx={{ cursor: 'pointer' }} variant="body2">Laptop Sleeves</Typography>
+            <Typography sx={{ cursor: 'pointer' }} variant="body2">
+              Totes
+            </Typography>
+            <Typography sx={{ cursor: 'pointer' }} variant="body2">
+              Backpacks
+            </Typography>
+            <Typography sx={{ cursor: 'pointer' }} variant="body2">
+              Travel Bags
+            </Typography>
+            <Typography sx={{ cursor: 'pointer' }} variant="body2">
+              Hip Bags
+            </Typography>
+            <Typography sx={{ cursor: 'pointer' }} variant="body2">
+              Laptop Sleeves
+            </Typography>
           </Stack>
 
           {/* Brand filters */}
@@ -423,7 +427,13 @@ export default function HomePage() {
         {/* Products section */}
         <Stack rowGap={5} mt={is600 ? 2 : 0}>
           {/* Sort options */}
-          <Stack flexDirection="row" mr="2rem" justifyContent="flex-end" alignItems="center" columnGap={5}>
+          <Stack
+            flexDirection="row"
+            mr="2rem"
+            justifyContent="flex-end"
+            alignItems="center"
+            columnGap={5}
+          >
             <Stack alignSelf="flex-end" width="12rem">
               <FormControl fullWidth>
                 <InputLabel id="sort-dropdown">Sort</InputLabel>
@@ -459,7 +469,12 @@ export default function HomePage() {
           </Grid>
 
           {/* Pagination */}
-          <Stack alignSelf={is488 ? 'center' : 'flex-end'} mr={is488 ? 0 : 5} rowGap={2} p={is488 ? 1 : 0}>
+          <Stack
+            alignSelf={is488 ? 'center' : 'flex-end'}
+            mr={is488 ? 0 : 5}
+            rowGap={2}
+            p={is488 ? 1 : 0}
+          >
             <Pagination
               size={is488 ? 'medium' : 'large'}
               page={page}

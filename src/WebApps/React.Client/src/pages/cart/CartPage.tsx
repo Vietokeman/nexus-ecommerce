@@ -114,7 +114,11 @@ function CartItem({ itemNo, productName, price, quantity, imageUrl }: CartItemPr
         alignItems="flex-end"
       >
         <Typography variant="body2">${price}</Typography>
-        <Button size={is480 ? 'small' : undefined} onClick={handleProductRemove} variant="contained">
+        <Button
+          size={is480 ? 'small' : undefined}
+          onClick={handleProductRemove}
+          variant="contained"
+        >
           Remove
         </Button>
       </Stack>
@@ -147,7 +151,13 @@ export function CartContent({ checkout }: CartProps) {
 
   return (
     <Stack justifyContent="flex-start" alignItems="center" mb="5rem">
-      <Stack width={is900 ? 'auto' : '50rem'} mt="3rem" paddingLeft={checkout ? 0 : 2} paddingRight={checkout ? 0 : 2} rowGap={4}>
+      <Stack
+        width={is900 ? 'auto' : '50rem'}
+        mt="3rem"
+        paddingLeft={checkout ? 0 : 2}
+        paddingRight={checkout ? 0 : 2}
+        rowGap={4}
+      >
         {/* cart items */}
         <Stack rowGap={2}>
           {items.map((item) => (

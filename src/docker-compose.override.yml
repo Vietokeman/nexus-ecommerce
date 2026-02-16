@@ -75,7 +75,7 @@ services:
   # ==================== MICROSERVICES API SECTIONS ====================
   # Note: Microservices do NOT expose ports directly
   # All traffic must go through Ocelot API Gateway on port 5000
-  
+
   product.api:
     container_name: product.api
     environment:
@@ -87,7 +87,7 @@ services:
     # ports: # REMOVED - Access via Gateway only
     #   - "6002:80"
     restart: always
-    
+
   customer.api:
     container_name: customer.api
     environment:
@@ -263,7 +263,7 @@ services:
       - groupbuy.api
       - elasticsearch
     ports:
-      - "5000:80"  # ⭐ MAIN API ENTRY POINT - All microservices accessible via http://localhost:5000
+      - "5000:80" # ⭐ MAIN API ENTRY POINT - All microservices accessible via http://localhost:5000
     restart: always
 
   # ==================== WEB APPLICATIONS ====================
@@ -272,7 +272,7 @@ services:
     depends_on:
       - ocelot.apigw
     ports:
-      - "3000:80"  # Frontend application
+      - "3000:80" # Frontend application
     restart: always
 
   webhealthstatus:
@@ -283,5 +283,5 @@ services:
     depends_on:
       - ocelot.apigw
     ports:
-      - "6010:80"  # Health monitoring dashboard
+      - "6010:80" # Health monitoring dashboard
     restart: always

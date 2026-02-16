@@ -94,7 +94,11 @@ export default function UserProfilePage() {
             <Typography variant="h6" fontWeight={400}>
               Manage addresses
             </Typography>
-            <Button onClick={() => setAddAddress(true)} size={is480 ? 'small' : undefined} variant="contained">
+            <Button
+              onClick={() => setAddAddress(true)}
+              size={is480 ? 'small' : undefined}
+              variant="contained"
+            >
               Add
             </Button>
           </Stack>
@@ -110,7 +114,10 @@ export default function UserProfilePage() {
             >
               <Stack>
                 <Typography gutterBottom>Type</Typography>
-                <TextField placeholder="Eg. Home, Business" {...register('type', { required: true })} />
+                <TextField
+                  placeholder="Eg. Home, Business"
+                  {...register('type', { required: true })}
+                />
               </Stack>
               <Stack>
                 <Typography gutterBottom>Street</Typography>
@@ -161,13 +168,7 @@ export default function UserProfilePage() {
           <Stack width="100%" rowGap={2}>
             {addresses.length > 0 ? (
               addresses.map((address) => (
-                <Stack
-                  key={address._id}
-                  component={Paper}
-                  elevation={1}
-                  p={2}
-                  rowGap={1}
-                >
+                <Stack key={address._id} component={Paper} elevation={1} p={2} rowGap={1}>
                   <Stack flexDirection="row" justifyContent="space-between" alignItems="center">
                     <Typography variant="h6" fontWeight={500}>
                       {address.type}

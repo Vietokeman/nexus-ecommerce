@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   Button,
   Checkbox,
@@ -26,7 +26,6 @@ export default function WishlistPage() {
   const removeFromWishlist = useWishlistStore((s) => s.removeItem);
   const cartItems = useCartStore((s) => s.items);
   const addToCart = useCartStore((s) => s.addItem);
-  const navigate = useNavigate();
   const theme = useTheme();
   const is1130 = useMediaQuery(theme.breakpoints.down(1130));
   const is480 = useMediaQuery(theme.breakpoints.down(480));
@@ -96,9 +95,7 @@ export default function WishlistPage() {
                         checked
                         icon={<FavoriteBorder />}
                         checkedIcon={<Favorite sx={{ color: 'red' }} />}
-                        onChange={(e) =>
-                          handleAddRemoveFromWishlist(item.id, e.target.checked)
-                        }
+                        onChange={(e) => handleAddRemoveFromWishlist(item.id, e.target.checked)}
                       />
                     </Stack>
                     <Stack

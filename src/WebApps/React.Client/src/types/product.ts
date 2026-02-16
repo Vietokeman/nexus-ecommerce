@@ -1,3 +1,7 @@
+/**
+ * Maps to backend CatalogProduct entity.
+ * `attributes` is a JSON object stored as JSONB in PostgreSQL.
+ */
 export interface Product {
   id: number;
   no: string;
@@ -5,6 +9,8 @@ export interface Product {
   summary: string;
   description: string;
   price: number;
+  category?: string;
+  attributes?: Record<string, string | number | boolean>;
   imageUrl?: string;
 }
 
@@ -14,6 +20,8 @@ export interface CreateProductDto {
   summary: string;
   description: string;
   price: number;
+  category?: string;
+  attributes?: Record<string, string | number | boolean>;
 }
 
 export interface UpdateProductDto {
@@ -21,4 +29,6 @@ export interface UpdateProductDto {
   summary: string;
   description: string;
   price: number;
+  category?: string;
+  attributes?: Record<string, string | number | boolean>;
 }

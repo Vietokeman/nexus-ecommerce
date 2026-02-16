@@ -39,7 +39,9 @@ export const useAuthStore = create<AuthState>()(
         },
 
         signup: async (signupData: SignupDto) => {
-          const { data } = await api.post<AuthResponse>(API_ENDPOINTS.AUTH.REGISTER, signupData);
+          // Strip confirmPassword before sending to backend
+          const { confirmPassword: _, ...registerPayload } = signupData;
+          const { data } = await api.post<AuthResponse>(API_ENDPOINTS.AUTH.REGISTER, registerPayload);
           const result = data as unknown as { result?: AuthResponse } & AuthResponse;
           const authData = result.result ?? result;
           set({

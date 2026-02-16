@@ -28,6 +28,7 @@ docker-compose up -d
 ```
 
 **✅ Đã xong!** Tất cả microservices chạy qua API Gateway duy nhất:
+
 - **Frontend**: http://localhost:3000
 - **API Gateway**: http://localhost:5000 ⭐
 - **Swagger**: http://localhost:5000/swagger
@@ -47,7 +48,8 @@ docker-compose up -d
 This repository provides a **complete e-commerce platform** built using **Microservices Architecture**, powered by **Docker Compose**, and accessible through **Ocelot API Gateway**.
 
 **Key Features:**
-- ✅ **Single Entry Point**: All services accessible via Gateway (port 5000)  
+
+- ✅ **Single Entry Point**: All services accessible via Gateway (port 5000)
 - ✅ **Auto Seed Data**: 30+ products với đầy đủ categories
 - ✅ **Event-Driven**: RabbitMQ for inter-service communication
 - ✅ **Monitoring**: Elasticsearch + Kibana + Health Checks
@@ -57,14 +59,14 @@ This repository provides a **complete e-commerce platform** built using **Micros
 
 ## 🚀 Tech Stack
 
-| Category            | Technology                                      |
-|---------------------|--------------------------------------------------|
-| 💻 Backend           | `.NET 8`, `ASP.NET Core`, `REST APIs`           |
-| 🛢 Databases         | `SQL Server`, `MySQL`, `PostgreSQL`, `MongoDB`, `Redis` |
-| 📩 Message Broker    | `RabbitMQ`                                      |
-| 🔎 Logging & Search  | `Elasticsearch`, `Kibana`                       |
-| 🔧 Dev Tools         | `pgAdmin`, `Portainer`, `Docker`, `Docker Compose` |
-| 🧠 Architecture      | `Microservices`, `Ocelot Gateway`, `EF Core`, `DDD` |
+| Category            | Technology                                              |
+| ------------------- | ------------------------------------------------------- |
+| 💻 Backend          | `.NET 8`, `ASP.NET Core`, `REST APIs`                   |
+| 🛢 Databases        | `SQL Server`, `MySQL`, `PostgreSQL`, `MongoDB`, `Redis` |
+| 📩 Message Broker   | `RabbitMQ`                                              |
+| 🔎 Logging & Search | `Elasticsearch`, `Kibana`                               |
+| 🔧 Dev Tools        | `pgAdmin`, `Portainer`, `Docker`, `Docker Compose`      |
+| 🧠 Architecture     | `Microservices`, `Ocelot Gateway`, `EF Core`, `DDD`     |
 
 ---
 
@@ -79,37 +81,40 @@ This repository provides a **complete e-commerce platform** built using **Micros
 ## 📦 Services Overview
 
 ### Infrastructure Services
+
 ```yaml
-version: '3.8'
+version: "3.8"
 services:
-  orderdb:       # SQL Server
-  productdb:     # MySQL
-  customerdb:    # PostgreSQL
-  basketdb:      # Redis
-  inventorydb:   # MongoDB
-  rabbitmq:      # Message Broker
-  pgadmin:       # PostgreSQL UI
-  portainer:     # Docker Management UI
+  orderdb: # SQL Server
+  productdb: # MySQL
+  customerdb: # PostgreSQL
+  basketdb: # Redis
+  inventorydb: # MongoDB
+  rabbitmq: # Message Broker
+  pgadmin: # PostgreSQL UI
+  portainer: # Docker Management UI
   elasticsearch: # Logging & Search
-  kibana:        # Log Dashboard
+  kibana: # Log Dashboard
 ```
 
 ### Microservices
+
 ```yaml
-  product.api:   # Product Catalog Service
-  customer.api:  # Customer Management Service
-  basket.api:    # Shopping Cart Service
-  ordering.api:  # Order Processing Service
+product.api: # Product Catalog Service
+customer.api: # Customer Management Service
+basket.api: # Shopping Cart Service
+ordering.api: # Order Processing Service
 ```
 
 ### API Gateway
+
 ```yaml
-  ocelot.apigw:  # API Gateway (Port 5000)
-    - Routing & Load Balancing
-    - Rate Limiting
-    - Response Caching
-    - Circuit Breaker
-    - Request Logging
+ocelot.apigw: # API Gateway (Port 5000)
+  - Routing & Load Balancing
+  - Rate Limiting
+  - Response Caching
+  - Circuit Breaker
+  - Request Logging
 ```
 
 ---
@@ -190,54 +195,80 @@ services:
 ---
 
 ## 💡 How to Run
+
 # 1. Clone project từ GitHub
+
 git clone https://github.com/Vietokeman/distributed-ecommerce-platform.git
 cd distributed-ecommerce-platform
 
 # 2. Start toàn bộ services trong Docker Compose
+
 docker compose up -d
 
 # 3. Kiểm tra các container đang chạy
+
 docker ps
 
 # 4. Kiểm tra volumes đã được tạo
+
 docker volume ls
 
 # 5. Kiểm tra log của một service cụ thể (VD: elasticsearch)
+
 docker logs elasticsearch
 
 # 6. Nếu cần stop toàn bộ services
+
 docker compose down
 
 # 7. Nếu muốn xóa luôn volumes khi stop (mất data)
+
 docker compose down -v
 
 # 8. Reset lại nếu gặp lỗi port/volume (cẩn thận mất dữ liệu)
+
 docker system prune -a --volumes
 
 # 9. Truy cập các dịch vụ qua trình duyệt:
-# 🌐 Frontend:       http://localhost:3000 (React App)
-# 🌐 API Gateway:    http://localhost:5000 ⭐ (Tất cả APIs)
-# 🌐 Swagger:        http://localhost:5000/swagger
+
+# 🌐 Frontend: http://localhost:3000 (React App)
+
+# 🌐 API Gateway: http://localhost:5000 ⭐ (Tất cả APIs)
+
+# 🌐 Swagger: http://localhost:5000/swagger
+
 #
+
 # 🛠 Management Tools:
-# RabbitMQ UI:       http://localhost:15672 (guest/guest)
-# pgAdmin:           http://localhost:5050
-# Portainer:         http://localhost:9000
-# Kibana:            http://localhost:5601
+
+# RabbitMQ UI: http://localhost:15672 (guest/guest)
+
+# pgAdmin: http://localhost:5050
+
+# Portainer: http://localhost:9000
+
+# Kibana: http://localhost:5601
+
 #
+
 # 📊 Databases (chỉ dùng cho dev tools):
-# PostgreSQL:        localhost:5433 (nexusdb - all microservices)
-# Redis:             localhost:6379 (Basket cache)
+
+# PostgreSQL: localhost:5433 (nexusdb - all microservices)
+
+# Redis: localhost:6379 (Basket cache)
+
 #
+
 # ⚠️ LƯU Ý: Các microservices KHÔNG expose port trực tiếp
-#           Tất cả API calls phải qua Gateway: http://localhost:5000
+
+# Tất cả API calls phải qua Gateway: http://localhost:5000
 
 ---
 
 ## 🌐 API Gateway Usage
 
 ### Quick Test via Gateway
+
 ```bash
 # Get all products through gateway
 curl http://localhost:5000/api/v1/products
@@ -260,19 +291,20 @@ curl http://localhost:5000/health
 
 ### Gateway Routes (All via port 5000)
 
-| Microservice | Gateway Route | Description |
-|-------------|---------------|-------------|
-| Product API | `/api/v1/products` | Product catalog & search |
-| Customer API | `/api/v1/customers` | Customer management |
-| Basket API | `/api/v1/baskets` | Shopping cart operations |
-| Ordering API | `/api/v1/orders` | Order processing |
-| Inventory API | `/api/v1/inventory` | Stock management |
-| Payment API | `/api/v1/payments` | Payment processing |
-| Identity API | `/api/v1/identity` | Authentication & authorization |
-| FlashSale API | `/api/v1/flashsales` | Flash sale events |
-| GroupBuy API | `/api/v1/groupbuys` | Group buying campaigns |
+| Microservice  | Gateway Route        | Description                    |
+| ------------- | -------------------- | ------------------------------ |
+| Product API   | `/api/v1/products`   | Product catalog & search       |
+| Customer API  | `/api/v1/customers`  | Customer management            |
+| Basket API    | `/api/v1/baskets`    | Shopping cart operations       |
+| Ordering API  | `/api/v1/orders`     | Order processing               |
+| Inventory API | `/api/v1/inventory`  | Stock management               |
+| Payment API   | `/api/v1/payments`   | Payment processing             |
+| Identity API  | `/api/v1/identity`   | Authentication & authorization |
+| FlashSale API | `/api/v1/flashsales` | Flash sale events              |
+| GroupBuy API  | `/api/v1/groupbuys`  | Group buying campaigns         |
 
 ### Gateway Features
+
 - **Routing**: Single entry point for all microservices
 - **Rate Limiting**: 3-20 requests/second (varies by endpoint)
 - **Caching**: 15-60 seconds TTL (reduces database load)

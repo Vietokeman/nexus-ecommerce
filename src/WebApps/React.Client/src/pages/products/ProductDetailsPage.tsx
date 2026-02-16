@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   Box,
-  Button,
   Checkbox,
   Rating,
   Stack,
@@ -80,7 +79,6 @@ export default function ProductDetailsPage() {
       itemNo: product.no,
       productName: product.name,
       price: product.price,
-      quantity,
     });
     toast.success('Product added to cart');
     setQuantity(1);
@@ -102,7 +100,7 @@ export default function ProductDetailsPage() {
 
   // Mock images (since our API may not have images array)
   const images = [
-    product?.thumbnail || `https://via.placeholder.com/500?text=${product?.name?.[0] || 'P'}`,
+    product?.imageUrl || `https://via.placeholder.com/500?text=${product?.name?.[0] || 'P'}`,
   ];
 
   if (loading) {
@@ -153,7 +151,9 @@ export default function ProductDetailsPage() {
           >
             {/* Image selection thumbnails */}
             {!is1420 && (
-              <Stack sx={{ display: 'flex', rowGap: '1.5rem', height: '100%', overflowY: 'scroll' }}>
+              <Stack
+                sx={{ display: 'flex', rowGap: '1.5rem', height: '100%', overflowY: 'scroll' }}
+              >
                 {images.map((image, index) => (
                   <motion.div
                     key={index}
@@ -303,7 +303,7 @@ export default function ProductDetailsPage() {
                 <Stack flexDirection="row" columnGap={is387 ? '.3rem' : '1.5rem'} width="100%">
                   {/* Quantity */}
                   <Stack flexDirection="row" alignItems="center" justifyContent="space-between">
-                    <MotionConfig whileHover={{ scale: 1.05 }} whileTap={{ scale: 1 }}>
+                    <MotionConfig>
                       <motion.button
                         onClick={handleDecreaseQty}
                         style={{
