@@ -199,7 +199,13 @@ export default function CheckoutPage() {
               Choose from existing Addresses
             </Typography>
           </Stack>
-          <Grid container gap={2} width={is900 ? 'auto' : '50rem'} justifyContent="flex-start" alignContent="flex-start">
+          <Grid
+            container
+            gap={2}
+            width={is900 ? 'auto' : '50rem'}
+            justifyContent="flex-start"
+            alignContent="flex-start"
+          >
             {addresses.map((address, index) => (
               <FormControl key={address._id}>
                 <Stack
@@ -214,7 +220,7 @@ export default function CheckoutPage() {
                     <Radio
                       checked={selectedAddress?._id === address._id}
                       name="addressRadioGroup"
-                      onChange={() => setSelectedAddress(addresses[index])}
+                      onChange={() => setSelectedAddress(addresses[index] ?? null)}
                     />
                     <Typography>{address.type}</Typography>
                   </Stack>

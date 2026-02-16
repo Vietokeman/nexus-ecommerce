@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { Box, Typography, CircularProgress, Button, Paper } from '@mui/material';
-import { CheckCircle } from '@mui/icons-material';
+import { Box, Typography, CircularProgress, Button, Stack } from '@mui/material';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { motion } from 'framer-motion';
 import { api } from '@/lib/api';
 import { API_ENDPOINTS } from '@/lib/endpoints';
 import { useCartStore } from '@/store/cart-store';
+import { nexus } from '@/theme/theme';
 
 export default function PaymentSuccessPage() {
   const [searchParams] = useSearchParams();
@@ -34,36 +35,69 @@ export default function PaymentSuccessPage() {
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', pt: 10 }}>
-        <CircularProgress />
+        <CircularProgress sx={{ color: nexus.purple[500] }} />
       </Box>
     );
   }
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', pt: 6 }}>
-      <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
-        <Paper sx={{ p: 6, textAlign: 'center', borderRadius: 3, maxWidth: 480 }} elevation={3}>
-          <CheckCircle sx={{ fontSize: 80, color: 'success.main', mb: 2 }} />
-          <Typography variant="h4" fontWeight={700} gutterBottom>
+    <Box sx={{ display: 'flex', justifyContent: 'center', pt: { xs: 4, md: 8 } }}>
+      <motion.div
+        initial={{ scale: 0.85, opacity: 0, y: 30 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+      >
+        <Stack
+          className="nx-glass"
+          sx={{
+            p: { xs: 4, md: 6 },
+            textAlign: 'center',
+            borderRadius: nexus.radius.xl,
+            maxWidth: 480,
+            alignItems: 'center',
+          }}
+          spacing={2}
+        >
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
+          >
+            <CheckCircleOutlineIcon sx={{ fontSize: 96, color: '#10B981' }} />
+          </motion.div>
+
+          <Typography
+            variant="h4"
+            fontWeight={700}
+            sx={{
+              background: nexus.gradient.primary,
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}
+          >
             Payment Successful!
           </Typography>
-          <Typography variant="body1" color="text.secondary" sx={{ mb: 1 }}>
+
+          <Typography variant="body1" sx={{ color: nexus.neutral[500] }}>
             Thank you for your purchase.
           </Typography>
+
           {orderNo && (
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-              Order: <strong>{orderNo}</strong>
+            <Typography variant="body2" sx={{ color: nexus.neutral[500] }}>
+              Order: <strong style={{ color: nexus.neutral[900] }}>{orderNo}</strong>
             </Typography>
           )}
-          <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', mt: 3 }}>
+
+          <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
             <Button variant="contained" onClick={() => navigate('/orders')}>
               View Orders
             </Button>
             <Button variant="outlined" onClick={() => navigate('/')}>
               Continue Shopping
             </Button>
-          </Box>
-        </Paper>
+          </Stack>
+        </Stack>
       </motion.div>
     </Box>
   );

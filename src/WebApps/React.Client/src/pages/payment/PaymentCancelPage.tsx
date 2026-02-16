@@ -1,31 +1,55 @@
 import { useNavigate } from 'react-router-dom';
-import { Box, Typography, Button, Paper } from '@mui/material';
-import { Cancel } from '@mui/icons-material';
+import { Box, Typography, Button, Stack } from '@mui/material';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { motion } from 'framer-motion';
+import { nexus } from '@/theme/theme';
 
 export default function PaymentCancelPage() {
   const navigate = useNavigate();
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', pt: 6 }}>
-      <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
-        <Paper sx={{ p: 6, textAlign: 'center', borderRadius: 3, maxWidth: 480 }} elevation={3}>
-          <Cancel sx={{ fontSize: 80, color: 'error.main', mb: 2 }} />
-          <Typography variant="h4" fontWeight={700} gutterBottom>
+    <Box sx={{ display: 'flex', justifyContent: 'center', pt: { xs: 4, md: 8 } }}>
+      <motion.div
+        initial={{ scale: 0.85, opacity: 0, y: 30 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+      >
+        <Stack
+          className="nx-glass"
+          sx={{
+            p: { xs: 4, md: 6 },
+            textAlign: 'center',
+            borderRadius: nexus.radius.xl,
+            maxWidth: 480,
+            alignItems: 'center',
+          }}
+          spacing={2}
+        >
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
+          >
+            <ErrorOutlineIcon sx={{ fontSize: 96, color: '#EF4444' }} />
+          </motion.div>
+
+          <Typography variant="h4" fontWeight={700} sx={{ color: nexus.neutral[900] }}>
             Payment Cancelled
           </Typography>
-          <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+
+          <Typography variant="body1" sx={{ color: nexus.neutral[500] }}>
             Your payment was cancelled. No charges were made.
           </Typography>
-          <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
+
+          <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
             <Button variant="contained" onClick={() => navigate('/cart')}>
               Back to Cart
             </Button>
             <Button variant="outlined" onClick={() => navigate('/')}>
               Continue Shopping
             </Button>
-          </Box>
-        </Paper>
+          </Stack>
+        </Stack>
       </motion.div>
     </Box>
   );

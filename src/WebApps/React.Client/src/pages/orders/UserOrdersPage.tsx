@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   Button,
   IconButton,
@@ -42,7 +42,6 @@ export default function UserOrdersPage() {
   const user = useAuthStore((s) => s.user);
   const cartItems = useCartStore((s) => s.items);
   const addToCart = useCartStore((s) => s.addItem);
-  const navigate = useNavigate();
   const theme = useTheme();
   const is1200 = useMediaQuery(theme.breakpoints.down(1200));
   const is768 = useMediaQuery(theme.breakpoints.down(768));
@@ -51,7 +50,11 @@ export default function UserOrdersPage() {
 
   const userName = user?.userName || user?.email || 'guest';
 
-  const { data: orders = [], isLoading, isError } = useQuery<Order[]>({
+  const {
+    data: orders = [],
+    isLoading,
+    isError,
+  } = useQuery<Order[]>({
     queryKey: ['orders', userName],
     queryFn: () =>
       api.get(API_ENDPOINTS.ORDERS.BY_USER(userName)).then((r) => r.data?.result || r.data || []),
@@ -116,7 +119,12 @@ export default function UserOrdersPage() {
                 rowGap={2}
               >
                 {/* upper */}
-                <Stack flexDirection="row" rowGap="1rem" justifyContent="space-between" flexWrap="wrap">
+                <Stack
+                  flexDirection="row"
+                  rowGap="1rem"
+                  justifyContent="space-between"
+                  flexWrap="wrap"
+                >
                   <Stack flexDirection="row" columnGap={4} rowGap="1rem" flexWrap="wrap">
                     <Stack>
                       <Typography>Order Number</Typography>

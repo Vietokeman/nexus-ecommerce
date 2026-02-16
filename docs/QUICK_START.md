@@ -7,6 +7,7 @@
 ## 📌 Điểm Khác Biệt
 
 ### ❌ Cũ (Phải chạy từng service riêng lẻ):
+
 ```powershell
 # Phải chạy 10+ services riêng lẻ
 dotnet run --project Product.API      # Port 6002
@@ -18,13 +19,14 @@ dotnet run --project Inventory.API    # Port 6006
 ```
 
 ### ✅ Mới (Chỉ cần API Gateway):
+
 ```powershell
 # CHỈ 1 LỆNH DUY NHẤT
 cd d:\Git-Repo\Microservice\distributed-ecommerce-platform\src
 docker-compose up -d
 
 # TẤT CẢ services chạy qua port 5000
-http://localhost:5000/api/v1/products     # → Product.API  
+http://localhost:5000/api/v1/products     # → Product.API
 http://localhost:5000/api/v1/customers    # → Customer.API
 http://localhost:5000/api/v1/baskets      # → Basket.API
 http://localhost:5000/api/v1/orders       # → Ordering.API
@@ -102,6 +104,7 @@ docker-compose ps
 ## 🌐 API Endpoints (Tất Cả Qua Gateway Port 5000)
 
 ### Product Management
+
 ```
 GET    http://localhost:5000/api/v1/products
 GET    http://localhost:5000/api/v1/products/{id}
@@ -111,6 +114,7 @@ DELETE http://localhost:5000/api/v1/products/{id}
 ```
 
 ### Customer Management
+
 ```
 GET    http://localhost:5000/api/v1/customers
 GET    http://localhost:5000/api/v1/customers/{id}
@@ -119,6 +123,7 @@ PUT    http://localhost:5000/api/v1/customers/{id}
 ```
 
 ### Shopping Cart
+
 ```
 GET    http://localhost:5000/api/v1/baskets/{username}
 POST   http://localhost:5000/api/v1/baskets
@@ -128,6 +133,7 @@ POST   http://localhost:5000/api/v1/baskets/checkout
 ```
 
 ### Order Management
+
 ```
 GET    http://localhost:5000/api/v1/orders/{username}
 GET    http://localhost:5000/api/v1/orders/all
@@ -135,6 +141,7 @@ POST   http://localhost:5000/api/v1/orders
 ```
 
 ### Authentication
+
 ```
 POST   http://localhost:5000/api/v1/identity/register
 POST   http://localhost:5000/api/v1/identity/login
@@ -142,6 +149,7 @@ POST   http://localhost:5000/api/v1/identity/refresh-token
 ```
 
 ### Payment
+
 ```
 POST   http://localhost:5000/api/v1/payments/create-payment-link
 GET    http://localhost:5000/api/v1/payments/{orderId}
@@ -155,6 +163,7 @@ POST   http://localhost:5000/api/v1/payments/webhook
 Khi khởi động lần đầu, hệ thống sẽ tự động seed data:
 
 ### Products (30+ sản phẩm)
+
 - **Smartphones**: iPhone 9, Samsung Galaxy, OPPO F19, Huawei P30
 - **Laptops**: MacBook Pro, Samsung Galaxy Book, Microsoft Surface, HP Pavilion
 - **Fragrances**: Perfumes, Colognes
@@ -167,6 +176,7 @@ Khi khởi động lần đầu, hệ thống sẽ tự động seed data:
 - **Furniture**: Tables, Chairs
 
 ### Categories
+
 ```
 smartphones, laptops, fragrances, skincare, groceries,
 home-decoration, furniture, tops, womens-dresses,
@@ -227,16 +237,19 @@ docker-compose up -d
 ## 🛑 Tắt Hệ Thống
 
 ### Dừng Tất Cả (Giữ data)
+
 ```powershell
 docker-compose stop
 ```
 
 ### Dừng và Xóa Containers (Giữ data)
+
 ```powershell
 docker-compose down
 ```
 
 ### Xóa Toàn Bộ (Bao gồm data)
+
 ```powershell
 docker-compose down -v
 ```
@@ -307,24 +320,28 @@ docker-compose up -d --build
 ## 📊 Kiểm Tra Khởi Động Thành Công
 
 ### 1. Check All Containers Running
+
 ```powershell
 docker-compose ps
 # Tất cả phải có status "Up"
 ```
 
 ### 2. Check Gateway Health
+
 ```powershell
 curl http://localhost:5000/health
 # Kết quả: {"status": "Healthy"}
 ```
 
 ### 3. Check Product API
+
 ```powershell
 curl http://localhost:5000/api/v1/products
 # Kết quả: JSON array với danh sách products
 ```
 
 ### 4. Check Frontend
+
 ```powershell
 # Mở browser: http://localhost:3000
 # Phải thấy trang login/home
@@ -353,6 +370,7 @@ npm run dev
 ### Environment Configuration
 
 File `.env.local`:
+
 ```env
 VITE_API_GATEWAY_URL=http://localhost:5000
 VITE_APP_NAME=E-Commerce Platform
@@ -365,12 +383,14 @@ VITE_APP_NAME=E-Commerce Platform
 ### Cho Development
 
 1. **Start Backend**:
+
    ```powershell
    cd d:\Git-Repo\Microservice\distributed-ecommerce-platform\src
    docker-compose up -d
    ```
 
 2. **Start Frontend (Dev Mode)**:
+
    ```powershell
    cd WebApps\React.Client
    npm run dev
@@ -418,4 +438,4 @@ docker-compose up -d --build
 
 **Happy Coding! 🚀**
 
-*Hệ thống đã được cấu hình để chạy hoàn toàn qua API Gateway. Không cần chạy từng service riêng lẻ nữa!*
+_Hệ thống đã được cấu hình để chạy hoàn toàn qua API Gateway. Không cần chạy từng service riêng lẻ nữa!_

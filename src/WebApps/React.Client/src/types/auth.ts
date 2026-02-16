@@ -13,8 +13,13 @@ export interface LoginDto {
   password: string;
 }
 
+/**
+ * Maps to backend RegisterDto: { FirstName, LastName, Email, Password }
+ * `confirmPassword` is frontend-only validation.
+ */
 export interface SignupDto {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   confirmPassword: string;

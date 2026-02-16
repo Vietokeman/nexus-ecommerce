@@ -23,14 +23,14 @@
 
 ### 1.1. Phần Mềm Cần Thiết
 
-| Công Cụ | Phiên Bản | Download Link |
-|---------|-----------|---------------|
-| **.NET SDK** | 8.0+ | https://dotnet.microsoft.com/download |
-| **Node.js** | 20.x+ | https://nodejs.org/ |
-| **Docker Desktop** | Latest | https://www.docker.com/products/docker-desktop |
-| **Visual Studio 2022** | Community/Pro/Enterprise | https://visualstudio.microsoft.com/ |
-| **VS Code** | Latest | https://code.visualstudio.com/ |
-| **Git** | Latest | https://git-scm.com/ |
+| Công Cụ                | Phiên Bản                | Download Link                                  |
+| ---------------------- | ------------------------ | ---------------------------------------------- |
+| **.NET SDK**           | 8.0+                     | https://dotnet.microsoft.com/download          |
+| **Node.js**            | 20.x+                    | https://nodejs.org/                            |
+| **Docker Desktop**     | Latest                   | https://www.docker.com/products/docker-desktop |
+| **Visual Studio 2022** | Community/Pro/Enterprise | https://visualstudio.microsoft.com/            |
+| **VS Code**            | Latest                   | https://code.visualstudio.com/                 |
+| **Git**                | Latest                   | https://git-scm.com/                           |
 
 ### 1.2. Extensions Cho VS Code
 
@@ -192,11 +192,7 @@ Tạo file `.vscode/launch.json`:
   "compounds": [
     {
       "name": "All Services",
-      "configurations": [
-        "Product.API",
-        "Customer.API",
-        "Ocelot.ApiGw"
-      ]
+      "configurations": ["Product.API", "Customer.API", "Ocelot.ApiGw"]
     }
   ]
 }
@@ -468,13 +464,14 @@ Sử dụng trong code:
 
 ```typescript
 // src/lib/api.ts
-const API_GATEWAY_URL = import.meta.env.VITE_API_GATEWAY_URL || 'http://localhost:5000';
+const API_GATEWAY_URL =
+  import.meta.env.VITE_API_GATEWAY_URL || "http://localhost:5000";
 
 export const apiClient = axios.create({
   baseURL: API_GATEWAY_URL,
   timeout: 10000,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 ```
@@ -872,17 +869,17 @@ public async Task<IActionResult> CheckoutBasket([FromBody] BasketCheckout basket
 {
     // Validate basket
     var basket = await _repository.GetBasket(basketCheckout.UserName);
-    
+
     // Map to event
     var eventMessage = _mapper.Map<BasketCheckoutEvent>(basketCheckout);
     eventMessage.TotalPrice = basket.TotalPrice;
-    
+
     // Publish event to RabbitMQ
     await _publishEndpoint.Publish(eventMessage);
-    
+
     // Delete basket
     await _repository.DeleteBasket(basketCheckout.UserName);
-    
+
     return Accepted();
 }
 ```
@@ -895,7 +892,7 @@ builder.Services.AddMassTransit(x =>
 {
     // Register consumer
     x.AddConsumer<BasketCheckoutConsumer>();
-    
+
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host("rabbitmq", "/", h =>
@@ -903,15 +900,15 @@ builder.Services.AddMassTransit(x =>
             h.Username("guest");
             h.Password("guest");
         });
-        
+
         // Configure endpoint for consumer
         cfg.ReceiveEndpoint("basket-checkout-queue", e =>
         {
             e.ConfigureConsumer<BasketCheckoutConsumer>(context);
-            
+
             // Retry policy
             e.UseMessageRetry(r => r.Interval(3, TimeSpan.FromSeconds(5)));
-            
+
             // Circuit breaker
             e.UseCircuitBreaker(cb =>
             {
@@ -929,18 +926,18 @@ public class BasketCheckoutConsumer : IConsumer<BasketCheckoutEvent>
 {
     private readonly IMediator _mediator;
     private readonly ILogger<BasketCheckoutConsumer> _logger;
-    
+
     public async Task Consume(ConsumeContext<BasketCheckoutEvent> context)
     {
-        _logger.LogInformation("Received BasketCheckoutEvent for {UserName}", 
+        _logger.LogInformation("Received BasketCheckoutEvent for {UserName}",
             context.Message.UserName);
-        
+
         // Map event to command
         var command = _mapper.Map<CheckoutOrderCommand>(context.Message);
-        
+
         // Process command using CQRS/MediatR
         var result = await _mediator.Send(command);
-        
+
         if (result.IsSuccess)
         {
             _logger.LogInformation("Order created successfully: {OrderId}", result.OrderId);
@@ -967,23 +964,23 @@ namespace EventBus.Messages.Events
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string EmailAddress { get; set; }
-        
+
         // Address
         public string AddressLine { get; set; }
         public string Country { get; set; }
         public string State { get; set; }
         public string ZipCode { get; set; }
-        
+
         // Payment
         public string CardName { get; set; }
         public string CardNumber { get; set; }
         public string Expiration { get; set; }
         public string CVV { get; set; }
         public int PaymentMethod { get; set; }
-        
+
         // Order
         public decimal TotalPrice { get; set; }
-        
+
         // Metadata
         public Guid CorrelationId { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
@@ -1051,14 +1048,14 @@ cfg.ReceiveEndpoint("basket-checkout-queue", e =>
 cfg.ReceiveEndpoint("basket-checkout-queue", e =>
 {
     e.ConfigureConsumer<BasketCheckoutConsumer>(context);
-    
+
     // Tự động chuyển failed messages sang dead letter queue
-    e.UseMessageRetry(r => 
+    e.UseMessageRetry(r =>
     {
         r.Interval(3, TimeSpan.FromSeconds(5));
         r.Handle<Exception>();
     });
-    
+
     // Dead letter exchange
     e.BindDeadLetterQueue("basket-checkout-queue-error");
 });
@@ -1152,7 +1149,7 @@ Connection:
   Port: 5432
   Username: admin
   Password: admin1234
-  
+
 Databases:
   - ProductDb
   - CustomerDb
@@ -1388,6 +1385,7 @@ pnpm install
 ## 📚 Tài Liệu Tham Khảo
 
 ### Official Documentation
+
 - [.NET 8 Documentation](https://learn.microsoft.com/en-us/dotnet/)
 - [Docker Documentation](https://docs.docker.com/)
 - [RabbitMQ Documentation](https://www.rabbitmq.com/documentation.html)
@@ -1397,6 +1395,7 @@ pnpm install
 - [Vite Documentation](https://vitejs.dev/)
 
 ### Project Files
+
 - [Master Plan](./MASTER_PLAN.md)
 - [Ocelot Configuration Guide](../src/APIGateWays/OcelotApiGw/CONFIGURATION_GUIDE.md)
 - [README](../README.md)
