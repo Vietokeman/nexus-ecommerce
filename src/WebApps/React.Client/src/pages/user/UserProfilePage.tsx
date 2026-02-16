@@ -1,104 +1,200 @@
-import { useNavigate } from 'react-router-dom';
-import { Box, Typography, Paper, Avatar, Divider, Grid, TextField, Button } from '@mui/material';
-import { Email, Phone, Home } from '@mui/icons-material';
-import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import {
+  Avatar,
+  Button,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
+import { useAuthStore } from '@/store/auth-store';
+
+interface AddressForm {
+  type: string;
+  street: string;
+  postalCode: string;
+  country: string;
+  phoneNumber: string;
+  state: string;
+  city: string;
+}
+
+interface Address extends AddressForm {
+  _id: string;
+}
 
 export default function UserProfilePage() {
-  const navigate = useNavigate();
-  const user = {
-    firstName: localStorage.getItem('firstName') || 'Guest',
-    lastName: localStorage.getItem('lastName') || 'User',
-    email: localStorage.getItem('userName') || 'guest@example.com',
-    phone: localStorage.getItem('phone') || '',
-    address: localStorage.getItem('address') || '',
+  const { register, handleSubmit, reset } = useForm<AddressForm>();
+  const user = useAuthStore((s) => s.user);
+  const theme = useTheme();
+  const [addAddress, setAddAddress] = useState(false);
+  const [addresses, setAddresses] = useState<Address[]>([]);
+  const [loading, setLoading] = useState(false);
+  const is900 = useMediaQuery(theme.breakpoints.down(900));
+  const is480 = useMediaQuery(theme.breakpoints.down(480));
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+  }, []);
+
+  const displayName = user?.firstName
+    ? `${user.firstName} ${user.lastName || ''}`
+    : user?.userName || 'Guest';
+  const email = user?.email || user?.userName || 'guest@example.com';
+
+  const handleAddAddress = (data: AddressForm) => {
+    setLoading(true);
+    const newAddress: Address = { ...data, _id: `addr-${Date.now()}` };
+    setAddresses((prev) => [...prev, newAddress]);
+    toast.success('Address added');
+    setAddAddress(false);
+    reset();
+    setLoading(false);
+  };
+
+  const handleDeleteAddress = (id: string) => {
+    setAddresses((prev) => prev.filter((a) => a._id !== id));
+    toast.success('Address deleted');
   };
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-      <Typography variant="h4" fontWeight={700} gutterBottom>
-        My Profile
-      </Typography>
+    <Stack height="calc(100vh - 4rem)" justifyContent="flex-start" alignItems="center">
+      <Stack
+        component={is480 ? 'div' : Paper}
+        elevation={1}
+        width={is900 ? '100%' : '50rem'}
+        p={2}
+        mt={is480 ? 0 : 5}
+        rowGap={2}
+      >
+        {/* user details */}
+        <Stack
+          bgcolor={theme.palette.primary.light}
+          color={theme.palette.primary.main}
+          p={2}
+          rowGap={1}
+          borderRadius=".6rem"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Avatar src="none" alt={displayName} sx={{ width: 70, height: 70 }} />
+          <Typography>{displayName}</Typography>
+          <Typography>{email}</Typography>
+        </Stack>
 
-      <Grid container spacing={4}>
-        <Grid item xs={12} md={4}>
-          <Paper sx={{ p: 4, textAlign: 'center', borderRadius: 2 }} elevation={2}>
-            <Avatar
-              sx={{
-                width: 100,
-                height: 100,
-                mx: 'auto',
-                mb: 2,
-                bgcolor: 'primary.main',
-                fontSize: 40,
-              }}
+        {/* address section */}
+        <Stack justifyContent="center" alignItems="center" rowGap={3}>
+          {/* heading and add button */}
+          <Stack flexDirection="row" alignItems="center" justifyContent="center" columnGap={1}>
+            <Typography variant="h6" fontWeight={400}>
+              Manage addresses
+            </Typography>
+            <Button onClick={() => setAddAddress(true)} size={is480 ? 'small' : undefined} variant="contained">
+              Add
+            </Button>
+          </Stack>
+
+          {/* add address form */}
+          {addAddress && (
+            <Stack
+              width="100%"
+              component="form"
+              noValidate
+              onSubmit={handleSubmit(handleAddAddress)}
+              rowGap={2}
             >
-              {user.firstName[0]}
-              {user.lastName[0]}
-            </Avatar>
-            <Typography variant="h6" fontWeight={600}>
-              {user.firstName} {user.lastName}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {user.email}
-            </Typography>
-            <Divider sx={{ my: 3 }} />
-            <Box sx={{ textAlign: 'left' }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
-                <Email fontSize="small" color="action" />
-                <Typography variant="body2">{user.email}</Typography>
-              </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
-                <Phone fontSize="small" color="action" />
-                <Typography variant="body2">{user.phone || 'Not provided'}</Typography>
-              </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Home fontSize="small" color="action" />
-                <Typography variant="body2">{user.address || 'Not provided'}</Typography>
-              </Box>
-            </Box>
-          </Paper>
-
-          <Button variant="outlined" fullWidth sx={{ mt: 2 }} onClick={() => navigate('/orders')}>
-            View Orders
-          </Button>
-        </Grid>
-
-        <Grid item xs={12} md={8}>
-          <Paper sx={{ p: 4, borderRadius: 2 }} elevation={2}>
-            <Typography variant="h6" fontWeight={600} gutterBottom>
-              Edit Profile
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField label="First Name" fullWidth defaultValue={user.firstName} />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField label="Last Name" fullWidth defaultValue={user.lastName} />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField label="Email" fullWidth defaultValue={user.email} disabled />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField label="Phone" fullWidth defaultValue={user.phone} />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  label="Address"
-                  fullWidth
-                  multiline
-                  rows={3}
-                  defaultValue={user.address}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Button variant="contained" size="large">
-                  Save Changes
+              <Stack>
+                <Typography gutterBottom>Type</Typography>
+                <TextField placeholder="Eg. Home, Business" {...register('type', { required: true })} />
+              </Stack>
+              <Stack>
+                <Typography gutterBottom>Street</Typography>
+                <TextField {...register('street', { required: true })} />
+              </Stack>
+              <Stack>
+                <Typography gutterBottom>Postal Code</Typography>
+                <TextField type="number" {...register('postalCode', { required: true })} />
+              </Stack>
+              <Stack>
+                <Typography gutterBottom>Country</Typography>
+                <TextField {...register('country', { required: true })} />
+              </Stack>
+              <Stack>
+                <Typography gutterBottom>Phone Number</Typography>
+                <TextField type="number" {...register('phoneNumber', { required: true })} />
+              </Stack>
+              <Stack>
+                <Typography gutterBottom>State</Typography>
+                <TextField {...register('state', { required: true })} />
+              </Stack>
+              <Stack>
+                <Typography gutterBottom>City</Typography>
+                <TextField {...register('city', { required: true })} />
+              </Stack>
+              <Stack flexDirection="row" alignSelf="flex-end" columnGap={is480 ? 1 : 2}>
+                <LoadingButton
+                  loading={loading}
+                  type="submit"
+                  size={is480 ? 'small' : undefined}
+                  variant="contained"
+                >
+                  add
+                </LoadingButton>
+                <Button
+                  color="error"
+                  onClick={() => setAddAddress(false)}
+                  variant={is480 ? 'outlined' : 'text'}
+                  size={is480 ? 'small' : undefined}
+                >
+                  cancel
                 </Button>
-              </Grid>
-            </Grid>
-          </Paper>
-        </Grid>
-      </Grid>
-    </motion.div>
+              </Stack>
+            </Stack>
+          )}
+
+          {/* mapping on addresses */}
+          <Stack width="100%" rowGap={2}>
+            {addresses.length > 0 ? (
+              addresses.map((address) => (
+                <Stack
+                  key={address._id}
+                  component={Paper}
+                  elevation={1}
+                  p={2}
+                  rowGap={1}
+                >
+                  <Stack flexDirection="row" justifyContent="space-between" alignItems="center">
+                    <Typography variant="h6" fontWeight={500}>
+                      {address.type}
+                    </Typography>
+                    <Button
+                      color="error"
+                      size="small"
+                      onClick={() => handleDeleteAddress(address._id)}
+                    >
+                      Delete
+                    </Button>
+                  </Stack>
+                  <Typography>{address.street}</Typography>
+                  <Typography>
+                    {address.city}, {address.state}, {address.country} - {address.postalCode}
+                  </Typography>
+                  <Typography>{address.phoneNumber}</Typography>
+                </Stack>
+              ))
+            ) : (
+              <Typography textAlign="center" mt={2} variant="body2">
+                You have no added addresses
+              </Typography>
+            )}
+          </Stack>
+        </Stack>
+      </Stack>
+    </Stack>
   );
 }
