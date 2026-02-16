@@ -1,6 +1,6 @@
 ## Aspnetcore Microservices
 
-<h1 align="center">🧱 Distributed Ecommerce Platform</h1>
+<h1 align="center">🚀 Nexus Commerce</h1>
 <h3 align="center">Microservices Infrastructure using Docker Compose</h3>
 
 <p align="center">
@@ -198,8 +198,8 @@ ocelot.apigw: # API Gateway (Port 5000)
 
 # 1. Clone project từ GitHub
 
-git clone https://github.com/Vietokeman/distributed-ecommerce-platform.git
-cd distributed-ecommerce-platform
+git clone https://github.com/Vietokeman/nexus-commerce.git
+cd nexus-commerce
 
 # 2. Start toàn bộ services trong Docker Compose
 

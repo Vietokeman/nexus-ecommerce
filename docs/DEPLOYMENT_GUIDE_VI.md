@@ -1,4 +1,4 @@
-# 🚀 HƯỚNG DẪN TRIỂN KHAI - Distributed E-Commerce Platform
+# 🚀 HƯỚNG DẪN TRIỂN KHAI - Nexus Commerce
 
 **Phiên bản:** 1.0  
 **Ngày cập nhật:** 16/02/2026  
