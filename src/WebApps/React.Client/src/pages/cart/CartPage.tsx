@@ -1,143 +1,232 @@
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import {
-  Box,
-  Typography,
   Button,
+  Chip,
   IconButton,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Paper,
-  Divider,
+  Stack,
+  Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
-import { Add, Remove, Delete, ArrowBack } from '@mui/icons-material';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 import { motion } from 'framer-motion';
+import { toast } from 'react-toastify';
 import { useCartStore } from '@/store/cart-store';
-import EmptyState from '@/components/ui/EmptyState';
 
-export default function CartPage() {
-  const { items, updateQuantity, removeItem, clearCart, subtotal, shipping, taxAmount, total } =
-    useCartStore();
-  const navigate = useNavigate();
+const SHIPPING = 5.55;
+const TAXES = 2.0;
 
-  if (items.length === 0) {
-    return (
-      <EmptyState
-        title="Your cart is empty"
-        description="Add some products to get started!"
-        actionLabel="Browse Products"
-        onAction={() => navigate('/')}
-      />
-    );
-  }
+/* ── CartItem sub-component ─────────────────────────────────── */
+interface CartItemProps {
+  itemNo: string;
+  productName: string;
+  price: number;
+  quantity: number;
+  imageUrl?: string;
+}
+
+function CartItem({ itemNo, productName, price, quantity, imageUrl }: CartItemProps) {
+  const updateQuantity = useCartStore((s) => s.updateQuantity);
+  const removeItem = useCartStore((s) => s.removeItem);
+  const theme = useTheme();
+  const is900 = useMediaQuery(theme.breakpoints.down(900));
+  const is552 = useMediaQuery(theme.breakpoints.down(552));
+  const is480 = useMediaQuery(theme.breakpoints.down(480));
+
+  const handleAddQty = () => updateQuantity(itemNo, quantity + 1);
+  const handleRemoveQty = () => {
+    if (quantity === 1) {
+      removeItem(itemNo);
+    } else {
+      updateQuantity(itemNo, quantity - 1);
+    }
+  };
+  const handleProductRemove = () => {
+    removeItem(itemNo);
+    toast.success('Product removed from cart');
+  };
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-      <Button startIcon={<ArrowBack />} onClick={() => navigate(-1)} sx={{ mb: 2 }}>
-        Continue Shopping
-      </Button>
-      <Typography variant="h4" fontWeight={700} gutterBottom>
-        Shopping Cart ({items.length} items)
-      </Typography>
+    <Stack
+      bgcolor="white"
+      component={is900 ? 'div' : Paper}
+      p={is900 ? 0 : 2}
+      elevation={1}
+      flexDirection="row"
+      justifyContent="space-between"
+      alignItems="center"
+    >
+      {/* image and details */}
+      <Stack flexDirection="row" rowGap="1rem" alignItems="center" columnGap={2} flexWrap="wrap">
+        <Stack
+          width={is552 ? 'auto' : '200px'}
+          height={is552 ? 'auto' : '200px'}
+          component={Link}
+          to={`/product-details/${itemNo}`}
+        >
+          <img
+            style={{
+              width: '100%',
+              height: is552 ? 'auto' : '100%',
+              aspectRatio: is552 ? '1/1' : undefined,
+              objectFit: 'contain',
+            }}
+            src={imageUrl || 'https://via.placeholder.com/200'}
+            alt={`${productName} image`}
+          />
+        </Stack>
 
-      <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 4 }}>
-        {/* Cart Items */}
-        <Box sx={{ flex: 2 }}>
-          <TableContainer component={Paper} elevation={0} sx={{ border: '1px solid #eee' }}>
-            <Table>
-              <TableHead>
-                <TableRow sx={{ bgcolor: '#f5f5f5' }}>
-                  <TableCell>Product</TableCell>
-                  <TableCell align="center">Price</TableCell>
-                  <TableCell align="center">Quantity</TableCell>
-                  <TableCell align="center">Subtotal</TableCell>
-                  <TableCell align="center">Action</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {items.map((item) => (
-                  <TableRow key={item.itemNo}>
-                    <TableCell>
-                      <Typography fontWeight={600}>{item.productName}</Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        #{item.itemNo}
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="center">${item.price.toFixed(2)}</TableCell>
-                    <TableCell align="center">
-                      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <IconButton
-                          size="small"
-                          onClick={() => updateQuantity(item.itemNo, item.quantity - 1)}
-                        >
-                          <Remove fontSize="small" />
-                        </IconButton>
-                        <Typography sx={{ mx: 1, minWidth: 24, textAlign: 'center' }}>
-                          {item.quantity}
-                        </Typography>
-                        <IconButton
-                          size="small"
-                          onClick={() => updateQuantity(item.itemNo, item.quantity + 1)}
-                        >
-                          <Add fontSize="small" />
-                        </IconButton>
-                      </Box>
-                    </TableCell>
-                    <TableCell align="center" sx={{ fontWeight: 600 }}>
-                      ${(item.price * item.quantity).toFixed(2)}
-                    </TableCell>
-                    <TableCell align="center">
-                      <IconButton color="error" onClick={() => removeItem(item.itemNo)}>
-                        <Delete />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <Box sx={{ mt: 2, textAlign: 'right' }}>
-            <Button variant="outlined" color="error" onClick={clearCart}>
-              Clear Cart
-            </Button>
-          </Box>
-        </Box>
-
-        {/* Order Summary */}
-        <Paper sx={{ flex: 1, p: 3, height: 'fit-content', borderRadius: 2 }} elevation={2}>
-          <Typography variant="h6" fontWeight={700} gutterBottom>
-            Order Summary
+        <Stack>
+          <Typography
+            component={Link}
+            to={`/product-details/${itemNo}`}
+            sx={{ textDecoration: 'none', color: theme.palette.primary.main }}
+            variant="h6"
+            fontWeight={500}
+          >
+            {productName}
           </Typography>
-          <Divider sx={{ mb: 2 }} />
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-            <Typography>Subtotal</Typography>
-            <Typography>${subtotal().toFixed(2)}</Typography>
-          </Box>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-            <Typography>Shipping</Typography>
-            <Typography>${shipping().toFixed(2)}</Typography>
-          </Box>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-            <Typography>Tax (5%)</Typography>
-            <Typography>${taxAmount().toFixed(2)}</Typography>
-          </Box>
-          <Divider sx={{ mb: 2 }} />
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-            <Typography variant="h6" fontWeight={700}>
-              Total
-            </Typography>
-            <Typography variant="h6" fontWeight={700} color="primary.dark">
-              ${total().toFixed(2)}
-            </Typography>
-          </Box>
-          <Button variant="contained" fullWidth size="large" onClick={() => navigate('/checkout')}>
-            Proceed to Checkout
-          </Button>
-        </Paper>
-      </Box>
-    </motion.div>
+          <Typography variant="body2" color="text.secondary">
+            Product
+          </Typography>
+          <Typography mt={1}>Quantity</Typography>
+          <Stack flexDirection="row" alignItems="center">
+            <IconButton onClick={handleRemoveQty}>
+              <RemoveIcon fontSize="small" />
+            </IconButton>
+            <Typography>{quantity}</Typography>
+            <IconButton onClick={handleAddQty}>
+              <AddIcon fontSize="small" />
+            </IconButton>
+          </Stack>
+        </Stack>
+      </Stack>
+
+      {/* price and remove button */}
+      <Stack
+        justifyContent="space-evenly"
+        alignSelf={is552 ? 'flex-end' : undefined}
+        height="100%"
+        rowGap="1rem"
+        alignItems="flex-end"
+      >
+        <Typography variant="body2">${price}</Typography>
+        <Button size={is480 ? 'small' : undefined} onClick={handleProductRemove} variant="contained">
+          Remove
+        </Button>
+      </Stack>
+    </Stack>
   );
+}
+
+/* ── Cart component (also reusable in Checkout) ────────────── */
+interface CartProps {
+  checkout?: boolean;
+}
+
+export function CartContent({ checkout }: CartProps) {
+  const items = useCartStore((s) => s.items);
+  const totalItems = useCartStore((s) => s.totalItems);
+  const subtotal = useCartStore((s) => s.subtotal);
+  const navigate = useNavigate();
+  const theme = useTheme();
+  const is900 = useMediaQuery(theme.breakpoints.down(900));
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+  }, []);
+
+  useEffect(() => {
+    if (items.length === 0 && !checkout) {
+      navigate('/');
+    }
+  }, [items, navigate, checkout]);
+
+  return (
+    <Stack justifyContent="flex-start" alignItems="center" mb="5rem">
+      <Stack width={is900 ? 'auto' : '50rem'} mt="3rem" paddingLeft={checkout ? 0 : 2} paddingRight={checkout ? 0 : 2} rowGap={4}>
+        {/* cart items */}
+        <Stack rowGap={2}>
+          {items.map((item) => (
+            <CartItem
+              key={item.itemNo}
+              itemNo={item.itemNo}
+              productName={item.productName}
+              price={item.price}
+              quantity={item.quantity}
+              imageUrl={item.imageUrl}
+            />
+          ))}
+        </Stack>
+
+        {/* subtotal */}
+        <Stack flexDirection="row" justifyContent="space-between" alignItems="center">
+          {checkout ? (
+            <Stack rowGap={2} width="100%">
+              <Stack flexDirection="row" justifyContent="space-between">
+                <Typography>Subtotal</Typography>
+                <Typography>${subtotal()}</Typography>
+              </Stack>
+              <Stack flexDirection="row" justifyContent="space-between">
+                <Typography>Shipping</Typography>
+                <Typography>${SHIPPING}</Typography>
+              </Stack>
+              <Stack flexDirection="row" justifyContent="space-between">
+                <Typography>Taxes</Typography>
+                <Typography>${TAXES}</Typography>
+              </Stack>
+              <hr />
+              <Stack flexDirection="row" justifyContent="space-between">
+                <Typography>Total</Typography>
+                <Typography>${subtotal() + SHIPPING + TAXES}</Typography>
+              </Stack>
+            </Stack>
+          ) : (
+            <>
+              <Stack>
+                <Typography variant="h6" fontWeight={500}>
+                  Subtotal
+                </Typography>
+                <Typography>Total items in cart {totalItems()}</Typography>
+                <Typography variant="body1" color="text.secondary">
+                  Shipping and taxes will be calculated at checkout.
+                </Typography>
+              </Stack>
+              <Stack>
+                <Typography variant="h6" fontWeight={500}>
+                  ${subtotal()}
+                </Typography>
+              </Stack>
+            </>
+          )}
+        </Stack>
+
+        {/* checkout or continue shopping */}
+        {!checkout && (
+          <Stack rowGap="1rem">
+            <Button variant="contained" component={Link} to="/checkout">
+              Checkout
+            </Button>
+            <motion.div style={{ alignSelf: 'center' }} whileHover={{ y: 2 }}>
+              <Chip
+                sx={{ cursor: 'pointer', borderRadius: '8px' }}
+                component={Link}
+                to="/"
+                label="or continue shopping"
+                variant="outlined"
+              />
+            </motion.div>
+          </Stack>
+        )}
+      </Stack>
+    </Stack>
+  );
+}
+
+/* ── Default export for route ──────────────────────────────── */
+export default function CartPage() {
+  return <CartContent />;
 }
