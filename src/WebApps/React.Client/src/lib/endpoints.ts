@@ -1,6 +1,6 @@
 export const API_ENDPOINTS = {
   AUTH: {
-    LOGIN: '/api/auth/authenticate',
+    LOGIN: '/api/auth/login',
     REGISTER: '/api/auth/register',
     REFRESH_TOKEN: '/api/auth/refresh-token',
     CONFIRM_EMAIL: '/api/auth/confirm-email',
@@ -41,12 +41,12 @@ export const API_ENDPOINTS = {
     STOCK: (itemNo: string) => `/api/inventory/stock/${itemNo}`,
   },
   PAYMENT: {
-    CREATE: '/api/payments',
-    STATUS: (orderNo: string) => `/api/payments/${orderNo}/status`,
-    STATUS_BY_CODE: (orderCode: number) => `/api/payments/code/${orderCode}/status`,
-    CANCEL: (orderNo: string) => `/api/payments/cancel/${orderNo}`,
-    USER: (userId: string) => `/api/payments/user/${userId}`,
-    CALLBACK: '/api/payments/payos-callback',
+    CREATE: '/api/payment/create',
+    STATUS: (orderNo: string) => `/api/payment/${orderNo}/status`,
+    STATUS_BY_CODE: (orderCode: number) => `/api/payment/code/${orderCode}/status`,
+    CANCEL: (orderNo: string) => `/api/payment/cancel/${orderNo}`,
+    USER: (userId: string) => `/api/payment/user/${userId}`,
+    CALLBACK: '/api/payment/payos-callback',
   },
   FLASH_SALE: {
     SESSIONS: '/api/flashsales/sessions',

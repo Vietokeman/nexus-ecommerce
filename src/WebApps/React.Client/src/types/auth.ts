@@ -41,7 +41,22 @@ export interface VerifyOtpDto {
   userId: string;
 }
 
+/**
+ * Backend AuthResponse envelope.
+ * The backend returns { success, message, accessToken, refreshToken, user }.
+ */
 export interface AuthResponse {
+  success: boolean;
+  message?: string;
+  accessToken?: string;
+  refreshToken?: string;
+  user?: User;
+}
+
+/**
+ * Normalized auth data used by the frontend store.
+ */
+export interface AuthData {
   user: User;
   token: string;
   refreshToken?: string;

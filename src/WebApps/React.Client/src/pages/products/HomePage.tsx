@@ -4,7 +4,10 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Box,
+  Button,
   Checkbox,
+  Chip,
   FormControl,
   FormControlLabel,
   FormGroup,
@@ -24,6 +27,9 @@ import AddIcon from '@mui/icons-material/Add';
 import ClearIcon from '@mui/icons-material/Clear';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
+import BoltIcon from '@mui/icons-material/Bolt';
+import GroupsIcon from '@mui/icons-material/Groups';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { motion } from 'framer-motion';
 import Lottie from 'lottie-react';
 import { toast } from 'react-toastify';
@@ -33,6 +39,10 @@ import { useCartStore } from '@/store/cart-store';
 import { useWishlistStore } from '@/store/wishlist-store';
 import { useUIStore } from '@/store/ui-store';
 import { useAuthStore } from '@/store/auth-store';
+import { useActiveSessions } from '@/hooks/useFlashSale';
+import { useActiveGroupBuyCampaigns } from '@/hooks/useGroupBuy';
+import FlashSaleWidget from '@/components/ui/FlashSaleWidget';
+import { nexus } from '@/theme/theme';
 import type { Product } from '@/types/product';
 import loadingAnimation from '@/assets/animations/loading.json';
 
@@ -61,7 +71,7 @@ const categories = [
   { id: '6', name: 'Home Decoration' },
 ];
 
-// Product Card component matching mern-ecommerce exactly
+// Product Card component
 function ProductCard({
   product,
   onToggleWishlist,
@@ -214,6 +224,12 @@ export default function HomePage() {
   const isFilterOpen = useUIStore((s) => s.isFilterOpen);
   const toggleFilter = useUIStore((s) => s.toggleFilter);
   const user = useAuthStore((s) => s.user);
+  const navigate = useNavigate();
+
+  /* ── FlashSale & GroupBuy live data ── */
+  const { data: flashSessions } = useActiveSessions();
+  const activeFlashSession = flashSessions?.[0];
+  const { data: groupCampaigns } = useActiveGroupBuyCampaigns();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
@@ -415,17 +431,78 @@ export default function HomePage() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              background: 'linear-gradient(135deg, #000 0%, #1a1a2e 50%, #16213e 100%)',
+              background: nexus.gradient.dark,
             }}
           >
             <Typography variant="h3" color="white" fontWeight={700}>
-              Discover Amazing Products
+              Nexus Commerce
             </Typography>
           </Stack>
         )}
 
         {/* Products section */}
         <Stack rowGap={5} mt={is600 ? 2 : 0}>
+
+          {/* ── Flash Sale Widget ── */}
+          {activeFlashSession && (
+            <Box sx={{ px: { xs: 1, md: 2 } }}>
+              <FlashSaleWidget
+                session={activeFlashSession}
+                onItemClick={() => navigate(`/flash-sale/${activeFlashSession.id}`)}
+              />
+              <Stack alignItems="center" mt={1}>
+                <Button
+                  onClick={() => navigate(`/flash-sale/${activeFlashSession.id}`)}
+                  endIcon={<ArrowForwardIcon />}
+                  sx={{ fontWeight: 600, color: nexus.purple[600] }}
+                >
+                  View All Flash Deals
+                </Button>
+              </Stack>
+            </Box>
+          )}
+
+          {/* ── Group Buy Promo ── */}
+          {groupCampaigns && groupCampaigns.length > 0 && (
+            <Box
+              sx={{
+                mx: { xs: 1, md: 2 },
+                p: 3,
+                borderRadius: nexus.radius.xl,
+                background: nexus.gradient.dark,
+                color: '#fff',
+                cursor: 'pointer',
+                transition: nexus.transition.base,
+                '&:hover': { transform: 'translateY(-2px)', boxShadow: nexus.glass.shadowHover },
+              }}
+              onClick={() => navigate('/group-buy')}
+            >
+              <Stack direction="row" alignItems="center" justifyContent="space-between" flexWrap="wrap" gap={2}>
+                <Stack direction="row" alignItems="center" spacing={2}>
+                  <GroupsIcon sx={{ fontSize: 36, color: nexus.orange[400] }} />
+                  <Stack>
+                    <Typography variant="h6" fontWeight={700}>
+                      Group Buy — Save Together
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.6)' }}>
+                      {groupCampaigns.length} active campaign{groupCampaigns.length > 1 ? 's' : ''} — invite friends &amp; unlock bulk discounts
+                    </Typography>
+                  </Stack>
+                </Stack>
+                <Chip
+                  icon={<BoltIcon sx={{ color: '#fff !important' }} />}
+                  label="Browse Deals"
+                  sx={{
+                    background: nexus.gradient.button,
+                    color: '#fff',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                  }}
+                />
+              </Stack>
+            </Box>
+          )}
+
           {/* Sort options */}
           <Stack
             flexDirection="row"
