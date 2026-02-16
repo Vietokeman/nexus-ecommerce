@@ -1,8 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Paper, Stack, TextField, Typography, Button } from '@mui/material';
+import {
+  FormHelperText,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+  Button,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { useForm } from 'react-hook-form';
+import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import { api } from '@/lib/api';
 import { API_ENDPOINTS } from '@/lib/endpoints';
@@ -23,13 +33,11 @@ export default function OtpVerificationPage() {
   const [verifyLoading, setVerifyLoading] = useState(false);
   const [resendLoading, setResendLoading] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
+  const theme = useTheme();
+  const is500 = useMediaQuery(theme.breakpoints.down(500));
 
   useEffect(() => {
-    if (!user) {
-      navigate('/login');
-    } else if (user.isVerified) {
-      navigate('/');
-    }
+    if (!user) navigate('/login');
   }, [user, navigate]);
 
   const handleSendOtp = async () => {
@@ -49,10 +57,7 @@ export default function OtpVerificationPage() {
   const handleVerifyOtp = async (data: OtpForm) => {
     setVerifyLoading(true);
     try {
-      await api.post(API_ENDPOINTS.AUTH.VERIFY_OTP, {
-        otp: data.otp,
-        userId: user?.id,
-      });
+      await api.post(API_ENDPOINTS.AUTH.VERIFY_OTP, { otp: data.otp, userId: user?.id });
       toast.success('Email verified! Welcome!');
       navigate('/');
     } catch (err: unknown) {
@@ -65,86 +70,94 @@ export default function OtpVerificationPage() {
 
   return (
     <Stack width="100vw" height="100vh" justifyContent="center" alignItems="center">
-      <Stack
-        component={Paper}
-        elevation={1}
-        justifyContent="center"
-        alignItems="center"
-        p="2rem"
-        rowGap="2rem"
-      >
-        <Typography mt={4} variant="h5" fontWeight={500}>
-          Verify Your Email Address
-        </Typography>
-
-        {otpSent ? (
+      <Stack rowGap="1rem">
+        <Stack component={Paper} elevation={2}>
           <Stack
-            width="100%"
+            width={is500 ? '95vw' : '30rem'}
+            p={is500 ? '1rem' : '1.5rem'}
             rowGap="1rem"
-            component="form"
-            noValidate
-            onSubmit={handleSubmit(handleVerifyOtp)}
+            justifyContent="center"
+            alignItems="center"
           >
-            <Stack rowGap="1rem">
-              <Stack>
-                <Typography color="GrayText">Enter the 4 digit OTP sent to</Typography>
-                <Typography fontWeight={600} color="GrayText">
-                  {user?.email}
-                </Typography>
-              </Stack>
-              <TextField
-                {...register('otp', {
-                  required: 'OTP is required',
-                  minLength: { value: 4, message: 'Please enter a 4 digit OTP' },
-                })}
-                fullWidth
-                type="number"
-                error={!!errors.otp}
-                helperText={errors.otp?.message}
-              />
+            <Stack rowGap=".4rem" alignItems="center">
+              <Typography variant="h5" fontWeight={600}>
+                Verify Your Email
+              </Typography>
+              <Typography color="text.secondary" variant="body2" textAlign="center">
+                {otpSent
+                  ? 'Enter the 4 digit OTP sent to your email'
+                  : 'Click below to receive a verification code on your email'}
+              </Typography>
             </Stack>
-            <LoadingButton
-              type="submit"
-              variant="contained"
-              fullWidth
-              loading={verifyLoading}
-              sx={{
-                bgcolor: '#DB4444',
-                '&:hover': { bgcolor: '#b33636' },
-              }}
-            >
-              Verify
-            </LoadingButton>
-          </Stack>
-        ) : (
-          <Stack rowGap="1rem" alignItems="center">
-            <Typography color="GrayText" textAlign="center">
-              Click below to receive a verification code on your email
-            </Typography>
-            <LoadingButton
-              variant="contained"
-              loading={resendLoading}
-              onClick={handleSendOtp}
-              sx={{
-                bgcolor: '#DB4444',
-                '&:hover': { bgcolor: '#b33636' },
-              }}
-            >
-              Send OTP
-            </LoadingButton>
-          </Stack>
-        )}
 
-        {otpSent && (
-          <Button
-            variant="text"
-            onClick={handleSendOtp}
-            disabled={resendLoading}
-            sx={{ color: '#DB4444' }}
-          >
-            Resend OTP
-          </Button>
-        )}
+            {otpSent ? (
+              <Stack
+                width="100%"
+                rowGap="1rem"
+                component="form"
+                noValidate
+                onSubmit={handleSubmit(handleVerifyOtp)}
+              >
+                <Stack rowGap="1rem">
+                  <Stack>
+                    <Typography color="GrayText">OTP sent to</Typography>
+                    <Typography fontWeight={600} color="GrayText">
+                      {user?.email}
+                    </Typography>
+                  </Stack>
+                  <motion.div whileHover={{ y: -2 }}>
+                    <TextField
+                      {...register('otp', {
+                        required: 'OTP is required',
+                        minLength: { value: 4, message: 'Please enter a 4 digit OTP' },
+                      })}
+                      fullWidth
+                      type="number"
+                      placeholder="Enter OTP"
+                    />
+                    {errors.otp && (
+                      <FormHelperText sx={{ fontSize: '.9rem', mt: 1 }} error>
+                        {errors.otp.message}
+                      </FormHelperText>
+                    )}
+                  </motion.div>
+                </Stack>
+                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 1 }}>
+                  <LoadingButton
+                    sx={{ height: '2.5rem' }}
+                    type="submit"
+                    variant="contained"
+                    fullWidth
+                    loading={verifyLoading}
+                  >
+                    Verify
+                  </LoadingButton>
+                </motion.div>
+              </Stack>
+            ) : (
+              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 1 }}>
+                <LoadingButton
+                  variant="contained"
+                  loading={resendLoading}
+                  onClick={handleSendOtp}
+                >
+                  Send OTP
+                </LoadingButton>
+              </motion.div>
+            )}
+
+            {otpSent && (
+              <Button
+                variant="text"
+                onClick={handleSendOtp}
+                disabled={resendLoading}
+                sx={{ color: theme.palette.primary.dark }}
+              >
+                Resend OTP
+              </Button>
+            )}
+          </Stack>
+        </Stack>
       </Stack>
     </Stack>
   );
