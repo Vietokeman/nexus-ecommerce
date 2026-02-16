@@ -259,7 +259,11 @@ export default function RootLayout() {
               <Typography
                 key={t}
                 variant="body2"
-                sx={{ color: 'rgba(255,255,255,0.5)', cursor: 'pointer', '&:hover': { color: nexus.purple[300] } }}
+                sx={{
+                  color: 'rgba(255,255,255,0.5)',
+                  cursor: 'pointer',
+                  '&:hover': { color: nexus.purple[300] },
+                }}
               >
                 {t}
               </Typography>
@@ -301,7 +305,11 @@ export default function RootLayout() {
               <Typography
                 key={t}
                 variant="body2"
-                sx={{ color: 'rgba(255,255,255,0.5)', cursor: 'pointer', '&:hover': { color: nexus.purple[300] } }}
+                sx={{
+                  color: 'rgba(255,255,255,0.5)',
+                  cursor: 'pointer',
+                  '&:hover': { color: nexus.purple[300] },
+                }}
               >
                 {t}
               </Typography>

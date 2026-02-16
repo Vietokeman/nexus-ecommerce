@@ -55,9 +55,7 @@ export default function ForgotPasswordPage() {
       {status === 'fullfilled' ? (
         <motion.div variants={itemVariants}>
           <Stack alignItems="center" spacing={3} mt={2}>
-            <CheckCircleOutlineIcon
-              sx={{ fontSize: 64, color: nexus.purple[500] }}
-            />
+            <CheckCircleOutlineIcon sx={{ fontSize: 64, color: nexus.purple[500] }} />
             <Typography
               variant="body2"
               component={Link}
@@ -101,7 +99,11 @@ export default function ForgotPasswordPage() {
             )}
           </motion.div>
 
-          <motion.div variants={itemVariants} whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.99 }}>
+          <motion.div
+            variants={itemVariants}
+            whileHover={{ scale: 1.015 }}
+            whileTap={{ scale: 0.99 }}
+          >
             <LoadingButton
               sx={{ height: '3rem', fontSize: '1rem' }}
               fullWidth

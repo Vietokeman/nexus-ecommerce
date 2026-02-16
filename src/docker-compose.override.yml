@@ -1,7 +1,16 @@
-version: "3.8"
+# ==============================================================================
+# DEVELOPMENT OVERRIDE - Hot Reload Mode
+# ==============================================================================
+# Sử dụng SDK image + Volume Mapping + dotnet watch run
+# Khi sửa code trên máy host, container tự động rebuild & reload.
+#
+# CÁCH DÙNG:
+#   docker compose up -d                    → Dev mode (hot-reload)
+#   docker compose -f docker-compose.yml up → Production mode (Dockerfile build)
+# ==============================================================================
 
 services:
-  #database section — unified PostgreSQL + PostGIS (nexusdb)
+  # ==================== DATABASE & INFRASTRUCTURE ====================
   nexusdb:
     container_name: nexusdb
     environment:
@@ -14,14 +23,12 @@ services:
     volumes:
       - nexusdb_data:/var/lib/postgresql/data
 
-  #basketdb: redis (also used for FlashSale Lua Script stock)
   basketdb:
     container_name: basketdb
     restart: always
     ports:
       - "6379:6379"
 
-  #infrastructure section
   rabbitmq:
     container_name: rabbitmq
     restart: always
@@ -39,18 +46,17 @@ services:
       - "5050:80"
     volumes:
       - pgadmin_data:/root/pgadmin
-  # web ui for docker compose
+
   portainer:
     container_name: portainer
     restart: always
     ports:
       - "8080:8080"
       - "9000:9000"
-
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
-  # elasticsearch and kibana section
+
   elasticsearch:
     container_name: elasticsearch
     environment:
@@ -72,80 +78,105 @@ services:
       - elasticsearch
     ports:
       - "5601:5601"
-  # ==================== MICROSERVICES API SECTIONS ====================
-  # Note: Microservices do NOT expose ports directly
-  # All traffic must go through Ocelot API Gateway on port 5000
+
+  # ==================== MICROSERVICES (SDK + Volume + Hot Reload) ====================
+  # Mỗi service dùng .NET SDK image, mount code từ host, chạy dotnet watch run.
+  # Khi sửa file .cs/.json trên máy → container tự detect & rebuild.
 
   product.api:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: product.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - AspNetCore_Urls=http://+:80
+      - ASPNETCORE_URLS=http://+:80
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
       - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=ProductDb;Username=admin;Password=admin1234;"
+    volumes:
+      - .:/src
+    working_dir: /src/Services/Product.API
+    command: dotnet watch run --no-launch-profile
     depends_on:
       - nexusdb
-    # ports: # REMOVED - Access via Gateway only
-    #   - "6002:80"
     restart: always
 
   customer.api:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: customer.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - AspNetCore_Urls=http://+:80
+      - ASPNETCORE_URLS=http://+:80
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
       - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=CustomerDb;Username=admin;Password=admin1234;"
+    volumes:
+      - .:/src
+    working_dir: /src/Services/Customer.API
+    command: dotnet watch run --no-launch-profile
     depends_on:
       - nexusdb
-    # ports: # REMOVED - Access via Gateway only
-    #   - "6003:80"
     restart: always
 
-  # basket api sections
   basket.api:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: basket.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - AspNetCore_Urls=http://+:80
+      - ASPNETCORE_URLS=http://+:80
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
       - "CacheSettings:ConnectionString=basketdb:6379"
+    volumes:
+      - .:/src
+    working_dir: /src/Services/Basket.API
+    command: dotnet watch run --no-launch-profile
     depends_on:
       - basketdb
-    # ports: # REMOVED - Access via Gateway only
-    #   - "6004:80"
     restart: always
 
-  # ordering api sections
   ordering.api:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: ordering.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - AspNetCore_Urls=http://+:80
+      - ASPNETCORE_URLS=http://+:80
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
       - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=OrderDb;Username=admin;Password=admin1234;"
+    volumes:
+      - .:/src
+    working_dir: /src/Services/Ordering/Ordering.API
+    command: dotnet watch run --no-launch-profile
     depends_on:
       - nexusdb
-    # ports: # REMOVED - Access via Gateway only
-    #   - "6005:80"
     restart: always
 
   inventory.api:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: inventory.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=80
+      - ASPNETCORE_URLS=http://+:80
       - ASPNETCORE_HTTPS_PORTS=443
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
       - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=InventoryDb;Username=admin;Password=admin1234;"
+    volumes:
+      - .:/src
+    working_dir: /src/Services/Inventory.Product.API
+    command: dotnet watch run --no-launch-profile
     depends_on:
       - nexusdb
-    # ports: # REMOVED - Access via Gateway only
-    #   - "6006:80"
-    #   - "5005:5005" # gRPC port also internal
     restart: always
 
-  # payment api sections
   payment.api:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: payment.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - AspNetCore_Urls=http://+:80
+      - ASPNETCORE_URLS=http://+:80
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
       - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=PaymentDb;Username=admin;Password=admin1234;"
       - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
       - "PayOSSettings:ClientId=change_me_with_payos_client_id"
@@ -159,20 +190,24 @@ services:
       - "SmtpSettings:Password=change_me_with_smtp_password"
       - "Serilog:Using:0=Serilog.Sinks.Elasticsearch"
       - "Serilog:WriteTo:0:Args:nodeUris=http://elasticsearch:9200"
+    volumes:
+      - .:/src
+    working_dir: /src/Services/Payment.API
+    command: dotnet watch run --no-launch-profile
     depends_on:
       - nexusdb
       - rabbitmq
       - elasticsearch
-    # ports: # REMOVED - Access via Gateway only
-    #   - "6007:80"
     restart: always
 
-  # hangfire api sections
   hangfire.api:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: hangfire.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - AspNetCore_Urls=http://+:80
+      - ASPNETCORE_URLS=http://+:80
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
       - "ConnectionStrings:HangfireConnection=Host=nexusdb;Port=5432;Database=HangfireDb;Username=admin;Password=admin1234;"
       - "SmtpSettings:Host=smtp.gmail.com"
       - "SmtpSettings:Port=587"
@@ -180,19 +215,23 @@ services:
       - "SmtpSettings:Password=change_me_with_smtp_password"
       - "GatewayUrl=http://ocelot.apigw:80"
       - "ElasticConfiguration:Uri=http://elasticsearch:9200"
+    volumes:
+      - .:/src
+    working_dir: /src/Services/Hangfire.API
+    command: dotnet watch run --no-launch-profile
     depends_on:
       - nexusdb
       - elasticsearch
-    # ports: # REMOVED - Access via Gateway only (except Hangfire dashboard - keep for admin access)
-    #   - "6008:80"
     restart: always
 
-  # identity api sections
   identity.api:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: identity.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - AspNetCore_Urls=http://+:80
+      - ASPNETCORE_URLS=http://+:80
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
       - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=IdentityDb;Username=admin;Password=admin1234;"
       - "JwtSettings:Secret=YourSuperSecretKeyHere_MustBeAtLeast32Characters!"
       - "JwtSettings:Issuer=distributed-ecommerce-platform"
@@ -202,55 +241,71 @@ services:
       - "SmtpSettings:UserName=vietbmt19@gmail.com"
       - "SmtpSettings:Password=change_me_with_smtp_password"
       - "ElasticConfiguration:Uri=http://elasticsearch:9200"
+    volumes:
+      - .:/src
+    working_dir: /src/Services/Identity.API
+    command: dotnet watch run --no-launch-profile
     depends_on:
       - nexusdb
       - elasticsearch
-    # ports: # REMOVED - Access via Gateway only
-    #   - "6009:80"
     restart: always
 
-  # flash sale api (Redis Lua Script + PostgreSQL)
   flashsale.api:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: flashsale.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - AspNetCore_Urls=http://+:80
+      - ASPNETCORE_URLS=http://+:80
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
       - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=FlashSaleDb;Username=admin;Password=admin1234;"
       - "ConnectionStrings:Redis=basketdb:6379"
       - "ElasticConfiguration:Uri=http://elasticsearch:9200"
+    volumes:
+      - .:/src
+    working_dir: /src/Services/FlashSale.API
+    command: dotnet watch run --no-launch-profile
     depends_on:
       - nexusdb
       - basketdb
       - elasticsearch
-    # ports: # REMOVED - Access via Gateway only
-    #   - "6011:80"
     restart: always
 
-  # group buy api (Pinduoduo social buying model)
   groupbuy.api:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: groupbuy.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - AspNetCore_Urls=http://+:80
+      - ASPNETCORE_URLS=http://+:80
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
       - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=GroupBuyDb;Username=admin;Password=admin1234;"
       - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
       - "ElasticConfiguration:Uri=http://elasticsearch:9200"
+    volumes:
+      - .:/src
+    working_dir: /src/Services/GroupBuy.API
+    command: dotnet watch run --no-launch-profile
     depends_on:
       - nexusdb
       - rabbitmq
       - elasticsearch
-    # ports: # REMOVED - Access via Gateway only
-    #   - "6012:80"
     restart: always
 
-  # ==================== API GATEWAY ====================
-  # This is the ONLY entry point for all API requests
+  # ==================== API GATEWAY (SDK + Volume + Hot Reload) ====================
   ocelot.apigw:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: ocelot.apigw
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - AspNetCore_Urls=http://+:80
+      - ASPNETCORE_URLS=http://+:80
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
       - "ElasticConfiguration:Uri=http://elasticsearch:9200"
+    volumes:
+      - .:/src
+    working_dir: /src/APIGateWays/OcelotApiGw
+    command: dotnet watch run --no-launch-profile
     depends_on:
       - product.api
       - customer.api
@@ -263,25 +318,43 @@ services:
       - groupbuy.api
       - elasticsearch
     ports:
-      - "5000:80" # ⭐ MAIN API ENTRY POINT - All microservices accessible via http://localhost:5000
+      - "5000:80"
     restart: always
 
-  # ==================== WEB APPLICATIONS ====================
+  # ==================== FRONTEND (Node + Vite Dev Server + Hot Reload) ====================
+  # React Client chạy Vite dev server với HMR (Hot Module Replacement)
+  # Sửa file .tsx/.ts/.css → browser tự cập nhật ngay lập tức
   react.client:
+    image: node:20-alpine
     container_name: react.client
+    environment:
+      - VITE_API_PROXY_TARGET=http://ocelot.apigw:80
+    volumes:
+      - ./WebApps/React.Client:/app
+      - react_node_modules:/app/node_modules
+    working_dir: /app
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
     depends_on:
       - ocelot.apigw
     ports:
-      - "3000:80" # Frontend application
+      - "3000:3000"
     restart: always
 
+  # ==================== HEALTH DASHBOARD (SDK + Volume + Hot Reload) ====================
   webhealthstatus:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: webhealthstatus
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - AspNetCore_Urls=http://+:80
+      - ASPNETCORE_URLS=http://+:80
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
+    volumes:
+      - .:/src
+    working_dir: /src/WebApps/WebHealthStatus
+    command: dotnet watch run --no-launch-profile
     depends_on:
       - ocelot.apigw
     ports:
-      - "6010:80" # Health monitoring dashboard
+      - "6010:80"
     restart: always

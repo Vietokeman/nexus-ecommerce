@@ -50,12 +50,7 @@ export default function ResetPasswordPage() {
 
   return (
     <AuthLayout title="Reset password" subtitle="Enter and confirm your new password">
-      <Stack
-        spacing={2.5}
-        component="form"
-        noValidate
-        onSubmit={handleSubmit(handleResetPassword)}
-      >
+      <Stack spacing={2.5} component="form" noValidate onSubmit={handleSubmit(handleResetPassword)}>
         <motion.div variants={itemVariants}>
           <TextField
             type="password"
@@ -64,8 +59,7 @@ export default function ResetPasswordPage() {
               required: 'Please enter a password',
               pattern: {
                 value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm,
-                message:
-                  'Min 8 characters with at least 1 uppercase, 1 lowercase, and 1 number',
+                message: 'Min 8 characters with at least 1 uppercase, 1 lowercase, and 1 number',
               },
             })}
             placeholder="New password"
@@ -97,7 +91,11 @@ export default function ResetPasswordPage() {
           )}
         </motion.div>
 
-        <motion.div variants={itemVariants} whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.99 }}>
+        <motion.div
+          variants={itemVariants}
+          whileHover={{ scale: 1.015 }}
+          whileTap={{ scale: 0.99 }}
+        >
           <LoadingButton
             sx={{ height: '3rem', fontSize: '1rem' }}
             fullWidth

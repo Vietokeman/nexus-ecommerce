@@ -61,7 +61,14 @@ export default function OtpVerificationPage() {
   };
 
   return (
-    <AuthLayout title="Verify your email" subtitle={otpSent ? 'Enter the 4-digit OTP sent to your email' : 'Click below to receive a verification code'}>
+    <AuthLayout
+      title="Verify your email"
+      subtitle={
+        otpSent
+          ? 'Enter the 4-digit OTP sent to your email'
+          : 'Click below to receive a verification code'
+      }
+    >
       <Stack spacing={2.5} alignItems="center">
         {otpSent ? (
           <Stack
@@ -99,7 +106,11 @@ export default function OtpVerificationPage() {
               )}
             </motion.div>
 
-            <motion.div variants={itemVariants} whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.99 }}>
+            <motion.div
+              variants={itemVariants}
+              whileHover={{ scale: 1.015 }}
+              whileTap={{ scale: 0.99 }}
+            >
               <LoadingButton
                 sx={{ height: '3rem', fontSize: '1rem' }}
                 type="submit"
@@ -127,7 +138,11 @@ export default function OtpVerificationPage() {
             </motion.div>
           </Stack>
         ) : (
-          <motion.div variants={itemVariants} whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.99 }}>
+          <motion.div
+            variants={itemVariants}
+            whileHover={{ scale: 1.015 }}
+            whileTap={{ scale: 0.99 }}
+          >
             <LoadingButton
               variant="contained"
               loading={resendLoading}

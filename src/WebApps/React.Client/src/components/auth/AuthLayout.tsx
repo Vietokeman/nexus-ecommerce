@@ -1,6 +1,7 @@
-import { Box, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { motion } from 'framer-motion';
-import NexusCartLogo from './NexusCartLogo';
+import Lottie from 'lottie-react';
+import ecommerceAnimation from '@/assets/animations/ecommerceOutlook.json';
 import { nexus } from '@/theme/theme';
 import { containerVariants, itemVariants } from '@/lib/motion';
 
@@ -28,7 +29,7 @@ export default function AuthLayout({ children, title, subtitle }: AuthLayoutProp
         overflow: 'hidden',
       }}
     >
-      {/* ─── LEFT: Dark branding panel ─── */}
+      {/* ─── LEFT: Dark branding panel with Lottie animation ─── */}
       {!isMobile && (
         <Stack
           flex={1}
@@ -38,88 +39,24 @@ export default function AuthLayout({ children, title, subtitle }: AuthLayoutProp
           sx={{ position: 'relative' }}
         >
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
+            style={{ width: '100%', height: '100%' }}
           >
-            <Stack alignItems="center" spacing={3}>
-              <NexusCartLogo size={100} />
-              <Typography
-                variant="h3"
-                sx={{
-                  background: nexus.gradient.primary,
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                  fontWeight: 700,
-                  letterSpacing: '-0.02em',
+            <div className="nx-lottie-container">
+              <Lottie
+                animationData={ecommerceAnimation}
+                loop={true}
+                autoplay={true}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  maxWidth: '700px',
+                  maxHeight: '700px',
                 }}
-              >
-                Nexus Commerce
-              </Typography>
-              <Typography
-                variant="body1"
-                sx={{
-                  color: 'rgba(255,255,255,0.5)',
-                  maxWidth: '22rem',
-                  textAlign: 'center',
-                  lineHeight: 1.6,
-                }}
-              >
-                Where smart shopping meets seamless experience.
-                Discover, compare, and shop with confidence.
-              </Typography>
-
-              {/* Decorative floating orbs */}
-              <Box sx={{ position: 'absolute', top: '15%', left: '10%' }}>
-                <motion.div
-                  animate={{ y: [0, -12, 0] }}
-                  transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
-                >
-                  <Box
-                    sx={{
-                      width: 12,
-                      height: 12,
-                      borderRadius: '50%',
-                      background: nexus.purple[400],
-                      opacity: 0.4,
-                    }}
-                  />
-                </motion.div>
-              </Box>
-              <Box sx={{ position: 'absolute', bottom: '25%', right: '15%' }}>
-                <motion.div
-                  animate={{ y: [0, 10, 0] }}
-                  transition={{ repeat: Infinity, duration: 3.5, ease: 'easeInOut', delay: 1 }}
-                >
-                  <Box
-                    sx={{
-                      width: 8,
-                      height: 8,
-                      borderRadius: '50%',
-                      background: nexus.orange[400],
-                      opacity: 0.35,
-                    }}
-                  />
-                </motion.div>
-              </Box>
-              <Box sx={{ position: 'absolute', top: '55%', left: '20%' }}>
-                <motion.div
-                  animate={{ y: [0, -8, 0] }}
-                  transition={{ repeat: Infinity, duration: 5, ease: 'easeInOut', delay: 0.5 }}
-                >
-                  <Box
-                    sx={{
-                      width: 6,
-                      height: 6,
-                      borderRadius: '50%',
-                      background: nexus.purple[300],
-                      opacity: 0.3,
-                    }}
-                  />
-                </motion.div>
-              </Box>
-            </Stack>
+              />
+            </div>
           </motion.div>
         </Stack>
       )}
@@ -145,7 +82,19 @@ export default function AuthLayout({ children, title, subtitle }: AuthLayoutProp
           {isMobile && (
             <motion.div variants={itemVariants}>
               <Stack alignItems="center" mb={3}>
-                <NexusCartLogo size={56} />
+                <Typography
+                  variant="h4"
+                  sx={{
+                    background: nexus.gradient.primary,
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                    fontWeight: 700,
+                    letterSpacing: '-0.02em',
+                  }}
+                >
+                  Nexus Commerce
+                </Typography>
               </Stack>
             </motion.div>
           )}
@@ -153,11 +102,7 @@ export default function AuthLayout({ children, title, subtitle }: AuthLayoutProp
           {/* Title */}
           {title && (
             <motion.div variants={itemVariants}>
-              <Typography
-                variant="h4"
-                fontWeight={700}
-                sx={{ mb: 0.5, color: nexus.neutral[900] }}
-              >
+              <Typography variant="h4" fontWeight={700} sx={{ mb: 0.5, color: nexus.neutral[900] }}>
                 {title}
               </Typography>
             </motion.div>
@@ -166,10 +111,7 @@ export default function AuthLayout({ children, title, subtitle }: AuthLayoutProp
           {/* Subtitle */}
           {subtitle && (
             <motion.div variants={itemVariants}>
-              <Typography
-                variant="body2"
-                sx={{ mb: 3, color: nexus.neutral[500] }}
-              >
+              <Typography variant="body2" sx={{ mb: 3, color: nexus.neutral[500] }}>
                 {subtitle}
               </Typography>
             </motion.div>

@@ -442,7 +442,6 @@ export default function HomePage() {
 
         {/* Products section */}
         <Stack rowGap={5} mt={is600 ? 2 : 0}>
-
           {/* ── Flash Sale Widget ── */}
           {activeFlashSession && (
             <Box sx={{ px: { xs: 1, md: 2 } }}>
@@ -477,7 +476,13 @@ export default function HomePage() {
               }}
               onClick={() => navigate('/group-buy')}
             >
-              <Stack direction="row" alignItems="center" justifyContent="space-between" flexWrap="wrap" gap={2}>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="space-between"
+                flexWrap="wrap"
+                gap={2}
+              >
                 <Stack direction="row" alignItems="center" spacing={2}>
                   <GroupsIcon sx={{ fontSize: 36, color: nexus.orange[400] }} />
                   <Stack>
@@ -485,7 +490,8 @@ export default function HomePage() {
                       Group Buy — Save Together
                     </Typography>
                     <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.6)' }}>
-                      {groupCampaigns.length} active campaign{groupCampaigns.length > 1 ? 's' : ''} — invite friends &amp; unlock bulk discounts
+                      {groupCampaigns.length} active campaign{groupCampaigns.length > 1 ? 's' : ''}{' '}
+                      — invite friends &amp; unlock bulk discounts
                     </Typography>
                   </Stack>
                 </Stack>

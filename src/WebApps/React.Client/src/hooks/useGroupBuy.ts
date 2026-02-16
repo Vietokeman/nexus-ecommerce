@@ -24,9 +24,7 @@ export function useGroupBuyCampaigns() {
   return useQuery({
     queryKey: keys.campaigns(),
     queryFn: async () => {
-      const { data } = await api.get<GroupBuyCampaign[]>(
-        API_ENDPOINTS.GROUP_BUY.CAMPAIGNS,
-      );
+      const { data } = await api.get<GroupBuyCampaign[]>(API_ENDPOINTS.GROUP_BUY.CAMPAIGNS);
       return data;
     },
   });
@@ -36,9 +34,7 @@ export function useActiveGroupBuyCampaigns() {
   return useQuery({
     queryKey: keys.activeCampaigns(),
     queryFn: async () => {
-      const { data } = await api.get<GroupBuyCampaign[]>(
-        API_ENDPOINTS.GROUP_BUY.ACTIVE_CAMPAIGNS,
-      );
+      const { data } = await api.get<GroupBuyCampaign[]>(API_ENDPOINTS.GROUP_BUY.ACTIVE_CAMPAIGNS);
       return data;
     },
     refetchInterval: 30_000,
@@ -49,9 +45,7 @@ export function useGroupBuyCampaign(id: number) {
   return useQuery({
     queryKey: keys.campaign(id),
     queryFn: async () => {
-      const { data } = await api.get<GroupBuyCampaign>(
-        API_ENDPOINTS.GROUP_BUY.CAMPAIGN_DETAIL(id),
-      );
+      const { data } = await api.get<GroupBuyCampaign>(API_ENDPOINTS.GROUP_BUY.CAMPAIGN_DETAIL(id));
       return data;
     },
     enabled: id > 0,
@@ -78,10 +72,7 @@ export function useOpenGroup() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (dto: OpenGroupDto) => {
-      const { data } = await api.post<GroupBuySession>(
-        API_ENDPOINTS.GROUP_BUY.OPEN_GROUP,
-        dto,
-      );
+      const { data } = await api.post<GroupBuySession>(API_ENDPOINTS.GROUP_BUY.OPEN_GROUP, dto);
       return data;
     },
     onSuccess: () => {
@@ -94,10 +85,7 @@ export function useJoinGroup() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (dto: JoinGroupDto) => {
-      const { data } = await api.post<GroupBuyParticipant>(
-        API_ENDPOINTS.GROUP_BUY.JOIN_GROUP,
-        dto,
-      );
+      const { data } = await api.post<GroupBuyParticipant>(API_ENDPOINTS.GROUP_BUY.JOIN_GROUP, dto);
       return data;
     },
     onSuccess: (_data, variables) => {

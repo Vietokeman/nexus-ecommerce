@@ -229,7 +229,12 @@
       "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 6009 }],
       "UpstreamPathTemplate": "/api/auth/{everything}",
       "UpstreamHttpMethod": ["GET", "POST"],
-      "RateLimitOptions": { "EnableRateLimiting": true, "Period": "1s", "PeriodTimespan": 1, "Limit": 10 }
+      "RateLimitOptions": {
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 10
+      }
     },
     {
       "DownstreamPathTemplate": "/api/user",
@@ -252,7 +257,12 @@
       "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 6007 }],
       "UpstreamPathTemplate": "/api/payment/{everything}",
       "UpstreamHttpMethod": ["GET", "POST"],
-      "RateLimitOptions": { "EnableRateLimiting": true, "Period": "1s", "PeriodTimespan": 1, "Limit": 10 }
+      "RateLimitOptions": {
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 10
+      }
     },
 
     {
@@ -261,7 +271,12 @@
       "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 6011 }],
       "UpstreamPathTemplate": "/api/flashsales/{everything}",
       "UpstreamHttpMethod": ["GET", "POST"],
-      "RateLimitOptions": { "EnableRateLimiting": true, "Period": "1s", "PeriodTimespan": 1, "Limit": 20 }
+      "RateLimitOptions": {
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 20
+      }
     },
 
     {
@@ -270,7 +285,12 @@
       "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 6012 }],
       "UpstreamPathTemplate": "/api/groupbuys/{everything}",
       "UpstreamHttpMethod": ["GET", "POST"],
-      "RateLimitOptions": { "EnableRateLimiting": true, "Period": "1s", "PeriodTimespan": 1, "Limit": 10 }
+      "RateLimitOptions": {
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 10
+      }
     },
 
     {
@@ -279,7 +299,12 @@
       "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 6006 }],
       "UpstreamPathTemplate": "/api/inventory/{everything}",
       "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"],
-      "RateLimitOptions": { "EnableRateLimiting": true, "Period": "1s", "PeriodTimespan": 1, "Limit": 20 }
+      "RateLimitOptions": {
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 20
+      }
     }
   ],
   "GlobalConfiguration": {

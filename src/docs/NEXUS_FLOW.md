@@ -123,7 +123,7 @@ sequenceDiagram
         RD-->>FS: ✅ Stock reserved
         FS->>DB: Insert FlashSaleOrder (Status: Confirmed, UnitPrice: FlashPrice)
         FS-->>FE: FlashSaleOrder { id, unitPrice, status }
-        
+
         Note over FE,POS: Phase 4 — Payment
         FE->>GW: POST /api/payment/create
         GW->>PAY: Forward
@@ -158,7 +158,7 @@ flowchart TD
 
     subgraph Main["🏠 Main App (RootLayout: Navbar + Footer)"]
         HOME["/  (index)<br/>HomePage"]
-        
+
         subgraph FlashSale["⚡ Flash Sale Zone"]
             FS_WIDGET["FlashSaleWidget<br/>(embedded in HomePage)"]
             FS_DETAIL["/flash-sale/:sessionId<br/>FlashSaleDetailPage"]
@@ -218,7 +218,7 @@ flowchart TD
     CHECKOUT -->|"PayOS redirect"| PAY_SUCCESS
     CHECKOUT -->|"PayOS cancel"| PAY_CANCEL
     PAY_SUCCESS --> USER_ORDERS
-    
+
     style FlashSale fill:#7C3AED22,stroke:#7C3AED
     style GroupBuy fill:#F9731622,stroke:#F97316
     style Auth fill:#1a1a2e22,stroke:#1a1a2e
@@ -284,12 +284,12 @@ graph LR
 
 ### What Makes Nexus Different from Standard E-Commerce
 
-| Feature | Standard | Nexus |
-|---------|----------|-------|
-| **Flash Sales** | Static discount pages | Redis-backed atomic stock with Lua scripts, per-user limits, client-side countdown |
-| **Group Buying** | N/A | Session-based social commerce with invite codes, auto-success threshold, deadline expiry |
-| **Stock Management** | Single DB check | Dual: PostgreSQL ledger (Inventory) + Redis counters (FlashSale) |
-| **Payment** | Stripe/PayPal | PayOS (Vietnamese market), webhook-driven status |
-| **Auth** | Session/Cookie | JWT with role claims, refresh tokens, email confirmation |
-| **Inter-service** | Monolith | RabbitMQ events (BasketCheckout → Order), gRPC (Basket → Inventory stock check) |
-| **Architecture** | MVC | CQRS (Ordering), Event-Driven, separated read/write paths |
+| Feature              | Standard              | Nexus                                                                                    |
+| -------------------- | --------------------- | ---------------------------------------------------------------------------------------- |
+| **Flash Sales**      | Static discount pages | Redis-backed atomic stock with Lua scripts, per-user limits, client-side countdown       |
+| **Group Buying**     | N/A                   | Session-based social commerce with invite codes, auto-success threshold, deadline expiry |
+| **Stock Management** | Single DB check       | Dual: PostgreSQL ledger (Inventory) + Redis counters (FlashSale)                         |
+| **Payment**          | Stripe/PayPal         | PayOS (Vietnamese market), webhook-driven status                                         |
+| **Auth**             | Session/Cookie        | JWT with role claims, refresh tokens, email confirmation                                 |
+| **Inter-service**    | Monolith              | RabbitMQ events (BasketCheckout → Order), gRPC (Basket → Inventory stock check)          |
+| **Architecture**     | MVC                   | CQRS (Ordering), Event-Driven, separated read/write paths                                |

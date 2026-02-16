@@ -455,9 +455,6 @@
       "DurationOfBreak": 1000,
       "TimeoutValue": 5000
     },
-    "ServiceDiscoveryProvider": {
-      "Type": "Default"
-    },
     "LoadBalancerOptions": {
       "Type": "RoundRobin"
     }
