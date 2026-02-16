@@ -28,30 +28,33 @@ export const useAuthStore = create<AuthState>()(
 
         login: async (credentials: LoginDto) => {
           const { data } = await api.post<AuthResponse>(API_ENDPOINTS.AUTH.LOGIN, credentials);
-          const result = data as unknown as { result?: AuthResponse } & AuthResponse;
-          const authData = result.result ?? result;
+          // Backend returns { success, accessToken, refreshToken, user }
+          const token = data.accessToken;
+          if (!data.success || !token || !data.user) {
+            throw new Error(data.message ?? 'Login failed');
+          }
           set({
-            user: authData.user,
-            token: authData.token,
+            user: data.user,
+            token,
             isAuthenticated: true,
           });
-          localStorage.setItem('token', authData.token);
+          localStorage.setItem('token', token);
         },
 
         signup: async (signupData: SignupDto) => {
           // Strip confirmPassword before sending to backend
           const { confirmPassword: _, ...registerPayload } = signupData;
           const { data } = await api.post<AuthResponse>(API_ENDPOINTS.AUTH.REGISTER, registerPayload);
-          const result = data as unknown as { result?: AuthResponse } & AuthResponse;
-          const authData = result.result ?? result;
+          const token = data.accessToken;
+          if (!data.success || !token || !data.user) {
+            throw new Error(data.message ?? 'Registration failed');
+          }
           set({
-            user: authData.user,
-            token: authData.token,
+            user: data.user,
+            token,
             isAuthenticated: true,
           });
-          if (authData.token) {
-            localStorage.setItem('token', authData.token);
-          }
+          localStorage.setItem('token', token);
         },
 
         logout: () => {

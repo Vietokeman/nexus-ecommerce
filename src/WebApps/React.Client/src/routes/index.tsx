@@ -30,6 +30,14 @@ const AddProductPage = lazy(() => import('@/pages/admin/AddProductPage'));
 const ProductUpdatePage = lazy(() => import('@/pages/admin/ProductUpdatePage'));
 const AdminOrdersPage = lazy(() => import('@/pages/admin/AdminOrdersPage'));
 
+/* ─── Lazy Pages: GroupBuy ─── */
+const GroupBuyListPage = lazy(() => import('@/pages/group-buy/GroupBuyListPage'));
+const GroupBuyCampaignPage = lazy(() => import('@/pages/group-buy/GroupBuyCampaignPage'));
+const GroupBuyJoinPage = lazy(() => import('@/pages/group-buy/GroupBuyJoinPage'));
+
+/* ─── Lazy Pages: FlashSale ─── */
+const FlashSaleDetailPage = lazy(() => import('@/pages/flash-sale/FlashSaleDetailPage'));
+
 /* ─── Lazy Pages: Other ─── */
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 
@@ -179,6 +187,42 @@ export const router = createBrowserRouter([
         element: (
           <P>
             <WishlistPage />
+          </P>
+        ),
+      },
+
+      /* ─── GroupBuy Routes ─── */
+      {
+        path: 'group-buy',
+        element: (
+          <P>
+            <GroupBuyListPage />
+          </P>
+        ),
+      },
+      {
+        path: 'group-buy/:campaignId',
+        element: (
+          <P>
+            <GroupBuyCampaignPage />
+          </P>
+        ),
+      },
+      {
+        path: 'group-buy/join/:inviteCode',
+        element: (
+          <P>
+            <GroupBuyJoinPage />
+          </P>
+        ),
+      },
+
+      /* ─── FlashSale Routes ─── */
+      {
+        path: 'flash-sale/:sessionId',
+        element: (
+          <P>
+            <FlashSaleDetailPage />
           </P>
         ),
       },
