@@ -6,17 +6,52 @@
 <p align="center">
   <img src="https://img.shields.io/badge/architecture-microservices-blue.svg" />
   <img src="https://img.shields.io/badge/backend-.NET%208-green" />
+  <img src="https://img.shields.io/badge/frontend-React%2BVite-cyan" />
   <img src="https://img.shields.io/badge/orchestration-Docker--Compose-orange" />
-  <img src="https://img.shields.io/badge/database-SQL%2FNoSQL-informational" />
+  <img src="https://img.shields.io/badge/database-PostgreSQL%2FRedis-informational" />
+  <img src="https://img.shields.io/badge/gateway-Ocelot-purple" />
 </p>
+
+---
+
+## ⚡ Quick Start
+
+### One Command Deployment
+
+```powershell
+# Windows PowerShell - Khởi động tất cả services
+.\start.ps1
+
+# Hoặc thủ công
+cd src
+docker-compose up -d
+```
+
+**✅ Đã xong!** Tất cả microservices chạy qua API Gateway duy nhất:
+- **Frontend**: http://localhost:3000
+- **API Gateway**: http://localhost:5000 ⭐
+- **Swagger**: http://localhost:5000/swagger
+
+### Available Scripts
+
+- `.\start.ps1` - Khởi động toàn bộ hệ thống
+- `.\stop.ps1` - Dừng services (với options)
+- `.\logs.ps1` - Xem logs real-time
+
+📚 **Chi tiết**: [QUICK_START.md](./docs/QUICK_START.md) | [DEPLOYMENT_GUIDE_VI.md](./docs/DEPLOYMENT_GUIDE_VI.md)
 
 ---
 
 ## 🧭 Overview
 
-This repository provides the **infrastructure layer** for a distributed e-commerce platform, built using **Microservices Architecture** and powered by **Docker Compose**.
+This repository provides a **complete e-commerce platform** built using **Microservices Architecture**, powered by **Docker Compose**, and accessible through **Ocelot API Gateway**.
 
-Each microservice is expected to run in its own containerized environment, and this setup provides the supporting services (databases, message brokers, monitoring tools) to facilitate development and testing.
+**Key Features:**
+- ✅ **Single Entry Point**: All services accessible via Gateway (port 5000)  
+- ✅ **Auto Seed Data**: 30+ products với đầy đủ categories
+- ✅ **Event-Driven**: RabbitMQ for inter-service communication
+- ✅ **Monitoring**: Elasticsearch + Kibana + Health Checks
+- ✅ **Modern Frontend**: React + Vite + Zustand + Tailwind CSS
 
 ---
 
@@ -82,46 +117,74 @@ services:
 ## 🏗️ Architecture Diagram
 
 ```
-┌─────────────────────────────────────────────┐
-│         Client Applications                  │
-│     (Web, Mobile, Desktop, etc.)            │
-└────────────────┬────────────────────────────┘
-                 │
-                 ↓
-┌────────────────────────────────────────────┐
-│      Ocelot API Gateway :5000              │
-│  • Routing & Load Balancing                 │
-│  • Rate Limiting (3-20 req/s)              │
-│  • Response Caching (15-60s TTL)           │
-│  • Circuit Breaker (QoS)                    │
-│  • Request/Response Logging                 │
-│  • CORS Support                             │
-└────┬──────────┬──────────┬─────────┬───────┘
-     │          │          │         │
-     ↓          ↓          ↓         ↓
-┌─────────┐ ┌─────────┐ ┌───────┐ ┌──────────┐
-│Product  │ │Customer │ │Basket │ │Ordering  │
-│API      │ │API      │ │API    │ │API       │
-│:6002    │ │:6003    │ │:6004  │ │:6005     │
-└────┬────┘ └────┬────┘ └───┬───┘ └────┬─────┘
-     │           │           │          │
-     ↓           ↓           ↓          ↓
-┌─────────┐ ┌─────────┐ ┌───────┐ ┌──────────┐
-│ MySQL   │ │Postgres │ │ Redis │ │SQL Server│
-│:3306    │ │:5432    │ │:6379  │ │:1432     │
-└─────────┘ └─────────┘ └───────┘ └──────────┘
-     │           │           │          │
-     └───────────┴───────────┴──────────┘
-                 │
-                 ↓
-┌────────────────────────────────────────────┐
-│         Supporting Services                 │
-│  • RabbitMQ :5672, :15672                  │
-│  • Elasticsearch :9200                      │
-│  • Kibana :5601                             │
-│  • Portainer :9000                          │
-│  • pgAdmin :5050                            │
-└────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────┐
+│                  Client Applications                          │
+│         (Web Browser, Mobile, Desktop, etc.)                 │
+└───────────────────────┬──────────────────────────────────────┘
+                        │
+                        │ HTTP/HTTPS
+                        ↓
+       ┌────────────────────────────────────────────┐
+       │   🌐 Ocelot API Gateway :5000 ⭐          │
+       │   • Single Entry Point                     │
+       │   • Routing & Load Balancing               │
+       │   • Rate Limiting (3-20 req/s)            │
+       │   • Response Caching (15-60s TTL)         │
+       │   • Circuit Breaker (QoS)                  │
+       │   • Request/Response Logging               │
+       │   • CORS Support                           │
+       └───┬────┬────┬────┬────┬────┬────┬────┬────┘
+           │    │    │    │    │    │    │    │
+     ──────┴────┴────┴────┴────┴────┴────┴────┴──────
+     Internal Docker Network (No External Ports)
+     ──────┬────┬────┬────┬────┬────┬────┬────┬──────
+           │    │    │    │    │    │    │    │
+      ┌────▽──┐ │    │    │    │    │    │    │
+      │Product│ │    │    │    │    │    │    │
+      │  API  │ │    │    │    │    │    │    │
+      └───┬───┘ │    │    │    │    │    │    │
+          │  ┌──▽────┐   │    │    │    │    │
+          │  │Customer   │    │    │    │    │
+          │  │  API  │   │    │    │    │    │
+          │  └───┬───┘   │    │    │    │    │
+          │      │  ┌────▽───┐│    │    │    │
+          │      │  │Basket  ││    │    │    │
+          │      │  │  API   ││    │    │    │
+          │      │  └───┬────┘│    │    │    │
+          │      │      │  ┌──▽─────┐   │    │
+          │      │      │  │Ordering│   │    │
+          │      │      │  │  API   │   │    │
+          │      │      │  └───┬────┘   │    │
+          │      │      │      │  ┌─────▽──┐ │
+          │      │      │      │  │Inventory  │
+          │      │      │      │  │   API  │ │
+          │      │      │      │  └────┬───┘ │
+          │      │      │      │       │  ┌──▽────┐
+          │      │      │      │       │  │Payment│
+          │      │      │      │       │  │  API  │
+          │      │      │      │       │  └───┬───┘
+          │      │      │      │       │      │
+          ↓      ↓      ↓      ↓       ↓      ↓
+    ┌──────────────────────────────────────────────┐
+    │         Infrastructure Layer                  │
+    │  ┌──────────┐ ┌────────┐ ┌─────────┐        │
+    │  │PostgreSQL│ │ Redis  │ │RabbitMQ │        │
+    │  │ (nexusdb)│ │:6379   │ │:5672    │        │
+    │  │  :5433   │ └────────┘ └─────────┘        │
+    │  └──────────┘                                 │
+    │  ┌──────────┐ ┌────────┐                     │
+    │  │Elastic-  │ │Kibana  │                     │
+    │  │ search   │ │:5601   │                     │
+    │  │  :9200   │ └────────┘                     │
+    │  └──────────┘                                 │
+    └──────────────────────────────────────────────┘
+
+📌 Key Points:
+- ⭐ ONLY port 5000 (Gateway) is exposed for API access
+- All microservices run on internal Docker network
+- Frontend (React) runs on port 3000
+- Management tools: pgAdmin :5050, RabbitMQ UI :15672, Portainer :9000, Kibana :5601
+- Database: PostgreSQL :5433 (nexusdb) for all microservices
 ```
 
 ---
@@ -153,21 +216,22 @@ docker compose down -v
 docker system prune -a --volumes
 
 # 9. Truy cập các dịch vụ qua trình duyệt:
-# API Gateway:       http://localhost:5000 ⭐
-# Product API:       http://localhost:6002
-# Customer API:      http://localhost:6003
-# Basket API:        http://localhost:6004
-# Ordering API:      http://localhost:6005
-# SQL Server:        localhost:1432 (qua SSMS hoặc Azure Data Studio)
-# MySQL:             localhost:3306
-# PostgreSQL:        localhost:5432
-# Redis:             localhost:6379
-# MongoDB:           localhost:27017
-# RabbitMQ UI:       http://localhost:15672
+# 🌐 Frontend:       http://localhost:3000 (React App)
+# 🌐 API Gateway:    http://localhost:5000 ⭐ (Tất cả APIs)
+# 🌐 Swagger:        http://localhost:5000/swagger
+#
+# 🛠 Management Tools:
+# RabbitMQ UI:       http://localhost:15672 (guest/guest)
 # pgAdmin:           http://localhost:5050
 # Portainer:         http://localhost:9000
-# Elasticsearch:     http://localhost:9200
 # Kibana:            http://localhost:5601
+#
+# 📊 Databases (chỉ dùng cho dev tools):
+# PostgreSQL:        localhost:5433 (nexusdb - all microservices)
+# Redis:             localhost:6379 (Basket cache)
+#
+# ⚠️ LƯU Ý: Các microservices KHÔNG expose port trực tiếp
+#           Tất cả API calls phải qua Gateway: http://localhost:5000
 
 ---
 
@@ -176,17 +240,37 @@ docker system prune -a --volumes
 ### Quick Test via Gateway
 ```bash
 # Get all products through gateway
-curl http://localhost:5000/api/products
+curl http://localhost:5000/api/v1/products
 
 # Get all customers
-curl http://localhost:5000/api/customers
+curl http://localhost:5000/api/v1/customers
 
 # Get user's basket
-curl http://localhost:5000/api/baskets/john.doe
+curl http://localhost:5000/api/v1/baskets/john.doe
 
 # Get all orders
 curl http://localhost:5000/api/v1/orders
+
+# Get inventory for product
+curl http://localhost:5000/api/v1/inventory/{productId}
+
+# Health check
+curl http://localhost:5000/health
 ```
+
+### Gateway Routes (All via port 5000)
+
+| Microservice | Gateway Route | Description |
+|-------------|---------------|-------------|
+| Product API | `/api/v1/products` | Product catalog & search |
+| Customer API | `/api/v1/customers` | Customer management |
+| Basket API | `/api/v1/baskets` | Shopping cart operations |
+| Ordering API | `/api/v1/orders` | Order processing |
+| Inventory API | `/api/v1/inventory` | Stock management |
+| Payment API | `/api/v1/payments` | Payment processing |
+| Identity API | `/api/v1/identity` | Authentication & authorization |
+| FlashSale API | `/api/v1/flashsales` | Flash sale events |
+| GroupBuy API | `/api/v1/groupbuys` | Group buying campaigns |
 
 ### Gateway Features
 - **Routing**: Single entry point for all microservices
