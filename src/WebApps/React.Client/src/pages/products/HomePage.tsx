@@ -1,51 +1,234 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Box,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
   Grid,
-  Card,
-  CardContent,
-  CardMedia,
-  Typography,
-  Button,
   IconButton,
-  TextField,
-  InputAdornment,
-  Skeleton,
+  InputLabel,
+  MenuItem,
+  Pagination,
+  Paper,
+  Select,
+  Stack,
+  Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
-import { Search, FavoriteBorder, Favorite, ShoppingCart } from '@mui/icons-material';
+import AddIcon from '@mui/icons-material/Add';
+import ClearIcon from '@mui/icons-material/Clear';
+import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
+import Favorite from '@mui/icons-material/Favorite';
 import { motion } from 'framer-motion';
+import Lottie from 'lottie-react';
+import { toast } from 'react-toastify';
 import { api } from '@/lib/api';
 import { API_ENDPOINTS } from '@/lib/endpoints';
 import { useCartStore } from '@/store/cart-store';
 import { useWishlistStore } from '@/store/wishlist-store';
+import { useUIStore } from '@/store/ui-store';
+import { useAuthStore } from '@/store/auth-store';
 import type { Product } from '@/types/product';
+import loadingAnimation from '@/assets/animations/loading.json';
 
-const container = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.1 } },
-};
+const ITEMS_PER_PAGE = 10;
 
-const item = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0 },
-};
+const sortOptions = [
+  { name: 'Price: low to high', sort: 'price', order: 'asc' },
+  { name: 'Price: high to low', sort: 'price', order: 'desc' },
+];
+
+// Mock brand/category data - these would come from API
+const brands = [
+  { id: '1', name: 'Apple' },
+  { id: '2', name: 'Samsung' },
+  { id: '3', name: 'Sony' },
+  { id: '4', name: 'Nike' },
+  { id: '5', name: 'Adidas' },
+];
+
+const categories = [
+  { id: '1', name: 'Smartphones' },
+  { id: '2', name: 'Laptops' },
+  { id: '3', name: 'Fashion' },
+  { id: '4', name: 'Footwear' },
+  { id: '5', name: 'Groceries' },
+  { id: '6', name: 'Home Decoration' },
+];
+
+// Product Card component matching mern-ecommerce exactly
+function ProductCard({
+  product,
+  onToggleWishlist,
+  isInWishlist,
+  isAdmin,
+}: {
+  product: Product;
+  onToggleWishlist: (productId: string, checked: boolean) => void;
+  isInWishlist: boolean;
+  isAdmin: boolean;
+}) {
+  const navigate = useNavigate();
+  const addItem = useCartStore((s) => s.addItem);
+  const cartItems = useCartStore((s) => s.items);
+  const theme = useTheme();
+  const is1410 = useMediaQuery(theme.breakpoints.down(1410));
+  const is932 = useMediaQuery(theme.breakpoints.down(932));
+  const is752 = useMediaQuery(theme.breakpoints.down(752));
+  const is608 = useMediaQuery(theme.breakpoints.down(608));
+  const is488 = useMediaQuery(theme.breakpoints.down(488));
+  const is408 = useMediaQuery(theme.breakpoints.down(408));
+  const is500 = useMediaQuery(theme.breakpoints.down(500));
+
+  const isProductAlreadyInCart = cartItems.some((item) => item.itemNo === product.no);
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    addItem({
+      itemNo: product.no,
+      productName: product.name,
+      price: product.price,
+    });
+    toast.success('Product added to cart');
+  };
+
+  const cardWidth = is408
+    ? 'auto'
+    : is488
+      ? '200px'
+      : is608
+        ? '240px'
+        : is752
+          ? '300px'
+          : is932
+            ? '240px'
+            : is1410
+              ? '300px'
+              : '340px';
+
+  return (
+    <Stack
+      component={is408 ? 'div' : Paper}
+      mt={is408 ? 2 : 0}
+      elevation={1}
+      p={2}
+      width={cardWidth}
+      sx={{ cursor: 'pointer' }}
+      onClick={() => navigate(`/product-details/${product.id}`)}
+    >
+      {/* Image */}
+      <Stack>
+        <img
+          width="100%"
+          style={{ aspectRatio: '1/1', objectFit: 'contain' }}
+          height="100%"
+          src={product.thumbnail || `https://via.placeholder.com/300?text=${product.name[0]}`}
+          alt={`${product.name}`}
+        />
+      </Stack>
+
+      {/* Lower section */}
+      <Stack flex={2} justifyContent="flex-end" spacing={1} rowGap={2}>
+        <Stack>
+          <Stack flexDirection="row" alignItems="center" justifyContent="space-between">
+            <Typography variant="h6" fontWeight={400}>
+              {product.name}
+            </Typography>
+            {!isAdmin && (
+              <motion.div
+                whileHover={{ scale: 1.3, y: -10, zIndex: 100 }}
+                whileTap={{ scale: 1 }}
+                transition={{ duration: 0.4, type: 'spring' }}
+              >
+                <Checkbox
+                  onClick={(e) => e.stopPropagation()}
+                  checked={isInWishlist}
+                  onChange={(e) => onToggleWishlist(String(product.id), e.target.checked)}
+                  icon={<FavoriteBorder />}
+                  checkedIcon={<Favorite sx={{ color: 'red' }} />}
+                />
+              </motion.div>
+            )}
+          </Stack>
+          <Typography color="text.secondary">{product.summary || 'Brand'}</Typography>
+        </Stack>
+
+        <Stack sx={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Typography>${product.price}</Typography>
+          {isProductAlreadyInCart ? (
+            <Typography variant="body2" color="text.secondary">
+              Added to cart
+            </Typography>
+          ) : (
+            !isAdmin && (
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 1 }}
+                onClick={handleAddToCart}
+                style={{
+                  padding: '10px 15px',
+                  borderRadius: '3px',
+                  outline: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  backgroundColor: 'black',
+                  color: 'white',
+                  fontSize: is408 ? '.9rem' : is488 ? '.7rem' : is500 ? '.8rem' : '.9rem',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', columnGap: '.5rem' }}>
+                  <p>Add To Cart</p>
+                </div>
+              </motion.button>
+            )
+          )}
+        </Stack>
+      </Stack>
+    </Stack>
+  );
+}
 
 export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState('');
-  const navigate = useNavigate();
-  const addItem = useCartStore((s) => s.addItem);
+  const [page, setPage] = useState(1);
+  const [totalResults, setTotalResults] = useState(0);
+  const [sort, setSortValue] = useState<string>('');
+  const [brandFilters, setBrandFilters] = useState<Set<string>>(new Set());
+  const [categoryFilters, setCategoryFilters] = useState<Set<string>>(new Set());
+
+  const theme = useTheme();
+  const is1200 = useMediaQuery(theme.breakpoints.down(1200));
+  const is800 = useMediaQuery(theme.breakpoints.down(800));
+  const is700 = useMediaQuery(theme.breakpoints.down(700));
+  const is600 = useMediaQuery(theme.breakpoints.down(600));
+  const is500 = useMediaQuery(theme.breakpoints.down(500));
+  const is488 = useMediaQuery(theme.breakpoints.down(488));
+
   const { isInWishlist, toggleItem } = useWishlistStore();
+  const isFilterOpen = useUIStore((s) => s.isFilterOpen);
+  const toggleFilter = useUIStore((s) => s.toggleFilter);
+  const user = useAuthStore((s) => s.user);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+  }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
+      setLoading(true);
       try {
         const { data } = await api.get(API_ENDPOINTS.PRODUCTS.LIST);
-        setProducts(Array.isArray(data) ? data : (data.result ?? []));
-      } catch (err) {
-        console.error('Failed to fetch products', err);
+        const list = Array.isArray(data) ? data : data.result ?? [];
+        setProducts(list);
+        setTotalResults(list.length);
+      } catch {
+        toast.error('Error fetching products, please try again later');
       } finally {
         setLoading(false);
       }
@@ -53,163 +236,246 @@ export default function HomePage() {
     fetchProducts();
   }, []);
 
-  const filtered = products.filter(
-    (p) =>
-      p.name.toLowerCase().includes(search.toLowerCase()) ||
-      p.no.toLowerCase().includes(search.toLowerCase()),
+  // Client-side filtering & sorting
+  const filtered = products
+    .filter((p) => {
+      if (brandFilters.size > 0) {
+        const match = Array.from(brandFilters).some(
+          (b) => p.summary?.toLowerCase().includes(b.toLowerCase()),
+        );
+        if (!match) return false;
+      }
+      if (categoryFilters.size > 0) {
+        const match = Array.from(categoryFilters).some(
+          (c) => p.name?.toLowerCase().includes(c.toLowerCase()),
+        );
+        if (!match) return false;
+      }
+      return true;
+    })
+    .sort((a, b) => {
+      if (sort === 'price-asc') return a.price - b.price;
+      if (sort === 'price-desc') return b.price - a.price;
+      return 0;
+    });
+
+  const paginatedProducts = filtered.slice(
+    (page - 1) * ITEMS_PER_PAGE,
+    page * ITEMS_PER_PAGE,
   );
 
-  return (
-    <Box>
-      {/* Hero Banner */}
-      <Box
-        sx={{
-          bgcolor: '#000',
-          color: '#fff',
-          borderRadius: 3,
-          p: { xs: 4, md: 6 },
-          mb: 4,
-          background: 'linear-gradient(135deg, #000 0%, #333 100%)',
-        }}
+  const handleBrandFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newSet = new Set(brandFilters);
+    if (e.target.checked) newSet.add(e.target.value);
+    else newSet.delete(e.target.value);
+    setBrandFilters(newSet);
+    setPage(1);
+  };
+
+  const handleCategoryFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newSet = new Set(categoryFilters);
+    if (e.target.checked) newSet.add(e.target.value);
+    else newSet.delete(e.target.value);
+    setCategoryFilters(newSet);
+    setPage(1);
+  };
+
+  const handleToggleWishlist = (productId: string, checked: boolean) => {
+    const product = products.find((p) => String(p.id) === productId);
+    if (!product) return;
+    toggleItem({ id: productId, name: product.name, price: product.price });
+    toast.success(checked ? 'Product added to wishlist' : 'Product removed from wishlist');
+  };
+
+  if (loading) {
+    return (
+      <Stack
+        width={is500 ? '35vh' : '25rem'}
+        height="calc(100vh - 4rem)"
+        justifyContent="center"
+        marginRight="auto"
+        marginLeft="auto"
       >
-        <Typography variant="h3" fontWeight={700} gutterBottom>
-          Welcome to Our Store
-        </Typography>
-        <Typography variant="h6" color="grey.400" sx={{ mb: 3 }}>
-          Discover amazing products at the best prices
-        </Typography>
-        <Button
-          variant="contained"
-          size="large"
-          sx={{ bgcolor: '#DB4444', '&:hover': { bgcolor: '#b33636' } }}
-        >
-          Shop Now
-        </Button>
-      </Box>
+        <Lottie animationData={loadingAnimation} />
+      </Stack>
+    );
+  }
 
-      {/* Search */}
-      <TextField
-        fullWidth
-        placeholder="Search products..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        sx={{ mb: 4 }}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <Search />
-            </InputAdornment>
-          ),
+  return (
+    <>
+      {/* Sliding Filter Sidebar */}
+      <motion.div
+        style={{
+          position: 'fixed',
+          backgroundColor: 'white',
+          height: '100vh',
+          padding: '1rem',
+          overflowY: 'scroll',
+          width: is500 ? '100vw' : '30rem',
+          zIndex: 500,
+          top: 0,
         }}
-      />
+        variants={{ show: { left: 0 }, hide: { left: -500 } }}
+        initial="hide"
+        transition={{ ease: 'easeInOut', duration: 0.7, type: 'spring' }}
+        animate={isFilterOpen ? 'show' : 'hide'}
+      >
+        <Stack mb="5rem" sx={{ scrollBehavior: 'smooth', overflowY: 'scroll' }}>
+          <Typography variant="h4">New Arrivals</Typography>
 
-      {/* Products Grid */}
-      {loading ? (
-        <Grid container spacing={3}>
-          {Array.from({ length: 8 }).map((_, i) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={i}>
-              <Skeleton variant="rectangular" height={200} sx={{ borderRadius: 2 }} />
-              <Skeleton width="60%" sx={{ mt: 1 }} />
-              <Skeleton width="40%" />
-            </Grid>
-          ))}
-        </Grid>
-      ) : (
-        <motion.div variants={container} initial="hidden" animate="show">
-          <Grid container spacing={3}>
-            {filtered.map((product) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
-                <motion.div variants={item}>
-                  <Card
-                    sx={{
-                      height: '100%',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      cursor: 'pointer',
-                      transition: 'transform 0.2s, box-shadow 0.2s',
-                      '&:hover': {
-                        transform: 'translateY(-4px)',
-                        boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
-                      },
-                    }}
-                  >
-                    <Box sx={{ position: 'relative' }}>
-                      <CardMedia
-                        component="div"
-                        sx={{
-                          height: 200,
-                          bgcolor: '#f5f5f5',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                        onClick={() => navigate(`/product-details/${product.id}`)}
-                      >
-                        <Typography variant="h4" color="grey.400">
-                          {product.name[0]}
-                        </Typography>
-                      </CardMedia>
-                      <IconButton
-                        sx={{ position: 'absolute', top: 8, right: 8 }}
-                        onClick={() =>
-                          toggleItem({
-                            id: String(product.id),
-                            name: product.name,
-                            price: product.price,
-                          })
-                        }
-                      >
-                        {isInWishlist(String(product.id)) ? (
-                          <Favorite sx={{ color: '#DB4444' }} />
-                        ) : (
-                          <FavoriteBorder />
-                        )}
-                      </IconButton>
-                    </Box>
-                    <CardContent sx={{ flex: 1 }}>
-                      <Typography
-                        variant="subtitle1"
-                        fontWeight={600}
-                        noWrap
-                        onClick={() => navigate(`/product-details/${product.id}`)}
-                      >
-                        {product.name}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary" noWrap>
-                        {product.summary}
-                      </Typography>
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          mt: 2,
-                        }}
-                      >
-                        <Typography variant="h6" fontWeight={700} color="primary.dark">
-                          ${product.price.toFixed(2)}
-                        </Typography>
-                        <IconButton
-                          color="primary"
-                          onClick={() =>
-                            addItem({
-                              itemNo: product.no,
-                              productName: product.name,
-                              price: product.price,
-                            })
-                          }
-                        >
-                          <ShoppingCart />
-                        </IconButton>
-                      </Box>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              </Grid>
+          <IconButton
+            onClick={toggleFilter}
+            style={{ position: 'absolute', top: 15, right: 15 }}
+          >
+            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+              <ClearIcon fontSize="medium" />
+            </motion.div>
+          </IconButton>
+
+          <Stack rowGap={2} mt={4}>
+            <Typography sx={{ cursor: 'pointer' }} variant="body2">Totes</Typography>
+            <Typography sx={{ cursor: 'pointer' }} variant="body2">Backpacks</Typography>
+            <Typography sx={{ cursor: 'pointer' }} variant="body2">Travel Bags</Typography>
+            <Typography sx={{ cursor: 'pointer' }} variant="body2">Hip Bags</Typography>
+            <Typography sx={{ cursor: 'pointer' }} variant="body2">Laptop Sleeves</Typography>
+          </Stack>
+
+          {/* Brand filters */}
+          <Stack mt={2}>
+            <Accordion>
+              <AccordionSummary expandIcon={<AddIcon />}>
+                <Typography>Brands</Typography>
+              </AccordionSummary>
+              <AccordionDetails sx={{ p: 0 }}>
+                <FormGroup onChange={handleBrandFilter as never}>
+                  {brands.map((brand) => (
+                    <motion.div
+                      key={brand.id}
+                      style={{ width: 'fit-content' }}
+                      whileHover={{ x: 5 }}
+                      whileTap={{ scale: 0.9 }}
+                    >
+                      <FormControlLabel
+                        sx={{ ml: 1 }}
+                        control={<Checkbox />}
+                        label={brand.name}
+                        value={brand.name}
+                      />
+                    </motion.div>
+                  ))}
+                </FormGroup>
+              </AccordionDetails>
+            </Accordion>
+          </Stack>
+
+          {/* Category filters */}
+          <Stack mt={2}>
+            <Accordion>
+              <AccordionSummary expandIcon={<AddIcon />}>
+                <Typography>Category</Typography>
+              </AccordionSummary>
+              <AccordionDetails sx={{ p: 0 }}>
+                <FormGroup onChange={handleCategoryFilter as never}>
+                  {categories.map((cat) => (
+                    <motion.div
+                      key={cat.id}
+                      style={{ width: 'fit-content' }}
+                      whileHover={{ x: 5 }}
+                      whileTap={{ scale: 0.9 }}
+                    >
+                      <FormControlLabel
+                        sx={{ ml: 1 }}
+                        control={<Checkbox />}
+                        label={cat.name}
+                        value={cat.name}
+                      />
+                    </motion.div>
+                  ))}
+                </FormGroup>
+              </AccordionDetails>
+            </Accordion>
+          </Stack>
+        </Stack>
+      </motion.div>
+
+      <Stack mb="3rem">
+        {/* Banner section */}
+        {!is600 && (
+          <Stack
+            sx={{
+              width: '100%',
+              height: is800 ? '300px' : is1200 ? '400px' : '500px',
+              bgcolor: '#000',
+              borderRadius: 2,
+              mb: 3,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'linear-gradient(135deg, #000 0%, #1a1a2e 50%, #16213e 100%)',
+            }}
+          >
+            <Typography variant="h3" color="white" fontWeight={700}>
+              Discover Amazing Products
+            </Typography>
+          </Stack>
+        )}
+
+        {/* Products section */}
+        <Stack rowGap={5} mt={is600 ? 2 : 0}>
+          {/* Sort options */}
+          <Stack flexDirection="row" mr="2rem" justifyContent="flex-end" alignItems="center" columnGap={5}>
+            <Stack alignSelf="flex-end" width="12rem">
+              <FormControl fullWidth>
+                <InputLabel id="sort-dropdown">Sort</InputLabel>
+                <Select
+                  variant="standard"
+                  labelId="sort-dropdown"
+                  label="Sort"
+                  onChange={(e) => setSortValue(e.target.value as string)}
+                  value={sort}
+                >
+                  <MenuItem value="">Reset</MenuItem>
+                  {sortOptions.map((option) => (
+                    <MenuItem key={option.name} value={`${option.sort}-${option.order}`}>
+                      {option.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Stack>
+          </Stack>
+
+          {/* Product grid */}
+          <Grid gap={is700 ? 1 : 2} container justifyContent="center" alignContent="center">
+            {paginatedProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                onToggleWishlist={handleToggleWishlist}
+                isInWishlist={isInWishlist(String(product.id))}
+                isAdmin={!!user?.isAdmin}
+              />
             ))}
           </Grid>
-        </motion.div>
-      )}
-    </Box>
+
+          {/* Pagination */}
+          <Stack alignSelf={is488 ? 'center' : 'flex-end'} mr={is488 ? 0 : 5} rowGap={2} p={is488 ? 1 : 0}>
+            <Pagination
+              size={is488 ? 'medium' : 'large'}
+              page={page}
+              onChange={(_, p) => setPage(p)}
+              count={Math.ceil(filtered.length / ITEMS_PER_PAGE)}
+              variant="outlined"
+              shape="rounded"
+            />
+            <Typography textAlign="center">
+              Showing {(page - 1) * ITEMS_PER_PAGE + 1} to{' '}
+              {page * ITEMS_PER_PAGE > filtered.length ? filtered.length : page * ITEMS_PER_PAGE} of{' '}
+              {filtered.length} results
+            </Typography>
+          </Stack>
+        </Stack>
+      </Stack>
+    </>
   );
 }
