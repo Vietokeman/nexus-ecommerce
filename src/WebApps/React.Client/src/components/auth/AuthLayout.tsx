@@ -2,32 +2,13 @@ import { Box, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { motion } from 'framer-motion';
 import NexusCartLogo from './NexusCartLogo';
 import { nexus } from '@/theme/theme';
+import { containerVariants, itemVariants } from '@/lib/motion';
 
 interface AuthLayoutProps {
   children: React.ReactNode;
   title?: string;
   subtitle?: string;
 }
-
-/* ── Framer Motion variants for staggered entrance ── */
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.08, delayChildren: 0.15 },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.4, ease: 'easeOut' as const },
-  },
-};
-
-export { containerVariants, itemVariants };
 
 /**
  * Split-screen auth layout:

@@ -18,7 +18,7 @@ import { motion } from 'framer-motion';
 import { nexus } from '@/theme/theme';
 import { useGroupBuySessionByCode, useJoinGroup } from '@/hooks/useGroupBuy';
 import { useAuthStore } from '@/store/auth-store';
-import { containerVariants, itemVariants } from '@/components/auth/AuthLayout';
+import { containerVariants, itemVariants } from '@/lib/motion';
 import { toast } from 'react-toastify';
 
 function CountdownTimer({ deadline }: { deadline: string }) {

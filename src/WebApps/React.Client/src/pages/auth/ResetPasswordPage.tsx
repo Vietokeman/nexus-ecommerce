@@ -7,7 +7,8 @@ import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import { api } from '@/lib/api';
 import { API_ENDPOINTS } from '@/lib/endpoints';
-import AuthLayout, { itemVariants } from '@/components/auth/AuthLayout';
+import AuthLayout from '@/components/auth/AuthLayout';
+import { itemVariants } from '@/lib/motion';
 
 interface ResetForm {
   password: string;
