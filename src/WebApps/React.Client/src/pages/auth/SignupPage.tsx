@@ -7,7 +7,8 @@ import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import { useAuthStore } from '@/store/auth-store';
 import type { SignupDto } from '@/types/auth';
-import AuthLayout, { itemVariants } from '@/components/auth/AuthLayout';
+import AuthLayout from '@/components/auth/AuthLayout';
+import { itemVariants } from '@/lib/motion';
 import { nexus } from '@/theme/theme';
 
 export default function SignupPage() {

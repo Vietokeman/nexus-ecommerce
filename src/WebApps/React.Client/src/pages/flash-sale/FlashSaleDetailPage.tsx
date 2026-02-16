@@ -19,7 +19,7 @@ import {
   useFlashSalePurchase,
 } from '@/hooks/useFlashSale';
 import { useAuthStore } from '@/store/auth-store';
-import { containerVariants, itemVariants } from '@/components/auth/AuthLayout';
+import { containerVariants, itemVariants } from '@/lib/motion';
 import { toast } from 'react-toastify';
 import type { FlashSaleItem } from '@/types/flash-sale';
 

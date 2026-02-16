@@ -8,7 +8,8 @@ import { toast } from 'react-toastify';
 import { api } from '@/lib/api';
 import { API_ENDPOINTS } from '@/lib/endpoints';
 import { useAuthStore } from '@/store/auth-store';
-import AuthLayout, { itemVariants } from '@/components/auth/AuthLayout';
+import AuthLayout from '@/components/auth/AuthLayout';
+import { itemVariants } from '@/lib/motion';
 import { nexus } from '@/theme/theme';
 
 interface OtpForm {
