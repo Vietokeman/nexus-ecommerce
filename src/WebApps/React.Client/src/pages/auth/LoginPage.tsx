@@ -48,12 +48,7 @@ export default function LoginPage() {
 
   return (
     <AuthLayout title="Welcome back" subtitle="Sign in to continue shopping">
-      <Stack
-        spacing={2.5}
-        component="form"
-        noValidate
-        onSubmit={handleSubmit(handleLogin)}
-      >
+      <Stack spacing={2.5} component="form" noValidate onSubmit={handleSubmit(handleLogin)}>
         <motion.div variants={itemVariants}>
           <TextField
             fullWidth
@@ -108,7 +103,11 @@ export default function LoginPage() {
           </Stack>
         </motion.div>
 
-        <motion.div variants={itemVariants} whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.99 }}>
+        <motion.div
+          variants={itemVariants}
+          whileHover={{ scale: 1.015 }}
+          whileTap={{ scale: 0.99 }}
+        >
           <LoadingButton
             fullWidth
             sx={{ height: '3rem', fontSize: '1rem' }}
@@ -121,11 +120,7 @@ export default function LoginPage() {
         </motion.div>
 
         <motion.div variants={itemVariants}>
-          <Typography
-            variant="body2"
-            textAlign="center"
-            sx={{ color: nexus.neutral[500], mt: 1 }}
-          >
+          <Typography variant="body2" textAlign="center" sx={{ color: nexus.neutral[500], mt: 1 }}>
             Don&apos;t have an account?{' '}
             <Typography
               component={Link}

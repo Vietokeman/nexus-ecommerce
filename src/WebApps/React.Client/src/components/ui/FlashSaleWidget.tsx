@@ -1,13 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import {
-  Box,
-  Card,
-  CardMedia,
-  Chip,
-  LinearProgress,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Box, Card, CardMedia, Chip, LinearProgress, Stack, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
 import { nexus } from '@/theme/theme';
 import type { FlashSaleItem, FlashSaleSession } from '@/types/flash-sale';
@@ -135,12 +127,12 @@ export default function FlashSaleWidget({ session, onItemClick }: FlashSaleWidge
         }}
       >
         {items.map((item) => {
-          const soldPercent = item.totalStock > 0
-            ? Math.min(100, (item.soldQuantity / item.totalStock) * 100)
-            : 0;
-          const discount = item.originalPrice > 0
-            ? Math.round(((item.originalPrice - item.flashPrice) / item.originalPrice) * 100)
-            : 0;
+          const soldPercent =
+            item.totalStock > 0 ? Math.min(100, (item.soldQuantity / item.totalStock) * 100) : 0;
+          const discount =
+            item.originalPrice > 0
+              ? Math.round(((item.originalPrice - item.flashPrice) / item.originalPrice) * 100)
+              : 0;
 
           return (
             <motion.div

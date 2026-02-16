@@ -65,11 +65,7 @@ export default function GroupBuyJoinPage() {
   const { inviteCode } = useParams<{ inviteCode: string }>();
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
-  const {
-    data: session,
-    isLoading,
-    error,
-  } = useGroupBuySessionByCode(inviteCode ?? '');
+  const { data: session, isLoading, error } = useGroupBuySessionByCode(inviteCode ?? '');
   const joinGroup = useJoinGroup();
 
   const handleJoin = async () => {
@@ -98,9 +94,7 @@ export default function GroupBuyJoinPage() {
   const participants = session?.participants ?? [];
   const minNeeded = campaign?.minParticipants ?? 3;
   const progress = session ? (session.currentParticipants / minNeeded) * 100 : 0;
-  const alreadyJoined = user
-    ? participants.some((p) => p.userName === user.userName)
-    : false;
+  const alreadyJoined = user ? participants.some((p) => p.userName === user.userName) : false;
 
   if (isLoading) {
     return (
@@ -155,11 +149,7 @@ export default function GroupBuyJoinPage() {
             sx={{
               borderRadius: nexus.radius.xl,
               border: '2px solid',
-              borderColor: isSucceeded
-                ? '#10B981'
-                : isFailed
-                  ? '#EF4444'
-                  : nexus.purple[200],
+              borderColor: isSucceeded ? '#10B981' : isFailed ? '#EF4444' : nexus.purple[200],
               overflow: 'hidden',
             }}
           >
@@ -211,9 +201,7 @@ export default function GroupBuyJoinPage() {
                     >
                       ${campaign.groupPrice.toFixed(2)}
                     </Typography>
-                    <Typography
-                      sx={{ textDecoration: 'line-through', color: nexus.neutral[400] }}
-                    >
+                    <Typography sx={{ textDecoration: 'line-through', color: nexus.neutral[400] }}>
                       ${campaign.originalPrice.toFixed(2)}
                     </Typography>
                   </Stack>
@@ -315,27 +303,29 @@ export default function GroupBuyJoinPage() {
                   ))}
                   {/* Empty slots */}
                   {isOpen &&
-                    Array.from({ length: Math.max(0, minNeeded - session.currentParticipants) }).map(
-                      (_, i) => (
-                        <Stack
-                          key={`empty-${i}`}
-                          direction="row"
-                          alignItems="center"
-                          spacing={1.5}
-                          sx={{
-                            p: 1.5,
-                            borderRadius: nexus.radius.md,
-                            border: '1px dashed',
-                            borderColor: nexus.neutral[300],
-                          }}
-                        >
-                          <Avatar sx={{ width: 30, height: 30, bgcolor: nexus.neutral[200] }}>?</Avatar>
-                          <Typography variant="body2" color={nexus.neutral[400]}>
-                            Waiting for someone...
-                          </Typography>
-                        </Stack>
-                      ),
-                    )}
+                    Array.from({
+                      length: Math.max(0, minNeeded - session.currentParticipants),
+                    }).map((_, i) => (
+                      <Stack
+                        key={`empty-${i}`}
+                        direction="row"
+                        alignItems="center"
+                        spacing={1.5}
+                        sx={{
+                          p: 1.5,
+                          borderRadius: nexus.radius.md,
+                          border: '1px dashed',
+                          borderColor: nexus.neutral[300],
+                        }}
+                      >
+                        <Avatar sx={{ width: 30, height: 30, bgcolor: nexus.neutral[200] }}>
+                          ?
+                        </Avatar>
+                        <Typography variant="body2" color={nexus.neutral[400]}>
+                          Waiting for someone...
+                        </Typography>
+                      </Stack>
+                    ))}
                 </Stack>
               </Stack>
 

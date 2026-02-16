@@ -11,8 +11,7 @@ export const nexus = {
     subtle: 'linear-gradient(135deg, #7C3AED 0%, #A855F7 50%, #FB923C 100%)',
     button: 'linear-gradient(90deg, #7C3AED 0%, #9333EA 50%, #F97316 100%)',
     dark: 'linear-gradient(135deg, #1E1028 0%, #0F0A1A 50%, #1A0F0A 100%)',
-    glass:
-      'linear-gradient(135deg, rgba(124,58,237,0.08) 0%, rgba(249,115,22,0.05) 100%)',
+    glass: 'linear-gradient(135deg, rgba(124,58,237,0.08) 0%, rgba(249,115,22,0.05) 100%)',
   },
 
   /* ── Core colours ── */

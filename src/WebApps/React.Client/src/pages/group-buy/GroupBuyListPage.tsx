@@ -1,13 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Box,
-  Stack,
-  Typography,
-  Chip,
-  CircularProgress,
-  Alert,
-} from '@mui/material';
+import { Box, Stack, Typography, Chip, CircularProgress, Alert } from '@mui/material';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -75,7 +68,14 @@ function CampaignCard({ campaign }: { campaign: GroupBuyCampaign }) {
         }}
       >
         {/* Image */}
-        <Box sx={{ position: 'relative', aspectRatio: '16/10', overflow: 'hidden', bgcolor: nexus.neutral[100] }}>
+        <Box
+          sx={{
+            position: 'relative',
+            aspectRatio: '16/10',
+            overflow: 'hidden',
+            bgcolor: nexus.neutral[100],
+          }}
+        >
           <DiscountBadge original={campaign.originalPrice} group={campaign.groupPrice} />
           {campaign.imageUrl ? (
             <img

@@ -51,12 +51,7 @@ export default function SignupPage() {
 
   return (
     <AuthLayout title="Create account" subtitle="Join Nexus Commerce and start shopping">
-      <Stack
-        spacing={2.5}
-        component="form"
-        noValidate
-        onSubmit={handleSubmit(handleSignup)}
-      >
+      <Stack spacing={2.5} component="form" noValidate onSubmit={handleSubmit(handleSignup)}>
         {/* First & Last Name side-by-side */}
         <motion.div variants={itemVariants}>
           <Stack direction="row" spacing={1.5}>
@@ -118,8 +113,7 @@ export default function SignupPage() {
               required: 'Password is required',
               pattern: {
                 value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm,
-                message:
-                  'Min 8 characters with at least 1 uppercase, 1 lowercase, and 1 number',
+                message: 'Min 8 characters with at least 1 uppercase, 1 lowercase, and 1 number',
               },
             })}
             placeholder="Password"
@@ -150,7 +144,11 @@ export default function SignupPage() {
           )}
         </motion.div>
 
-        <motion.div variants={itemVariants} whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.99 }}>
+        <motion.div
+          variants={itemVariants}
+          whileHover={{ scale: 1.015 }}
+          whileTap={{ scale: 0.99 }}
+        >
           <LoadingButton
             sx={{ height: '3rem', fontSize: '1rem' }}
             fullWidth
@@ -163,11 +161,7 @@ export default function SignupPage() {
         </motion.div>
 
         <motion.div variants={itemVariants}>
-          <Typography
-            variant="body2"
-            textAlign="center"
-            sx={{ color: nexus.neutral[500], mt: 1 }}
-          >
+          <Typography variant="body2" textAlign="center" sx={{ color: nexus.neutral[500], mt: 1 }}>
             Already have an account?{' '}
             <Typography
               component={Link}

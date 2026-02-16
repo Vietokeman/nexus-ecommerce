@@ -285,7 +285,8 @@ export default function GroupBuyCampaignPage() {
                           <IconButton
                             onClick={() => {
                               const url = `${window.location.origin}/group-buy/join/${createdSession.inviteCode}`;
-                              if (navigator.share) navigator.share({ url, title: 'Join my group buy!' });
+                              if (navigator.share)
+                                navigator.share({ url, title: 'Join my group buy!' });
                               else copyInviteLink();
                             }}
                             color="primary"
@@ -310,8 +311,7 @@ export default function GroupBuyCampaignPage() {
                 Open Groups ({activeSessions.length})
               </Typography>
               {activeSessions.map((session) => {
-                const progress =
-                  (session.currentParticipants / campaign.minParticipants) * 100;
+                const progress = (session.currentParticipants / campaign.minParticipants) * 100;
                 return (
                   <Box
                     key={session.id}

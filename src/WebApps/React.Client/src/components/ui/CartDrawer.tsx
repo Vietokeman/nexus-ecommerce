@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Divider,
-  Drawer,
-  IconButton,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Divider, Drawer, IconButton, Stack, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -86,13 +78,17 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
         <Box sx={{ flex: 1, overflowY: 'auto', px: 2.5, py: 2 }}>
           {items.length === 0 ? (
             <Stack alignItems="center" justifyContent="center" sx={{ height: '100%' }} spacing={2}>
-              <ShoppingCartOutlinedIcon
-                sx={{ fontSize: 64, color: nexus.neutral[300] }}
-              />
+              <ShoppingCartOutlinedIcon sx={{ fontSize: 64, color: nexus.neutral[300] }} />
               <Typography variant="body1" sx={{ color: nexus.neutral[500] }}>
                 Your cart is empty
               </Typography>
-              <Button variant="outlined" onClick={() => { onClose(); navigate('/'); }}>
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  onClose();
+                  navigate('/');
+                }}
+              >
                 Start Shopping
               </Button>
             </Stack>

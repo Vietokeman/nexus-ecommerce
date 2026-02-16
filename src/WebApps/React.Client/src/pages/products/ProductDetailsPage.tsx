@@ -1,14 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import {
-  Box,
-  Checkbox,
-  Rating,
-  Stack,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from '@mui/material';
+import { Box, Checkbox, Rating, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
 import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';

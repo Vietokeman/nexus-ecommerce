@@ -23,9 +23,7 @@ export function useActiveSessions() {
   return useQuery({
     queryKey: keys.active(),
     queryFn: async () => {
-      const { data } = await api.get<FlashSaleSession[]>(
-        API_ENDPOINTS.FLASH_SALE.ACTIVE_SESSIONS,
-      );
+      const { data } = await api.get<FlashSaleSession[]>(API_ENDPOINTS.FLASH_SALE.ACTIVE_SESSIONS);
       return data;
     },
     refetchInterval: 30_000, // Refresh every 30s
@@ -36,9 +34,7 @@ export function useFlashSaleSession(id: number) {
   return useQuery({
     queryKey: keys.session(id),
     queryFn: async () => {
-      const { data } = await api.get<FlashSaleSession>(
-        API_ENDPOINTS.FLASH_SALE.SESSION_DETAIL(id),
-      );
+      const { data } = await api.get<FlashSaleSession>(API_ENDPOINTS.FLASH_SALE.SESSION_DETAIL(id));
       return data;
     },
     enabled: id > 0,
@@ -78,10 +74,7 @@ export function useFlashSalePurchase() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (dto: FlashSalePurchaseDto) => {
-      const { data } = await api.post<FlashSaleOrder>(
-        API_ENDPOINTS.FLASH_SALE.PURCHASE,
-        dto,
-      );
+      const { data } = await api.post<FlashSaleOrder>(API_ENDPOINTS.FLASH_SALE.PURCHASE, dto);
       return data;
     },
     onSuccess: (_data, variables) => {

@@ -44,7 +44,10 @@ export const useAuthStore = create<AuthState>()(
         signup: async (signupData: SignupDto) => {
           // Strip confirmPassword before sending to backend
           const { confirmPassword: _, ...registerPayload } = signupData;
-          const { data } = await api.post<AuthResponse>(API_ENDPOINTS.AUTH.REGISTER, registerPayload);
+          const { data } = await api.post<AuthResponse>(
+            API_ENDPOINTS.AUTH.REGISTER,
+            registerPayload,
+          );
           const token = data.accessToken;
           if (!data.success || !token || !data.user) {
             throw new Error(data.message ?? 'Registration failed');

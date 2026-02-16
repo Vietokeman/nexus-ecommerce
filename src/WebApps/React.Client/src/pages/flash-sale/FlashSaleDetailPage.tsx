@@ -1,23 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import {
-  Box,
-  Stack,
-  Typography,
-  Button,
-  Chip,
-  CircularProgress,
-  Alert,
-} from '@mui/material';
+import { Box, Stack, Typography, Button, Chip, CircularProgress, Alert } from '@mui/material';
 import BoltIcon from '@mui/icons-material/Bolt';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import { motion } from 'framer-motion';
 import { nexus } from '@/theme/theme';
-import {
-  useFlashSaleSession,
-  useFlashSaleStock,
-  useFlashSalePurchase,
-} from '@/hooks/useFlashSale';
+import { useFlashSaleSession, useFlashSaleStock, useFlashSalePurchase } from '@/hooks/useFlashSale';
 import { useAuthStore } from '@/store/auth-store';
 import { containerVariants, itemVariants } from '@/lib/motion';
 import { toast } from 'react-toastify';
@@ -78,9 +66,7 @@ function FlashItemCard({ item }: { item: FlashSaleItem }) {
   const { data: stockData } = useFlashSaleStock(item.id);
   const remaining = stockData?.remainingStock ?? item.totalStock - item.soldQuantity;
   const soldPct = ((item.totalStock - remaining) / item.totalStock) * 100;
-  const discount = Math.round(
-    ((item.originalPrice - item.flashPrice) / item.originalPrice) * 100,
-  );
+  const discount = Math.round(((item.originalPrice - item.flashPrice) / item.originalPrice) * 100);
 
   const handleBuy = async () => {
     if (!user) {
@@ -96,10 +82,7 @@ function FlashItemCard({ item }: { item: FlashSaleItem }) {
       toast.success('Purchase confirmed! Proceed to payment.');
       navigate('/checkout');
     } catch (err: unknown) {
-      const msg =
-        err instanceof Error
-          ? err.message
-          : 'Purchase failed';
+      const msg = err instanceof Error ? err.message : 'Purchase failed';
       toast.error(msg);
     }
   };
@@ -301,7 +284,12 @@ export default function FlashSaleDetailPage() {
               overflow: 'hidden',
             }}
           >
-            <Stack direction={{ xs: 'column', md: 'row' }} justifyContent="space-between" alignItems="center" spacing={3}>
+            <Stack
+              direction={{ xs: 'column', md: 'row' }}
+              justifyContent="space-between"
+              alignItems="center"
+              spacing={3}
+            >
               <Stack spacing={1}>
                 <Stack direction="row" alignItems="center" spacing={1}>
                   <BoltIcon sx={{ color: nexus.orange[400], fontSize: 32 }} />
@@ -369,9 +357,7 @@ function CountdownSection({ endTime }: { endTime: string }) {
   const { h, m, s, expired } = useCountdown(endTime);
 
   if (expired) {
-    return (
-      <Chip label="ENDED" sx={{ bgcolor: '#EF4444', color: '#fff', fontWeight: 700 }} />
-    );
+    return <Chip label="ENDED" sx={{ bgcolor: '#EF4444', color: '#fff', fontWeight: 700 }} />;
   }
 
   return (
