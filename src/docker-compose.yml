@@ -2,98 +2,118 @@ services:
   # database section — unified PostgreSQL + PostGIS
   nexusdb:
     image: postgis/postgis:16-3.4
+    container_name: src-nexusdb
   basketdb:
     image: redis:alpine
+    container_name: src-basketdb
 
   # infrastructure section
   rabbitmq:
     image: rabbitmq:3-management-alpine
+    container_name: src-rabbitmq
   pgadmin:
     image: dpage/pgadmin4
+    container_name: src-pgadmin
   portainer:
     image: portainer/portainer-ce
+    container_name: src-portainer
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.17.2
+    container_name: src-elasticsearch
   kibana:
     image: docker.elastic.co/kibana/kibana:7.17.2
+    container_name: src-kibana
 
   #microservices api section
   product.api:
-    image: ${DOCKER_REGISTRY-}product-api:${PLATFORM:-linux}-${TAG:-latest}
+    image: ${DOCKER_REGISTRY-}src/product-api:${PLATFORM:-linux}-${TAG:-latest}
+    container_name: src-product-api
     build:
       context: .
       dockerfile: Services/Product.API/Dockerfile
 
   customer.api:
-    image: ${DOCKER_REGISTRY-}customer-api:${PLATFORM:-linux}-${TAG:-latest}
+    image: ${DOCKER_REGISTRY-}src/customer-api:${PLATFORM:-linux}-${TAG:-latest}
+    container_name: src-customer-api
     build:
       context: .
       dockerfile: Services/Customer.API/Dockerfile
 
   basket.api:
-    image: ${DOCKER_REGISTRY-}basket-api:${PLATFORM:-linux}-${TAG:-latest}
+    image: ${DOCKER_REGISTRY-}src/basket-api:${PLATFORM:-linux}-${TAG:-latest}
+    container_name: src-basket-api
     build:
       context: .
       dockerfile: Services/Basket.API/Dockerfile
 
   ordering.api:
-    image: ${DOCKER_REGISTRY-}ordering-api:${PLATFORM:-linux}-${TAG:-latest}
+    image: ${DOCKER_REGISTRY-}src/ordering-api:${PLATFORM:-linux}-${TAG:-latest}
+    container_name: src-ordering-api
     build:
       context: .
       dockerfile: Services/Ordering/Ordering.API/Dockerfile
 
   inventory.api:
-    image: ${DOCKER_REGISTRY-}inventory-api:${PLATFORM:-linux}-${TAG:-latest}
+    image: ${DOCKER_REGISTRY-}src/inventory-api:${PLATFORM:-linux}-${TAG:-latest}
+    container_name: src-inventory-api
     build:
       context: .
       dockerfile: Services/Inventory.Product.API/Dockerfile
 
   payment.api:
-    image: ${DOCKER_REGISTRY-}payment-api:${PLATFORM:-linux}-${TAG:-latest}
+    image: ${DOCKER_REGISTRY-}src/payment-api:${PLATFORM:-linux}-${TAG:-latest}
+    container_name: src-payment-api
     build:
       context: .
       dockerfile: Services/Payment.API/Dockerfile
 
   hangfire.api:
-    image: ${DOCKER_REGISTRY-}hangfire-api:${PLATFORM:-linux}-${TAG:-latest}
+    image: ${DOCKER_REGISTRY-}src/hangfire-api:${PLATFORM:-linux}-${TAG:-latest}
+    container_name: src-hangfire-api
     build:
       context: .
       dockerfile: Services/Hangfire.API/Dockerfile
 
   identity.api:
-    image: ${DOCKER_REGISTRY-}identity-api:${PLATFORM:-linux}-${TAG:-latest}
+    image: ${DOCKER_REGISTRY-}src/identity-api:${PLATFORM:-linux}-${TAG:-latest}
+    container_name: src-identity-api
     build:
       context: .
       dockerfile: Services/Identity.API/Dockerfile
 
   flashsale.api:
-    image: ${DOCKER_REGISTRY-}flashsale-api:${PLATFORM:-linux}-${TAG:-latest}
+    image: ${DOCKER_REGISTRY-}src/flashsale-api:${PLATFORM:-linux}-${TAG:-latest}
+    container_name: src-flashsale-api
     build:
       context: .
       dockerfile: Services/FlashSale.API/Dockerfile
 
   groupbuy.api:
-    image: ${DOCKER_REGISTRY-}groupbuy-api:${PLATFORM:-linux}-${TAG:-latest}
+    image: ${DOCKER_REGISTRY-}src/groupbuy-api:${PLATFORM:-linux}-${TAG:-latest}
+    container_name: src-groupbuy-api
     build:
       context: .
       dockerfile: Services/GroupBuy.API/Dockerfile
 
   # API Gateway section
   ocelot.apigw:
-    image: ${DOCKER_REGISTRY-}ocelot-apigw:${PLATFORM:-linux}-${TAG:-latest}
+    image: ${DOCKER_REGISTRY-}src/ocelot-apigw:${PLATFORM:-linux}-${TAG:-latest}
+    container_name: src-ocelot-apigw
     build:
       context: .
       dockerfile: APIGateWays/OcelotApiGw/Dockerfile
 
   # WebApps section
   react.client:
-    image: ${DOCKER_REGISTRY-}react-client:${PLATFORM:-linux}-${TAG:-latest}
+    image: ${DOCKER_REGISTRY-}src/react-client:${PLATFORM:-linux}-${TAG:-latest}
+    container_name: src-react-client
     build:
       context: ./WebApps/React.Client
       dockerfile: Dockerfile
 
   webhealthstatus:
-    image: ${DOCKER_REGISTRY-}webhealthstatus:${PLATFORM:-linux}-${TAG:-latest}
+    image: ${DOCKER_REGISTRY-}src/webhealthstatus:${PLATFORM:-linux}-${TAG:-latest}
+    container_name: src-webhealthstatus
     build:
       context: .
       dockerfile: WebApps/WebHealthStatus/Dockerfile
