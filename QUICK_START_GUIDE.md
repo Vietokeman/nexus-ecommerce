@@ -10,6 +10,7 @@ cd d:\Git-Repo\Microservice\distributed-ecommerce-platform
 ```
 
 Menu sẽ hiện ra, chọn:
+
 - **1** → Start All (lần đầu sẽ pull images)
 - **4** → Xem trạng thái containers
 - **5** → Xem logs tất cả services
@@ -92,24 +93,25 @@ d:\Git-Repo\Microservice\distributed-ecommerce-platform\
 
 ## 🌐 URLs Sau Khi Chạy
 
-| Service | URL | Ghi chú |
-|---------|-----|---------|
-| **React Frontend** | http://localhost:3000 | Main UI |
-| **API Gateway** | http://localhost:5000 | Backend entry point |
-| **Health Dashboard** | http://localhost:6010 | Service health |
-| RabbitMQ UI | http://localhost:15672 | guest/guest |
-| Kibana | http://localhost:5601 | Logs viewer |
-| Elasticsearch | http://localhost:9200 | Search engine |
-| PgAdmin | http://localhost:5050 | DB admin |
-| Portainer | http://localhost:9000 | Docker UI |
-| PostgreSQL | localhost:5433 | Database |
-| Redis | localhost:6379 | Cache |
+| Service              | URL                    | Ghi chú             |
+| -------------------- | ---------------------- | ------------------- |
+| **React Frontend**   | http://localhost:3000  | Main UI             |
+| **API Gateway**      | http://localhost:5000  | Backend entry point |
+| **Health Dashboard** | http://localhost:6010  | Service health      |
+| RabbitMQ UI          | http://localhost:15672 | guest/guest         |
+| Kibana               | http://localhost:5601  | Logs viewer         |
+| Elasticsearch        | http://localhost:9200  | Search engine       |
+| PgAdmin              | http://localhost:5050  | DB admin            |
+| Portainer            | http://localhost:9000  | Docker UI           |
+| PostgreSQL           | localhost:5433         | Database            |
+| Redis                | localhost:6379         | Cache               |
 
 ---
 
 ## 🐳 Các Lệnh Thường Dùng
 
 **LUÔN luôn CD trước:**
+
 ```powershell
 cd d:\Git-Repo\Microservice\distributed-ecommerce-platform\src
 ```
@@ -211,16 +213,19 @@ docker compose down --remove-orphans
 ## ⚡ Hot Reload
 
 **Backend (.cs, .json files):**
+
 ```
 Sửa file → Save → dotnet watch tự detect → Rebuild (5-10s) → đợi xong test API
 ```
 
 **Frontend (.tsx, .ts, .css):**
+
 ```
 Sửa file → Save → Vite HMR → Browser cập nhật ngay (<1s) ✨
 ```
 
 **Test:**
+
 1. Mở http://localhost:3000
 2. Sửa `src/WebApps/React.Client/src/App.tsx`
 3. Save → Browser tự động update!
@@ -301,28 +306,33 @@ npm list
 ## 📦 Lần Đầu Chạy
 
 **Bước 1: Pull images**
+
 ```powershell
 cd d:\Git-Repo\Microservice\distributed-ecommerce-platform\src
 docker compose pull
 ```
 
 **Bước 2: Start infrastructure**
+
 ```powershell
 docker compose up -d nexusdb basketdb rabbitmq elasticsearch kibana
 ```
 
 **Bước 3: Đợi DB khởi động (20-30s)**
+
 ```powershell
 docker compose logs -f nexusdb
 # Đợi thấy "database system is ready to accept connections"
 ```
 
 **Bước 4: Start services**
+
 ```powershell
 docker compose up -d
 ```
 
 **Bước 5: Run migrations** (nếu cần)
+
 ```powershell
 docker compose exec product.api dotnet ef database update
 docker compose exec customer.api dotnet ef database update
@@ -335,12 +345,14 @@ docker compose exec hangfire.api dotnet ef database update
 ```
 
 **Bước 6: Kiểm tra**
+
 ```powershell
 docker compose ps
 # Tất cả phải "Up" hoặc "Up (healthy)"
 ```
 
 **Bước 7: Test**
+
 - Frontend: http://localhost:3000
 - API Gateway: http://localhost:5000/api/products
 - Health: http://localhost:6010
@@ -439,12 +451,14 @@ docker system prune -a --volumes
 ## 🆘 Cần Trợ Giúp?
 
 **Quick commands:**
+
 ```powershell
 .\docker-helper.ps1    # Interactive menu
 .\run-gateway.ps1      # Auto launcher
 ```
 
 **Check services:**
+
 ```powershell
 cd src
 docker compose ps      # Status
@@ -452,6 +466,7 @@ docker compose logs    # All logs
 ```
 
 **Reset everything:**
+
 ```powershell
 docker compose down -v
 docker compose up -d
