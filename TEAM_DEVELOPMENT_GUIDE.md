@@ -1,6 +1,7 @@
 # 🏢 Hướng Dẫn Development Cho Team Lớn
 
 ## 📚 Mục Lục
+
 1. [Best Practices Overview](#best-practices-overview)
 2. [Development Strategies](#development-strategies)
 3. [Docker Strategy](#docker-strategy)
@@ -12,15 +13,16 @@
 ## 🎯 Best Practices Overview
 
 ### Nguyên Tắc Vàng
+
 > **"Chỉ chạy những gì bạn đang develop, mock/stub phần còn lại"**
 
 ### Chiến Lược Theo Team Size
 
-| Team Size | Strategy | Docker Usage |
-|-----------|----------|--------------|
-| 1-3 devs | Selective services | Infrastructure + Service đang develop |
-| 4-10 devs | Domain-based | Infrastructure + Domain services |
-| 10+ devs | Shared Dev Env | Infrastructure local + Services remote |
+| Team Size | Strategy           | Docker Usage                           |
+| --------- | ------------------ | -------------------------------------- |
+| 1-3 devs  | Selective services | Infrastructure + Service đang develop  |
+| 4-10 devs | Domain-based       | Infrastructure + Domain services       |
+| 10+ devs  | Shared Dev Env     | Infrastructure local + Services remote |
 
 ---
 
@@ -29,11 +31,13 @@
 ### Strategy 1: Minimal Local Setup (KHUYẾN NGHỊ cho 1 Developer)
 
 **Chỉ chạy:**
+
 - ✅ Infrastructure (Database, Redis, RabbitMQ, Elasticsearch)
 - ✅ Service đang develop (VD: Gateway)
 - ✅ Mock/Stub các services khác
 
 **Setup:**
+
 ```powershell
 # File: docker-compose.dev-minimal.yml
 version: "3.8"
@@ -84,6 +88,7 @@ volumes:
 ```
 
 **Run:**
+
 ```powershell
 # Chỉ chạy infrastructure
 docker-compose -f docker-compose.dev-minimal.yml up -d
@@ -94,12 +99,14 @@ dotnet run
 ```
 
 **Ưu điểm:**
+
 - ⚡ Khởi động nhanh (< 30s)
 - 💻 Ít tốn RAM (~ 2-3GB)
 - 🔧 Dễ debug
 - 🚀 Build nhanh
 
 **Nhược điểm:**
+
 - ⚠️ Cần mock downstream services
 - ⚠️ Không test integration đầy đủ
 
@@ -110,36 +117,33 @@ dotnet run
 **Chia theo Domain:**
 
 ```
-Team Product: 
+Team Product:
   - Product.API
   - Inventory.API
-  
+
 Team Order:
   - Ordering.API
   - Payment.API
-  
+
 Team Customer:
   - Customer.API
   - Identity.API
-  
+
 Team Flash Sale:
   - FlashSale.API
   - GroupBuy.API
 ```
 
 **File: docker-compose.dev-product.yml**
+
 ```yaml
 services:
   # Infrastructure (shared)
-  nexusdb:
-    ...
-  basketdb:
-    ...
-  rabbitmq:
-    ...
-  elasticsearch:
-    ...
-  
+  nexusdb: ...
+  basketdb: ...
+  rabbitmq: ...
+  elasticsearch: ...
+
   # Product Domain Services
   product.api:
     build:
@@ -147,7 +151,7 @@ services:
       dockerfile: Services/Product.API/Dockerfile
     ports:
       - "6002:80"
-      
+
   inventory.api:
     build:
       context: .
@@ -157,6 +161,7 @@ services:
 ```
 
 **Run:**
+
 ```powershell
 # Team Product chỉ chạy Product domain
 docker-compose -f docker-compose.dev-product.yml up -d
@@ -169,6 +174,7 @@ docker-compose -f docker-compose.dev-product.yml up -d
 ### Strategy 3: Shared Dev Environment (Team > 10 người)
 
 **Mô hình:**
+
 ```
 ┌─────────────────────────────────────────┐
 │   Developer Local Machine               │
@@ -190,23 +196,26 @@ docker-compose -f docker-compose.dev-product.yml up -d
 ```
 
 **File: appsettings.Development.Local.json**
+
 ```json
 {
   "DownstreamServices": {
     "ProductAPI": "https://dev.company.com/product-api",
     "CustomerAPI": "https://dev.company.com/customer-api",
-    "BasketAPI": "http://localhost:6004"  // Service đang develop local
+    "BasketAPI": "http://localhost:6004" // Service đang develop local
   }
 }
 ```
 
 **Ưu điểm:**
+
 - ✅ Không cần build tất cả
 - ✅ Luôn có services mới nhất
 - ✅ Tiết kiệm tài nguyên local
 - ✅ Giống production
 
 **Nhược điểm:**
+
 - ⚠️ Cần infrastructure team setup
 - ⚠️ Cần VPN/networking
 - ⚠️ Shared state có thể conflict
@@ -220,6 +229,7 @@ docker-compose -f docker-compose.dev-product.yml up -d
 #### Option 1: Pre-built Images (KHUYẾN NGHỊ)
 
 **Setup Registry:**
+
 ```powershell
 # Company Private Registry
 docker login registry.company.com
@@ -230,17 +240,19 @@ docker pull registry.company.com/customer-api:latest
 ```
 
 **docker-compose.dev-prebuilt.yml:**
+
 ```yaml
 services:
   product.api:
     image: registry.company.com/product-api:latest
     # Không build, chỉ pull
-    
+
   customer.api:
     image: registry.company.com/customer-api:latest
 ```
 
 **Lợi ích:**
+
 - ⚡ Không cần build (chỉ pull ~ 30s)
 - 🎯 Luôn có version stable
 - 💾 Tiết kiệm disk space
@@ -248,43 +260,46 @@ services:
 #### Option 2: Selective Build
 
 **File: docker-compose.dev-selective.yml**
+
 ```yaml
 services:
   # Services KHÔNG develop → dùng pre-built
   product.api:
     image: registry.company.com/product-api:latest
-    
+
   # Service ĐANG develop → build local
   ocelot.apigw:
     build:
       context: .
       dockerfile: APIGateWays/OcelotApiGw/Dockerfile
     volumes:
-      - ./APIGateWays/OcelotApiGw:/app  # Hot reload
+      - ./APIGateWays/OcelotApiGw:/app # Hot reload
 ```
 
 #### Option 3: Docker Compose Profiles
 
 **docker-compose.yml with profiles:**
+
 ```yaml
 services:
   nexusdb:
     profiles: ["infra", "full"]
-    
+
   product.api:
     profiles: ["product", "full"]
     build: ...
-    
+
   customer.api:
     profiles: ["customer", "full"]
     build: ...
-    
+
   ocelot.apigw:
     profiles: ["gateway", "full"]
     build: ...
 ```
 
 **Run:**
+
 ```powershell
 # Chỉ infrastructure
 docker-compose --profile infra up -d
@@ -311,26 +326,26 @@ name: Gateway CI/CD
 on:
   push:
     paths:
-      - 'src/APIGateWays/OcelotApiGw/**'
-      
+      - "src/APIGateWays/OcelotApiGw/**"
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Build Docker Image
         run: |
           docker build -t registry.company.com/ocelot-gateway:${{ github.sha }} \
             -f src/APIGateWays/OcelotApiGw/Dockerfile .
-            
+
       - name: Push to Registry
         run: |
           docker push registry.company.com/ocelot-gateway:${{ github.sha }}
           docker tag registry.company.com/ocelot-gateway:${{ github.sha }} \
             registry.company.com/ocelot-gateway:latest
           docker push registry.company.com/ocelot-gateway:latest
-          
+
       - name: Deploy to Dev
         run: |
           kubectl set image deployment/gateway \
@@ -339,6 +354,7 @@ jobs:
 ```
 
 **Benefits:**
+
 - ✅ Mỗi service có CI/CD riêng
 - ✅ Chỉ build service thay đổi
 - ✅ Auto deploy to dev environment
@@ -353,6 +369,7 @@ jobs:
 #### 1. Developer Workflow
 
 **Bước 1: Xác định scope**
+
 ```
 Task: Fix bug ở Gateway routing
 → Chỉ cần: Infrastructure + Gateway
@@ -360,6 +377,7 @@ Task: Fix bug ở Gateway routing
 ```
 
 **Bước 2: Setup minimal**
+
 ```powershell
 # Start infrastructure
 docker-compose --profile infra up -d
@@ -381,6 +399,7 @@ dotnet watch run
 ```
 
 **Bước 3: Develop & Test**
+
 ```powershell
 # Code changes...
 # Auto reload với dotnet watch
@@ -390,6 +409,7 @@ curl http://localhost:5000/api/products
 ```
 
 **Bước 4: Commit & Push**
+
 ```powershell
 git add .
 git commit -m "fix: gateway routing issue"
@@ -401,10 +421,12 @@ git push origin feature/fix-gateway-routing
 #### 2. Integration Testing
 
 **Người chịu trách nhiệm:**
+
 - QA Team
 - DevOps Team
 
 **Environment:**
+
 - Dedicated testing cluster với full services
 - Automated E2E tests
 
@@ -414,12 +436,12 @@ git push origin feature/fix-gateway-routing
 
 ## 📊 Environment Matrix
 
-| Environment | Purpose | Who Uses | Docker Strategy |
-|------------|---------|----------|-----------------|
-| **Local** | Feature development | Individual dev | Infrastructure + 1-2 services |
-| **Dev** | Integration testing | Team | Full stack (auto-deploy) |
-| **Staging** | Pre-production | QA/Product | Full stack (manual deploy) |
-| **Production** | Live | End users | Full stack (versioned deploy) |
+| Environment    | Purpose             | Who Uses       | Docker Strategy               |
+| -------------- | ------------------- | -------------- | ----------------------------- |
+| **Local**      | Feature development | Individual dev | Infrastructure + 1-2 services |
+| **Dev**        | Integration testing | Team           | Full stack (auto-deploy)      |
+| **Staging**    | Pre-production      | QA/Product     | Full stack (manual deploy)    |
+| **Production** | Live                | End users      | Full stack (versioned deploy) |
 
 ---
 
@@ -473,6 +495,7 @@ docker-compose -f docker-compose.dev-gateway.yml up -d
 ```
 
 **Tại sao:**
+
 - ⚡ Khởi động trong 1-2 phút
 - 💻 Tốn ~2GB RAM thay vì 10-15GB
 - 🔧 Dễ debug Gateway code
@@ -497,7 +520,7 @@ docker-compose -f docker-compose.dev-gateway.yml up -d
 Developer cần fix bug ở News Feed API:
 → Chỉ run News Feed API local
 → Auth service: point to dev cluster
-→ User service: point to dev cluster  
+→ User service: point to dev cluster
 → Database: local PostgreSQL container
 → Cache: local Redis container
 
@@ -534,18 +557,21 @@ docker logs -f ocelot.apigw
 ## 📝 Summary
 
 ### ✅ DO:
+
 - Run minimal infrastructure locally
 - Run only services you're developing
 - Use shared dev environment for integration
 - Pre-built images from CI/CD
 
 ### ❌ DON'T:
+
 - Build all services every time
 - Run full stack locally
 - Wait for all services to start
 - Waste time on services you don't touch
 
 ### 🎯 Goal:
+
 **From commit to running: < 5 minutes**
 
 ---
@@ -553,11 +579,13 @@ docker logs -f ocelot.apigw
 ## 📞 Need Help?
 
 **Setup Issues:**
+
 - Check Docker memory: Docker Desktop → Settings → Resources (≥8GB)
 - Check disk space: ≥50GB free
 - Check internet: VPN/Firewall might block Docker Hub
 
 **Architecture Questions:**
+
 - Discuss with DevOps team about shared dev cluster
 - Consider Kubernetes for team > 10
 - Implement contract testing (Pact.io)

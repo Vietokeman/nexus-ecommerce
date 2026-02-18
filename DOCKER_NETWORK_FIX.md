@@ -23,23 +23,27 @@ docker compose up -d
 ### Option 2: Đổi DNS (Fix network routing)
 
 **Google DNS:**
+
 ```powershell
 # PowerShell as Admin
 Set-DnsClientServerAddress -InterfaceAlias "Ethernet" -ServerAddresses ("8.8.8.8","8.8.4.4")
 ```
 
 **Cloudflare DNS:**
+
 ```powershell
 Set-DnsClientServerAddress -InterfaceAlias "Ethernet" -ServerAddresses ("1.1.1.1","1.0.0.1")
 ```
 
 **Kiểm tra interface name:**
+
 ```powershell
 Get-NetAdapter | Select-Object Name, Status
 # Thay "Ethernet" bằng tên thực tế (VD: "Wi-Fi", "Ethernet 2")
 ```
 
 **Hoặc đổi qua GUI:**
+
 1. Control Panel → Network Connections
 2. Right-click adapter → Properties
 3. IPv4 → Properties → Use the following DNS:
@@ -60,6 +64,7 @@ Start-Process "C:\Program Files\Docker\Docker\Docker Desktop.exe"
 ### Option 4: Tắt VPN/Proxy tạm thời
 
 Nếu đang dùng VPN/Corporate Proxy:
+
 ```powershell
 # Disable proxy tạm thời
 $env:HTTP_PROXY = ""
@@ -228,12 +233,12 @@ docker compose logs product.api  # Logs 1 service
 
 ## 📊 Container Startup Time
 
-| Service | Expected Time | Notes |
-|---------|---------------|-------|
-| Infrastructure (DB, Redis) | 10-20s | Nhanh nhất |
-| .NET Services (first run) | 30-60s | `dotnet restore` + build |
-| React Client (first run) | 40-80s | `npm install` + dev server |
-| Subsequent runs | 5-10s | Hot reload mode |
+| Service                    | Expected Time | Notes                      |
+| -------------------------- | ------------- | -------------------------- |
+| Infrastructure (DB, Redis) | 10-20s        | Nhanh nhất                 |
+| .NET Services (first run)  | 30-60s        | `dotnet restore` + build   |
+| React Client (first run)   | 40-80s        | `npm install` + dev server |
+| Subsequent runs            | 5-10s         | Hot reload mode            |
 
 ---
 
