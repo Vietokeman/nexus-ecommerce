@@ -1,25 +1,74 @@
-﻿**/.dockerignore
-**/.env
+﻿# Git
 **/.git
 **/.gitignore
-**/.project
-**/.settings
-**/.toolstarget
+**/.gitattributes
+
+# IDE
 **/.vs
 **/.vscode
 **/.idea
+**/.rider
 **/*.*proj.user
-**/*.dbmdl
-**/*.jfm
-**/azds.yaml
+**/.project
+**/.settings
+**/.toolstarget
+
+# Build outputs
 **/bin
-**/charts
-**/docker-compose*
-**/Dockerfile*
+**/obj
+**/out
+**/dist
+**/build
+
+# Node
 **/node_modules
 **/npm-debug.log
-**/obj
+**/yarn-error.log
+**/pnpm-debug.log
+**/.pnpm-store
+
+# Docker
+**/.dockerignore
+**/docker-compose*
+**/Dockerfile*
+
+# Documentation (exclude to reduce image size)
+**/*.md
+**/docs
+**/CHANGELOG.md
+**/LICENSE
+**/README.md
+
+# Logs
+**/*.log
+**/logs
+
+# OS
+**/.DS_Store
+**/Thumbs.db
+
+# Environment
+**/.env
+**/.env.*
+!**/.env.example
+
+# Test
+**/coverage
+**/.nyc_output
+**/TestResults
+
+# Azure
+**/azds.yaml
+**/charts
+**/*.dbmdl
+**/*.jfm
 **/secrets.dev.yaml
 **/values.dev.yaml
-LICENSE
-README.md
+
+# Temp files
+**/tmp
+**/temp
+**/*.tmp
+**/*.temp
+**/*.swp
+**/*.swo

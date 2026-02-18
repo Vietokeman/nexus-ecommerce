@@ -1,0 +1,139 @@
+# ==============================================================================
+# MINIMAL DEVELOPMENT SETUP
+# ==============================================================================
+# Chỉ chạy Infrastructure + Services đang develop để tăng tốc độ
+# Phù hợp cho 1-2 developers làm việc trên ít services
+#
+# CÁCH DÙNG:
+#   docker compose -f docker-compose.dev-minimal.yml up -d
+#
+# Chỉnh sửa file này để enable services bạn đang develop
+# ==============================================================================
+
+services:
+  # ==================== DATABASE & INFRASTRUCTURE ====================
+  nexusdb:
+    image: postgis/postgis:16-3.4
+    container_name: src-nexusdb-dev
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin1234
+      - POSTGRES_DB=NexusDb
+    restart: always
+    ports:
+      - "5433:5432"
+    volumes:
+      - nexusdb_dev_data:/var/lib/postgresql/data
+    networks:
+      - dev_network
+
+  basketdb:
+    image: redis:alpine
+    container_name: src-basketdb-dev
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - dev_network
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: src-rabbitmq-dev
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - dev_network
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.2
+    container_name: src-elasticsearch-dev
+    environment:
+      - xpack.monitoring.enabled=true
+      - xpack.watcher.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch_dev_data:/usr/share/elasticsearch/data
+    networks:
+      - dev_network
+
+  # ==================== SERVICES (Enable what you need) ====================
+  
+  # Product Service (Example: Uncomment if developing)
+  # product.api:
+  #   image: mcr.microsoft.com/dotnet/sdk:8.0
+  #   container_name: src-product-api-dev
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  #     - ASPNETCORE_URLS=http://+:80
+  #     - DOTNET_USE_POLLING_FILE_WATCHER=1
+  #     - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=ProductDb;Username=admin;Password=admin1234;"
+  #   volumes:
+  #     - .:/src
+  #   working_dir: /src/Services/Product.API
+  #   command: dotnet watch run --no-launch-profile
+  #   depends_on:
+  #     - nexusdb
+  #   ports:
+  #     - "5001:80"
+  #   networks:
+  #     - dev_network
+  #   restart: always
+
+  # API Gateway (Usually needed)
+  ocelot.apigw:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    container_name: src-ocelot-apigw-dev
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
+    volumes:
+      - .:/src
+    working_dir: /src/APIGateWays/OcelotApiGw
+    command: dotnet watch run --no-launch-profile
+    depends_on:
+      - elasticsearch
+    ports:
+      - "5000:80"
+    networks:
+      - dev_network
+    restart: always
+
+  # React Client (Frontend)
+  react.client:
+    image: node:20-alpine
+    container_name: src-react-client-dev
+    environment:
+      - VITE_API_PROXY_TARGET=http://ocelot.apigw:80
+      - DOCKER_ENV=true
+    volumes:
+      - ./WebApps/React.Client:/app
+      - react_node_modules_dev:/app/node_modules
+    working_dir: /app
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    depends_on:
+      - ocelot.apigw
+    ports:
+      - "3000:3000"
+    networks:
+      - dev_network
+    restart: always
+
+networks:
+  dev_network:
+    name: nexus_dev_network
+    driver: bridge
+
+volumes:
+  nexusdb_dev_data:
+    name: nexusdb_dev_data
+  elasticsearch_dev_data:
+    name: elasticsearch_dev_data
+  react_node_modules_dev:
+    name: react_node_modules_dev
