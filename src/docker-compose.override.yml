@@ -15,7 +15,7 @@ services:
     container_name: src-nexusdb
     environment:
       - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin1234
+      - POSTGRES_PASSWORD=change_me_with_postgres_password
       - POSTGRES_DB=NexusDb
     restart: always
     ports:
@@ -91,7 +91,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - DOTNET_USE_POLLING_FILE_WATCHER=1
       - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=ProductDb;Username=admin;Password=admin1234;"
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=ProductDb;Username=admin;Password=change_me_with_postgres_password;"
     volumes:
       - .:/src
     working_dir: /src/Services/Product.API
@@ -108,7 +108,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - DOTNET_USE_POLLING_FILE_WATCHER=1
       - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=CustomerDb;Username=admin;Password=admin1234;"
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=CustomerDb;Username=admin;Password=change_me_with_postgres_password;"
     volumes:
       - .:/src
     working_dir: /src/Services/Customer.API
@@ -142,7 +142,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - DOTNET_USE_POLLING_FILE_WATCHER=1
       - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=OrderDb;Username=admin;Password=admin1234;"
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=OrderDb;Username=admin;Password=change_me_with_postgres_password;"
     volumes:
       - .:/src
     working_dir: /src/Services/Ordering/Ordering.API
@@ -160,7 +160,7 @@ services:
       - ASPNETCORE_HTTPS_PORTS=443
       - DOTNET_USE_POLLING_FILE_WATCHER=1
       - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=InventoryDb;Username=admin;Password=admin1234;"
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=InventoryDb;Username=admin;Password=change_me_with_postgres_password;"
     volumes:
       - .:/src
     working_dir: /src/Services/Inventory.Product.API
@@ -177,7 +177,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - DOTNET_USE_POLLING_FILE_WATCHER=1
       - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=PaymentDb;Username=admin;Password=admin1234;"
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=PaymentDb;Username=admin;Password=change_me_with_postgres_password;"
       - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
       - "PayOSSettings:ClientId=change_me_with_payos_client_id"
       - "PayOSSettings:ApiKey=change_me_with_payos_api_key"
@@ -208,7 +208,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - DOTNET_USE_POLLING_FILE_WATCHER=1
       - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
-      - "ConnectionStrings:HangfireConnection=Host=nexusdb;Port=5432;Database=HangfireDb;Username=admin;Password=admin1234;"
+      - "ConnectionStrings:HangfireConnection=Host=nexusdb;Port=5432;Database=HangfireDb;Username=admin;Password=change_me_with_postgres_password;"
       - "SmtpSettings:Host=smtp.gmail.com"
       - "SmtpSettings:Port=587"
       - "SmtpSettings:UserName=vietbmt19@gmail.com"
@@ -232,7 +232,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - DOTNET_USE_POLLING_FILE_WATCHER=1
       - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=IdentityDb;Username=admin;Password=admin1234;"
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=IdentityDb;Username=admin;Password=change_me_with_postgres_password;"
       - "JwtSettings:Secret=YourSuperSecretKeyHere_MustBeAtLeast32Characters!"
       - "JwtSettings:Issuer=distributed-ecommerce-platform"
       - "JwtSettings:Audience=distributed-ecommerce-client"
@@ -258,7 +258,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - DOTNET_USE_POLLING_FILE_WATCHER=1
       - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=FlashSaleDb;Username=admin;Password=admin1234;"
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=FlashSaleDb;Username=admin;Password=change_me_with_postgres_password;"
       - "ConnectionStrings:Redis=basketdb:6379"
       - "ElasticConfiguration:Uri=http://elasticsearch:9200"
     volumes:
@@ -279,7 +279,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - DOTNET_USE_POLLING_FILE_WATCHER=1
       - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=GroupBuyDb;Username=admin;Password=admin1234;"
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=GroupBuyDb;Username=admin;Password=change_me_with_postgres_password;"
       - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
       - "ElasticConfiguration:Uri=http://elasticsearch:9200"
     volumes:

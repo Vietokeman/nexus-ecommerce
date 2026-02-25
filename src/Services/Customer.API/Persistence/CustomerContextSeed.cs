@@ -11,6 +11,16 @@ namespace Customer.API.Persistence
             await customerContext.Database.MigrateAsync();
 
             await CreateCustomer(customerContext, "customer1", "customer1", "customer1", "customer@gmail.com");
+            await CreateCustomer(customerContext, "demo", "Demo", "User", "demo@gmail.com");
+            await CreateCustomer(customerContext, "rishibakshi", "Rishi", "Bakshi", "demo2@gmail.com");
+            await CreateCustomer(customerContext, "admin", "Admin", "User", "admin@ecommerce.com");
+            await CreateCustomer(customerContext, "johndoe", "John", "Doe", "john.doe@example.com");
+            await CreateCustomer(customerContext, "janesmith", "Jane", "Smith", "jane.smith@example.com");
+            await CreateCustomer(customerContext, "nguyenviet", "Nguyen", "Viet", "vietbmt19@gmail.com");
+            await CreateCustomer(customerContext, "alice_w", "Alice", "Williams", "alice.w@example.com");
+            await CreateCustomer(customerContext, "bob_martin", "Bob", "Martin", "bob.martin@example.com");
+            await CreateCustomer(customerContext, "charlie_b", "Charlie", "Brown", "charlie.b@example.com");
+            await CreateCustomer(customerContext, "emma_davis", "Emma", "Davis", "emma.davis@example.com");
         }
 
         private static async Task CreateCustomer(CustomerContext customerContext, string username, string firstName, string lastName, string email)

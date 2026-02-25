@@ -45,11 +45,12 @@ try
 
     var app = builder.Build();
 
-    // Auto-migrate
+    // Auto-migrate & seed
     using (var scope = app.Services.CreateScope())
     {
         var db = scope.ServiceProvider.GetRequiredService<InventoryContext>();
         await db.Database.MigrateAsync();
+        await InventoryContextSeed.SeedInventoryAsync(db);
     }
 
     if (app.Environment.IsDevelopment())

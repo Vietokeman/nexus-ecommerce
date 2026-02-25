@@ -80,7 +80,7 @@ Use synchronous HTTP for queries, async messaging for commands and events.
 public class OrderService
 {
     private readonly CustomerDbContext _customerDb;
-    
+
     public async Task CreateOrder(CreateOrderRequest request)
     {
         // Direct database access violates service boundaries
@@ -97,19 +97,19 @@ public class OrderService
 public class OrderService
 {
     private readonly ICustomerApiClient _customerClient;
-    
+
     public async Task CreateOrder(CreateOrderRequest request)
     {
         // Synchronous API call for queries
         var customer = await _customerClient
             .GetCustomerByIdAsync(request.CustomerId);
-        
+
         if (customer == null)
             return Result.Failure("Customer not found");
-            
+
         var order = new Order(customer.Id, customer.Email);
         await _orderRepository.AddAsync(order);
-        
+
         // Async event for notifications
         await _messageBus.PublishAsync(new OrderCreatedEvent
         {
@@ -135,7 +135,7 @@ services:
   product.api:
     environment:
       - ConnectionStrings__DefaultConnectionString=Host=nexusdb;Database=SharedDb
-  
+
   ordering.api:
     environment:
       - ConnectionStrings__DefaultConnectionString=Host=nexusdb;Database=SharedDb
@@ -149,7 +149,7 @@ services:
   product.api:
     environment:
       - ConnectionStrings__DefaultConnectionString=Host=nexusdb;Database=ProductDb
-  
+
   ordering.api:
     environment:
       - ConnectionStrings__DefaultConnectionString=Host=nexusdb;Database=OrderDb
@@ -194,7 +194,7 @@ Configure routes, downstream services, QoS, rate limiting, and caching in ocelot
         }
       ],
       "UpstreamPathTemplate": "/products",
-      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamHttpMethod": ["GET"],
       "RateLimitOptions": {
         "ClientWhitelist": [],
         "EnableRateLimiting": true,
@@ -315,13 +315,13 @@ public class OrderService
 {
     private readonly IOrderRepository _repository;
     private readonly IBusPublisher _busPublisher;
-    
+
     public async Task<Result<Order>> CreateOrderAsync(CreateOrderCommand command)
     {
         // Create order
         var order = new Order(command.CustomerId, command.Items);
         await _repository.AddAsync(order);
-        
+
         // Publish event after commit
         await _busPublisher.PublishAsync(new OrderCreatedEvent
         {
@@ -330,7 +330,7 @@ public class OrderService
             TotalAmount = order.TotalAmount,
             CreatedAt = DateTime.UtcNow
         }, "orders.created");
-        
+
         return Result.Success(order);
     }
 }
@@ -349,7 +349,7 @@ public class OrderCreatedEventHandler : IEventHandler<OrderCreatedEvent>
 {
     private readonly IInventoryService _inventoryService;
     private readonly IProcessedEventRepository _processedEvents;
-    
+
     public async Task HandleAsync(OrderCreatedEvent @event)
     {
         // Check if already processed (idempotency)
@@ -358,14 +358,14 @@ public class OrderCreatedEventHandler : IEventHandler<OrderCreatedEvent>
             _logger.LogInformation("Event already processed: {OrderId}", @event.OrderId);
             return;
         }
-        
+
         try
         {
             // Reserve inventory
             await _inventoryService.ReserveStockAsync(
                 @event.OrderId,
                 @event.Items);
-            
+
             // Mark as processed
             await _processedEvents.MarkAsProcessedAsync(@event.OrderId);
         }
@@ -437,7 +437,7 @@ public class CustomerUpdatedEvent
 public class CustomerCacheUpdater : IEventHandler<CustomerUpdatedEvent>
 {
     private readonly ICustomerCacheRepository _cache;
-    
+
     public async Task HandleAsync(CustomerUpdatedEvent @event)
     {
         await _cache.UpsertAsync(new CustomerCache
@@ -482,7 +482,7 @@ Use Polly circuit breaker to stop calling failing services.
 public class ResilientHttpClient
 {
     private readonly IAsyncPolicy<HttpResponseMessage> _circuitBreakerPolicy;
-    
+
     public ResilientHttpClient()
     {
         _circuitBreakerPolicy = Policy
@@ -500,12 +500,12 @@ public class ResilientHttpClient
                     _logger.LogInformation("Circuit breaker reset");
                 });
     }
-    
+
     public async Task<T> GetAsync<T>(string url)
     {
-        var response = await _circuitBreakerPolicy.ExecuteAsync(() => 
+        var response = await _circuitBreakerPolicy.ExecuteAsync(() =>
             _httpClient.GetAsync(url));
-            
+
         response.EnsureSuccessStatusCode();
         return await response.Content.ReadFromJsonAsync<T>();
     }
@@ -526,7 +526,7 @@ var retryPolicy = Policy
     .Or<TimeoutException>()
     .WaitAndRetryAsync(
         retryCount: 3,
-        sleepDurationProvider: retryAttempt => 
+        sleepDurationProvider: retryAttempt =>
             TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
         onRetry: (exception, timeSpan, retryCount, context) =>
         {
@@ -605,23 +605,23 @@ builder.Host.UseSerilog((context, configuration) =>
 public class ProductService
 {
     private readonly ILogger<ProductService> _logger;
-    
+
     public async Task<Product> CreateProductAsync(CreateProductCommand command)
     {
         _logger.LogInformation(
             "Creating product {ProductName} in category {CategoryId}",
             command.Name,
             command.CategoryId);
-        
+
         try
         {
             var product = new Product(command.Name, command.Price);
             await _repository.AddAsync(product);
-            
+
             _logger.LogInformation(
                 "Product created successfully {ProductId}",
                 product.Id);
-            
+
             return product;
         }
         catch (Exception ex)
@@ -681,17 +681,17 @@ public class TokenService
             new Claim(ClaimTypes.Email, user.Email),
             new Claim(ClaimTypes.Role, user.Role)
         };
-        
+
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        
+
         var token = new JwtSecurityToken(
             issuer: _jwtSettings.Issuer,
             audience: _jwtSettings.Audience,
             claims: claims,
             expires: DateTime.UtcNow.AddHours(24),
             signingCredentials: credentials);
-        
+
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }

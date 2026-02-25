@@ -33,7 +33,7 @@ try
 {
     // Hangfire Configuration - PostgreSQL
     var hangfireConnectionString = builder.Configuration.GetConnectionString("HangfireConnection")
-        ?? "Host=nexusdb;Port=5432;Database=HangfireDb;Username=postgres;Password=Passw0rd!";
+        ?? "Host=nexusdb;Port=5432;Database=HangfireDb;Username=admin;Password=change_me_with_postgres_password";
 
     builder.Services.AddHangfire(config => config
         .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)

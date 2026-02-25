@@ -15,6 +15,7 @@ Performance optimization guide for React 19 applications with Vite 6, TailwindCS
 ## When to Apply
 
 Reference these guidelines when:
+
 - Building new React components or pages
 - Optimizing bundle size and load times
 - Implementing data fetching logic
@@ -25,14 +26,14 @@ Reference these guidelines when:
 
 ## Technology Stack
 
-| Technology | Purpose | Version |
-|------------|---------|---------|
-| React | UI Framework | 19.x |
-| Vite | Build Tool | 6.x |
-| TailwindCSS | Styling | 4.x |
-| React Router | Routing | 7.x |
-| TanStack Query | Data Fetching | Latest |
-| Material-UI | Component Library | Latest |
+| Technology     | Purpose           | Version |
+| -------------- | ----------------- | ------- |
+| React          | UI Framework      | 19.x    |
+| Vite           | Build Tool        | 6.x     |
+| TailwindCSS    | Styling           | 4.x     |
+| React Router   | Routing           | 7.x     |
+| TanStack Query | Data Fetching     | Latest  |
+| Material-UI    | Component Library | Latest  |
 
 ## Project Structure
 
@@ -67,30 +68,32 @@ src/
 
 ## Rule Categories by Priority
 
-| Priority | Category | Impact | Rules |
-|----------|----------|--------|-------|
-| 1 | Bundle Size | CRITICAL | 8 rules |
-| 2 | Data Fetching | CRITICAL | 6 rules |
-| 3 | Re-render Optimization | HIGH | 7 rules |
-| 4 | Component Performance | MEDIUM | 5 rules |
-| 5 | JavaScript Performance | LOW | 4 rules |
+| Priority | Category               | Impact   | Rules   |
+| -------- | ---------------------- | -------- | ------- |
+| 1        | Bundle Size            | CRITICAL | 8 rules |
+| 2        | Data Fetching          | CRITICAL | 6 rules |
+| 3        | Re-render Optimization | HIGH     | 7 rules |
+| 4        | Component Performance  | MEDIUM   | 5 rules |
+| 5        | JavaScript Performance | LOW      | 4 rules |
 
 ## Quick Reference
 
 ### 1. Bundle Size Optimization (CRITICAL)
 
 **Rule: Avoid barrel file imports**
+
 ```typescript
 // ❌ Imports entire library
-import { Button, TextField, Dialog } from '@mui/material'
+import { Button, TextField, Dialog } from "@mui/material";
 
 // ✅ Direct imports
-import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
-import Dialog from '@mui/material/Dialog'
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
 ```
 
 **Rule: Dynamic imports for heavy components**
+
 ```typescript
 // ❌ Static import
 import HeavyChart from '@/components/HeavyChart'
@@ -108,104 +111,116 @@ function Dashboard() {
 ```
 
 **Rule: Conditional module loading**
+
 ```typescript
 // ❌ Loads library unconditionally
-import html2canvas from 'html2canvas'
+import html2canvas from "html2canvas";
 
 function ExportButton() {
   const handleExport = () => {
-    html2canvas(element).then(/* ... */)
-  }
+    html2canvas(element).then(/* ... */);
+  };
 }
 
 // ✅ Load only when needed
 function ExportButton() {
   const handleExport = async () => {
-    const html2canvas = (await import('html2canvas')).default
-    html2canvas(element).then(/* ... */)
-  }
+    const html2canvas = (await import("html2canvas")).default;
+    html2canvas(element).then(/* ... */);
+  };
 }
 ```
 
 **Rule: Defer non-critical libraries**
+
 ```typescript
 // ✅ Load analytics after app loads
 useEffect(() => {
-  import('react-ga4').then((ReactGA) => {
-    ReactGA.initialize('G-XXXXXXXXXX')
-  })
-}, [])
+  import("react-ga4").then((ReactGA) => {
+    ReactGA.initialize("G-XXXXXXXXXX");
+  });
+}, []);
 ```
 
 ### 2. Data Fetching (CRITICAL)
 
 **Rule: Use React Query for automatic deduplication**
+
 ```typescript
 // ❌ Multiple components fetch same data
 function ProductList() {
-  const [products, setProducts] = useState([])
+  const [products, setProducts] = useState([]);
   useEffect(() => {
-    fetch('/api/products').then(r => r.json()).then(setProducts)
-  }, [])
+    fetch("/api/products")
+      .then((r) => r.json())
+      .then(setProducts);
+  }, []);
 }
 
 // ✅ React Query deduplicates requests
 function ProductList() {
   const { data: products } = useQuery({
-    queryKey: ['products'],
-    queryFn: () => api.get('/products'),
-    staleTime: 5 * 60 * 1000 // 5 minutes
-  })
+    queryKey: ["products"],
+    queryFn: () => api.get("/products"),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
 }
 ```
 
 **Rule: Parallel data fetching**
+
 ```typescript
 // ❌ Waterfall requests
-const user = await fetch('/api/user').then(r => r.json())
-const orders = await fetch(`/api/orders?userId=${user.id}`).then(r => r.json())
+const user = await fetch("/api/user").then((r) => r.json());
+const orders = await fetch(`/api/orders?userId=${user.id}`).then((r) =>
+  r.json(),
+);
 
 // ✅ Parallel fetching
 const [user, products] = await Promise.all([
-  fetch('/api/user').then(r => r.json()),
-  fetch('/api/products').then(r => r.json())
-])
+  fetch("/api/user").then((r) => r.json()),
+  fetch("/api/products").then((r) => r.json()),
+]);
 
 // Then fetch dependent data
-const orders = await fetch(`/api/orders?userId=${user.id}`).then(r => r.json())
+const orders = await fetch(`/api/orders?userId=${user.id}`).then((r) =>
+  r.json(),
+);
 ```
 
 **Rule: Optimistic updates**
+
 ```typescript
 const addToCartMutation = useMutation({
-  mutationFn: (productId: string) => api.post('/cart', { productId }),
+  mutationFn: (productId: string) => api.post("/cart", { productId }),
   onMutate: async (productId) => {
     // Cancel outgoing refetches
-    await queryClient.cancelQueries({ queryKey: ['cart'] })
-    
+    await queryClient.cancelQueries({ queryKey: ["cart"] });
+
     // Snapshot previous value
-    const previousCart = queryClient.getQueryData(['cart'])
-    
+    const previousCart = queryClient.getQueryData(["cart"]);
+
     // Optimistically update
-    queryClient.setQueryData(['cart'], (old: any) => ({
+    queryClient.setQueryData(["cart"], (old: any) => ({
       ...old,
-      items: [...old.items, { productId, quantity: 1 }]
-    }))
-    
-    return { previousCart }
+      items: [...old.items, { productId, quantity: 1 }],
+    }));
+
+    return { previousCart };
   },
   onError: (err, variables, context) => {
     // Rollback on error
-    queryClient.setQueryData(['cart'], context?.previousCart)
-  }
-})
+    queryClient.setQueryData(["cart"], context?.previousCart);
+  },
+});
 ```
 
 **Rule: Prefetch on user intent**
+
 ```typescript
 function ProductCard({ product }: Props) {
   const queryClient = useQueryClient()
-  
+
   const handleMouseEnter = () => {
     // Prefetch product details when user hovers
     queryClient.prefetchQuery({
@@ -213,7 +228,7 @@ function ProductCard({ product }: Props) {
       queryFn: () => api.get(`/products/${product.id}`)
     })
   }
-  
+
   return (
     <Link to={`/products/${product.id}`} onMouseEnter={handleMouseEnter}>
       {product.name}
@@ -225,28 +240,30 @@ function ProductCard({ product }: Props) {
 ### 3. Re-render Optimization (HIGH)
 
 **Rule: Use memo for expensive computations**
+
 ```typescript
 // ❌ Recalculates on every render
 function ProductList({ products }: Props) {
-  const sortedProducts = products.sort((a, b) => b.price - a.price)
-  const total = products.reduce((sum, p) => sum + p.price, 0)
+  const sortedProducts = products.sort((a, b) => b.price - a.price);
+  const total = products.reduce((sum, p) => sum + p.price, 0);
 }
 
 // ✅ Only recalculates when products change
 function ProductList({ products }: Props) {
   const sortedProducts = useMemo(
     () => products.sort((a, b) => b.price - a.price),
-    [products]
-  )
-  
+    [products],
+  );
+
   const total = useMemo(
     () => products.reduce((sum, p) => sum + p.price, 0),
-    [products]
-  )
+    [products],
+  );
 }
 ```
 
 **Rule: Extract to memoized components**
+
 ```typescript
 // ❌ ProductItem re-renders when parent updates
 function ProductList({ products, searchQuery }: Props) {
@@ -267,45 +284,48 @@ const ProductItem = memo(({ product }: Props) => {
 ```
 
 **Rule: Use functional setState**
+
 ```typescript
 // ❌ Depends on current state (closure)
 const incrementCount = () => {
-  setCount(count + 1)
-}
+  setCount(count + 1);
+};
 
 // ✅ Functional update (no dependencies)
 const incrementCount = () => {
-  setCount(c => c + 1)
-}
+  setCount((c) => c + 1);
+};
 ```
 
 **Rule: Lazy state initialization**
+
 ```typescript
 // ❌ Expensive calculation runs on every render
-const [cart, setCart] = useState(JSON.parse(localStorage.getItem('cart')))
+const [cart, setCart] = useState(JSON.parse(localStorage.getItem("cart")));
 
 // ✅ Function only runs once
-const [cart, setCart] = useState(() => 
-  JSON.parse(localStorage.getItem('cart'))
-)
+const [cart, setCart] = useState(() =>
+  JSON.parse(localStorage.getItem("cart")),
+);
 ```
 
 ### 4. Component Performance (MEDIUM)
 
 **Rule: Virtualize long lists**
+
 ```typescript
 import { useVirtualizer } from '@tanstack/react-virtual'
 
 function ProductList({ products }: Props) {
   const parentRef = useRef<HTMLDivElement>(null)
-  
+
   const virtualizer = useVirtualizer({
     count: products.length,
     getScrollElement: () => parentRef.current,
     estimateSize: () => 100,
     overscan: 5
   })
-  
+
   return (
     <div ref={parentRef} style={{ height: '600px', overflow: 'auto' }}>
       <div style={{ height: `${virtualizer.getTotalSize()}px` }}>
@@ -321,6 +341,7 @@ function ProductList({ products }: Props) {
 ```
 
 **Rule: Use transitions for non-urgent updates**
+
 ```typescript
 import { useTransition } from 'react'
 
@@ -328,19 +349,19 @@ function SearchProducts() {
   const [searchQuery, setSearchQuery] = useState('')
   const [filteredProducts, setFilteredProducts] = useState(products)
   const [isPending, startTransition] = useTransition()
-  
+
   const handleSearch = (value: string) => {
     setSearchQuery(value) // Urgent: update input immediately
-    
+
     // Non-urgent: filter can wait
     startTransition(() => {
-      const filtered = products.filter(p => 
+      const filtered = products.filter(p =>
         p.name.toLowerCase().includes(value.toLowerCase())
       )
       setFilteredProducts(filtered)
     })
   }
-  
+
   return (
     <>
       <input value={searchQuery} onChange={e => handleSearch(e.target.value)} />
@@ -352,6 +373,7 @@ function SearchProducts() {
 ```
 
 **Rule: Hoist static JSX elements**
+
 ```typescript
 // ❌ Creates new object on every render
 function ProductPage() {
@@ -385,6 +407,7 @@ function ProductPage() {
 ### 5. Vite Configuration (CRITICAL)
 
 **Rule: Optimize build configuration**
+
 ```typescript
 // vite.config.ts
 export default defineConfig({
@@ -392,78 +415,79 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          'vendor': ['react', 'react-dom', 'react-router-dom'],
-          'ui': ['@mui/material', '@mui/icons-material'],
-          'data': ['@tanstack/react-query', 'axios']
-        }
-      }
+          vendor: ["react", "react-dom", "react-router-dom"],
+          ui: ["@mui/material", "@mui/icons-material"],
+          data: ["@tanstack/react-query", "axios"],
+        },
+      },
     },
     chunkSizeWarningLimit: 1000,
     sourcemap: false, // Disable in production
-    minify: 'terser',
+    minify: "terser",
     terserOptions: {
       compress: {
         drop_console: true, // Remove console.logs
-        drop_debugger: true
-      }
-    }
+        drop_debugger: true,
+      },
+    },
   },
   server: {
-    host: '0.0.0.0', // For Docker
+    host: "0.0.0.0", // For Docker
     port: 3000,
     proxy: {
-      '/api': {
-        target: process.env.DOCKER_ENV 
-          ? 'http://ocelot.apigw' 
-          : 'http://localhost:5000',
-        changeOrigin: true
-      }
-    }
-  }
-})
+      "/api": {
+        target: process.env.DOCKER_ENV
+          ? "http://ocelot.apigw"
+          : "http://localhost:5000",
+        changeOrigin: true,
+      },
+    },
+  },
+});
 ```
 
 **Rule: Configure PWA caching**
+
 ```typescript
 // vite.config.ts
-import { VitePWA } from 'vite-plugin-pwa'
+import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
   plugins: [
     VitePWA({
-      registerType: 'autoUpdate',
+      registerType: "autoUpdate",
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/api\.nexus-commerce\.com\/.*/i,
-            handler: 'NetworkFirst',
+            handler: "NetworkFirst",
             options: {
-              cacheName: 'api-cache',
+              cacheName: "api-cache",
               expiration: {
                 maxEntries: 100,
-                maxAgeSeconds: 60 * 60 * 24 // 24 hours
-              }
-            }
-          }
-        ]
-      }
-    })
-  ]
-})
+                maxAgeSeconds: 60 * 60 * 24, // 24 hours
+              },
+            },
+          },
+        ],
+      },
+    }),
+  ],
+});
 ```
 
 ## Anti-Patterns to Avoid
 
-| ❌ Anti-Pattern | ✅ Correct Pattern |
-|----------------|-------------------|
-| Importing entire Material-UI | Direct component imports |
-| Fetching data on component mount | React Query with caching |
-| Not memoizing expensive calculations | useMemo for computations |
-| Re-rendering entire list | Memoized list items |
-| Large bundle (>1MB) | Code splitting + lazy loading |
-| Nested async waterfalls | Parallel Promise.all() |
-| Using index as key | Stable unique IDs |
+| ❌ Anti-Pattern                      | ✅ Correct Pattern            |
+| ------------------------------------ | ----------------------------- |
+| Importing entire Material-UI         | Direct component imports      |
+| Fetching data on component mount     | React Query with caching      |
+| Not memoizing expensive calculations | useMemo for computations      |
+| Re-rendering entire list             | Memoized list items           |
+| Large bundle (>1MB)                  | Code splitting + lazy loading |
+| Nested async waterfalls              | Parallel Promise.all()        |
+| Using index as key                   | Stable unique IDs             |
 
 ## Performance Checklist
 

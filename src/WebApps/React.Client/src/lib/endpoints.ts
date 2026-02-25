@@ -9,6 +9,8 @@ export const API_ENDPOINTS = {
     VERIFY_OTP: '/api/auth/verify-otp',
     RESEND_OTP: '/api/auth/resend-otp',
     ME: '/api/auth/me',
+    EXTERNAL_LOGIN: '/api/auth/external-login',
+    EXTERNAL_PROVIDERS: '/api/auth/external-providers',
   },
   PRODUCTS: {
     LIST: '/api/products',

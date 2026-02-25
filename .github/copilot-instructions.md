@@ -3,6 +3,7 @@
 ## Project Overview
 
 **Nexus Commerce** is a distributed e-commerce microservices platform built with:
+
 - **Backend:** ASP.NET Core 8.0 (C#, .NET 8)
 - **Frontend:** React 19 + Vite 6 + TailwindCSS v4
 - **Architecture:** Microservices + CQRS + Event-Driven
@@ -27,13 +28,14 @@ When generating or modifying backend code:
   - API layer: Controllers, Middleware
 
 - ✅ **Use CQRS Pattern:**
+
   ```csharp
   // Commands for writes
   public record CreateProductCommand(string Name, decimal Price);
-  
+
   // Queries for reads
   public record GetProductQuery(Guid Id);
-  
+
   // Handlers return Result<T>
   public class CreateProductHandler : IRequestHandler<CreateProductCommand, Result<Product>>
   ```
@@ -115,6 +117,7 @@ When generating or modifying frontend code:
 ### 4. Docker Configuration
 
 - ✅ **Use Minimal Dev Setup for development:**
+
   ```bash
   docker compose -f docker-compose.dev-minimal.yml up -d
   ```
@@ -134,6 +137,7 @@ When generating or modifying frontend code:
 ## File Organization
 
 ### Backend Service Structure
+
 ```
 Services/[ServiceName].API/
 ├── Controllers/           # API endpoints
@@ -147,6 +151,7 @@ Services/[ServiceName].API/
 ```
 
 ### Frontend Structure
+
 ```
 src/
 ├── components/           # Reusable UI components
@@ -165,7 +170,9 @@ src/
 Reference these architectural guides when working with the codebase:
 
 ### Backend Skills
-📚 **[Microservices Architecture](/.github/skills/microservices-architecture/AGENTS.md)**
+
+📚 **[Microservices Architecture](skills/microservices-architecture/AGENTS.md)**
+
 - Service design patterns
 - API Gateway configuration
 - Event-driven communication
@@ -174,7 +181,9 @@ Reference these architectural guides when working with the codebase:
 - Observability & monitoring
 
 ### Frontend Skills
-📚 **[React Performance Optimization](/.github/skills/react-performance-optimization/SKILL.md)**
+
+📚 **[React Performance Optimization](skills/react-performance-optimization/SKILL.md)**
+
 - Bundle size optimization
 - Data fetching strategies
 - Re-render optimization
@@ -188,11 +197,13 @@ Reference these architectural guides when working with the codebase:
 ### Add New Microservice
 
 1. Create service project:
+
    ```bash
    dotnet new webapi -n [ServiceName].API -o Services/[ServiceName].API
    ```
 
 2. Add to solution:
+
    ```bash
    dotnet sln add Services/[ServiceName].API/[ServiceName].API.csproj
    ```
@@ -208,6 +219,7 @@ Reference these architectural guides when working with the codebase:
 ### Add New React Feature
 
 1. Create feature folder:
+
    ```
    src/features/[feature-name]/
    ├── components/
@@ -228,19 +240,19 @@ Reference these architectural guides when working with the codebase:
 
 ## Technology Versions
 
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| .NET | 8.0 | Backend framework |
-| React | 19.x | Frontend framework |
-| Vite | 6.x | Build tool |
-| TypeScript | Latest | Type safety |
-| TailwindCSS | 4.x | Styling |
-| Material-UI | Latest | UI components |
-| Ocelot | 23.0.0 | API Gateway |
-| PostgreSQL | 16-3.4 | Database |
-| Redis | Alpine | Caching |
-| RabbitMQ | 3-alpine | Message broker |
-| Elasticsearch | 7.17.2 | Logging & search |
+| Technology    | Version  | Purpose            |
+| ------------- | -------- | ------------------ |
+| .NET          | 8.0      | Backend framework  |
+| React         | 19.x     | Frontend framework |
+| Vite          | 6.x      | Build tool         |
+| TypeScript    | Latest   | Type safety        |
+| TailwindCSS   | 4.x      | Styling            |
+| Material-UI   | Latest   | UI components      |
+| Ocelot        | 23.0.0   | API Gateway        |
+| PostgreSQL    | 16-3.4   | Database           |
+| Redis         | Alpine   | Caching            |
+| RabbitMQ      | 3-alpine | Message broker     |
+| Elasticsearch | 7.17.2   | Logging & search   |
 
 ---
 
@@ -308,15 +320,18 @@ docker compose -f docker-compose.yml build
 ## Troubleshooting
 
 ### Build Issues
+
 - Clean Docker cache: `docker builder prune -a`
 - Rebuild without cache: `docker compose build --no-cache`
 
 ### Performance Issues
+
 - Use minimal dev setup (see DOCKER_OPTIMIZATION.md)
 - Check RAM usage: `docker stats`
 - Prune unused resources: `docker system prune -a`
 
 ### Service Communication Issues
+
 - Check API Gateway routes in `ocelot.json`
 - Verify service names in Docker network
 - Check connection strings in environment variables
@@ -325,11 +340,11 @@ docker compose -f docker-compose.yml build
 
 ## References
 
-- [Microservices Architecture Guide](/.github/skills/microservices-architecture/AGENTS.md)
-- [React Performance Guide](/.github/skills/react-performance-optimization/SKILL.md)
-- [Docker Optimization Guide](/DOCKER_OPTIMIZATION.md)
-- [Quick Start Guide](/QUICK_START_GUIDE.md)
-- [Team Development Guide](/TEAM_DEVELOPMENT_GUIDE.md)
+- [Microservices Architecture Guide](skills/microservices-architecture/AGENTS.md)
+- [React Performance Guide](skills/react-performance-optimization/SKILL.md)
+- [Docker Optimization Guide](../DOCKER_OPTIMIZATION.md)
+- [Quick Start Guide](../QUICK_START_GUIDE.md)
+- [Team Development Guide](../TEAM_DEVELOPMENT_GUIDE.md)
 
 ---
 
