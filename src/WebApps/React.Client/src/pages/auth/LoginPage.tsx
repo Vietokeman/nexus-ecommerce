@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FormHelperText, Stack, TextField, Typography } from '@mui/material';
+import { Button, Divider, FormHelperText, Stack, TextField, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import { Google as GoogleIcon, GitHub as GitHubIcon } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
@@ -10,6 +11,8 @@ import type { LoginDto } from '@/types/auth';
 import AuthLayout from '@/components/auth/AuthLayout';
 import { itemVariants } from '@/lib/motion';
 import { nexus } from '@/theme/theme';
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
 
 export default function LoginPage() {
   const {
@@ -117,6 +120,63 @@ export default function LoginPage() {
           >
             Sign In
           </LoadingButton>
+        </motion.div>
+
+        <motion.div variants={itemVariants}>
+          <Divider sx={{ my: 1 }}>
+            <Typography variant="body2" sx={{ color: nexus.neutral[400], px: 1 }}>
+              or continue with
+            </Typography>
+          </Divider>
+        </motion.div>
+
+        <motion.div variants={itemVariants}>
+          <Stack direction="row" spacing={2}>
+            <Button
+              fullWidth
+              variant="outlined"
+              startIcon={<GoogleIcon />}
+              onClick={() => {
+                window.location.href = `${API_BASE_URL}/api/auth/external-login?provider=Google`;
+              }}
+              sx={{
+                height: '2.8rem',
+                textTransform: 'none',
+                fontWeight: 500,
+                borderColor: nexus.neutral[300],
+                color: nexus.neutral[700],
+                '&:hover': {
+                  borderColor: '#ea4335',
+                  backgroundColor: 'rgba(234, 67, 53, 0.04)',
+                  color: '#ea4335',
+                },
+              }}
+            >
+              Google
+            </Button>
+            <Button
+              fullWidth
+              variant="outlined"
+              startIcon={<GitHubIcon />}
+              onClick={() => {
+                window.location.href = `${API_BASE_URL}/api/auth/external-login?provider=GitHub`;
+              }}
+              sx={{
+                height: '2.8rem',
+                textTransform: 'none',
+                fontWeight: 500,
+                borderColor: nexus.neutral[300],
+                color: nexus.neutral[700],
+                '&:hover': {
+                  borderColor: '#333',
+                  backgroundColor: 'rgba(51, 51, 51, 0.04)',
+                  color: '#333',
+                },
+              }}
+            >
+              GitHub
+            </Button>
+          </Stack>
         </motion.div>
 
         <motion.div variants={itemVariants}>

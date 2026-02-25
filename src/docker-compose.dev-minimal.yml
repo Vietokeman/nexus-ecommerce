@@ -17,7 +17,7 @@ services:
     container_name: src-nexusdb-dev
     environment:
       - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin1234
+      - POSTGRES_PASSWORD=0977452762Viet
       - POSTGRES_DB=NexusDb
     restart: always
     ports:
@@ -62,7 +62,7 @@ services:
       - dev_network
 
   # ==================== SERVICES (Enable what you need) ====================
-  
+
   # Product Service (Example: Uncomment if developing)
   # product.api:
   #   image: mcr.microsoft.com/dotnet/sdk:8.0
@@ -71,7 +71,7 @@ services:
   #     - ASPNETCORE_ENVIRONMENT=Development
   #     - ASPNETCORE_URLS=http://+:80
   #     - DOTNET_USE_POLLING_FILE_WATCHER=1
-  #     - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=ProductDb;Username=admin;Password=admin1234;"
+  #     - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=ProductDb;Username=admin;Password=0977452762Viet;"
   #   volumes:
   #     - .:/src
   #   working_dir: /src/Services/Product.API

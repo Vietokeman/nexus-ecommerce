@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using AspNet.Security.OAuth.GitHub;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -74,10 +75,20 @@ try
 
     var secret = jwtSettings["Secret"] ?? "YourSuperSecretKeyHere_MustBeAtLeast32Characters!";
 
+    // OAuth settings
+    var oauthSettings = builder.Configuration.GetSection("OAuthSettings");
+    builder.Services.Configure<OAuthSettings>(oauthSettings);
+
     builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultSignInScheme = "ExternalCookies";
+    })
+    .AddCookie("ExternalCookies", options =>
+    {
+        options.Cookie.HttpOnly = true;
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
     })
     .AddJwtBearer(options =>
     {
@@ -92,6 +103,19 @@ try
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret)),
             ClockSkew = TimeSpan.Zero
         };
+    })
+    .AddGoogle("Google", options =>
+    {
+        options.ClientId = oauthSettings["Google:ClientId"] ?? "";
+        options.ClientSecret = oauthSettings["Google:ClientSecret"] ?? "";
+        options.SignInScheme = "ExternalCookies";
+    })
+    .AddGitHub("GitHub", options =>
+    {
+        options.ClientId = oauthSettings["GitHub:ClientId"] ?? "";
+        options.ClientSecret = oauthSettings["GitHub:ClientSecret"] ?? "";
+        options.SignInScheme = "ExternalCookies";
+        options.Scope.Add("user:email");
     });
 
     // Services
@@ -184,6 +208,42 @@ try
             {
                 await userManager.AddToRoleAsync(admin, "Admin");
                 Log.Information("Admin user seeded: {Email}", adminEmail);
+            }
+        }
+
+        // Seed demo users (from MERN project)
+        var demoUsers = new[]
+        {
+            new { Email = "demo@gmail.com", FirstName = "Demo", LastName = "User", Password = "Demo@123", Role = "User" },
+            new { Email = "demo2@gmail.com", FirstName = "Rishi", LastName = "Bakshi", Password = "Demo@123", Role = "User" },
+            new { Email = "john.doe@example.com", FirstName = "John", LastName = "Doe", Password = "User@123", Role = "User" },
+            new { Email = "jane.smith@example.com", FirstName = "Jane", LastName = "Smith", Password = "User@123", Role = "User" },
+            new { Email = "vietbmt19@gmail.com", FirstName = "Nguyen", LastName = "Viet", Password = "Admin@123", Role = "Admin" },
+            new { Email = "alice.w@example.com", FirstName = "Alice", LastName = "Williams", Password = "User@123", Role = "User" },
+            new { Email = "bob.martin@example.com", FirstName = "Bob", LastName = "Martin", Password = "User@123", Role = "User" },
+            new { Email = "charlie.b@example.com", FirstName = "Charlie", LastName = "Brown", Password = "User@123", Role = "User" },
+            new { Email = "emma.davis@example.com", FirstName = "Emma", LastName = "Davis", Password = "User@123", Role = "User" },
+        };
+
+        foreach (var demoUser in demoUsers)
+        {
+            if (await userManager.FindByEmailAsync(demoUser.Email) == null)
+            {
+                var user = new AppUser
+                {
+                    UserName = demoUser.Email,
+                    Email = demoUser.Email,
+                    FirstName = demoUser.FirstName,
+                    LastName = demoUser.LastName,
+                    EmailConfirmed = true,
+                    IsAdmin = demoUser.Role == "Admin"
+                };
+                var result = await userManager.CreateAsync(user, demoUser.Password);
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(user, demoUser.Role);
+                    Log.Information("Demo user seeded: {Email}", demoUser.Email);
+                }
             }
         }
     }

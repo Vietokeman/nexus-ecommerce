@@ -337,6 +337,419 @@ public class ProductContextSeed
                 Category = "furniture",
                 ImageUrl = "https://cdn.dummyjson.com/product-images/26/thumbnail.jpg",
                 Attributes = "{\"brand\": \"Ratttan Outdoor\", \"discountPercentage\": 8.95, \"stockQuantity\": 9, \"rating\": 4.75}"
+            },
+
+            // ==================== ADDITIONAL SMARTPHONES ====================
+            new()
+            {
+                No = "GALAXY_S21",
+                Name = "Samsung Galaxy S21",
+                Summary = "Samsung flagship 2021",
+                Description = "Samsung Galaxy S21 5G with Dynamic AMOLED 2X, 120Hz display, triple camera system, and Snapdragon 888 processor.",
+                Price = 799m,
+                Category = "smartphones",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/3/thumbnail.jpg",
+                Attributes = "{\"brand\": \"Samsung\", \"discountPercentage\": 8.5, \"stockQuantity\": 45, \"rating\": 4.55}"
+            },
+            new()
+            {
+                No = "IPHONE14PRO",
+                Name = "iPhone 14 Pro",
+                Summary = "Apple iPhone 14 Pro with Dynamic Island",
+                Description = "Apple iPhone 14 Pro featuring Dynamic Island, Always-On display, 48MP camera system, and A16 Bionic chip.",
+                Price = 1299m,
+                Category = "smartphones",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/1/thumbnail.jpg",
+                Attributes = "{\"brand\": \"Apple\", \"discountPercentage\": 5.15, \"stockQuantity\": 58, \"rating\": 4.82}"
+            },
+
+            // ==================== ADDITIONAL FRAGRANCES ====================
+            new()
+            {
+                No = "ROYALMIRAGE",
+                Name = "Royal Mirage Deluxe",
+                Summary = "Royal Mirage premium fragrance",
+                Description = "Royal Mirage Crystal Deodorant Body Spray. Long-lasting premium body spray with subtle and elegant notes.",
+                Price = 25m,
+                Category = "fragrances",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/14/thumbnail.jpg",
+                Attributes = "{\"brand\": \"Royal Mirage\", \"discountPercentage\": 5.0, \"stockQuantity\": 48, \"rating\": 4.35}"
+            },
+            new()
+            {
+                No = "ALDREHABOIL",
+                Name = "Lord Concentrated Perfume Oil",
+                Summary = "Lord Al-Rehab perfume oil",
+                Description = "Lord - Loss One-lined Free-flowing Double-breasted Top Coat. Premium Arabian concentrated perfume oil with long lasting fragrance.",
+                Price = 30m,
+                Category = "fragrances",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/15/thumbnail.jpg",
+                Attributes = "{\"brand\": \"Lord Al-Rehab\", \"discountPercentage\": 12.15, \"stockQuantity\": 35, \"rating\": 4.59}"
+            },
+            new()
+            {
+                No = "ACQUADIGIO",
+                Name = "Impression of Acqua Di Gio",
+                Summary = "Acqua Di Gio inspired perfume",
+                Description = "Our Impression of Acqua Di Gio for Men. Fresh aquatic fragrance with notes of marine accords, citrus and woods.",
+                Price = 20m,
+                Category = "fragrances",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/11/thumbnail.jpg",
+                Attributes = "{\"brand\": \"Acqua Di Gio\", \"discountPercentage\": 7.0, \"stockQuantity\": 55, \"rating\": 4.26}"
+            },
+
+            // ==================== ADDITIONAL SKINCARE ====================
+            new()
+            {
+                No = "RICESERUM",
+                Name = "White Rice Skin Beauty Serum",
+                Summary = "Rice extract skin serum",
+                Description = "ROREC White Rice Skin Beauty Serum For Face Whitening, Anti-aging, Moisturizing, Oil Control. Natural ingredients for radiant skin.",
+                Price = 18m,
+                Category = "skincare",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/19/thumbnail.jpg",
+                Attributes = "{\"brand\": \"ROREC White Rice\", \"discountPercentage\": 10.68, \"stockQuantity\": 65, \"rating\": 4.31}"
+            },
+            new()
+            {
+                No = "LOREAL01",
+                Name = "L'Oreal Paris Skin Perfect",
+                Summary = "L'Oreal daily skincare",
+                Description = "L'Oréal Paris Skin Perfect 30+ Day Cream. Anti-fine lines, Whitening, Even tone, UV protection.",
+                Price = 35m,
+                Category = "skincare",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/16/thumbnail.jpg",
+                Attributes = "{\"brand\": \"L'Oreal Paris\", \"discountPercentage\": 5.0, \"stockQuantity\": 40, \"rating\": 4.60}"
+            },
+            new()
+            {
+                No = "FAIRCLEAR",
+                Name = "Fair & Clear Cream 35ml",
+                Summary = "Fair & Clear Anti Cream",
+                Description = "Fair & Clear Face Cream by Fair & Clear Antl Cream. Dark spots removal cream for brighter, clearer skin.",
+                Price = 12m,
+                Category = "skincare",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/20/thumbnail.jpg",
+                Attributes = "{\"brand\": \"Fair & Clear\", \"discountPercentage\": 3.45, \"stockQuantity\": 33, \"rating\": 4.12}"
+            },
+
+            // ==================== ADDITIONAL GROCERIES ====================
+            new()
+            {
+                No = "MULTIGRAIN",
+                Name = "Multi Grain Flour",
+                Summary = "Baking flour multi grain",
+                Description = "Multi Grain Flour Package Of Two Premium Quality. Perfect for baking bread, cookies, and pastries.",
+                Price = 8m,
+                Category = "groceries",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/23/thumbnail.jpg",
+                Attributes = "{\"brand\": \"Bake Parlor Big\", \"discountPercentage\": 6.11, \"stockQuantity\": 95, \"rating\": 4.44}"
+            },
+            new()
+            {
+                No = "CEREAL01",
+                Name = "Whole Grain Cereals",
+                Summary = "Healthy whole grain cereals",
+                Description = "Fauji Whole Grain Cereals – 250g pack. Nutritious breakfast cereal with vitamins and minerals.",
+                Price = 5m,
+                Category = "groceries",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/24/thumbnail.jpg",
+                Attributes = "{\"brand\": \"Fauji\", \"discountPercentage\": 2.85, \"stockQuantity\": 150, \"rating\": 4.19}"
+            },
+            new()
+            {
+                No = "DRIEDROSE",
+                Name = "Dried Rose Flowers",
+                Summary = "Natural dried rose flowers",
+                Description = "Saaf & Khaas Dried Rose Flowers 50g. Perfect for tea, skincare, and aromatherapy. 100% natural.",
+                Price = 7m,
+                Category = "groceries",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/25/thumbnail.jpg",
+                Attributes = "{\"brand\": \"Saaf & Khaas\", \"discountPercentage\": 4.30, \"stockQuantity\": 72, \"rating\": 4.38}"
+            },
+
+            // ==================== ADDITIONAL HOME DECORATION ====================
+            new()
+            {
+                No = "LEDLIGHT01",
+                Name = "LED Fairy String Lights",
+                Summary = "Decorative LED lights",
+                Description = "3D Illusion LED Night Light With 7 Color Change. Neon LED light perfect for home decoration and gifting.",
+                Price = 15m,
+                Category = "home-decoration",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/26/thumbnail.jpg",
+                Attributes = "{\"brand\": \"LED Lights\", \"discountPercentage\": 9.25, \"stockQuantity\": 85, \"rating\": 4.52}"
+            },
+            new()
+            {
+                No = "BOHODECOR",
+                Name = "Bohemian Wall Hanging",
+                Summary = "Boho macramé wall decor",
+                Description = "Boho Decor Macramé Wall Hanging. Handmade cotton rope design perfect for living rooms and bedrooms.",
+                Price = 45m,
+                Category = "home-decoration",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/27/thumbnail.jpg",
+                Attributes = "{\"brand\": \"Boho Decor\", \"discountPercentage\": 6.40, \"stockQuantity\": 28, \"rating\": 4.68}"
+            },
+
+            // ==================== ADDITIONAL FASHION ====================
+            new()
+            {
+                No = "SHIRT02",
+                Name = "Men's Slim Fit Shirt",
+                Summary = "Professional slim fit shirt",
+                Description = "Men's Slim Fit Professional Shirt with Spread Collar. Premium cotton blend fabric for office and casual wear.",
+                Price = 35m,
+                Category = "mens-shirts",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/43/thumbnail.jpg",
+                Attributes = "{\"brand\": \"Professional Wear\", \"discountPercentage\": 7.12, \"stockQuantity\": 55, \"rating\": 4.33}"
+            },
+            new()
+            {
+                No = "SHIRT03",
+                Name = "Cotton Casual Tee",
+                Summary = "Soft cotton casual T-shirt",
+                Description = "Digital Printed Soft Cotton Casual T-Shirt. Lightweight, breathable, and perfect for everyday styling.",
+                Price = 18m,
+                Category = "mens-shirts",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/44/thumbnail.jpg",
+                Attributes = "{\"brand\": \"Digital Printed\", \"discountPercentage\": 15.20, \"stockQuantity\": 88, \"rating\": 4.18}"
+            },
+            new()
+            {
+                No = "DRESS02",
+                Name = "Floral Print Maxi Dress",
+                Summary = "Elegant floral maxi dress",
+                Description = "Women's Floral Print Maxi Dress with V-neckline and flowy skirt. Perfect for summer outings and parties.",
+                Price = 55m,
+                Category = "womens-dresses",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/29/thumbnail.jpg",
+                Attributes = "{\"brand\": \"Ghazi Fabric\", \"discountPercentage\": 9.80, \"stockQuantity\": 37, \"rating\": 4.55}"
+            },
+            new()
+            {
+                No = "TOP01",
+                Name = "Knit Sweater Top",
+                Summary = "Women's knit sweater top",
+                Description = "Top Sweater Women knitted O-Neck Long Sleeve. Warm and stylish for autumn and winter seasons.",
+                Price = 40m,
+                Category = "tops",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/30/thumbnail.jpg",
+                Attributes = "{\"brand\": \"Top Sweater\", \"discountPercentage\": 8.50, \"stockQuantity\": 42, \"rating\": 4.40}"
+            },
+
+            // ==================== ADDITIONAL FOOTWEAR ====================
+            new()
+            {
+                No = "SNEAKER01",
+                Name = "Running Sports Sneakers",
+                Summary = "Lightweight running sneakers",
+                Description = "Men's Lightweight Running Sports Sneakers with Breathable Mesh Upper and Cushioned Sole. Ideal for jogging and gym.",
+                Price = 75m,
+                Category = "mens-shoes",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/59/thumbnail.jpg",
+                Attributes = "{\"brand\": \"Sneakers\", \"discountPercentage\": 11.20, \"stockQuantity\": 67, \"rating\": 4.51}"
+            },
+            new()
+            {
+                No = "SHOES02",
+                Name = "Maasai Leather Sandals",
+                Summary = "Handmade Maasai sandals",
+                Description = "Handmade Maasai Leather Sandals with intricate beadwork. Durable and comfortable for everyday wear.",
+                Price = 45m,
+                Category = "womens-shoes",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/33/thumbnail.jpg",
+                Attributes = "{\"brand\": \"Maasai Sandals\", \"discountPercentage\": 5.45, \"stockQuantity\": 31, \"rating\": 4.62}"
+            },
+
+            // ==================== ADDITIONAL WATCHES ====================
+            new()
+            {
+                No = "WATCH03",
+                Name = "Naviforce Military Watch",
+                Summary = "Military style automatic watch",
+                Description = "Naviforce Military Style Automatic Watch with Leather Strap. Water-resistant, luminous hands, and date display.",
+                Price = 95m,
+                Category = "mens-watches",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/61/thumbnail.jpg",
+                Attributes = "{\"brand\": \"Naviforce\", \"discountPercentage\": 7.85, \"stockQuantity\": 44, \"rating\": 4.47}"
+            },
+            new()
+            {
+                No = "WATCH04",
+                Name = "SKMEI Digital Watch",
+                Summary = "SKMEI digital sports watch",
+                Description = "SKMEI 9117 Digital Sports Watch with LED Display, Alarm, and Stopwatch. Waterproof and durable.",
+                Price = 55m,
+                Category = "mens-watches",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/62/thumbnail.jpg",
+                Attributes = "{\"brand\": \"SKMEI\", \"discountPercentage\": 13.50, \"stockQuantity\": 78, \"rating\": 4.22}"
+            },
+            new()
+            {
+                No = "WATCH05",
+                Name = "Rose Gold Bracelet Watch",
+                Summary = "Women's rose gold bracelet watch",
+                Description = "Women's Luxury Rose Gold Bracelet Watch with Diamond Accents. Elegant design for both casual and formal occasions.",
+                Price = 150m,
+                Category = "womens-watches",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/63/thumbnail.jpg",
+                Attributes = "{\"brand\": \"Watch Pearls\", \"discountPercentage\": 6.20, \"stockQuantity\": 19, \"rating\": 4.72}"
+            },
+
+            // ==================== ADDITIONAL ACCESSORIES ====================
+            new()
+            {
+                No = "JEWEL01",
+                Name = "Gold Plated Necklace Set",
+                Summary = "Gold plated jewelry set",
+                Description = "Fashion Jewellery Gold Plated Necklace Set with Earrings. Elegant design perfect for weddings and celebrations.",
+                Price = 35m,
+                Category = "womens-jewellery",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/64/thumbnail.jpg",
+                Attributes = "{\"brand\": \"Fashion Jewellery\", \"discountPercentage\": 8.75, \"stockQuantity\": 52, \"rating\": 4.38}"
+            },
+            new()
+            {
+                No = "JEWEL02",
+                Name = "Butterfly Cuff Bracelet",
+                Summary = "Crystal butterfly bracelet",
+                Description = "Cuff Butterfly Crystal Bracelet with Silver-tone Finish. Adjustable size with sparkling crystal accents.",
+                Price = 28m,
+                Category = "womens-jewellery",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/65/thumbnail.jpg",
+                Attributes = "{\"brand\": \"Cuff Butterfly\", \"discountPercentage\": 4.90, \"stockQuantity\": 41, \"rating\": 4.56}"
+            },
+            new()
+            {
+                No = "BAG02",
+                Name = "LouisWill Crossbody Bag",
+                Summary = "Stylish crossbody handbag",
+                Description = "LouisWill Women's Luxury Crossbody Bag with Gold Hardware. PU Leather with multiple compartments.",
+                Price = 85m,
+                Category = "womens-bags",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/71/thumbnail.jpg",
+                Attributes = "{\"brand\": \"LouisWill\", \"discountPercentage\": 11.50, \"stockQuantity\": 33, \"rating\": 4.45}"
+            },
+            new()
+            {
+                No = "SUNGLASS02",
+                Name = "Vintage Round Sunglasses",
+                Summary = "Retro round frame sunglasses",
+                Description = "Vintage Round Frame Sunglasses with UV400 Protection. Classic design suitable for men and women.",
+                Price = 45m,
+                Category = "sunglasses",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/83/thumbnail.jpg",
+                Attributes = "{\"brand\": \"Steal Frame\", \"discountPercentage\": 7.30, \"stockQuantity\": 63, \"rating\": 4.35}"
+            },
+
+            // ==================== ADDITIONAL AUTOMOTIVE ====================
+            new()
+            {
+                No = "AUTO01",
+                Name = "Car Aux Cable Bluetooth",
+                Summary = "Bluetooth aux adapter for car",
+                Description = "Car Aux Cable Bluetooth Adapter with Hands-Free Calling. Works with all car stereo systems via AUX port.",
+                Price = 22m,
+                Category = "automotive",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/85/thumbnail.jpg",
+                Attributes = "{\"brand\": \"Car Aux\", \"discountPercentage\": 5.60, \"stockQuantity\": 90, \"rating\": 4.15}"
+            },
+            new()
+            {
+                No = "AUTO02",
+                Name = "Shock Absorber Spring Set",
+                Summary = "Heavy duty shock absorbers",
+                Description = "Heavy Duty Shock Absorber Spring Set for Off-Road Vehicles. Improved ride comfort and handling.",
+                Price = 180m,
+                Category = "automotive",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/86/thumbnail.jpg",
+                Attributes = "{\"brand\": \"Shock Absorber\", \"discountPercentage\": 3.20, \"stockQuantity\": 25, \"rating\": 4.58}"
+            },
+
+            // ==================== MOTORCYCLE ====================
+            new()
+            {
+                No = "MOTO01",
+                Name = "METRO 70cc Motorcycle",
+                Summary = "METRO 70cc basic motorcycle",
+                Description = "METRO 70cc Motorcycle - MR70. Economical fuel consumption, reliable 4-stroke engine, perfect for daily commute.",
+                Price = 750m,
+                Category = "motorcycle",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/91/thumbnail.jpg",
+                Attributes = "{\"brand\": \"METRO\", \"discountPercentage\": 2.50, \"stockQuantity\": 12, \"rating\": 4.30}"
+            },
+            new()
+            {
+                No = "MOTO02",
+                Name = "BRAVE BULL Sport Bike",
+                Summary = "Sport motorcycle 150cc",
+                Description = "BRAVE BULL 150cc Sport Bike with digital dashboard, disc brakes, and aerodynamic design. Thrilling riding experience.",
+                Price = 1850m,
+                Category = "motorcycle",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/92/thumbnail.jpg",
+                Attributes = "{\"brand\": \"BRAVE BULL\", \"discountPercentage\": 4.80, \"stockQuantity\": 8, \"rating\": 4.42}"
+            },
+
+            // ==================== LIGHTING ====================
+            new()
+            {
+                No = "LIGHT01",
+                Name = "Smart LED Ceiling Light",
+                Summary = "Dimmable smart ceiling light",
+                Description = "Smart LED Ceiling Light with Remote Control and App integration. Adjustable color temperature and brightness.",
+                Price = 65m,
+                Category = "lighting",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/93/thumbnail.jpg",
+                Attributes = "{\"brand\": \"Xiangle\", \"discountPercentage\": 8.15, \"stockQuantity\": 55, \"rating\": 4.48}"
+            },
+            new()
+            {
+                No = "LIGHT02",
+                Name = "Neon LED Sign Light",
+                Summary = "Decorative neon LED sign",
+                Description = "Neon LED Light Sign for Room Decoration. USB powered, energy efficient, and perfect for bedrooms, cafes, or parties.",
+                Price = 25m,
+                Category = "lighting",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/94/thumbnail.jpg",
+                Attributes = "{\"brand\": \"Neon LED Light\", \"discountPercentage\": 12.00, \"stockQuantity\": 72, \"rating\": 4.55}"
+            },
+
+            // ==================== ADDITIONAL LAPTOPS ====================
+            new()
+            {
+                No = "THINKPAD",
+                Name = "Lenovo ThinkPad X1 Carbon",
+                Summary = "Lenovo business ultrabook",
+                Description = "Lenovo ThinkPad X1 Carbon Gen 10 with Intel 12th Gen, 14\" 2.8K OLED display, 16GB RAM, 512GB SSD. Ultimate business laptop.",
+                Price = 1899m,
+                Category = "laptops",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/8/thumbnail.jpg",
+                Attributes = "{\"brand\": \"Lenovo\", \"discountPercentage\": 6.50, \"stockQuantity\": 40, \"rating\": 4.62}"
+            },
+            new()
+            {
+                No = "DELLXPS",
+                Name = "Dell XPS 15",
+                Summary = "Dell premium 15-inch laptop",
+                Description = "Dell XPS 15 with Intel Core i7, 15.6\" 3.5K OLED, 32GB RAM, 1TB SSD, NVIDIA GeForce RTX 3050 Ti. Creation powerhouse.",
+                Price = 2199m,
+                Category = "laptops",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/9/thumbnail.jpg",
+                Attributes = "{\"brand\": \"Dell\", \"discountPercentage\": 5.25, \"stockQuantity\": 28, \"rating\": 4.55}"
+            },
+
+            // ==================== KITCHEN & HOME ====================
+            new()
+            {
+                No = "SHELF01",
+                Name = "Kitchen Storage Shelf",
+                Summary = "Multi-tier kitchen organizer",
+                Description = "Kitchen Shelf Multi Purpose Rack with 3 tiers. Stainless steel construction, perfect for organizing spices, utensils, and cookware.",
+                Price = 45m,
+                Category = "furniture",
+                ImageUrl = "https://cdn.dummyjson.com/product-images/27/thumbnail.jpg",
+                Attributes = "{\"brand\": \"Kitchen Shelf\", \"discountPercentage\": 5.80, \"stockQuantity\": 48, \"rating\": 4.32}"
             }
         };
     }

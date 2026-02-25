@@ -22,6 +22,7 @@ docker compose -f docker-compose.dev-minimal.yml up -d
 ```
 
 **Bao gồm:**
+
 - ✅ PostgreSQL (nexusdb)
 - ✅ Redis (basketdb)
 - ✅ RabbitMQ
@@ -31,6 +32,7 @@ docker compose -f docker-compose.dev-minimal.yml up -d
 - ⚠️ Các services khác: Comment/uncomment trong file theo nhu cầu
 
 **Lợi ích:**
+
 - Build nhanh gấp 5-10 lần (chỉ 2-3 services thay vì 15)
 - Tiết kiệm RAM (từ 8GB → 2GB)
 - Hot-reload vẫn hoạt động
@@ -83,6 +85,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 #### 3. Layer Caching Strategy
 
 Dockerfile sử dụng layer caching tối ưu:
+
 1. Copy .csproj files → Restore (cached nếu dependencies không đổi)
 2. Copy source code → Build (cached nếu code không đổi)
 3. Publish → Final image
@@ -94,11 +97,11 @@ Dockerfile sử dụng layer caching tối ưu:
 
 ## 📊 So Sánh Performance
 
-| Setup | Services | First Build | Rebuild | RAM Usage | Disk |
-|-------|----------|-------------|---------|-----------|------|
-| Full Stack | 15 services | ~15-20 min | ~5-8 min | 8GB | 5GB |
-| Minimal Dev | 2-3 services | ~2-3 min | ~30 sec | 2GB | 1GB |
-| Production | Build only | ~5 min | ~30 sec | N/A | 200MB/service |
+| Setup       | Services     | First Build | Rebuild  | RAM Usage | Disk          |
+| ----------- | ------------ | ----------- | -------- | --------- | ------------- |
+| Full Stack  | 15 services  | ~15-20 min  | ~5-8 min | 8GB       | 5GB           |
+| Minimal Dev | 2-3 services | ~2-3 min    | ~30 sec  | 2GB       | 1GB           |
+| Production  | Build only   | ~5 min      | ~30 sec  | N/A       | 200MB/service |
 
 ---
 
@@ -153,12 +156,14 @@ Nếu build trên CI/CD (GitHub Actions, GitLab CI), enable layer caching:
 ## 🎯 Development Strategies by Team Size
 
 ### 1 Developer (Solo)
+
 ```powershell
 # Minimal setup
 docker compose -f docker-compose.dev-minimal.yml up -d
 ```
 
 **Run thêm services trong VS/Rider:**
+
 - Run Product.API từ IDE
 - Run Customer.API từ IDE
 - Debug trực tiếp, hot-reload ngay lập tức
@@ -166,6 +171,7 @@ docker compose -f docker-compose.dev-minimal.yml up -d
 ---
 
 ### 2-5 Developers (Small Team)
+
 ```powershell
 # Infrastructure + Domain services
 docker compose up -d nexusdb basketdb rabbitmq elasticsearch ocelot.apigw react.client
@@ -176,6 +182,7 @@ Mỗi developer run services riêng của mình từ IDE.
 ---
 
 ### 5+ Developers (Large Team)
+
 - Infrastructure: Local Docker
 - Services: Shared Dev Environment (Kubernetes/Docker Swarm)
 - Developers chỉ run service đang develop
@@ -222,17 +229,20 @@ docker system prune -a --volumes
 ## 📝 Best Practices
 
 ### Development Mode
+
 - ✅ Use `docker-compose.dev-minimal.yml`
 - ✅ Run services from IDE for better debugging
 - ✅ Only containerize infrastructure (DB, Redis, RabbitMQ)
 
 ### Production Mode
+
 - ✅ Use `docker-compose.yml` (multi-stage builds)
 - ✅ Enable BuildKit for parallel builds
 - ✅ Pre-pull base images
 - ✅ Use layer caching in CI/CD
 
 ### General
+
 - ✅ Keep .dockerignore updated
 - ✅ Minimize layers in Dockerfile
 - ✅ Use specific base image tags (not `latest`)
@@ -271,16 +281,19 @@ docker stats
 ## 📈 Expected Performance
 
 ### Minimal Dev Setup
+
 - **First run:** 2-3 minutes (pull images + build gateway + frontend)
 - **Subsequent runs:** 10-30 seconds (containers already exist)
 - **Hot-reload:** Instant (dotnet watch detects changes)
 
 ### Full Dev Setup (15 services)
+
 - **First run:** 15-20 minutes (build all services)
 - **Subsequent runs:** 5-8 minutes (cached layers)
 - **Hot-reload:** Instant
 
 ### Production Build (với BuildKit)
+
 - **First build:** 5-10 minutes per service
 - **Rebuild (cache hit):** 30 seconds - 2 minutes
 - **Parallel build:** ~40-50% faster than sequential
@@ -292,6 +305,7 @@ docker stats
 **Sử dụng `docker-compose.dev-minimal.yml` cho development hàng ngày!**
 
 Chỉ run full stack khi:
+
 - Integration testing toàn bộ hệ thống
 - Demo cho client
 - QA testing

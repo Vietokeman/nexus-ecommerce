@@ -14,6 +14,7 @@ Comprehensive guide for building distributed microservices using ASP.NET Core 8.
 ## When to Apply
 
 Reference these guidelines when:
+
 - Designing new microservices or splitting monoliths
 - Implementing service-to-service communication
 - Configuring API Gateway routes and policies
@@ -25,16 +26,16 @@ Reference these guidelines when:
 
 ## Technology Stack
 
-| Technology | Purpose | Version |
-|------------|---------|---------|
-| ASP.NET Core | Web Framework | 8.0 |
-| Docker | Containerization | Latest |
-| Ocelot | API Gateway | 23.0.0 |
-| RabbitMQ | Message Broker | 3-management-alpine |
-| PostgreSQL (PostGIS) | Database | 16-3.4 |
-| Redis | Caching | alpine |
-| Elasticsearch | Logging & Search | 7.17.2 |
-| Kibana | Log Visualization | 7.17.2 |
+| Technology           | Purpose           | Version             |
+| -------------------- | ----------------- | ------------------- |
+| ASP.NET Core         | Web Framework     | 8.0                 |
+| Docker               | Containerization  | Latest              |
+| Ocelot               | API Gateway       | 23.0.0              |
+| RabbitMQ             | Message Broker    | 3-management-alpine |
+| PostgreSQL (PostGIS) | Database          | 16-3.4              |
+| Redis                | Caching           | alpine              |
+| Elasticsearch        | Logging & Search  | 7.17.2              |
+| Kibana               | Log Visualization | 7.17.2              |
 
 ## Project Structure
 
@@ -76,15 +77,15 @@ distributed-ecommerce-platform/
 
 ## Rule Categories by Priority
 
-| Priority | Category | Impact | Prefix |
-|----------|----------|--------|--------|
-| 1 | Service Design | CRITICAL | `service-` |
-| 2 | API Gateway | CRITICAL | `gateway-` |
-| 3 | Event Communication | HIGH | `event-` |
-| 4 | Data Management | HIGH | `data-` |
-| 5 | Resilience | MEDIUM-HIGH | `resilience-` |
-| 6 | Observability | MEDIUM | `observability-` |
-| 7 | Security | MEDIUM | `security-` |
+| Priority | Category            | Impact      | Prefix           |
+| -------- | ------------------- | ----------- | ---------------- |
+| 1        | Service Design      | CRITICAL    | `service-`       |
+| 2        | API Gateway         | CRITICAL    | `gateway-`       |
+| 3        | Event Communication | HIGH        | `event-`         |
+| 4        | Data Management     | HIGH        | `data-`          |
+| 5        | Resilience          | MEDIUM-HIGH | `resilience-`    |
+| 6        | Observability       | MEDIUM      | `observability-` |
+| 7        | Security            | MEDIUM      | `security-`      |
 
 ## Quick Reference
 
@@ -236,11 +237,9 @@ public class PaymentCompletedEventHandler : IEventHandler<PaymentCompletedEvent>
     {
       "DownstreamPathTemplate": "/api/v1/{everything}",
       "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        { "Host": "product.api", "Port": 80 }
-      ],
+      "DownstreamHostAndPorts": [{ "Host": "product.api", "Port": 80 }],
       "UpstreamPathTemplate": "/products/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+      "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"]
     }
   ]
 }
@@ -248,15 +247,15 @@ public class PaymentCompletedEventHandler : IEventHandler<PaymentCompletedEvent>
 
 ## Anti-Patterns to Avoid
 
-| ❌ Anti-Pattern | ✅ Correct Pattern |
-|----------------|-------------------|
-| Shared database between services | Database per service |
-| Synchronous calls for long operations | Async messaging with events |
-| No retry logic for HTTP calls | Polly retry with exponential backoff |
-| Hardcoded service URLs | Service discovery or configuration |
-| No health checks | /health endpoints for all services |
-| Large Docker images (1GB+) | Multi-stage builds (<200MB) |
-| Running all services locally | Selective services + infrastructure |
+| ❌ Anti-Pattern                       | ✅ Correct Pattern                   |
+| ------------------------------------- | ------------------------------------ |
+| Shared database between services      | Database per service                 |
+| Synchronous calls for long operations | Async messaging with events          |
+| No retry logic for HTTP calls         | Polly retry with exponential backoff |
+| Hardcoded service URLs                | Service discovery or configuration   |
+| No health checks                      | /health endpoints for all services   |
+| Large Docker images (1GB+)            | Multi-stage builds (<200MB)          |
+| Running all services locally          | Selective services + infrastructure  |
 
 ## Performance Optimization
 
