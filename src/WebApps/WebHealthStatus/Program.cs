@@ -14,6 +14,8 @@ builder.Services.AddHealthChecksUI(opt =>
     opt.AddHealthCheckEndpoint("Identity API", "http://identity.api:80/health");
     opt.AddHealthCheckEndpoint("Hangfire API", "http://hangfire.api:80/health");
     opt.AddHealthCheckEndpoint("Ocelot Gateway", "http://ocelot.apigw:80/health");
+    opt.AddHealthCheckEndpoint("FlashSale API", "http://flashsale.api:80/health");
+    opt.AddHealthCheckEndpoint("GroupBuy API", "http://groupbuy.api:80/health");
 }).AddInMemoryStorage();
 
 var app = builder.Build();
