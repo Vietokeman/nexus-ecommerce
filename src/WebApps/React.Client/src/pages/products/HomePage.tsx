@@ -207,7 +207,6 @@ export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [_totalResults, setTotalResults] = useState(0);
   const [sort, setSortValue] = useState<string>('');
   const [brandFilters, setBrandFilters] = useState<Set<string>>(new Set());
   const [categoryFilters, setCategoryFilters] = useState<Set<string>>(new Set());
@@ -242,7 +241,6 @@ export default function HomePage() {
         const { data } = await api.get(API_ENDPOINTS.PRODUCTS.LIST);
         const list = Array.isArray(data) ? data : (data.result ?? []);
         setProducts(list);
-        setTotalResults(list.length);
       } catch {
         toast.error('Error fetching products, please try again later');
       } finally {
@@ -343,21 +341,27 @@ export default function HomePage() {
           </IconButton>
 
           <Stack rowGap={2} mt={4}>
-            <Typography sx={{ cursor: 'pointer' }} variant="body2">
-              Totes
-            </Typography>
-            <Typography sx={{ cursor: 'pointer' }} variant="body2">
-              Backpacks
-            </Typography>
-            <Typography sx={{ cursor: 'pointer' }} variant="body2">
-              Travel Bags
-            </Typography>
-            <Typography sx={{ cursor: 'pointer' }} variant="body2">
-              Hip Bags
-            </Typography>
-            <Typography sx={{ cursor: 'pointer' }} variant="body2">
-              Laptop Sleeves
-            </Typography>
+            {categories.map((cat) => (
+              <Typography
+                key={cat.id}
+                sx={{
+                  cursor: 'pointer',
+                  fontWeight: categoryFilters.has(cat.name) ? 600 : 400,
+                  color: categoryFilters.has(cat.name) ? 'primary.main' : 'text.secondary',
+                  '&:hover': { color: 'primary.main' },
+                }}
+                variant="body2"
+                onClick={() => {
+                  const newSet = new Set(categoryFilters);
+                  if (newSet.has(cat.name)) newSet.delete(cat.name);
+                  else newSet.add(cat.name);
+                  setCategoryFilters(newSet);
+                  setPage(1);
+                }}
+              >
+                {cat.name}
+              </Typography>
+            ))}
           </Stack>
 
           {/* Brand filters */}
@@ -367,7 +371,7 @@ export default function HomePage() {
                 <Typography>Brands</Typography>
               </AccordionSummary>
               <AccordionDetails sx={{ p: 0 }}>
-                <FormGroup onChange={handleBrandFilter as never}>
+                <FormGroup onChange={(e) => handleBrandFilter(e as React.ChangeEvent<HTMLInputElement>)}>
                   {brands.map((brand) => (
                     <motion.div
                       key={brand.id}
@@ -395,7 +399,7 @@ export default function HomePage() {
                 <Typography>Category</Typography>
               </AccordionSummary>
               <AccordionDetails sx={{ p: 0 }}>
-                <FormGroup onChange={handleCategoryFilter as never}>
+                <FormGroup onChange={(e) => handleCategoryFilter(e as React.ChangeEvent<HTMLInputElement>)}>
                   {categories.map((cat) => (
                     <motion.div
                       key={cat.id}
