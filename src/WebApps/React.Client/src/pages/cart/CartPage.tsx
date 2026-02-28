@@ -15,9 +15,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import { useCartStore } from '@/store/cart-store';
-
-const SHIPPING = 5.55;
-const TAXES = 2.0;
+import { SHIPPING, TAXES } from '@/constants';
 
 /* ── CartItem sub-component ─────────────────────────────────── */
 interface CartItemProps {
@@ -185,13 +183,13 @@ export function CartContent({ checkout }: CartProps) {
                 <Typography>${SHIPPING}</Typography>
               </Stack>
               <Stack flexDirection="row" justifyContent="space-between">
-                <Typography>Taxes</Typography>
-                <Typography>${TAXES}</Typography>
+                <Typography>Taxes ({TAXES}%)</Typography>
+                <Typography>${((subtotal() * TAXES) / 100).toFixed(2)}</Typography>
               </Stack>
               <hr />
               <Stack flexDirection="row" justifyContent="space-between">
                 <Typography>Total</Typography>
-                <Typography>${subtotal() + SHIPPING + TAXES}</Typography>
+                <Typography>${(subtotal() + SHIPPING + (subtotal() * TAXES) / 100).toFixed(2)}</Typography>
               </Stack>
             </Stack>
           ) : (

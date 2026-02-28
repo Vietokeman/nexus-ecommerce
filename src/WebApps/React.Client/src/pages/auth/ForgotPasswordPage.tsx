@@ -23,13 +23,13 @@ export default function ForgotPasswordPage() {
     reset,
     formState: { errors },
   } = useForm<ForgotForm>();
-  const [status, setStatus] = useState<'idle' | 'pending' | 'fullfilled' | 'rejected'>('idle');
+  const [status, setStatus] = useState<'idle' | 'pending' | 'fulfilled' | 'rejected'>('idle');
 
   const handleForgotPassword = async (data: ForgotForm) => {
     setStatus('pending');
     try {
       await api.post(API_ENDPOINTS.AUTH.FORGOT_PASSWORD, data);
-      setStatus('fullfilled');
+      setStatus('fulfilled');
       toast.success('Password reset link sent to your email');
       reset();
     } catch (err: unknown) {
@@ -45,14 +45,14 @@ export default function ForgotPasswordPage() {
 
   return (
     <AuthLayout
-      title={status === 'fullfilled' ? successTitle : 'Forgot your password?'}
+      title={status === 'fulfilled' ? successTitle : 'Forgot your password?'}
       subtitle={
-        status === 'fullfilled'
+        status === 'fulfilled'
           ? successSubtitle
           : 'Enter your registered email to receive a reset link'
       }
     >
-      {status === 'fullfilled' ? (
+      {status === 'fulfilled' ? (
         <motion.div variants={itemVariants}>
           <Stack alignItems="center" spacing={3} mt={2}>
             <CheckCircleOutlineIcon sx={{ fontSize: 64, color: nexus.purple[500] }} />
@@ -85,7 +85,7 @@ export default function ForgotPasswordPage() {
                 required: 'Please enter your email',
                 pattern: {
                   value:
-                    /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g,
+                    /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
                   message: 'Enter a valid email',
                 },
               })}
