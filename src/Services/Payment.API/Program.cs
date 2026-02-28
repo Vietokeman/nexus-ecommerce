@@ -91,11 +91,8 @@ try
 
     var app = builder.Build();
 
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
+    app.UseSwagger();
+    app.UseSwaggerUI();
 
     app.UseCors("CorsPolicy");
     app.UseSerilogRequestLogging();
@@ -107,7 +104,8 @@ try
     using (var scope = app.Services.CreateScope())
     {
         var db = scope.ServiceProvider.GetRequiredService<PaymentDbContext>();
-        await db.Database.MigrateAsync();
+        // Use EnsureCreatedAsync since no EF migrations exist yet
+        await db.Database.EnsureCreatedAsync();
     }
 
     app.Run();
