@@ -31,6 +31,14 @@ namespace Product.API.Extensions
             services.ConfigureProductionDbContext(configuration);
             services.AddInfrastructureServices();
             services.AddAutoMapper(config => config.AddProfile(new MappingProfile()));
+
+            // Health Checks
+            services.AddHealthChecks()
+                .AddNpgSql(
+                    configuration.GetConnectionString("DefaultConnectionString")!,
+                    name: "postgresql",
+                    tags: new[] { "db", "postgresql" });
+
             return services;
         }
 
