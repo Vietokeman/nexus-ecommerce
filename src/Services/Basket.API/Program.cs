@@ -29,6 +29,13 @@ try
     builder.Services.ConfigureRedis(builder.Configuration);
     builder.Services.ConfigureMassTransit(builder.Configuration); // Add MassTransit with RabbitMQ
     
+    // Health Checks
+    builder.Services.AddHealthChecks()
+        .AddRedis(
+            builder.Configuration["CacheSettings:ConnectionString"] ?? "localhost:6379",
+            name: "redis",
+            tags: new[] { "cache", "redis" });
+
     // Add services
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
@@ -36,15 +43,13 @@ try
 
     var app = builder.Build();
 
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
+    app.UseSwagger();
+    app.UseSwaggerUI();
 
     app.UseHttpsRedirection();
     app.UseAuthorization();
     app.MapControllers();
+    app.MapHealthChecks("/health");
     app.Run();
 }
 catch (Exception ex)
