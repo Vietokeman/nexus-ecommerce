@@ -18,15 +18,15 @@ export default function Providers({ children }: ProvidersProps) {
         <CssBaseline />
         {children}
         <ToastContainer
-          position="bottom-right"
-          autoClose={3000}
+          position="top-right"
+          autoClose={1500}
           hideProgressBar={false}
           newestOnTop
           closeOnClick
           pauseOnFocusLoss={false}
           draggable
           pauseOnHover
-          theme="colored"
+          theme="light"
         />
       </ThemeProvider>
       <ReactQueryDevtools initialIsOpen={false} />
