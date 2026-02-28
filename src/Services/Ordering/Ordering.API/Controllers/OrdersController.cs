@@ -109,20 +109,23 @@ namespace Ordering.API.Controllers
             {
                 HostName = "localhost",
             };
-            var connection = await connectionFactory.CreateConnectionAsync();
-            using var channel = await connection.CreateChannelAsync();
-            await channel.QueueDeclareAsync(
+            using var connection = connectionFactory.CreateConnection();
+            using var channel = connection.CreateModel();
+            channel.QueueDeclare(
                 queue: "order",
-                exclusive: false
+                durable: false,
+                exclusive: false,
+                autoDelete: false,
+                arguments: null
             );
 
             // Publish a test message
             var message = "Test message from API";
             var body = System.Text.Encoding.UTF8.GetBytes(message);
-            await channel.BasicPublishAsync(exchange: string.Empty, routingKey: "order", body: body);
+            channel.BasicPublish(exchange: string.Empty, routingKey: "order", basicProperties: null, body: body);
 
             // Try to consume the message
-            var result = await channel.BasicGetAsync(queue: "order", autoAck: true);
+            var result = channel.BasicGet(queue: "order", autoAck: true);
             if (result != null)
             {
                 var receivedMessage = System.Text.Encoding.UTF8.GetString(result.Body.ToArray());
