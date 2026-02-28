@@ -1,6 +1,31 @@
 {
   "Routes": [
     {
+      "DownstreamPathTemplate": "/signin-google",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "identity.api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/signin-google",
+      "UpstreamHttpMethod": ["GET", "POST"]
+    },
+    {
+      "DownstreamPathTemplate": "/signin-github",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "identity.api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/signin-github",
+      "UpstreamHttpMethod": ["GET", "POST"]
+    },
+    {
+      "SwaggerKey": "product",
       "DownstreamPathTemplate": "/api/products",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -30,6 +55,7 @@
       }
     },
     {
+      "SwaggerKey": "product",
       "DownstreamPathTemplate": "/api/products/{id}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -58,6 +84,7 @@
       }
     },
     {
+      "SwaggerKey": "product",
       "DownstreamPathTemplate": "/api/products/get-product-by-no/{productNo}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -74,6 +101,7 @@
       }
     },
     {
+      "SwaggerKey": "customer",
       "DownstreamPathTemplate": "/api/customers",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -102,6 +130,7 @@
       }
     },
     {
+      "SwaggerKey": "customer",
       "DownstreamPathTemplate": "/api/customer/{username}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -118,6 +147,7 @@
       }
     },
     {
+      "SwaggerKey": "customer",
       "DownstreamPathTemplate": "/api/customer",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -137,6 +167,7 @@
       }
     },
     {
+      "SwaggerKey": "basket",
       "DownstreamPathTemplate": "/api/baskets/{username}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -161,6 +192,7 @@
       }
     },
     {
+      "SwaggerKey": "basket",
       "DownstreamPathTemplate": "/api/baskets",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -180,6 +212,27 @@
       }
     },
     {
+      "SwaggerKey": "basket",
+      "DownstreamPathTemplate": "/api/baskets/checkout",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "basket.api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/baskets/checkout",
+      "UpstreamHttpMethod": ["POST"],
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 3
+      }
+    },
+    {
+      "SwaggerKey": "ordering",
       "DownstreamPathTemplate": "/api/v1/orders",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -208,6 +261,7 @@
       }
     },
     {
+      "SwaggerKey": "ordering",
       "DownstreamPathTemplate": "/api/v1/orders/{id}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -227,6 +281,7 @@
       }
     },
     {
+      "SwaggerKey": "ordering",
       "DownstreamPathTemplate": "/api/v1/orders/{username}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -243,7 +298,8 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/payments",
+      "SwaggerKey": "payment",
+      "DownstreamPathTemplate": "/api/payment/create",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -251,11 +307,12 @@
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/api/payments",
+      "UpstreamPathTemplate": "/api/payment/create",
       "UpstreamHttpMethod": ["POST"]
     },
     {
-      "DownstreamPathTemplate": "/api/payments/{orderNo}/status",
+      "SwaggerKey": "payment",
+      "DownstreamPathTemplate": "/api/payment/{orderNo}/status",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -263,11 +320,12 @@
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/api/payments/{orderNo}/status",
+      "UpstreamPathTemplate": "/api/payment/{orderNo}/status",
       "UpstreamHttpMethod": ["GET"]
     },
     {
-      "DownstreamPathTemplate": "/api/payments/code/{orderCode}/status",
+      "SwaggerKey": "payment",
+      "DownstreamPathTemplate": "/api/payment/code/{orderCode}/status",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -275,11 +333,12 @@
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/api/payments/code/{orderCode}/status",
+      "UpstreamPathTemplate": "/api/payment/code/{orderCode}/status",
       "UpstreamHttpMethod": ["GET"]
     },
     {
-      "DownstreamPathTemplate": "/api/payments/cancel/{orderNo}",
+      "SwaggerKey": "payment",
+      "DownstreamPathTemplate": "/api/payment/cancel/{orderNo}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -287,11 +346,12 @@
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/api/payments/cancel/{orderNo}",
+      "UpstreamPathTemplate": "/api/payment/cancel/{orderNo}",
       "UpstreamHttpMethod": ["POST"]
     },
     {
-      "DownstreamPathTemplate": "/api/payments/user/{userId}",
+      "SwaggerKey": "payment",
+      "DownstreamPathTemplate": "/api/payment/user/{userId}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -299,11 +359,12 @@
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/api/payments/user/{userId}",
+      "UpstreamPathTemplate": "/api/payment/user/{userId}",
       "UpstreamHttpMethod": ["GET"]
     },
     {
-      "DownstreamPathTemplate": "/api/payments/payos-callback",
+      "SwaggerKey": "payment",
+      "DownstreamPathTemplate": "/api/payment/payos-callback",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -311,10 +372,11 @@
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/api/payments/payos-callback",
+      "UpstreamPathTemplate": "/api/payment/payos-callback",
       "UpstreamHttpMethod": ["POST"]
     },
     {
+      "SwaggerKey": "identity",
       "DownstreamPathTemplate": "/api/auth/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -334,6 +396,7 @@
       }
     },
     {
+      "SwaggerKey": "identity",
       "DownstreamPathTemplate": "/api/user",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -346,6 +409,7 @@
       "UpstreamHttpMethod": ["GET"]
     },
     {
+      "SwaggerKey": "identity",
       "DownstreamPathTemplate": "/api/user/{id}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -358,6 +422,7 @@
       "UpstreamHttpMethod": ["GET", "DELETE"]
     },
     {
+      "SwaggerKey": "identity",
       "DownstreamPathTemplate": "/api/permission",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -370,6 +435,7 @@
       "UpstreamHttpMethod": ["GET", "POST"]
     },
     {
+      "SwaggerKey": "identity",
       "DownstreamPathTemplate": "/api/permission/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -382,6 +448,7 @@
       "UpstreamHttpMethod": ["GET", "DELETE"]
     },
     {
+      "SwaggerKey": "flashsale",
       "DownstreamPathTemplate": "/api/flashsales/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -406,6 +473,7 @@
       }
     },
     {
+      "SwaggerKey": "groupbuy",
       "DownstreamPathTemplate": "/api/groupbuys/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -430,6 +498,7 @@
       }
     },
     {
+      "SwaggerKey": "inventory",
       "DownstreamPathTemplate": "/api/inventory/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -440,6 +509,107 @@
       ],
       "UpstreamPathTemplate": "/api/inventory/{everything}",
       "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"]
+    }
+  ],
+  "SwaggerEndPoints": [
+    {
+      "Key": "product",
+      "TransformByOcelotConfig": false,
+      "Config": [
+        {
+          "Name": "Product API",
+          "Version": "v1",
+          "Url": "http://product.api:80/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "customer",
+      "TransformByOcelotConfig": false,
+      "Config": [
+        {
+          "Name": "Customer API",
+          "Version": "v1",
+          "Url": "http://customer.api:80/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "basket",
+      "TransformByOcelotConfig": false,
+      "Config": [
+        {
+          "Name": "Basket API",
+          "Version": "v1",
+          "Url": "http://basket.api:80/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "ordering",
+      "TransformByOcelotConfig": false,
+      "Config": [
+        {
+          "Name": "Ordering API",
+          "Version": "v1",
+          "Url": "http://ordering.api:80/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "payment",
+      "TransformByOcelotConfig": false,
+      "Config": [
+        {
+          "Name": "Payment API",
+          "Version": "v1",
+          "Url": "http://payment.api:80/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "identity",
+      "TransformByOcelotConfig": false,
+      "Config": [
+        {
+          "Name": "Identity API",
+          "Version": "v1",
+          "Url": "http://identity.api:80/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "flashsale",
+      "TransformByOcelotConfig": false,
+      "Config": [
+        {
+          "Name": "FlashSale API",
+          "Version": "v1",
+          "Url": "http://flashsale.api:80/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "groupbuy",
+      "TransformByOcelotConfig": false,
+      "Config": [
+        {
+          "Name": "GroupBuy API",
+          "Version": "v1",
+          "Url": "http://groupbuy.api:80/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "inventory",
+      "TransformByOcelotConfig": false,
+      "Config": [
+        {
+          "Name": "Inventory API",
+          "Version": "v1",
+          "Url": "http://inventory.api:80/swagger/v1/swagger.json"
+        }
+      ]
     }
   ],
   "GlobalConfiguration": {
