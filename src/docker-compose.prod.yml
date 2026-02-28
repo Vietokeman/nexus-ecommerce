@@ -1,12 +1,11 @@
 # ==============================================================================
-# DEVELOPMENT OVERRIDE - Hot Reload Mode
+# PRODUCTION / DEPLOYMENT COMPOSE
 # ==============================================================================
-# Sử dụng SDK image + Volume Mapping + dotnet watch run
-# Khi sửa code trên máy host, container tự động rebuild & reload.
+# Dùng Dockerfile build (multi-stage) → image nhỏ gọn, nhanh, ít RAM
+# KHÔNG dùng dotnet watch, KHÔNG mount volume code
 #
 # CÁCH DÙNG:
-#   docker compose up -d                    → Dev mode (hot-reload)
-#   docker compose -f docker-compose.yml up → Production mode (Dockerfile build)
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
 # ==============================================================================
 
 services:
@@ -15,7 +14,7 @@ services:
     container_name: src-nexusdb
     environment:
       - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=0977452762Viet
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-0977452762Viet}
       - POSTGRES_DB=NexusDb
     restart: always
     ports:
@@ -65,39 +64,6 @@ services:
       retries: 5
       start_period: 30s
 
-  pgadmin:
-    container_name: src-pgadmin
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@tedu-microservice.com
-      - PGADMIN_DEFAULT_PASSWORD=admin1234
-    restart: always
-    ports:
-      - "5050:80"
-    volumes:
-      - pgadmin_data:/root/pgadmin
-    profiles:
-      - tools
-    deploy:
-      resources:
-        limits:
-          memory: 256M
-
-  portainer:
-    container_name: src-portainer
-    restart: always
-    ports:
-      - "8080:8080"
-      - "9000:9000"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
-    profiles:
-      - tools
-    deploy:
-      resources:
-        limits:
-          memory: 128M
-
   elasticsearch:
     container_name: src-elasticsearch
     environment:
@@ -121,147 +87,95 @@ services:
       retries: 5
       start_period: 60s
 
-  kibana:
-    container_name: src-kibana
-    environment:
-      - ELASTICSEARCH_URL=http://elasticsearch:9200
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-    depends_on:
-      elasticsearch:
-        condition: service_healthy
-    ports:
-      - "5601:5601"
-    profiles:
-      - monitoring
-    deploy:
-      resources:
-        limits:
-          memory: 512M
-
-  # ==================== MICROSERVICES (SDK + Volume + Hot Reload) ====================
-  # Mỗi service dùng .NET SDK image, mount code từ host, chạy dotnet watch run.
-  # Khi sửa file .cs/.json trên máy → container tự detect & rebuild.
-
+  # ==================== MICROSERVICES (Built images) ====================
   product.api:
-    image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: src-product-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - DOTNET_USE_POLLING_FILE_WATCHER=1
-      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=ProductDb;Username=admin;Password=0977452762Viet;"
-    volumes:
-      - .:/src
-    working_dir: /src/Services/Product.API
-    command: dotnet watch run --no-launch-profile
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=ProductDb;Username=admin;Password=${POSTGRES_PASSWORD:-0977452762Viet};"
+      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
     depends_on:
       nexusdb:
         condition: service_healthy
     deploy:
       resources:
         limits:
-          memory: 512M
+          memory: 256M
     restart: always
 
   customer.api:
-    image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: src-customer-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - DOTNET_USE_POLLING_FILE_WATCHER=1
-      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=CustomerDb;Username=admin;Password=0977452762Viet;"
-    volumes:
-      - .:/src
-    working_dir: /src/Services/Customer.API
-    command: dotnet watch run --no-launch-profile
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=CustomerDb;Username=admin;Password=${POSTGRES_PASSWORD:-0977452762Viet};"
     depends_on:
       nexusdb:
         condition: service_healthy
     deploy:
       resources:
         limits:
-          memory: 512M
+          memory: 256M
     restart: always
 
   basket.api:
-    image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: src-basket-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - DOTNET_USE_POLLING_FILE_WATCHER=1
-      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
       - "CacheSettings:ConnectionString=basketdb:6379"
-    volumes:
-      - .:/src
-    working_dir: /src/Services/Basket.API
-    command: dotnet watch run --no-launch-profile
+      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
     depends_on:
       basketdb:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
     deploy:
       resources:
         limits:
-          memory: 512M
+          memory: 256M
     restart: always
 
   ordering.api:
-    image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: src-ordering-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - DOTNET_USE_POLLING_FILE_WATCHER=1
-      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=OrderDb;Username=admin;Password=0977452762Viet;"
-    volumes:
-      - .:/src
-    working_dir: /src/Services/Ordering/Ordering.API
-    command: dotnet watch run --no-launch-profile
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=OrderDb;Username=admin;Password=${POSTGRES_PASSWORD:-0977452762Viet};"
+      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
     depends_on:
       nexusdb:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
     deploy:
       resources:
         limits:
-          memory: 512M
+          memory: 256M
     restart: always
 
   inventory.api:
-    image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: src-inventory-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - ASPNETCORE_HTTPS_PORTS=443
-      - DOTNET_USE_POLLING_FILE_WATCHER=1
-      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=InventoryDb;Username=admin;Password=0977452762Viet;"
-    volumes:
-      - .:/src
-    working_dir: /src/Services/Inventory.Product.API
-    command: dotnet watch run --no-launch-profile
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=InventoryDb;Username=admin;Password=${POSTGRES_PASSWORD:-0977452762Viet};"
     depends_on:
       nexusdb:
         condition: service_healthy
     deploy:
       resources:
         limits:
-          memory: 512M
+          memory: 256M
     restart: always
 
   payment.api:
-    image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: src-payment-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - DOTNET_USE_POLLING_FILE_WATCHER=1
-      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=PaymentDb;Username=admin;Password=0977452762Viet;"
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=PaymentDb;Username=admin;Password=${POSTGRES_PASSWORD:-0977452762Viet};"
       - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
       - "PayOSSettings:ClientId=0386ff7b-5d12-419f-8471-5015b22aff94"
       - "PayOSSettings:ApiKey=6d78ef9e-4c3c-47be-b750-89583c33948a"
@@ -272,12 +186,7 @@ services:
       - "SmtpSettings:Port=587"
       - "SmtpSettings:UserName=vietbmt19@gmail.com"
       - "SmtpSettings:Password=raka azkp yhzv ltgd"
-      - "Serilog:Using:0=Serilog.Sinks.Elasticsearch"
-      - "Serilog:WriteTo:0:Args:nodeUris=http://elasticsearch:9200"
-    volumes:
-      - .:/src
-    working_dir: /src/Services/Payment.API
-    command: dotnet watch run --no-launch-profile
+      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
     depends_on:
       nexusdb:
         condition: service_healthy
@@ -288,28 +197,21 @@ services:
     deploy:
       resources:
         limits:
-          memory: 512M
+          memory: 256M
     restart: always
 
   hangfire.api:
-    image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: src-hangfire-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - DOTNET_USE_POLLING_FILE_WATCHER=1
-      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
-      - "ConnectionStrings:HangfireConnection=Host=nexusdb;Port=5432;Database=HangfireDb;Username=admin;Password=0977452762Viet;"
+      - "ConnectionStrings:HangfireConnection=Host=nexusdb;Port=5432;Database=HangfireDb;Username=admin;Password=${POSTGRES_PASSWORD:-0977452762Viet};"
       - "SmtpSettings:Host=smtp.gmail.com"
       - "SmtpSettings:Port=587"
       - "SmtpSettings:UserName=vietbmt19@gmail.com"
       - "SmtpSettings:Password=raka azkp yhzv ltgd"
       - "GatewayUrl=http://ocelot.apigw:80"
       - "ElasticConfiguration:Uri=http://elasticsearch:9200"
-    volumes:
-      - .:/src
-    working_dir: /src/Services/Hangfire.API
-    command: dotnet watch run --no-launch-profile
     depends_on:
       nexusdb:
         condition: service_healthy
@@ -318,19 +220,16 @@ services:
     deploy:
       resources:
         limits:
-          memory: 512M
+          memory: 256M
     restart: always
 
   identity.api:
-    image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: src-identity-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - DOTNET_USE_POLLING_FILE_WATCHER=1
-      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=IdentityDb;Username=admin;Password=0977452762Viet;"
-      - "JwtSettings:Secret=YourSuperSecretKeyHere_MustBeAtLeast32Characters!"
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=IdentityDb;Username=admin;Password=${POSTGRES_PASSWORD:-0977452762Viet};"
+      - "JwtSettings:Secret=${JWT_SECRET:-YourSuperSecretKeyHere_MustBeAtLeast32Characters!}"
       - "JwtSettings:Issuer=distributed-ecommerce-platform"
       - "JwtSettings:Audience=distributed-ecommerce-client"
       - "SmtpSettings:Host=smtp.gmail.com"
@@ -338,10 +237,11 @@ services:
       - "SmtpSettings:UserName=vietbmt19@gmail.com"
       - "SmtpSettings:Password=raka azkp yhzv ltgd"
       - "ElasticConfiguration:Uri=http://elasticsearch:9200"
-    volumes:
-      - .:/src
-    working_dir: /src/Services/Identity.API
-    command: dotnet watch run --no-launch-profile
+      - "OAuthSettings:Google:ClientId=336824716010-868lqpjtj4rglnks5utm6ri23c38glol.apps.googleusercontent.com"
+      - "OAuthSettings:Google:ClientSecret=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"
+      - "OAuthSettings:GitHub:ClientId=Ov23liyYKB6kkKWyzQ5N"
+      - "OAuthSettings:GitHub:ClientSecret=afb140df7659c447d8e4974feb2191a54946756c"
+      - "FrontendUrl=http://localhost:3000"
     depends_on:
       nexusdb:
         condition: service_healthy
@@ -350,134 +250,145 @@ services:
     deploy:
       resources:
         limits:
-          memory: 512M
+          memory: 256M
     restart: always
 
   flashsale.api:
-    image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: src-flashsale-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - DOTNET_USE_POLLING_FILE_WATCHER=1
-      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=FlashSaleDb;Username=admin;Password=0977452762Viet;"
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=FlashSaleDb;Username=admin;Password=${POSTGRES_PASSWORD:-0977452762Viet};"
       - "ConnectionStrings:Redis=basketdb:6379"
       - "ElasticConfiguration:Uri=http://elasticsearch:9200"
-    volumes:
-      - .:/src
-    working_dir: /src/Services/FlashSale.API
-    command: dotnet watch run --no-launch-profile
     depends_on:
       nexusdb:
         condition: service_healthy
       basketdb:
         condition: service_healthy
-      elasticsearch:
-        condition: service_healthy
     deploy:
       resources:
         limits:
-          memory: 512M
+          memory: 256M
     restart: always
 
   groupbuy.api:
-    image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: src-groupbuy-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - DOTNET_USE_POLLING_FILE_WATCHER=1
-      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=GroupBuyDb;Username=admin;Password=0977452762Viet;"
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=GroupBuyDb;Username=admin;Password=${POSTGRES_PASSWORD:-0977452762Viet};"
       - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
       - "ElasticConfiguration:Uri=http://elasticsearch:9200"
-    volumes:
-      - .:/src
-    working_dir: /src/Services/GroupBuy.API
-    command: dotnet watch run --no-launch-profile
     depends_on:
       nexusdb:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-      elasticsearch:
-        condition: service_healthy
     deploy:
       resources:
         limits:
-          memory: 512M
+          memory: 256M
     restart: always
 
-  # ==================== API GATEWAY (SDK + Volume + Hot Reload) ====================
+  # ==================== API GATEWAY ====================
   ocelot.apigw:
-    image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: src-ocelot-apigw
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - DOTNET_USE_POLLING_FILE_WATCHER=1
-      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
       - "ElasticConfiguration:Uri=http://elasticsearch:9200"
-    volumes:
-      - .:/src
-    working_dir: /src/APIGateWays/OcelotApiGw
-    command: dotnet watch run --no-launch-profile
     depends_on:
-      - product.api
-      - customer.api
-      - basket.api
-      - ordering.api
-      - inventory.api
-      - payment.api
-      - identity.api
-      - flashsale.api
-      - groupbuy.api
-      - elasticsearch
+      product.api:
+        condition: service_started
+      customer.api:
+        condition: service_started
+      basket.api:
+        condition: service_started
+      ordering.api:
+        condition: service_started
+      inventory.api:
+        condition: service_started
+      payment.api:
+        condition: service_started
+      identity.api:
+        condition: service_started
+      flashsale.api:
+        condition: service_started
+      groupbuy.api:
+        condition: service_started
+      elasticsearch:
+        condition: service_healthy
     ports:
       - "5000:80"
     deploy:
       resources:
         limits:
-          memory: 512M
+          memory: 256M
     restart: always
 
-  # ==================== FRONTEND (Node + Vite Dev Server + Hot Reload) ====================
-  # React Client chạy Vite dev server với HMR (Hot Module Replacement)
-  # Sửa file .tsx/.ts/.css → browser tự cập nhật ngay lập tức
+  # ==================== FRONTEND (Nginx serving built files) ====================
   react.client:
-    image: node:20-alpine
     container_name: src-react-client
-    environment:
-      - VITE_API_PROXY_TARGET=http://ocelot.apigw:80
-    volumes:
-      - ./WebApps/React.Client:/app
-      - react_node_modules:/app/node_modules
-    working_dir: /app
-    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
     depends_on:
       - ocelot.apigw
     ports:
-      - "3000:3000"
+      - "3000:80"
     deploy:
       resources:
         limits:
-          memory: 512M
+          memory: 64M
     restart: always
 
-  # ==================== HEALTH DASHBOARD (SDK + Volume + Hot Reload) ====================
+  # ==================== MANAGEMENT TOOLS ====================
+  portainer:
+    container_name: src-portainer
+    restart: always
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+
+  pgadmin:
+    container_name: src-pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@nexus.io
+      - PGADMIN_DEFAULT_PASSWORD=admin123
+    restart: always
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+  kibana:
+    container_name: src-kibana
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    ports:
+      - "5601:5601"
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+  # ==================== HEALTH DASHBOARD ====================
   webhealthstatus:
-    image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: src-webhealthstatus
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - DOTNET_USE_POLLING_FILE_WATCHER=1
-      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
-    volumes:
-      - .:/src
-    working_dir: /src/WebApps/WebHealthStatus
-    command: dotnet watch run --no-launch-profile
     depends_on:
       - ocelot.apigw
     ports:
@@ -485,5 +396,5 @@ services:
     deploy:
       resources:
         limits:
-          memory: 256M
+          memory: 128M
     restart: always
