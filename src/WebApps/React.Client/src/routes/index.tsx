@@ -279,6 +279,14 @@ export const router = createBrowserRouter([
           </P>
         ),
       },
+      {
+        path: 'seller/edit-product/:id',
+        element: (
+          <P>
+            <SellerCreateProductPage />
+          </P>
+        ),
+      },
 
       /* ─── Admin Routes ─── */
       {
@@ -310,6 +318,14 @@ export const router = createBrowserRouter([
         element: (
           <A>
             <AdminOrdersPage />
+          </A>
+        ),
+      },
+      {
+        path: 'admin/profile',
+        element: (
+          <A>
+            <UserProfilePage />
           </A>
         ),
       },
