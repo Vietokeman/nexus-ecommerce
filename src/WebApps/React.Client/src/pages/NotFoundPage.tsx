@@ -7,7 +7,7 @@ import { nexus } from '@/theme/theme';
 
 export default function NotFoundPage() {
   return (
-    <Stack justifyContent="center" alignItems="center" height="100vh" sx={{ px: 2 }}>
+    <Stack justifyContent="center" alignItems="center" height="calc(100vh - 4rem)" sx={{ px: 2 }}>
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
