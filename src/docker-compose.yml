@@ -95,6 +95,13 @@ services:
       context: .
       dockerfile: Services/GroupBuy.API/Dockerfile
 
+  seller.api:
+    image: ${DOCKER_REGISTRY-}src/seller-api:${PLATFORM:-linux}-${TAG:-latest}
+    container_name: src-seller-api
+    build:
+      context: .
+      dockerfile: Services/Seller.API/Dockerfile
+
   # API Gateway section
   ocelot.apigw:
     image: ${DOCKER_REGISTRY-}src/ocelot-apigw:${PLATFORM:-linux}-${TAG:-latest}

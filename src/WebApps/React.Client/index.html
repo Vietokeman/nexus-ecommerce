@@ -16,7 +16,7 @@
     <!-- Unregister stale service workers from other projects (AURA-FE PWA) -->
     <script>
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        navigator.serviceWorker.getRegistrations().then(function (registrations) {
           for (var registration of registrations) {
             registration.unregister();
           }

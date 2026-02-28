@@ -509,6 +509,83 @@
       ],
       "UpstreamPathTemplate": "/api/inventory/{everything}",
       "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"]
+    },
+    {
+      "SwaggerKey": "seller",
+      "DownstreamPathTemplate": "/api/sellerproducts",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "seller.api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/sellerproducts",
+      "UpstreamHttpMethod": ["GET", "POST"],
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 10
+      },
+      "FileCacheOptions": {
+        "TtlSeconds": 15,
+        "Region": "seller-products"
+      }
+    },
+    {
+      "SwaggerKey": "seller",
+      "DownstreamPathTemplate": "/api/sellerproducts/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "seller.api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/sellerproducts/{everything}",
+      "UpstreamHttpMethod": ["GET", "PUT", "DELETE", "POST"],
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 10
+      }
+    },
+    {
+      "SwaggerKey": "seller",
+      "DownstreamPathTemplate": "/api/reviews/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "seller.api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/reviews/{everything}",
+      "UpstreamHttpMethod": ["GET", "POST"],
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 10
+      }
+    },
+    {
+      "SwaggerKey": "seller",
+      "DownstreamPathTemplate": "/api/reviews",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "seller.api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/reviews",
+      "UpstreamHttpMethod": ["POST"]
     }
   ],
   "SwaggerEndPoints": [
@@ -608,6 +685,17 @@
           "Name": "Inventory API",
           "Version": "v1",
           "Url": "http://inventory.api:80/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "seller",
+      "TransformByOcelotConfig": false,
+      "Config": [
+        {
+          "Name": "Seller API",
+          "Version": "v1",
+          "Url": "http://seller.api:80/swagger/v1/swagger.json"
         }
       ]
     }
