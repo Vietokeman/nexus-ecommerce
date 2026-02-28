@@ -44,6 +44,7 @@ import { useActiveGroupBuyCampaigns } from '@/hooks/useGroupBuy';
 import FlashSaleWidget from '@/components/ui/FlashSaleWidget';
 import { nexus } from '@/theme/theme';
 import type { Product } from '@/types/product';
+import { APP_NAME } from '@/constants';
 import loadingAnimation from '@/assets/animations/loading.json';
 
 const ITEMS_PER_PAGE = 10;
@@ -439,7 +440,7 @@ export default function HomePage() {
             }}
           >
             <Typography variant="h3" color="white" fontWeight={700}>
-              Nexus Commerce
+              {APP_NAME}
             </Typography>
           </Stack>
         )}
