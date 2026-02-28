@@ -14,6 +14,7 @@ public static class ApplicationExtensions
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapDefaultControllerRoute();
+            endpoints.MapHealthChecks("/health");
         });
     }
 }

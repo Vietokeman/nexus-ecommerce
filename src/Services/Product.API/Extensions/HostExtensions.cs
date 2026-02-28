@@ -35,7 +35,8 @@ namespace Product.API.Extensions
         //migrate database
         private static void ExecuteMigrations<TContext>(TContext context) where TContext : DbContext
         {
-            context.Database.Migrate();
+            // Use EnsureCreated since no EF migrations exist yet
+            context.Database.EnsureCreated();
         }
     }
 }
