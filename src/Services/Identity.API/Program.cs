@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.OpenApi.Models;
 using AspNet.Security.OAuth.GitHub;
 using Serilog;
@@ -133,6 +134,16 @@ try
         });
     });
 
+    // ForwardedHeaders (reverse proxy support for OAuth redirect_uri)
+    builder.Services.Configure<ForwardedHeadersOptions>(options =>
+    {
+        options.ForwardedHeaders = ForwardedHeaders.XForwardedFor
+                                 | ForwardedHeaders.XForwardedProto
+                                 | ForwardedHeaders.XForwardedHost;
+        options.KnownProxies.Clear();
+        options.KnownNetworks.Clear();
+    });
+
     // Health Checks
     builder.Services.AddHealthChecks()
         .AddNpgSql(
@@ -175,7 +186,8 @@ try
     using (var scope = app.Services.CreateScope())
     {
         var context = scope.ServiceProvider.GetRequiredService<IdentityDbContext>();
-        await context.Database.MigrateAsync();
+        // Use EnsureCreatedAsync since no EF migrations exist yet
+        await context.Database.EnsureCreatedAsync();
 
         // Seed roles
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
@@ -249,11 +261,10 @@ try
     }
 
     // Configure pipeline
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
+    app.UseForwardedHeaders();
+
+    app.UseSwagger();
+    app.UseSwaggerUI();
 
     app.UseCors("CorsPolicy");
     app.UseAuthentication();
