@@ -35,6 +35,13 @@ try
     // Add gRPC services
     builder.Services.AddGrpc();
 
+    // Health Checks
+    builder.Services.AddHealthChecks()
+        .AddNpgSql(
+            builder.Configuration.GetConnectionString("DefaultConnectionString")!,
+            name: "postgresql",
+            tags: new[] { "db", "postgresql" });
+
     // Add API services
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
@@ -49,15 +56,13 @@ try
     using (var scope = app.Services.CreateScope())
     {
         var db = scope.ServiceProvider.GetRequiredService<InventoryContext>();
-        await db.Database.MigrateAsync();
+        // Use EnsureCreatedAsync since no EF migrations exist yet
+        await db.Database.EnsureCreatedAsync();
         await InventoryContextSeed.SeedInventoryAsync(db);
     }
 
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
+    app.UseSwagger();
+    app.UseSwaggerUI();
 
     // Map gRPC service endpoint
     app.MapGrpcService<StockGrpcService>();
@@ -68,6 +73,7 @@ try
     app.UseHttpsRedirection();
     app.UseAuthorization();
     app.MapControllers();
+    app.MapHealthChecks("/health");
     
     Log.Information("Inventory API started successfully");
     app.Run();

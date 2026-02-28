@@ -55,9 +55,9 @@ public static class InventoryContextSeed
         if (!context.WarehouseStocks.Any())
         {
             var warehouses = context.Warehouses.ToList();
-            var hcmWarehouse = warehouses.First(w => w.Code == "WH-HCM-01");
-            var hnWarehouse = warehouses.First(w => w.Code == "WH-HN-01");
-            var dnWarehouse = warehouses.First(w => w.Code == "WH-DN-01");
+            var hcmWarehouse = warehouses.First(w => w.Code == "WH-HCM" || w.Code == "WH-HCM-01");
+            var hnWarehouse = warehouses.First(w => w.Code == "WH-HN" || w.Code == "WH-HN-01");
+            var dnWarehouse = warehouses.First(w => w.Code == "WH-DN" || w.Code == "WH-DN-01");
 
             // Seed stock for products (mapped from Product.API seed ItemNos)
             var stockItems = new List<WarehouseStock>
@@ -173,8 +173,8 @@ public static class InventoryContextSeed
         if (!context.InventoryEntries.Any())
         {
             var warehouses = context.Warehouses.ToList();
-            var hcmWarehouse = warehouses.First(w => w.Code == "WH-HCM-01");
-            var hnWarehouse = warehouses.First(w => w.Code == "WH-HN-01");
+            var hcmWarehouse = warehouses.First(w => w.Code == "WH-HCM" || w.Code == "WH-HCM-01");
+            var hnWarehouse = warehouses.First(w => w.Code == "WH-HN" || w.Code == "WH-HN-01");
 
             // Seed sample inventory entries (purchase orders that created initial stock)
             var entries = new List<InventoryEntry>
