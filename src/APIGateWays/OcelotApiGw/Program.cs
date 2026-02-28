@@ -2,6 +2,7 @@ using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using Ocelot.Cache.CacheManager;
 using Ocelot.Provider.Polly;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,6 +34,11 @@ builder.Services.AddOcelot(builder.Configuration)
     .AddCacheManager(x => x.WithDictionaryHandle())
     .AddPolly();
 
+// Swagger aggregation for all downstream services
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerForOcelot(builder.Configuration);
+
 // Add CORS policy
 builder.Services.AddCors(options =>
 {
@@ -44,12 +50,35 @@ builder.Services.AddCors(options =>
     });
 });
 
+// Health Checks
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline
 app.UseCors("CorsPolicy");
 
 app.UseSerilogRequestLogging();
+
+// UseHealthChecks middleware MUST be before UseOcelot (Ocelot is terminal middleware)
+app.UseHealthChecks("/health");
+
+// Redirect root to Swagger UI
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path == "/" || context.Request.Path == string.Empty)
+    {
+        context.Response.Redirect("/swagger");
+        return;
+    }
+    await next();
+});
+
+// Swagger UI - select service from dropdown at http://localhost:5000/swagger
+app.UseSwaggerForOcelotUI(opt =>
+{
+    opt.PathToSwaggerGenerator = "/swagger/docs";
+});
 
 await app.UseOcelot();
 
