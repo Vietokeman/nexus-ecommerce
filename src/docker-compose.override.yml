@@ -22,12 +22,31 @@ services:
       - "5433:5432"
     volumes:
       - nexusdb_data:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d NexusDb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   basketdb:
     container_name: src-basketdb
     restart: always
     ports:
       - "6379:6379"
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   rabbitmq:
     container_name: src-rabbitmq
@@ -35,6 +54,16 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
 
   pgadmin:
     container_name: src-pgadmin
@@ -46,6 +75,12 @@ services:
       - "5050:80"
     volumes:
       - pgadmin_data:/root/pgadmin
+    profiles:
+      - tools
+    deploy:
+      resources:
+        limits:
+          memory: 256M
 
   portainer:
     container_name: src-portainer
@@ -56,18 +91,35 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
+    profiles:
+      - tools
+    deploy:
+      resources:
+        limits:
+          memory: 128M
 
   elasticsearch:
     container_name: src-elasticsearch
     environment:
-      - xpack.monitoring.enabled=true
+      - xpack.monitoring.enabled=false
       - xpack.watcher.enabled=false
-      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms256m -Xmx256m
       - discovery.type=single-node
     ports:
       - "9200:9200"
     volumes:
       - elasticsearch_data:/usr/share/elasticsearch/data
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
 
   kibana:
     container_name: src-kibana
@@ -75,9 +127,16 @@ services:
       - ELASTICSEARCH_URL=http://elasticsearch:9200
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
     depends_on:
-      - elasticsearch
+      elasticsearch:
+        condition: service_healthy
     ports:
       - "5601:5601"
+    profiles:
+      - monitoring
+    deploy:
+      resources:
+        limits:
+          memory: 512M
 
   # ==================== MICROSERVICES (SDK + Volume + Hot Reload) ====================
   # Mỗi service dùng .NET SDK image, mount code từ host, chạy dotnet watch run.
@@ -97,7 +156,12 @@ services:
     working_dir: /src/Services/Product.API
     command: dotnet watch run --no-launch-profile
     depends_on:
-      - nexusdb
+      nexusdb:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 512M
     restart: always
 
   customer.api:
@@ -114,7 +178,12 @@ services:
     working_dir: /src/Services/Customer.API
     command: dotnet watch run --no-launch-profile
     depends_on:
-      - nexusdb
+      nexusdb:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 512M
     restart: always
 
   basket.api:
@@ -131,7 +200,12 @@ services:
     working_dir: /src/Services/Basket.API
     command: dotnet watch run --no-launch-profile
     depends_on:
-      - basketdb
+      basketdb:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 512M
     restart: always
 
   ordering.api:
@@ -148,7 +222,12 @@ services:
     working_dir: /src/Services/Ordering/Ordering.API
     command: dotnet watch run --no-launch-profile
     depends_on:
-      - nexusdb
+      nexusdb:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 512M
     restart: always
 
   inventory.api:
@@ -166,7 +245,12 @@ services:
     working_dir: /src/Services/Inventory.Product.API
     command: dotnet watch run --no-launch-profile
     depends_on:
-      - nexusdb
+      nexusdb:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 512M
     restart: always
 
   payment.api:
@@ -195,9 +279,16 @@ services:
     working_dir: /src/Services/Payment.API
     command: dotnet watch run --no-launch-profile
     depends_on:
-      - nexusdb
-      - rabbitmq
-      - elasticsearch
+      nexusdb:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 512M
     restart: always
 
   hangfire.api:
@@ -220,8 +311,14 @@ services:
     working_dir: /src/Services/Hangfire.API
     command: dotnet watch run --no-launch-profile
     depends_on:
-      - nexusdb
-      - elasticsearch
+      nexusdb:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 512M
     restart: always
 
   identity.api:
@@ -246,8 +343,14 @@ services:
     working_dir: /src/Services/Identity.API
     command: dotnet watch run --no-launch-profile
     depends_on:
-      - nexusdb
-      - elasticsearch
+      nexusdb:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 512M
     restart: always
 
   flashsale.api:
@@ -266,9 +369,16 @@ services:
     working_dir: /src/Services/FlashSale.API
     command: dotnet watch run --no-launch-profile
     depends_on:
-      - nexusdb
-      - basketdb
-      - elasticsearch
+      nexusdb:
+        condition: service_healthy
+      basketdb:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 512M
     restart: always
 
   groupbuy.api:
@@ -287,9 +397,16 @@ services:
     working_dir: /src/Services/GroupBuy.API
     command: dotnet watch run --no-launch-profile
     depends_on:
-      - nexusdb
-      - rabbitmq
-      - elasticsearch
+      nexusdb:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 512M
     restart: always
 
   # ==================== API GATEWAY (SDK + Volume + Hot Reload) ====================
@@ -319,6 +436,10 @@ services:
       - elasticsearch
     ports:
       - "5000:80"
+    deploy:
+      resources:
+        limits:
+          memory: 512M
     restart: always
 
   # ==================== FRONTEND (Node + Vite Dev Server + Hot Reload) ====================
@@ -338,6 +459,10 @@ services:
       - ocelot.apigw
     ports:
       - "3000:3000"
+    deploy:
+      resources:
+        limits:
+          memory: 512M
     restart: always
 
   # ==================== HEALTH DASHBOARD (SDK + Volume + Hot Reload) ====================
@@ -357,4 +482,8 @@ services:
       - ocelot.apigw
     ports:
       - "6010:80"
+    deploy:
+      resources:
+        limits:
+          memory: 256M
     restart: always

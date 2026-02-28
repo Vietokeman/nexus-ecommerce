@@ -1,0 +1,400 @@
+# ==============================================================================
+# PRODUCTION / DEPLOYMENT COMPOSE
+# ==============================================================================
+# Dùng Dockerfile build (multi-stage) → image nhỏ gọn, nhanh, ít RAM
+# KHÔNG dùng dotnet watch, KHÔNG mount volume code
+#
+# CÁCH DÙNG:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+# ==============================================================================
+
+services:
+  # ==================== DATABASE & INFRASTRUCTURE ====================
+  nexusdb:
+    container_name: src-nexusdb
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-change_me_with_postgres_password}
+      - POSTGRES_DB=NexusDb
+    restart: always
+    ports:
+      - "5433:5432"
+    volumes:
+      - nexusdb_data:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d NexusDb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  basketdb:
+    container_name: src-basketdb
+    restart: always
+    ports:
+      - "6379:6379"
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  rabbitmq:
+    container_name: src-rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  elasticsearch:
+    container_name: src-elasticsearch
+    environment:
+      - xpack.monitoring.enabled=false
+      - xpack.watcher.enabled=false
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms256m -Xmx256m
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  # ==================== MICROSERVICES (Built images) ====================
+  product.api:
+    container_name: src-product-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=ProductDb;Username=admin;Password=${POSTGRES_PASSWORD:-change_me_with_postgres_password};"
+      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
+    depends_on:
+      nexusdb:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    restart: always
+
+  customer.api:
+    container_name: src-customer-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=CustomerDb;Username=admin;Password=${POSTGRES_PASSWORD:-change_me_with_postgres_password};"
+    depends_on:
+      nexusdb:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    restart: always
+
+  basket.api:
+    container_name: src-basket-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - "CacheSettings:ConnectionString=basketdb:6379"
+      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
+    depends_on:
+      basketdb:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    restart: always
+
+  ordering.api:
+    container_name: src-ordering-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=OrderDb;Username=admin;Password=${POSTGRES_PASSWORD:-change_me_with_postgres_password};"
+      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
+    depends_on:
+      nexusdb:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    restart: always
+
+  inventory.api:
+    container_name: src-inventory-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=InventoryDb;Username=admin;Password=${POSTGRES_PASSWORD:-change_me_with_postgres_password};"
+    depends_on:
+      nexusdb:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    restart: always
+
+  payment.api:
+    container_name: src-payment-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=PaymentDb;Username=admin;Password=${POSTGRES_PASSWORD:-change_me_with_postgres_password};"
+      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
+      - "PayOSSettings:ClientId=change_me_with_payos_client_id"
+      - "PayOSSettings:ApiKey=change_me_with_payos_api_key"
+      - "PayOSSettings:ChecksumKey=change_me_with_payos_checksum_key"
+      - "PayOSSettings:WebReturnUrl=http://localhost:3000/payment/success"
+      - "PayOSSettings:WebCancelUrl=http://localhost:3000/payment/cancel"
+      - "SmtpSettings:Host=smtp.gmail.com"
+      - "SmtpSettings:Port=587"
+      - "SmtpSettings:UserName=vietbmt19@gmail.com"
+      - "SmtpSettings:Password=change_me_with_smtp_password"
+      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
+    depends_on:
+      nexusdb:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    restart: always
+
+  hangfire.api:
+    container_name: src-hangfire-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - "ConnectionStrings:HangfireConnection=Host=nexusdb;Port=5432;Database=HangfireDb;Username=admin;Password=${POSTGRES_PASSWORD:-change_me_with_postgres_password};"
+      - "SmtpSettings:Host=smtp.gmail.com"
+      - "SmtpSettings:Port=587"
+      - "SmtpSettings:UserName=vietbmt19@gmail.com"
+      - "SmtpSettings:Password=change_me_with_smtp_password"
+      - "GatewayUrl=http://ocelot.apigw:80"
+      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
+    depends_on:
+      nexusdb:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    restart: always
+
+  identity.api:
+    container_name: src-identity-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=IdentityDb;Username=admin;Password=${POSTGRES_PASSWORD:-change_me_with_postgres_password};"
+      - "JwtSettings:Secret=${JWT_SECRET:-YourSuperSecretKeyHere_MustBeAtLeast32Characters!}"
+      - "JwtSettings:Issuer=distributed-ecommerce-platform"
+      - "JwtSettings:Audience=distributed-ecommerce-client"
+      - "SmtpSettings:Host=smtp.gmail.com"
+      - "SmtpSettings:Port=587"
+      - "SmtpSettings:UserName=vietbmt19@gmail.com"
+      - "SmtpSettings:Password=change_me_with_smtp_password"
+      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
+      - "OAuthSettings:Google:ClientId=change_me_with_google_client_id"
+      - "OAuthSettings:Google:ClientSecret=change_me_with_google_client_secret"
+      - "OAuthSettings:GitHub:ClientId=change_me_with_github_client_id"
+      - "OAuthSettings:GitHub:ClientSecret=change_me_with_github_client_secret"
+      - "FrontendUrl=http://localhost:3000"
+    depends_on:
+      nexusdb:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    restart: always
+
+  flashsale.api:
+    container_name: src-flashsale-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=FlashSaleDb;Username=admin;Password=${POSTGRES_PASSWORD:-change_me_with_postgres_password};"
+      - "ConnectionStrings:Redis=basketdb:6379"
+      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
+    depends_on:
+      nexusdb:
+        condition: service_healthy
+      basketdb:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    restart: always
+
+  groupbuy.api:
+    container_name: src-groupbuy-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=GroupBuyDb;Username=admin;Password=${POSTGRES_PASSWORD:-change_me_with_postgres_password};"
+      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
+      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
+    depends_on:
+      nexusdb:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    restart: always
+
+  # ==================== API GATEWAY ====================
+  ocelot.apigw:
+    container_name: src-ocelot-apigw
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
+    depends_on:
+      product.api:
+        condition: service_started
+      customer.api:
+        condition: service_started
+      basket.api:
+        condition: service_started
+      ordering.api:
+        condition: service_started
+      inventory.api:
+        condition: service_started
+      payment.api:
+        condition: service_started
+      identity.api:
+        condition: service_started
+      flashsale.api:
+        condition: service_started
+      groupbuy.api:
+        condition: service_started
+      elasticsearch:
+        condition: service_healthy
+    ports:
+      - "5000:80"
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    restart: always
+
+  # ==================== FRONTEND (Nginx serving built files) ====================
+  react.client:
+    container_name: src-react-client
+    depends_on:
+      - ocelot.apigw
+    ports:
+      - "3000:80"
+    deploy:
+      resources:
+        limits:
+          memory: 64M
+    restart: always
+
+  # ==================== MANAGEMENT TOOLS ====================
+  portainer:
+    container_name: src-portainer
+    restart: always
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+
+  pgadmin:
+    container_name: src-pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@nexus.io
+      - PGADMIN_DEFAULT_PASSWORD=admin123
+    restart: always
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+  kibana:
+    container_name: src-kibana
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    ports:
+      - "5601:5601"
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+  # ==================== HEALTH DASHBOARD ====================
+  webhealthstatus:
+    container_name: src-webhealthstatus
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    depends_on:
+      - ocelot.apigw
+    ports:
+      - "6010:80"
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+    restart: always
