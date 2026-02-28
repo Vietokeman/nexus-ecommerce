@@ -14,6 +14,7 @@ export default function OAuthCallbackPage() {
   const navigate = useNavigate();
   const setUser = useAuthStore((s) => s.setUser);
   const setToken = useAuthStore((s) => s.setToken);
+  const setRefreshToken = useAuthStore((s) => s.setRefreshToken);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -45,14 +46,19 @@ export default function OAuthCallbackPage() {
       isVerified: searchParams.get('isVerified') === 'true',
     };
 
-    // Store token and user
+    // Store token, refreshToken, and user
     setToken(token);
+    const refreshToken = searchParams.get('refreshToken');
+    if (refreshToken) {
+      setRefreshToken(refreshToken);
+    }
     setUser(user);
 
     // Update zustand persist state
     useAuthStore.setState({
       user,
       token,
+      refreshToken: refreshToken ?? null,
       isAuthenticated: true,
     });
 

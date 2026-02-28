@@ -8,6 +8,7 @@ import type { User, LoginDto, SignupDto, AuthResponse } from '@/types/auth';
 interface AuthState {
   user: User | null;
   token: string | null;
+  refreshToken: string | null;
   isAuthenticated: boolean;
 
   login: (credentials: LoginDto) => Promise<void>;
@@ -16,6 +17,7 @@ interface AuthState {
   checkAuth: () => void;
   setUser: (user: User) => void;
   setToken: (token: string) => void;
+  setRefreshToken: (refreshToken: string) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -24,6 +26,7 @@ export const useAuthStore = create<AuthState>()(
       (set, get) => ({
         user: null,
         token: null,
+        refreshToken: null,
         isAuthenticated: false,
 
         login: async (credentials: LoginDto) => {
@@ -36,9 +39,11 @@ export const useAuthStore = create<AuthState>()(
           set({
             user: data.user,
             token,
+            refreshToken: data.refreshToken ?? null,
             isAuthenticated: true,
           });
           localStorage.setItem('token', token);
+          if (data.refreshToken) localStorage.setItem('refreshToken', data.refreshToken);
         },
 
         signup: async (signupData: SignupDto) => {
@@ -55,14 +60,17 @@ export const useAuthStore = create<AuthState>()(
           set({
             user: data.user,
             token,
+            refreshToken: data.refreshToken ?? null,
             isAuthenticated: true,
           });
           localStorage.setItem('token', token);
+          if (data.refreshToken) localStorage.setItem('refreshToken', data.refreshToken);
         },
 
         logout: () => {
-          set({ user: null, token: null, isAuthenticated: false });
+          set({ user: null, token: null, refreshToken: null, isAuthenticated: false });
           localStorage.removeItem('token');
+          localStorage.removeItem('refreshToken');
         },
 
         checkAuth: () => {
@@ -70,7 +78,7 @@ export const useAuthStore = create<AuthState>()(
           if (token && user) {
             set({ isAuthenticated: true });
           } else {
-            set({ isAuthenticated: false, user: null, token: null });
+            set({ isAuthenticated: false, user: null, token: null, refreshToken: null });
           }
         },
 
@@ -78,6 +86,10 @@ export const useAuthStore = create<AuthState>()(
         setToken: (token: string) => {
           set({ token });
           localStorage.setItem('token', token);
+        },
+        setRefreshToken: (refreshToken: string) => {
+          set({ refreshToken });
+          localStorage.setItem('refreshToken', refreshToken);
         },
       }),
       'auth-store',
@@ -87,6 +99,7 @@ export const useAuthStore = create<AuthState>()(
       partialize: (state) => ({
         user: state.user,
         token: state.token,
+        refreshToken: state.refreshToken,
         isAuthenticated: state.isAuthenticated,
       }),
     },
