@@ -42,17 +42,21 @@ try
     builder.Services.AddScoped<IMessageProducer, RabbitMQProducer>();// dang ki dich vu message producer
     builder.Services.AddScoped<ISerializeService, SeriallizeService>();// dang ki dich vu serialize
 
+    // Health Checks
+    builder.Services.AddHealthChecks()
+        .AddNpgSql(
+            builder.Configuration.GetConnectionString("DefaultConnectionString")!,
+            name: "postgresql",
+            tags: new[] { "db", "postgresql" });
+
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
 
     var app = builder.Build();
 
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
+    app.UseSwagger();
+    app.UseSwaggerUI();
 
     //Initialise and seed database
     using (var scope = app.Services.CreateScope())
@@ -67,6 +71,7 @@ try
     app.UseHttpsRedirection();
     app.UseAuthorization();
     app.MapControllers();
+    app.MapHealthChecks("/health");
     app.Run();
 }
 catch (Exception ex)
