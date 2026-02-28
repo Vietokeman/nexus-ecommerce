@@ -8,7 +8,8 @@ namespace Customer.API.Persistence
         {
             using var scope = host.Services.CreateScope();
             var customerContext = scope.ServiceProvider.GetRequiredService<CustomerContext>();
-            await customerContext.Database.MigrateAsync();
+            // Use EnsureCreatedAsync since no EF migrations exist yet
+            await customerContext.Database.EnsureCreatedAsync();
 
             await CreateCustomer(customerContext, "customer1", "customer1", "customer1", "customer@gmail.com");
             await CreateCustomer(customerContext, "demo", "Demo", "User", "demo@gmail.com");
