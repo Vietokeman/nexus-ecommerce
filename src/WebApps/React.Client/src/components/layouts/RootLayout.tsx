@@ -25,6 +25,7 @@ import { useAuthStore } from '@/store/auth-store';
 import { useUIStore } from '@/store/ui-store';
 import { nexus } from '@/theme/theme';
 import NexusCartLogo from '@/components/auth/NexusCartLogo';
+import { APP_NAME } from '@/constants';
 
 export default function RootLayout() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -103,7 +104,7 @@ export default function RootLayout() {
                 backgroundClip: 'text',
               }}
             >
-              Nexus Commerce
+              {APP_NAME}
             </Typography>
           </Stack>
 
@@ -278,7 +279,7 @@ export default function RootLayout() {
                   backgroundClip: 'text',
                 }}
               >
-                Nexus Commerce
+                {APP_NAME}
               </Typography>
             </Stack>
             <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', lineHeight: 1.7 }}>
@@ -356,7 +357,7 @@ export default function RootLayout() {
         {/* Divider & Copyright */}
         <Box sx={{ borderTop: '1px solid rgba(255,255,255,0.1)', pt: 2, textAlign: 'center' }}>
           <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.35)' }}>
-            &copy; Nexus Commerce {new Date().getFullYear()}. All rights reserved.
+            &copy; {APP_NAME} {new Date().getFullYear()}. All rights reserved.
           </Typography>
         </Box>
       </Box>
