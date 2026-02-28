@@ -115,7 +115,11 @@ services:
         limits:
           memory: 512M
     healthcheck:
-      test: ["CMD-SHELL", "curl -sf http://localhost:9200/_cluster/health || exit 1"]
+      test:
+        [
+          "CMD-SHELL",
+          "curl -sf http://localhost:9200/_cluster/health || exit 1",
+        ]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -409,6 +413,30 @@ services:
           memory: 512M
     restart: always
 
+  seller.api:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    container_name: src-seller-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=SellerDb;Username=admin;Password=0977452762Viet;"
+      - "OpenAI:ApiKey=${OPENAI_API_KEY:-your-api-key-here}"
+      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
+    volumes:
+      - .:/src
+    working_dir: /src/Services/Seller.API
+    command: dotnet watch run --no-launch-profile
+    depends_on:
+      nexusdb:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    restart: always
+
   # ==================== API GATEWAY (SDK + Volume + Hot Reload) ====================
   ocelot.apigw:
     image: mcr.microsoft.com/dotnet/sdk:8.0
@@ -433,6 +461,7 @@ services:
       - identity.api
       - flashsale.api
       - groupbuy.api
+      - seller.api
       - elasticsearch
     ports:
       - "5000:80"

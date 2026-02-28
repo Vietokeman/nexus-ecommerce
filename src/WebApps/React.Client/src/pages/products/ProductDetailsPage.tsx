@@ -15,6 +15,7 @@ import { useWishlistStore } from '@/store/wishlist-store';
 import { useAuthStore } from '@/store/auth-store';
 import type { Product } from '@/types/product';
 import loadingAnimation from '@/assets/animations/loading.json';
+import ProductReviewsSection from '@/components/reviews/ProductReviewsSection';
 
 const SIZES = ['XS', 'S', 'M', 'L', 'XL'];
 const COLORS = ['#020202', '#F6F6F6', '#B82222', '#BEA9A9', '#E2BB8D'];
@@ -441,6 +442,13 @@ export default function ProductDetailsPage() {
           </Stack>
         </Stack>
       </Stack>
+
+      {/* Product Reviews Section */}
+      {product && (
+        <Stack sx={{ maxWidth: '88rem', width: '100%', px: is480 ? 2 : 4 }}>
+          <ProductReviewsSection productId={product.id ?? Number(id)} />
+        </Stack>
+      )}
     </Stack>
   );
 }
