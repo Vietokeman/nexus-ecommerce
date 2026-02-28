@@ -26,7 +26,8 @@ namespace Ordering.Infrastructure.Persistence
             {
                 if (_context.Database.IsNpgsql())
                 {
-                    await _context.Database.MigrateAsync();
+                    // Use EnsureCreatedAsync since no EF migrations exist yet
+                await _context.Database.EnsureCreatedAsync();
                 }
             }
             catch (Exception ex)
@@ -91,7 +92,7 @@ namespace Ordering.Infrastructure.Persistence
                     ShipppingAdress = "789 Elm St, Da Nang",
                     InvoiceAdress = "789 Elm St, Da Nang, Vietnam",
                     TotalPrice = 1249,
-                    Status = EOrderStatus.Processing
+                    Status = EOrderStatus.Shipping
                 },
                 new Order
                 {
@@ -135,7 +136,7 @@ namespace Ordering.Infrastructure.Persistence
                     ShipppingAdress = "88 Le Loi, Ho Chi Minh City",
                     InvoiceAdress = "88 Le Loi, District 1, Ho Chi Minh City, Vietnam",
                     TotalPrice = 2598,
-                    Status = EOrderStatus.Processing
+                    Status = EOrderStatus.Shipping
                 },
                 new Order
                 {
