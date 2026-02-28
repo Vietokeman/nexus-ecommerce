@@ -146,25 +146,29 @@ export default function RootLayout() {
                   </Typography>
                 </MenuItem>
               )}
-              {/* Seller menu items */}
-              <MenuItem onClick={handleCloseUserMenu}>
-                <Typography
-                  component={Link}
-                  sx={{ textDecoration: 'none', color: nexus.neutral[900] }}
-                  to="/seller/dashboard"
-                >
-                  🏪 Seller Dashboard
-                </Typography>
-              </MenuItem>
-              <MenuItem onClick={handleCloseUserMenu}>
-                <Typography
-                  component={Link}
-                  sx={{ textDecoration: 'none', color: nexus.neutral[900] }}
-                  to="/seller/products"
-                >
-                  📦 My Products
-                </Typography>
-              </MenuItem>
+              {/* Seller menu items — only for non-admin users */}
+              {!user?.isAdmin && (
+                <>
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography
+                      component={Link}
+                      sx={{ textDecoration: 'none', color: nexus.neutral[900] }}
+                      to="/seller/dashboard"
+                    >
+                      🏪 Seller Dashboard
+                    </Typography>
+                  </MenuItem>
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography
+                      component={Link}
+                      sx={{ textDecoration: 'none', color: nexus.neutral[900] }}
+                      to="/seller/products"
+                    >
+                      📦 My Products
+                    </Typography>
+                  </MenuItem>
+                </>
+              )}
               {settings.map((setting) => (
                 <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
                   <Typography
@@ -198,15 +202,17 @@ export default function RootLayout() {
               </Button>
             )}
 
-            <Tooltip title="Seller Dashboard">
-              <IconButton
-                onClick={() => navigate('/seller/dashboard')}
-                size="small"
-                sx={{ display: { xs: 'none', sm: 'inline-flex' } }}
-              >
-                <StorefrontIcon sx={{ color: nexus.neutral[700] }} />
-              </IconButton>
-            </Tooltip>
+            {!user?.isAdmin && (
+              <Tooltip title="Seller Dashboard">
+                <IconButton
+                  onClick={() => navigate('/seller/dashboard')}
+                  size="small"
+                  sx={{ display: { xs: 'none', sm: 'inline-flex' } }}
+                >
+                  <StorefrontIcon sx={{ color: nexus.neutral[700] }} />
+                </IconButton>
+              </Tooltip>
+            )}
 
             {cartItems.length > 0 && (
               <Badge badgeContent={totalItems()} color="secondary">
