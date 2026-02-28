@@ -27,18 +27,22 @@ namespace Infrastructure.Messages
                 //UserName = "guest",
                 //Password
             };
-            var connection = connectionFactory.CreateConnectionAsync();
-            using var channel = connection.Result.CreateChannelAsync();
+            using var connection = connectionFactory.CreateConnection();
+            using var channel = connection.CreateModel();
 
-            channel.Result.QueueDeclareAsync(
+            channel.QueueDeclare(
                 queue: "order",
-                exclusive: false
+                durable: false,
+                exclusive: false,
+                autoDelete: false,
+                arguments: null
                 );
             var json = _serializeService.Serialize(message);
             var body = Encoding.UTF8.GetBytes(json);
-            channel.Result.BasicPublishAsync(
+            channel.BasicPublish(
                 exchange: "",
                 routingKey: "order",
+                basicProperties: null,
                 body: body
                 );
         }
