@@ -40,21 +40,24 @@ try
         .AddScoped(typeof(IRepositoryBaseAsync<,,>), typeof(RepositoryBaseAsync<,,>))
         .AddScoped(typeof(IUnitOfWork<>), typeof(UnitOfWork<>))
         .AddScoped<ICustomerService, CustomerService>();
+
+    // Health Checks
+    builder.Services.AddHealthChecks()
+        .AddNpgSql(
+            connectionString!,
+            name: "postgresql",
+            tags: new[] { "db", "postgresql" });
+
     var app = builder.Build();
     app.MapCustomerEndpoints();
 
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI(c =>
-        {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Customer Minimal API V1");
-        });
-    }
+    app.UseSwagger();
+    app.UseSwaggerUI();
 
     //app.UseHttpsRedirection();
     app.UseAuthorization();
     app.MapControllers();
+    app.MapHealthChecks("/health");
     await app.SeedCustomerData();
     app.Run();
 }
