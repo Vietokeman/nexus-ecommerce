@@ -23,9 +23,7 @@ import { useAuthStore } from '@/store/auth-store';
 import { CartContent } from './CartPage';
 import { api } from '@/lib/api';
 import { API_ENDPOINTS } from '@/lib/endpoints';
-
-const SHIPPING = 5.55;
-const TAXES = 2.0;
+import { SHIPPING, TAXES, VND_RATE } from '@/constants';
 
 interface AddressForm {
   type: string;
@@ -73,7 +71,7 @@ export default function CheckoutPage() {
     setOrderLoading(true);
     try {
       const orderNo = `ORD-${Date.now()}`;
-      const total = subtotal() + SHIPPING + TAXES;
+      const total = subtotal() + SHIPPING + (subtotal() * TAXES) / 100;
 
       await api.post(API_ENDPOINTS.BASKETS.UPDATE, {
         userName: user?.email || user?.userName,
@@ -98,14 +96,14 @@ export default function CheckoutPage() {
       if (selectedPaymentMethod === 'CARD') {
         const paymentData = {
           orderNo,
-          amount: Math.round(total * 23000),
+          amount: Math.round(total * VND_RATE),
           description: `Order ${orderNo}`,
           buyerName: `${user?.firstName} ${user?.lastName}`,
           buyerEmail: user?.email || user?.userName,
           items: items.map((i) => ({
             name: i.productName,
             quantity: i.quantity,
-            price: Math.round(i.price * 23000),
+            price: Math.round(i.price * VND_RATE),
           })),
         };
         const { data } = await api.post(API_ENDPOINTS.PAYMENT.CREATE, paymentData);

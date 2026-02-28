@@ -40,7 +40,7 @@ const ORDER_STEPS = [
   { key: 'Paid', label: 'Đã thanh toán', icon: <PaidIcon />, color: '#10b981' },
   { key: 'Shipping', label: 'Đang giao', icon: <LocalShippingIcon />, color: '#3b82f6' },
   { key: 'Shipped', label: 'Đã giao', icon: <InventoryIcon />, color: '#8b5cf6' },
-  { key: 'Fullfilled', label: 'Hoàn thành', icon: <CheckCircleIcon />, color: '#059669' },
+  { key: 'Fulfilled', label: 'Hoàn thành', icon: <CheckCircleIcon />, color: '#059669' },
 ];
 
 const statusToStep: Record<string, number> = {
@@ -49,7 +49,7 @@ const statusToStep: Record<string, number> = {
   Paid: 2,
   Shipping: 3,
   Shipped: 4,
-  Fullfilled: 5,
+  Fulfilled: 5,
   Cancelled: -1,
 };
 
