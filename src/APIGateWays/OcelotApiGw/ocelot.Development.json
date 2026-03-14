@@ -305,6 +305,34 @@
         "PeriodTimespan": 1,
         "Limit": 20
       }
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/ai/chat/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 6013 }],
+      "UpstreamPathTemplate": "/api/ai/chat/{everything}",
+      "UpstreamHttpMethod": ["GET", "POST"],
+      "RateLimitOptions": {
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 20
+      }
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/ai/admin/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 6013 }],
+      "UpstreamPathTemplate": "/api/ai/admin/{everything}",
+      "UpstreamHttpMethod": ["GET", "POST"],
+      "RateLimitOptions": {
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 10
+      }
     }
   ],
   "GlobalConfiguration": {
