@@ -1,0 +1,90 @@
+<c-row>
+  <c-col md="12">
+    <c-card class="mb-4">
+      <c-card-header>Nexus Admin Overview</c-card-header>
+      <c-card-body>
+        <p class="text-medium-emphasis mb-4">
+          Angular.AdminClient is the dedicated back-office shell for Nexus. It
+          reuses the CoreUI layout from CMS, but keeps only the generic admin
+          capabilities that fit this platform.
+        </p>
+        <c-row class="g-3">
+          <c-col md="6" xl="3" *ngFor="let card of overviewCards">
+            <c-card class="h-100">
+              <c-card-body>
+                <div class="text-medium-emphasis text-uppercase small mb-2">
+                  {{ card.title }}
+                </div>
+                <div class="fs-4 fw-semibold mb-2">{{ card.value }}</div>
+                <c-badge [color]="card.color" class="mb-2">Active</c-badge>
+                <p class="mb-0 small text-body-secondary">
+                  {{ card.description }}
+                </p>
+              </c-card-body>
+            </c-card>
+          </c-col>
+        </c-row>
+      </c-card-body>
+    </c-card>
+  </c-col>
+</c-row>
+
+<c-row>
+  <c-col md="8">
+    <c-card class="mb-4">
+      <c-card-header>Admin Surface</c-card-header>
+      <c-card-body>
+        <table cTable [striped]="true" [hover]="true" responsive="true">
+          <thead>
+            <tr>
+              <th>Area</th>
+              <th>Route</th>
+              <th>Status</th>
+              <th>Purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let area of areas">
+              <td>{{ area.name }}</td>
+              <td>
+                <code>{{ area.route }}</code>
+              </td>
+              <td>
+                <c-badge color="success">{{ area.status }}</c-badge>
+              </td>
+              <td>{{ area.summary }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </c-card-body>
+    </c-card>
+  </c-col>
+  <c-col md="4">
+    <c-card class="mb-4">
+      <c-card-header>Migration Notes</c-card-header>
+      <c-card-body>
+        <div class="mb-3">
+          <div class="small text-medium-emphasis mb-1">Scope kept from CMS</div>
+          <c-badge color="info" class="me-2">Dashboard</c-badge>
+          <c-badge color="info" class="me-2">Users</c-badge>
+          <c-badge color="info" class="me-2">Roles</c-badge>
+          <c-badge color="info" class="me-2">Posts</c-badge>
+          <c-badge color="info" class="me-2">Series</c-badge>
+          <c-badge color="info">Media Upload</c-badge>
+        </div>
+        <div class="mb-3">
+          <div class="small text-medium-emphasis mb-1">
+            Scope removed for Nexus
+          </div>
+          <c-badge color="secondary" class="me-2">Login UI</c-badge>
+          <c-badge color="secondary" class="me-2">Token Refresh Flow</c-badge>
+          <c-badge color="secondary">Royalty</c-badge>
+        </div>
+        <div class="small text-body-secondary">
+          The current backend implementation is an in-memory phase to stabilize
+          contracts and front-end flows before moving to persistent storage.
+        </div>
+      </c-card-body>
+    </c-card>
+  </c-col>
+</c-row>

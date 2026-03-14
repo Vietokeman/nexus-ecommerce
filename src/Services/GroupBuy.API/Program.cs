@@ -4,6 +4,7 @@ using GroupBuy.API.Repositories;
 using GroupBuy.API.Repositories.Interfaces;
 using GroupBuy.API.Services;
 using GroupBuy.API.Services.Interfaces;
+using Infrastructure.Audit;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -35,8 +36,10 @@ Log.Information("Starting GroupBuy API up");
 
 try
 {
+    builder.Services.AddAuditLogging(builder.Configuration, "groupbuy-api");
+
     // PostgreSQL Database
-    builder.Services.AddDbContext<GroupBuyContext>(options =>
+    builder.Services.AddDbContext<GroupBuyContext>((sp, options) =>
         options.UseNpgsql(
             builder.Configuration.GetConnectionString("DefaultConnectionString"),
             npgsqlOptions =>
@@ -45,7 +48,8 @@ try
                     maxRetryCount: 5,
                     maxRetryDelay: TimeSpan.FromSeconds(30),
                     errorCodesToAdd: null);
-            }));
+            })
+            .AddInterceptors(sp.GetRequiredService<AuditSaveChangesInterceptor>()));
 
     // Repositories
     builder.Services.AddScoped<IGroupBuyRepository, GroupBuyRepository>();

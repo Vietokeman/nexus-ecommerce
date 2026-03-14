@@ -23,30 +23,37 @@ A dedicated AI microservice for the Nexus distributed e-commerce platform. The s
 ## Phases
 
 ### Phase 1. Microservice foundation
+
 [COMMIT: feat(ai): scaffold Nexus.AI.Service with .NET 8 startup, Docker, and repo conventions]
 [COMMENT: Replaced the weather-template scaffold with production-aligned startup, configuration binding, health checks, Swagger, and Docker packaging.]
 
 ### Phase 2. Persistence model
+
 [COMMIT: feat(ai): add AI database schema for chat memory and product vectors]
 [COMMENT: Introduced `ChatSession`, `ChatMessageRecord`, `ProductVector`, and `NexusAiDbContext` with pgvector support.]
 
 ### Phase 3. Product synchronization
+
 [COMMIT: feat(ai): sync catalog data from Product.API into pgvector store]
 [COMMENT: Added HTTP-based catalog ingestion, embedding generation, upsert logic, and local vector materialization.]
 
 ### Phase 4. Semantic retrieval and plugins
+
 [COMMIT: feat(ai): add semantic product search and kernel plugins]
 [COMMENT: Added vector similarity search, product-search plugin output, and order-support guidance for grounded responses.]
 
 ### Phase 5. Chat orchestration
+
 [COMMIT: feat(ai): implement Gemini chat flow with persistent sessions]
 [COMMENT: Added session-aware conversation handling, grounded history reconstruction, and Gemini prompt settings with automatic tool invocation.]
 
 ### Phase 6. Platform integration
+
 [COMMIT: feat(ai): wire AI service into compose, Ocelot, and solution files]
 [COMMENT: Added dedicated pgvector container, gateway routes, Swagger exposure, development port mapping, and solution registration.]
 
 ### Phase 7. Validation and usage docs
+
 [COMMIT: docs(ai): add service usage guide and smoke-test requests]
 [COMMENT: Documented the architecture, configuration, and manual request flows required to operate and validate the service.]
 
