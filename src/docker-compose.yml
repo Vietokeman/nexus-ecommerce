@@ -112,6 +112,20 @@ services:
       context: .
       dockerfile: Services/Nexus.AI.Service/Dockerfile
 
+  admin.api:
+    image: ${DOCKER_REGISTRY-}src/admin-api:${PLATFORM:-linux}-${TAG:-latest}
+    container_name: src-admin-api
+    build:
+      context: .
+      dockerfile: Services/Admin.API/Dockerfile
+
+  angular.admin.client:
+    image: ${DOCKER_REGISTRY-}src/angular-admin-client:${PLATFORM:-linux}-${TAG:-latest}
+    container_name: src-angular-admin-client
+    build:
+      context: ./WebApps/Angular.AdminClient
+      dockerfile: Dockerfile
+
   # API Gateway section
   ocelot.apigw:
     image: ${DOCKER_REGISTRY-}src/ocelot-apigw:${PLATFORM:-linux}-${TAG:-latest}
@@ -157,3 +171,5 @@ volumes:
     name: pgadmin_data
   react_node_modules:
     name: react_node_modules
+  angular_admin_node_modules:
+    name: angular_admin_node_modules

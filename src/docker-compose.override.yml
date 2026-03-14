@@ -488,6 +488,26 @@ services:
           memory: 512M
     restart: always
 
+  admin.api:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    container_name: src-admin-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
+    volumes:
+      - .:/src
+    working_dir: /src/Services/Admin.API
+    command: dotnet watch run --no-launch-profile
+    ports:
+      - "6014:80"
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    restart: always
+
   # ==================== API GATEWAY (SDK + Volume + Hot Reload) ====================
   ocelot.apigw:
     image: mcr.microsoft.com/dotnet/sdk:8.0
@@ -514,6 +534,7 @@ services:
       - groupbuy.api
       - seller.api
       - nexus.ai.service
+      - admin.api
       - elasticsearch
     ports:
       - "5000:80"
@@ -540,6 +561,24 @@ services:
       - ocelot.apigw
     ports:
       - "3000:3000"
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    restart: always
+
+  angular.admin.client:
+    image: node:20-alpine
+    container_name: src-angular-admin-client
+    volumes:
+      - ./WebApps/Angular.AdminClient:/app
+      - angular_admin_node_modules:/app/node_modules
+    working_dir: /app
+    command: sh -c "npm install && npm run start -- --host 0.0.0.0"
+    depends_on:
+      - ocelot.apigw
+    ports:
+      - "4201:4201"
     deploy:
       resources:
         limits:
