@@ -30,7 +30,9 @@ export class DefaultLayoutComponent implements OnInit {
 
   ngOnInit(): void {
     const user = this.tokenService.getUser();
-    const permissions = Array.isArray(user?.permissions) ? user.permissions : [];
+    const permissions = Array.isArray(user?.permissions)
+      ? user.permissions
+      : [];
 
     this.navItems = navItems
       .map((item) => {

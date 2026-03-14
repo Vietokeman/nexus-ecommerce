@@ -7,11 +7,13 @@ This guide explains how Nexus.AI.Service stores and validates vector data in Pos
 Nexus.AI.Service uses a dedicated database `NexusAiDb` and does not share direct data access with other services.
 
 Main tables:
+
 - `product_vectors`: synchronized catalog data with embedding vectors.
 - `chat_sessions`: conversation sessions.
 - `chat_messages`: persisted user/assistant turns.
 
 Key constraints:
+
 - unique `product_id`
 - unique `product_no`
 - `embedding` column stored as `vector`
@@ -19,10 +21,12 @@ Key constraints:
 ## 2. Docker services
 
 Compose services:
+
 - `nexusaidb`: pgvector image (`pgvector/pgvector:pg16`)
 - `nexus.ai.service`: ASP.NET Core AI microservice
 
 Default dev database port mapping:
+
 - host `5436` -> container `5432`
 
 ## 3. Verify extension and schema
@@ -85,6 +89,7 @@ Replace the example vector by a real embedding to get meaningful ranking.
 Current implementation does not require Python and does not require ONNX models from Hugging Face.
 
 Current runtime path:
+
 - embeddings: Semantic Kernel Google connector (`text-embedding-004`)
 - chat: Gemini API via Semantic Kernel
 

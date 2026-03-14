@@ -1,11 +1,16 @@
 import { inject } from '@angular/core';
-import { Router, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivateFn } from '@angular/router';
+import {
+  Router,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+  CanActivateFn,
+} from '@angular/router';
 import { UrlConstants } from './constants/url.constants';
 import { TokenStorageService } from './services/token-storage.service';
 
 export const authGuard: CanActivateFn = (
   route: ActivatedRouteSnapshot,
-  state: RouterStateSnapshot
+  state: RouterStateSnapshot,
 ): boolean => {
   const router = inject(Router);
   const tokenService = inject(TokenStorageService);

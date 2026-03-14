@@ -29,4 +29,3 @@ export interface NotificationPageResult {
   rowCount: number;
   pageSize: number;
 }
-

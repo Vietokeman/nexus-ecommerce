@@ -36,7 +36,9 @@ export const useNotificationStore = create<NotificationState>()(
 
       upsertNotification: (notification) =>
         set((state) => {
-          const existingIndex = state.notifications.findIndex((item) => item.id === notification.id);
+          const existingIndex = state.notifications.findIndex(
+            (item) => item.id === notification.id,
+          );
           const merged =
             existingIndex >= 0
               ? state.notifications.map((item, index) =>

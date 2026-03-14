@@ -13,7 +13,13 @@ export interface NotificationListParams {
 const notificationKeys = {
   all: ['notifications'] as const,
   list: (params: NotificationListParams) =>
-    ['notifications', 'list', params.isRead ?? null, params.pageIndex ?? 1, params.pageSize ?? 20] as const,
+    [
+      'notifications',
+      'list',
+      params.isRead ?? null,
+      params.pageIndex ?? 1,
+      params.pageSize ?? 20,
+    ] as const,
   unreadCount: ['notifications', 'unread-count'] as const,
 };
 
@@ -38,7 +44,9 @@ export function useUnreadNotificationCount() {
   return useQuery({
     queryKey: notificationKeys.unreadCount,
     queryFn: async () => {
-      const { data } = await api.get<{ unreadCount: number }>(API_ENDPOINTS.NOTIFICATIONS.UNREAD_COUNT);
+      const { data } = await api.get<{ unreadCount: number }>(
+        API_ENDPOINTS.NOTIFICATIONS.UNREAD_COUNT,
+      );
       return data.unreadCount;
     },
   });
