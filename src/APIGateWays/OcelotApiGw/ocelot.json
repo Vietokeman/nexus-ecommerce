@@ -586,6 +586,46 @@
       ],
       "UpstreamPathTemplate": "/api/reviews",
       "UpstreamHttpMethod": ["POST"]
+    },
+    {
+      "SwaggerKey": "nexus-ai",
+      "DownstreamPathTemplate": "/api/ai/chat/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "nexus.ai.service",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/ai/chat/{everything}",
+      "UpstreamHttpMethod": ["GET", "POST"],
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 20
+      }
+    },
+    {
+      "SwaggerKey": "nexus-ai",
+      "DownstreamPathTemplate": "/api/ai/admin/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "nexus.ai.service",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/ai/admin/{everything}",
+      "UpstreamHttpMethod": ["GET", "POST"],
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 10
+      }
     }
   ],
   "SwaggerEndPoints": [
@@ -696,6 +736,17 @@
           "Name": "Seller API",
           "Version": "v1",
           "Url": "http://seller.api:80/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "nexus-ai",
+      "TransformByOcelotConfig": false,
+      "Config": [
+        {
+          "Name": "Nexus AI Service",
+          "Version": "v1",
+          "Url": "http://nexus.ai.service:80/swagger/v1/swagger.json"
         }
       ]
     }
