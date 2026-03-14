@@ -24,12 +24,14 @@ const OrderSuccessPage = lazy(() => import('@/pages/orders/OrderSuccessPage'));
 const UserOrdersPage = lazy(() => import('@/pages/orders/UserOrdersPage'));
 const UserProfilePage = lazy(() => import('@/pages/user/UserProfilePage'));
 const WishlistPage = lazy(() => import('@/pages/user/WishlistPage'));
+const NotificationsPage = lazy(() => import('@/pages/notifications/NotificationsPage'));
 
 /* ─── Lazy Pages: Admin ─── */
 const AdminDashboardPage = lazy(() => import('@/pages/admin/AdminDashboardPage'));
 const AddProductPage = lazy(() => import('@/pages/admin/AddProductPage'));
 const ProductUpdatePage = lazy(() => import('@/pages/admin/ProductUpdatePage'));
 const AdminOrdersPage = lazy(() => import('@/pages/admin/AdminOrdersPage'));
+const AdminAuditLogsPage = lazy(() => import('@/pages/admin/AdminAuditLogsPage'));
 
 /* ─── Lazy Pages: GroupBuy ─── */
 const GroupBuyListPage = lazy(() => import('@/pages/group-buy/GroupBuyListPage'));
@@ -207,6 +209,14 @@ export const router = createBrowserRouter([
           </P>
         ),
       },
+      {
+        path: 'notifications',
+        element: (
+          <P>
+            <NotificationsPage />
+          </P>
+        ),
+      },
 
       /* ─── GroupBuy Routes ─── */
       {
@@ -318,6 +328,14 @@ export const router = createBrowserRouter([
         element: (
           <A>
             <AdminOrdersPage />
+          </A>
+        ),
+      },
+      {
+        path: 'admin/audit-logs',
+        element: (
+          <A>
+            <AdminAuditLogsPage />
           </A>
         ),
       },

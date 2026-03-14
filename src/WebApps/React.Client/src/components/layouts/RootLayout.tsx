@@ -23,11 +23,15 @@ import { useCartStore } from '@/store/cart-store';
 import { useWishlistStore } from '@/store/wishlist-store';
 import { useAuthStore } from '@/store/auth-store';
 import { useUIStore } from '@/store/ui-store';
+import { useSignalRNotification } from '@/hooks/useSignalRNotification';
 import { nexus } from '@/theme/theme';
 import NexusCartLogo from '@/components/auth/NexusCartLogo';
+import NotificationDropdown from '@/components/notifications/NotificationDropdown';
 import { APP_NAME } from '@/constants';
 
 export default function RootLayout() {
+  useSignalRNotification();
+
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const totalItems = useCartStore((s) => s.totalItems);
   const cartItems = useCartStore((s) => s.items);
@@ -110,6 +114,8 @@ export default function RootLayout() {
 
           {/* Actions */}
           <Stack direction="row" alignItems="center" spacing={1.5}>
+            <NotificationDropdown />
+
             <Tooltip title="Settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar
@@ -292,19 +298,40 @@ export default function RootLayout() {
             <Typography variant="body1" fontWeight={600} sx={{ color: 'rgba(255,255,255,0.9)' }}>
               Support
             </Typography>
-            {['support@nexus.com', '+84 888-888-999', 'Ho Chi Minh City, Vietnam'].map((t) => (
-              <Typography
-                key={t}
-                variant="body2"
-                sx={{
-                  color: 'rgba(255,255,255,0.5)',
-                  cursor: 'pointer',
-                  '&:hover': { color: nexus.purple[300] },
-                }}
-              >
-                {t}
-              </Typography>
-            ))}
+            <Typography
+              component="a"
+              href="mailto:support@nexus.com"
+              variant="body2"
+              sx={{
+                color: 'rgba(255,255,255,0.5)',
+                cursor: 'pointer',
+                textDecoration: 'none',
+                '&:hover': { color: nexus.purple[300] },
+              }}
+            >
+              support@nexus.com
+            </Typography>
+            <Typography
+              component="a"
+              href="tel:+84888888999"
+              variant="body2"
+              sx={{
+                color: 'rgba(255,255,255,0.5)',
+                cursor: 'pointer',
+                textDecoration: 'none',
+                '&:hover': { color: nexus.purple[300] },
+              }}
+            >
+              +84 888-888-999
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{
+                color: 'rgba(255,255,255,0.5)',
+              }}
+            >
+              Ho Chi Minh City, Vietnam
+            </Typography>
           </Stack>
 
           {/* Account */}

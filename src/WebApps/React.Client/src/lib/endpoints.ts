@@ -83,4 +83,13 @@ export const API_ENDPOINTS = {
     CREATE: '/api/reviews',
     REPLY: (reviewId: number) => `/api/reviews/${reviewId}/reply`,
   },
+  NOTIFICATIONS: {
+    LIST: '/api/admin/notifications',
+    UNREAD_COUNT: '/api/admin/notifications/unread-count',
+    MARK_AS_READ: (id: string) => `/api/admin/notifications/${id}/mark-as-read`,
+    MARK_ALL_AS_READ: '/api/admin/notifications/mark-all-as-read',
+  },
+  AUDIT_LOGS: {
+    LIST: '/api/admin/audit-logs',
+  },
 } as const;
