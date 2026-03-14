@@ -1,0 +1,25 @@
+@baseUrl = http://localhost:6013
+@adminKey = change-me
+@sessionId = 11111111-1111-1111-1111-111111111111
+
+### Sync products into pgvector store
+POST {{baseUrl}}/api/ai/admin/sync/products
+X-Nexus-AI-Key: {{adminKey}}
+
+### Search synced products
+GET {{baseUrl}}/api/ai/admin/search?query=wireless%20headphones&topK=5
+X-Nexus-AI-Key: {{adminKey}}
+
+### Start or continue a grounded chat session
+POST {{baseUrl}}/api/ai/chat/sessions
+Content-Type: application/json
+
+{
+	"sessionId": "{{sessionId}}",
+	"userId": "demo-user",
+	"message": "Recommend a good budget gaming mouse and explain why.",
+	"topK": 5
+}
+
+### Read chat history
+GET {{baseUrl}}/api/ai/chat/sessions/{{sessionId}}
