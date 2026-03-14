@@ -626,6 +626,26 @@
         "PeriodTimespan": 1,
         "Limit": 10
       }
+    },
+    {
+      "SwaggerKey": "admin",
+      "DownstreamPathTemplate": "/api/admin/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "admin.api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/admin/{everything}",
+      "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"],
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 20
+      }
     }
   ],
   "SwaggerEndPoints": [
@@ -747,6 +767,17 @@
           "Name": "Nexus AI Service",
           "Version": "v1",
           "Url": "http://nexus.ai.service:80/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "admin",
+      "TransformByOcelotConfig": false,
+      "Config": [
+        {
+          "Name": "Admin API",
+          "Version": "v1",
+          "Url": "http://admin.api:80/swagger/v1/swagger.json"
         }
       ]
     }
