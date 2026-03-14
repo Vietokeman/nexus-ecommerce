@@ -90,7 +90,7 @@ export class TokenStorageService {
         .call(atob(str), function (character: string) {
           return '%' + ('00' + character.charCodeAt(0).toString(16)).slice(-2);
         })
-        .join('')
+        .join(''),
     );
   }
 }

@@ -16,7 +16,7 @@ interface IAdminArea {
 
 @Component({
   templateUrl: 'dashboard.component.html',
-  styleUrls: ['dashboard.component.scss']
+  styleUrls: ['dashboard.component.scss'],
 })
 export class DashboardComponent {
   public readonly overviewCards: IOverviewCard[] = [
@@ -29,7 +29,8 @@ export class DashboardComponent {
     {
       title: 'Roles',
       value: '2',
-      description: 'Administrator and content editor permissions are available.',
+      description:
+        'Administrator and content editor permissions are available.',
       color: 'info',
     },
     {
@@ -41,7 +42,8 @@ export class DashboardComponent {
     {
       title: 'Media',
       value: 'Ready',
-      description: 'Image uploads are stored under the Admin.API static files root.',
+      description:
+        'Image uploads are stored under the Admin.API static files root.',
       color: 'success',
     },
   ];
@@ -56,7 +58,8 @@ export class DashboardComponent {
     {
       name: 'System / Users',
       route: '/system/users',
-      summary: 'Manage admin identities, passwords, emails, and role assignment.',
+      summary:
+        'Manage admin identities, passwords, emails, and role assignment.',
       status: 'Active',
     },
     {
@@ -74,7 +77,8 @@ export class DashboardComponent {
     {
       name: 'Content / Posts',
       route: '/content/posts',
-      summary: 'Create, review, return, approve, and categorize editorial posts.',
+      summary:
+        'Create, review, return, approve, and categorize editorial posts.',
       status: 'Active',
     },
     {

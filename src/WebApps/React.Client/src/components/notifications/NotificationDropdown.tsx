@@ -134,7 +134,11 @@ export default function NotificationDropdown() {
                   }
                   secondary={
                     <>
-                      <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
+                      <Typography
+                        variant="caption"
+                        color="text.secondary"
+                        sx={{ display: 'block' }}
+                      >
                         {item.message}
                       </Typography>
                       <Typography variant="caption" color="text.disabled">
@@ -149,10 +153,14 @@ export default function NotificationDropdown() {
         )}
 
         <Box p={1.5}>
-          <Button fullWidth variant="outlined" onClick={() => {
-            handleClose();
-            navigate('/notifications');
-          }}>
+          <Button
+            fullWidth
+            variant="outlined"
+            onClick={() => {
+              handleClose();
+              navigate('/notifications');
+            }}
+          >
             View all notifications
           </Button>
         </Box>

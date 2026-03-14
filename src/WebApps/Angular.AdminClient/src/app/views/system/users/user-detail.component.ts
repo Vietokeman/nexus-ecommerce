@@ -48,7 +48,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     private utilService: UtilityService,
     private fb: FormBuilder,
     private cd: ChangeDetectorRef,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
   ) {}
   ngOnDestroy(): void {
     if (this.ref) {
@@ -212,37 +212,37 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     this.form = this.fb.group({
       firstName: new FormControl(
         this.selectedEntity.firstName || null,
-        Validators.required
+        Validators.required,
       ),
       lastName: new FormControl(
         this.selectedEntity.lastName || null,
-        Validators.required
+        Validators.required,
       ),
       userName: new FormControl(
         this.selectedEntity.userName || null,
-        Validators.required
+        Validators.required,
       ),
       email: new FormControl(
         this.selectedEntity.email || null,
-        Validators.required
+        Validators.required,
       ),
       phoneNumber: new FormControl(
         this.selectedEntity.phoneNumber || null,
-        Validators.required
+        Validators.required,
       ),
       password: new FormControl(
         null,
         Validators.compose([
           Validators.required,
           Validators.pattern(
-            '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&].{8,}$'
+            '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&].{8,}$',
           ),
-        ])
+        ]),
       ),
       dob: new FormControl(
         this.selectedEntity.dob
           ? formatDate(this.selectedEntity.dob, 'yyyy-MM-dd', 'en')
-          : null
+          : null,
       ),
       avatarFile: new FormControl(null),
       avatar: new FormControl(this.selectedEntity.avatar || null),

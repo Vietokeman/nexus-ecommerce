@@ -7,13 +7,13 @@ Dedicated admin web application for Nexus Commerce. This project was migrated fr
 - Separate admin operations from `React.Client`.
 - Reuse the mature CoreUI Angular layout from CMS.
 - Keep only common back-office domains for Nexus:
-	- dashboard
-	- users
-	- roles and permissions
-	- post categories
-	- posts
-	- series
-	- media upload
+  - dashboard
+  - users
+  - roles and permissions
+  - post categories
+  - posts
+  - series
+  - media upload
 
 Out of scope for this app:
 

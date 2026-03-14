@@ -1,15 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  Box,
-  Button,
-  Paper,
-  Pagination,
-  Stack,
-  Tab,
-  Tabs,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Paper, Pagination, Stack, Tab, Tabs, Typography } from '@mui/material';
 import { useNotificationStore } from '@/store/notification-store';
 import {
   useMarkAllNotificationsAsRead,
@@ -71,7 +62,12 @@ export default function NotificationsPage() {
 
   return (
     <Stack spacing={3}>
-      <Stack direction={{ xs: 'column', md: 'row' }} justifyContent="space-between" alignItems={{ xs: 'stretch', md: 'center' }} spacing={2}>
+      <Stack
+        direction={{ xs: 'column', md: 'row' }}
+        justifyContent="space-between"
+        alignItems={{ xs: 'stretch', md: 'center' }}
+        spacing={2}
+      >
         <Box>
           <Typography variant="h4" fontWeight={700}>
             Notifications
@@ -116,7 +112,11 @@ export default function NotificationsPage() {
             }}
             onClick={() => void handleReadAndNavigate(notification)}
           >
-            <Stack direction={{ xs: 'column', md: 'row' }} justifyContent="space-between" spacing={1}>
+            <Stack
+              direction={{ xs: 'column', md: 'row' }}
+              justifyContent="space-between"
+              spacing={1}
+            >
               <Box>
                 <Typography variant="subtitle1" fontWeight={notification.isRead ? 500 : 700}>
                   {notification.title}

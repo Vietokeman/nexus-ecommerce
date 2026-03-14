@@ -28,13 +28,19 @@ function formatTime(value: string): string {
   return new Date(value).toLocaleString();
 }
 
-function buildDiff(log: AuditLogItem): { oldValues: Record<string, string | null>; newValues: Record<string, string | null> } {
+function buildDiff(log: AuditLogItem): {
+  oldValues: Record<string, string | null>;
+  newValues: Record<string, string | null>;
+} {
   if (!log.changesJson) {
     return { oldValues: {}, newValues: {} };
   }
 
   try {
-    const parsed = JSON.parse(log.changesJson) as Record<string, { oldValue?: string | null; newValue?: string | null }>;
+    const parsed = JSON.parse(log.changesJson) as Record<
+      string,
+      { oldValue?: string | null; newValue?: string | null }
+    >;
     const oldValues: Record<string, string | null> = {};
     const newValues: Record<string, string | null> = {};
 
@@ -59,7 +65,11 @@ function getActionColor(action: string): 'success' | 'error' | 'info' | 'warning
     return 'success';
   }
 
-  if (upperAction.includes('UPDATE') || upperAction.includes('PUT') || upperAction.includes('PATCH')) {
+  if (
+    upperAction.includes('UPDATE') ||
+    upperAction.includes('PUT') ||
+    upperAction.includes('PATCH')
+  ) {
     return 'warning';
   }
 
@@ -211,7 +221,9 @@ export default function AdminAuditLogsPage() {
         <DialogContent>
           <Stack spacing={1.5}>
             <Typography variant="body2" color="text.secondary">
-              {selectedLog ? `${selectedLog.entityName} · ${selectedLog.action} · ${formatTime(selectedLog.timestamp)}` : ''}
+              {selectedLog
+                ? `${selectedLog.entityName} · ${selectedLog.action} · ${formatTime(selectedLog.timestamp)}`
+                : ''}
             </Typography>
             <Grid container spacing={2}>
               <Grid item xs={12} md={6}>
@@ -219,7 +231,10 @@ export default function AdminAuditLogsPage() {
                   <Typography variant="subtitle2" fontWeight={700} mb={1}>
                     Old Values
                   </Typography>
-                  <Box component="pre" sx={{ m: 0, whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontSize: 12 }}>
+                  <Box
+                    component="pre"
+                    sx={{ m: 0, whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontSize: 12 }}
+                  >
                     {JSON.stringify(diff.oldValues, null, 2)}
                   </Box>
                 </Paper>
@@ -229,7 +244,10 @@ export default function AdminAuditLogsPage() {
                   <Typography variant="subtitle2" fontWeight={700} mb={1}>
                     New Values
                   </Typography>
-                  <Box component="pre" sx={{ m: 0, whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontSize: 12 }}>
+                  <Box
+                    component="pre"
+                    sx={{ m: 0, whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontSize: 12 }}
+                  >
                     {JSON.stringify(diff.newValues, null, 2)}
                   </Box>
                 </Paper>
