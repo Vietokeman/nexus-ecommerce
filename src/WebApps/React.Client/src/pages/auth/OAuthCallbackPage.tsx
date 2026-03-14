@@ -67,7 +67,7 @@ export default function OAuthCallbackPage() {
     // Redirect to returnUrl or home
     const returnUrl = searchParams.get('returnUrl') || '/';
     navigate(returnUrl, { replace: true });
-  }, [searchParams, navigate, setUser, setToken]);
+  }, [searchParams, navigate, setUser, setToken, setRefreshToken]);
 
   if (error) {
     return (

@@ -15,6 +15,8 @@ import { useWishlistStore } from '@/store/wishlist-store';
 import { useAuthStore } from '@/store/auth-store';
 import type { Product } from '@/types/product';
 import loadingAnimation from '@/assets/animations/loading.json';
+import ProductReviewsSection from '@/components/reviews/ProductReviewsSection';
+import type { ReviewSummary } from '@/types/seller';
 
 const SIZES = ['XS', 'S', 'M', 'L', 'XL'];
 const COLORS = ['#020202', '#F6F6F6', '#B82222', '#BEA9A9', '#E2BB8D'];
@@ -33,6 +35,7 @@ export default function ProductDetailsPage() {
   const cartItems = useCartStore((s) => s.items);
   const { isInWishlist, toggleItem } = useWishlistStore();
   const user = useAuthStore((s) => s.user);
+  const [reviewSummary, setReviewSummary] = useState<ReviewSummary | null>(null);
 
   const theme = useTheme();
   const is1420 = useMediaQuery(theme.breakpoints.down(1420));
@@ -63,6 +66,17 @@ export default function ProductDetailsPage() {
       }
     };
     fetchProduct();
+  }, [id]);
+
+  // Fetch review summary for rating display
+  useEffect(() => {
+    if (!id) return;
+    api
+      .get(API_ENDPOINTS.REVIEWS.SUMMARY(Number(id)))
+      .then(({ data }) => setReviewSummary(data?.result || data))
+      .catch(() => {
+        /* ignore — reviews may not exist */
+      });
   }, [id]);
 
   const handleAddToCart = () => {
@@ -198,8 +212,12 @@ export default function ProductDetailsPage() {
                   rowGap: '1rem',
                 }}
               >
-                <Rating value={4} readOnly />
-                <Typography>( No reviews )</Typography>
+                <Rating value={reviewSummary?.averageRating ?? 0} precision={0.5} readOnly />
+                <Typography>
+                  {reviewSummary && reviewSummary.totalReviews > 0
+                    ? `(${reviewSummary.totalReviews} review${reviewSummary.totalReviews > 1 ? 's' : ''})`
+                    : '( No reviews )'}
+                </Typography>
                 <Typography color="green">In Stock</Typography>
               </Stack>
               <Typography variant="h5">${product.price}</Typography>
@@ -441,6 +459,13 @@ export default function ProductDetailsPage() {
           </Stack>
         </Stack>
       </Stack>
+
+      {/* Product Reviews Section */}
+      {product && (
+        <Stack sx={{ maxWidth: '88rem', width: '100%', px: is480 ? 2 : 4 }}>
+          <ProductReviewsSection productId={product.id ?? Number(id)} />
+        </Stack>
+      )}
     </Stack>
   );
 }

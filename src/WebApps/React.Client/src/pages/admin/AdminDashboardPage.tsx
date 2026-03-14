@@ -15,7 +15,10 @@ interface StatCard {
 export default function AdminDashboardPage() {
   const { data: products, isLoading: loadingProducts } = useQuery({
     queryKey: ['admin-products'],
-    queryFn: () => api.get(API_ENDPOINTS.PRODUCTS.LIST).then((r) => r.data),
+    queryFn: () => api.get(API_ENDPOINTS.PRODUCTS.LIST).then((r) => {
+      const data = r.data;
+      return Array.isArray(data) ? data : (data?.result ?? []);
+    }),
   });
 
   const stats: StatCard[] = [

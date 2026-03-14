@@ -39,6 +39,14 @@ const GroupBuyJoinPage = lazy(() => import('@/pages/group-buy/GroupBuyJoinPage')
 /* ─── Lazy Pages: FlashSale ─── */
 const FlashSaleDetailPage = lazy(() => import('@/pages/flash-sale/FlashSaleDetailPage'));
 
+/* ─── Lazy Pages: Seller ─── */
+const SellerDashboardPage = lazy(() => import('@/pages/seller/SellerDashboardPage'));
+const SellerProductsPage = lazy(() => import('@/pages/seller/SellerProductsPage'));
+const SellerCreateProductPage = lazy(() => import('@/pages/seller/SellerCreateProductPage'));
+
+/* ─── Lazy Pages: Order Tracking ─── */
+const OrderTrackingPage = lazy(() => import('@/pages/orders/OrderTrackingPage'));
+
 /* ─── Lazy Pages: Other ─── */
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 
@@ -236,6 +244,50 @@ export const router = createBrowserRouter([
         ),
       },
 
+      /* ─── Order Tracking ─── */
+      {
+        path: 'orders/:orderNo/tracking',
+        element: (
+          <P>
+            <OrderTrackingPage />
+          </P>
+        ),
+      },
+
+      /* ─── Seller Routes ─── */
+      {
+        path: 'seller/dashboard',
+        element: (
+          <P>
+            <SellerDashboardPage />
+          </P>
+        ),
+      },
+      {
+        path: 'seller/products',
+        element: (
+          <P>
+            <SellerProductsPage />
+          </P>
+        ),
+      },
+      {
+        path: 'seller/create-product',
+        element: (
+          <P>
+            <SellerCreateProductPage />
+          </P>
+        ),
+      },
+      {
+        path: 'seller/edit-product/:id',
+        element: (
+          <P>
+            <SellerCreateProductPage />
+          </P>
+        ),
+      },
+
       /* ─── Admin Routes ─── */
       {
         path: 'admin/dashboard',
@@ -266,6 +318,14 @@ export const router = createBrowserRouter([
         element: (
           <A>
             <AdminOrdersPage />
+          </A>
+        ),
+      },
+      {
+        path: 'admin/profile',
+        element: (
+          <A>
+            <UserProfilePage />
           </A>
         ),
       },

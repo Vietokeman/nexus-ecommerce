@@ -216,8 +216,17 @@ export default function UserOrdersPage() {
                 </Stack>
 
                 {/* lower */}
-                <Stack mt={2} flexDirection="row" justifyContent="space-between">
+                <Stack mt={2} flexDirection="row" justifyContent="space-between" alignItems="center">
                   <Typography mb={2}>Status : {order.status}</Typography>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    component={Link}
+                    to={`/orders/${order.documentNo}/tracking`}
+                    sx={{ mb: 2, fontWeight: 600 }}
+                  >
+                    📦 Theo dõi đơn hàng
+                  </Button>
                 </Stack>
               </Stack>
             ))}

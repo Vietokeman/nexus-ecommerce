@@ -18,12 +18,14 @@ import {
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import TuneIcon from '@mui/icons-material/Tune';
+import StorefrontIcon from '@mui/icons-material/Storefront';
 import { useCartStore } from '@/store/cart-store';
 import { useWishlistStore } from '@/store/wishlist-store';
 import { useAuthStore } from '@/store/auth-store';
 import { useUIStore } from '@/store/ui-store';
 import { nexus } from '@/theme/theme';
 import NexusCartLogo from '@/components/auth/NexusCartLogo';
+import { APP_NAME } from '@/constants';
 
 export default function RootLayout() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -102,7 +104,7 @@ export default function RootLayout() {
                 backgroundClip: 'text',
               }}
             >
-              Nexus Commerce
+              {APP_NAME}
             </Typography>
           </Stack>
 
@@ -145,6 +147,29 @@ export default function RootLayout() {
                   </Typography>
                 </MenuItem>
               )}
+              {/* Seller menu items — only for non-admin users */}
+              {!user?.isAdmin && (
+                <>
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography
+                      component={Link}
+                      sx={{ textDecoration: 'none', color: nexus.neutral[900] }}
+                      to="/seller/dashboard"
+                    >
+                      🏪 Seller Dashboard
+                    </Typography>
+                  </MenuItem>
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography
+                      component={Link}
+                      sx={{ textDecoration: 'none', color: nexus.neutral[900] }}
+                      to="/seller/products"
+                    >
+                      📦 My Products
+                    </Typography>
+                  </MenuItem>
+                </>
+              )}
               {settings.map((setting) => (
                 <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
                   <Typography
@@ -176,6 +201,18 @@ export default function RootLayout() {
               <Button variant="contained" size="small" sx={{ fontSize: '0.75rem' }}>
                 Admin
               </Button>
+            )}
+
+            {!user?.isAdmin && (
+              <Tooltip title="Seller Dashboard">
+                <IconButton
+                  onClick={() => navigate('/seller/dashboard')}
+                  size="small"
+                  sx={{ display: { xs: 'none', sm: 'inline-flex' } }}
+                >
+                  <StorefrontIcon sx={{ color: nexus.neutral[700] }} />
+                </IconButton>
+              </Tooltip>
             )}
 
             {cartItems.length > 0 && (
@@ -242,7 +279,7 @@ export default function RootLayout() {
                   backgroundClip: 'text',
                 }}
               >
-                Nexus Commerce
+                {APP_NAME}
               </Typography>
             </Stack>
             <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', lineHeight: 1.7 }}>
@@ -320,7 +357,7 @@ export default function RootLayout() {
         {/* Divider & Copyright */}
         <Box sx={{ borderTop: '1px solid rgba(255,255,255,0.1)', pt: 2, textAlign: 'center' }}>
           <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.35)' }}>
-            &copy; Nexus Commerce {new Date().getFullYear()}. All rights reserved.
+            &copy; {APP_NAME} {new Date().getFullYear()}. All rights reserved.
           </Typography>
         </Box>
       </Box>

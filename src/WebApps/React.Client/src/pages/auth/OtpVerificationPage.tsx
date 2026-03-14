@@ -35,7 +35,7 @@ export default function OtpVerificationPage() {
   const handleSendOtp = async () => {
     setResendLoading(true);
     try {
-      await api.post(API_ENDPOINTS.AUTH.RESEND_OTP, { user: user?.id });
+      await api.post(API_ENDPOINTS.AUTH.RESEND_OTP, { userId: user?.id });
       setOtpSent(true);
       toast.success('OTP sent to your email');
     } catch (err: unknown) {
