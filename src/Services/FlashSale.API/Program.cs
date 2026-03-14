@@ -4,6 +4,7 @@ using FlashSale.API.Repositories;
 using FlashSale.API.Repositories.Interfaces;
 using FlashSale.API.Services;
 using FlashSale.API.Services.Interfaces;
+using Infrastructure.Audit;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using StackExchange.Redis;
@@ -35,8 +36,10 @@ Log.Information("Starting FlashSale API up");
 
 try
 {
+    builder.Services.AddAuditLogging(builder.Configuration, "flashsale-api");
+
     // PostgreSQL Database
-    builder.Services.AddDbContext<FlashSaleContext>(options =>
+    builder.Services.AddDbContext<FlashSaleContext>((sp, options) =>
         options.UseNpgsql(
             builder.Configuration.GetConnectionString("DefaultConnectionString"),
             npgsqlOptions =>
@@ -45,7 +48,8 @@ try
                     maxRetryCount: 5,
                     maxRetryDelay: TimeSpan.FromSeconds(30),
                     errorCodesToAdd: null);
-            }));
+            })
+            .AddInterceptors(sp.GetRequiredService<AuditSaveChangesInterceptor>()));
 
     // Redis (for Lua Script atomic stock management)
     builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>

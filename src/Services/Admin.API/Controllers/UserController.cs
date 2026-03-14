@@ -1,4 +1,5 @@
 using Admin.API.Models;
+using Admin.API.Services;
 using Admin.API.Stores;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,7 +7,7 @@ namespace Admin.API.Controllers;
 
 [ApiController]
 [Route("api/admin/user")]
-public sealed class UserController(AdminDataStore store) : ControllerBase
+public sealed class UserController(AdminDataStore store, INotificationService notificationService) : ControllerBase
 {
     [HttpGet("{id:guid}")]
     public ActionResult<UserModel> GetUserById(Guid id)
@@ -51,7 +52,7 @@ public sealed class UserController(AdminDataStore store) : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult CreateUser([FromBody] CreateUserRequest request)
+    public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(request.UserName) || string.IsNullOrWhiteSpace(request.Email))
         {
@@ -83,11 +84,24 @@ public sealed class UserController(AdminDataStore store) : ControllerBase
             return true;
         });
 
-        return created ? Ok() : BadRequest("Username or email already exists.");
+        if (!created)
+        {
+            return BadRequest("Username or email already exists.");
+        }
+
+        await notificationService.PublishAsync(new CreateNotificationRequest
+        {
+            Title = "New user created",
+            Message = $"{request.UserName} has been added to the system.",
+            Link = "/admin/profile",
+            Type = "User"
+        }, cancellationToken);
+
+        return Ok();
     }
 
     [HttpPut("{id:guid}")]
-    public IActionResult UpdateUser(Guid id, [FromBody] UpdateUserRequest request)
+    public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserRequest request, CancellationToken cancellationToken)
     {
         var updated = store.Locked(() =>
         {
@@ -104,12 +118,26 @@ public sealed class UserController(AdminDataStore store) : ControllerBase
             return true;
         });
 
-        return updated ? Ok() : NotFound();
+        if (!updated)
+        {
+            return NotFound();
+        }
+
+        await notificationService.PublishAsync(new CreateNotificationRequest
+        {
+            Title = "User updated",
+            Message = $"User {id} profile has been updated.",
+            Link = "/admin/profile",
+            Type = "User"
+        }, cancellationToken);
+
+        return Ok();
     }
 
     [HttpDelete]
-    public IActionResult DeleteUsers([FromQuery] string[] ids)
+    public async Task<IActionResult> DeleteUsers([FromQuery] string[] ids, CancellationToken cancellationToken)
     {
+        var deletedCount = 0;
         store.Locked(() =>
         {
             var parsedIds = ids
@@ -117,8 +145,19 @@ public sealed class UserController(AdminDataStore store) : ControllerBase
                 .Where(id => id != Guid.Empty)
                 .ToHashSet();
 
-            store.Users.RemoveAll(user => parsedIds.Contains(user.Id));
+            deletedCount = store.Users.RemoveAll(user => parsedIds.Contains(user.Id));
         });
+
+        if (deletedCount > 0)
+        {
+            await notificationService.PublishAsync(new CreateNotificationRequest
+            {
+                Title = "Users removed",
+                Message = $"{deletedCount} user(s) were removed.",
+                Link = "/admin/profile",
+                Type = "User"
+            }, cancellationToken);
+        }
 
         return Ok();
     }
@@ -152,7 +191,7 @@ public sealed class UserController(AdminDataStore store) : ControllerBase
     }
 
     [HttpPost("change-email/{id:guid}")]
-    public IActionResult ChangeEmail(Guid id, [FromBody] ChangeEmailRequest request)
+    public async Task<IActionResult> ChangeEmail(Guid id, [FromBody] ChangeEmailRequest request, CancellationToken cancellationToken)
     {
         var updated = store.Locked(() =>
         {
@@ -166,11 +205,24 @@ public sealed class UserController(AdminDataStore store) : ControllerBase
             return true;
         });
 
-        return updated ? Ok() : NotFound();
+        if (!updated)
+        {
+            return NotFound();
+        }
+
+        await notificationService.PublishAsync(new CreateNotificationRequest
+        {
+            Title = "User email changed",
+            Message = $"User {id} changed email to {request.Email}.",
+            Link = "/admin/profile",
+            Type = "User"
+        }, cancellationToken);
+
+        return Ok();
     }
 
     [HttpPut("{id}/assign-users")]
-    public IActionResult AssignRolesToUser(string id, [FromBody] string[] roles)
+    public async Task<IActionResult> AssignRolesToUser(string id, [FromBody] string[] roles, CancellationToken cancellationToken)
     {
         if (!Guid.TryParse(id, out var userId))
         {
@@ -190,6 +242,19 @@ public sealed class UserController(AdminDataStore store) : ControllerBase
             return true;
         });
 
-        return assigned ? Ok() : NotFound();
+        if (!assigned)
+        {
+            return NotFound();
+        }
+
+        await notificationService.PublishAsync(new CreateNotificationRequest
+        {
+            Title = "User roles updated",
+            Message = $"Roles for user {id} were updated.",
+            Link = "/admin/profile",
+            Type = "Role"
+        }, cancellationToken);
+
+        return Ok();
     }
 }

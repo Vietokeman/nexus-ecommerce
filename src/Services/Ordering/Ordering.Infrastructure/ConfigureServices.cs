@@ -1,5 +1,6 @@
 using Contracts.Common.Interfaces;
 using Infrastructure.Common;
+using Infrastructure.Audit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,10 +16,14 @@ public static class ConfigureServices
 {
     public static IServiceCollection AddInfastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<OrderContext>(options =>
+        services.AddAuditLogging(configuration, "ordering-api");
+
+        services.AddDbContext<OrderContext>((sp, options) =>
         {
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnectionString"),
                 npgsqlOptions => npgsqlOptions.MigrationsAssembly(typeof(OrderContext).Assembly.FullName));
+
+            options.AddInterceptors(sp.GetRequiredService<AuditSaveChangesInterceptor>());
         });
 
         services.AddScoped<OrderContextSeed>();

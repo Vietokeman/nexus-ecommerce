@@ -1,4 +1,5 @@
 using Admin.API.Models;
+using Admin.API.Services;
 using Admin.API.Stores;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,7 +7,7 @@ namespace Admin.API.Controllers;
 
 [ApiController]
 [Route("api/admin/post-category")]
-public sealed class PostCategoryController(AdminDataStore store) : ControllerBase
+public sealed class PostCategoryController(AdminDataStore store, INotificationService notificationService) : ControllerBase
 {
     [HttpGet]
     public ActionResult<List<PostCategoryModel>> GetPostCategories()
@@ -46,7 +47,7 @@ public sealed class PostCategoryController(AdminDataStore store) : ControllerBas
     }
 
     [HttpPut("{id:guid}")]
-    public IActionResult UpdatePostCategory(Guid id, [FromBody] CreateUpdatePostCategoryRequest request)
+    public async Task<IActionResult> UpdatePostCategory(Guid id, [FromBody] CreateUpdatePostCategoryRequest request, CancellationToken cancellationToken)
     {
         var updated = store.Locked(() =>
         {
@@ -62,11 +63,24 @@ public sealed class PostCategoryController(AdminDataStore store) : ControllerBas
             return true;
         });
 
-        return updated ? Ok() : NotFound();
+        if (!updated)
+        {
+            return NotFound();
+        }
+
+        await notificationService.PublishAsync(new CreateNotificationRequest
+        {
+            Title = "Category updated",
+            Message = $"Category '{request.Name}' was updated.",
+            Link = "/admin/dashboard",
+            Type = "Category"
+        }, cancellationToken);
+
+        return Ok();
     }
 
     [HttpPost]
-    public IActionResult CreatePostCategory([FromBody] CreateUpdatePostCategoryRequest request)
+    public async Task<IActionResult> CreatePostCategory([FromBody] CreateUpdatePostCategoryRequest request, CancellationToken cancellationToken)
     {
         store.Locked(() =>
         {
@@ -78,17 +92,37 @@ public sealed class PostCategoryController(AdminDataStore store) : ControllerBas
             });
         });
 
+        await notificationService.PublishAsync(new CreateNotificationRequest
+        {
+            Title = "Category created",
+            Message = $"Category '{request.Name}' was created.",
+            Link = "/admin/dashboard",
+            Type = "Category"
+        }, cancellationToken);
+
         return Ok();
     }
 
     [HttpDelete("{ids}")]
-    public IActionResult DeletePostCategories([FromRoute] Guid[] ids)
+    public async Task<IActionResult> DeletePostCategories([FromRoute] Guid[] ids, CancellationToken cancellationToken)
     {
+        var removed = 0;
         store.Locked(() =>
         {
-            store.PostCategories.RemoveAll(x => ids.Contains(x.Id));
+            removed = store.PostCategories.RemoveAll(x => ids.Contains(x.Id));
             store.Posts.RemoveAll(post => !store.PostCategories.Any(category => category.Id == post.CategoryId));
         });
+
+        if (removed > 0)
+        {
+            await notificationService.PublishAsync(new CreateNotificationRequest
+            {
+                Title = "Categories deleted",
+                Message = $"{removed} category(s) were removed.",
+                Link = "/admin/dashboard",
+                Type = "Category"
+            }, cancellationToken);
+        }
 
         return Ok();
     }

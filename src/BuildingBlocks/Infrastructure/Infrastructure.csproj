@@ -8,9 +8,14 @@
 
   <ItemGroup>
 	<PackageReference Include="AutoMapper" Version="12.0.1" />
+	<PackageReference Include="Elastic.Clients.Elasticsearch" Version="8.17.1" />
 	<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 	<PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
     <ProjectReference Include="..\Contracts\Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
 </Project>
