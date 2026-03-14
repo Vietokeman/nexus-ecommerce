@@ -1,4 +1,5 @@
 using Admin.API.Models;
+using Admin.API.Services;
 using Admin.API.Stores;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,10 +7,10 @@ namespace Admin.API.Controllers;
 
 [ApiController]
 [Route("api/admin/post")]
-public sealed class PostController(AdminDataStore store) : ControllerBase
+public sealed class PostController(AdminDataStore store, INotificationService notificationService) : ControllerBase
 {
     [HttpPost]
-    public IActionResult CreatePost([FromBody] CreateUpdatePostRequest request)
+    public async Task<IActionResult> CreatePost([FromBody] CreateUpdatePostRequest request, CancellationToken cancellationToken)
     {
         var created = store.Locked(() =>
         {
@@ -46,11 +47,24 @@ public sealed class PostController(AdminDataStore store) : ControllerBase
             return true;
         });
 
-        return created ? Ok() : BadRequest("Invalid payload or duplicated slug.");
+        if (!created)
+        {
+            return BadRequest("Invalid payload or duplicated slug.");
+        }
+
+        await notificationService.PublishAsync(new CreateNotificationRequest
+        {
+            Title = "Post created",
+            Message = $"Post '{request.Title}' was created.",
+            Link = "/admin/dashboard",
+            Type = "Post"
+        }, cancellationToken);
+
+        return Ok();
     }
 
     [HttpPut]
-    public IActionResult UpdatePost(Guid id, [FromBody] CreateUpdatePostRequest request)
+    public async Task<IActionResult> UpdatePost(Guid id, [FromBody] CreateUpdatePostRequest request, CancellationToken cancellationToken)
     {
         var updated = store.Locked(() =>
         {
@@ -87,20 +101,45 @@ public sealed class PostController(AdminDataStore store) : ControllerBase
             return true;
         });
 
-        return updated ? Ok() : BadRequest("Invalid payload or post not found.");
+        if (!updated)
+        {
+            return BadRequest("Invalid payload or post not found.");
+        }
+
+        await notificationService.PublishAsync(new CreateNotificationRequest
+        {
+            Title = "Post updated",
+            Message = $"Post '{request.Title}' was updated.",
+            Link = "/admin/dashboard",
+            Type = "Post"
+        }, cancellationToken);
+
+        return Ok();
     }
 
     [HttpDelete]
-    public IActionResult DeletePosts([FromQuery] Guid[] ids)
+    public async Task<IActionResult> DeletePosts([FromQuery] Guid[] ids, CancellationToken cancellationToken)
     {
+        var removed = 0;
         store.Locked(() =>
         {
-            store.Posts.RemoveAll(post => ids.Contains(post.Id));
+            removed = store.Posts.RemoveAll(post => ids.Contains(post.Id));
             foreach (var series in store.Series)
             {
                 series.Posts.RemoveAll(post => ids.Contains(post.PostId));
             }
         });
+
+        if (removed > 0)
+        {
+            await notificationService.PublishAsync(new CreateNotificationRequest
+            {
+                Title = "Posts deleted",
+                Message = $"{removed} post(s) were deleted.",
+                Link = "/admin/dashboard",
+                Type = "Post"
+            }, cancellationToken);
+        }
 
         return Ok();
     }
@@ -162,21 +201,47 @@ public sealed class PostController(AdminDataStore store) : ControllerBase
     }
 
     [HttpGet("approve/{id:guid}")]
-    public IActionResult ApprovePost(Guid id)
+    public async Task<IActionResult> ApprovePost(Guid id, CancellationToken cancellationToken)
     {
         var updated = UpdateStatus(id, "Approved", "Approved");
-        return updated ? Ok() : NotFound();
+        if (!updated)
+        {
+            return NotFound();
+        }
+
+        await notificationService.PublishAsync(new CreateNotificationRequest
+        {
+            Title = "Post approved",
+            Message = $"Post {id} was approved.",
+            Link = "/admin/dashboard",
+            Type = "Post"
+        }, cancellationToken);
+
+        return Ok();
     }
 
     [HttpGet("approval-submit/{id:guid}")]
-    public IActionResult SendToApprove(Guid id)
+    public async Task<IActionResult> SendToApprove(Guid id, CancellationToken cancellationToken)
     {
         var updated = UpdateStatus(id, "PendingApproval", "Submitted for approval");
-        return updated ? Ok() : NotFound();
+        if (!updated)
+        {
+            return NotFound();
+        }
+
+        await notificationService.PublishAsync(new CreateNotificationRequest
+        {
+            Title = "Post submitted",
+            Message = $"Post {id} was sent for approval.",
+            Link = "/admin/dashboard",
+            Type = "Post"
+        }, cancellationToken);
+
+        return Ok();
     }
 
     [HttpPost("return-back/{id:guid}")]
-    public IActionResult ReturnBack(Guid id, [FromBody] ReturnBackRequest model)
+    public async Task<IActionResult> ReturnBack(Guid id, [FromBody] ReturnBackRequest model, CancellationToken cancellationToken)
     {
         var updated = store.Locked(() =>
         {
@@ -198,7 +263,20 @@ public sealed class PostController(AdminDataStore store) : ControllerBase
             return true;
         });
 
-        return updated ? Ok() : NotFound();
+        if (!updated)
+        {
+            return NotFound();
+        }
+
+        await notificationService.PublishAsync(new CreateNotificationRequest
+        {
+            Title = "Post returned",
+            Message = $"Post {id} was returned with reason: {model.Reason}",
+            Link = "/admin/dashboard",
+            Type = "Post"
+        }, cancellationToken);
+
+        return Ok();
     }
 
     [HttpGet("return-reason/{id:guid}")]

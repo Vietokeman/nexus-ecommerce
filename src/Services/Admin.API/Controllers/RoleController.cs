@@ -1,4 +1,5 @@
 using Admin.API.Models;
+using Admin.API.Services;
 using Admin.API.Stores;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,10 +7,10 @@ namespace Admin.API.Controllers;
 
 [ApiController]
 [Route("api/admin/role")]
-public sealed class RoleController(AdminDataStore store) : ControllerBase
+public sealed class RoleController(AdminDataStore store, INotificationService notificationService) : ControllerBase
 {
     [HttpPost]
-    public IActionResult CreateRole([FromBody] CreateUpdateRoleRequest request)
+    public async Task<IActionResult> CreateRole([FromBody] CreateUpdateRoleRequest request, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(request.Name))
         {
@@ -31,11 +32,24 @@ public sealed class RoleController(AdminDataStore store) : ControllerBase
             return true;
         });
 
-        return created ? Ok() : BadRequest("Role already exists.");
+        if (!created)
+        {
+            return BadRequest("Role already exists.");
+        }
+
+        await notificationService.PublishAsync(new CreateNotificationRequest
+        {
+            Title = "Role created",
+            Message = $"Role '{request.Name}' was created.",
+            Link = "/admin/profile",
+            Type = "Role"
+        }, cancellationToken);
+
+        return Ok();
     }
 
     [HttpPut("{id:guid}")]
-    public IActionResult UpdateRole(Guid id, [FromBody] CreateUpdateRoleRequest request)
+    public async Task<IActionResult> UpdateRole(Guid id, [FromBody] CreateUpdateRoleRequest request, CancellationToken cancellationToken)
     {
         var updated = store.Locked(() =>
         {
@@ -50,13 +64,39 @@ public sealed class RoleController(AdminDataStore store) : ControllerBase
             return true;
         });
 
-        return updated ? Ok() : NotFound();
+        if (!updated)
+        {
+            return NotFound();
+        }
+
+        await notificationService.PublishAsync(new CreateNotificationRequest
+        {
+            Title = "Role updated",
+            Message = $"Role '{request.Name}' was updated.",
+            Link = "/admin/profile",
+            Type = "Role"
+        }, cancellationToken);
+
+        return Ok();
     }
 
     [HttpDelete]
-    public IActionResult DeleteRoles([FromQuery] Guid[] ids)
+    public async Task<IActionResult> DeleteRoles([FromQuery] Guid[] ids, CancellationToken cancellationToken)
     {
-        store.Locked(() => store.Roles.RemoveAll(role => ids.Contains(role.Id)));
+        var deleted = 0;
+        store.Locked(() => deleted = store.Roles.RemoveAll(role => ids.Contains(role.Id)));
+
+        if (deleted > 0)
+        {
+            await notificationService.PublishAsync(new CreateNotificationRequest
+            {
+                Title = "Roles removed",
+                Message = $"{deleted} role(s) were deleted.",
+                Link = "/admin/profile",
+                Type = "Role"
+            }, cancellationToken);
+        }
+
         return Ok();
     }
 

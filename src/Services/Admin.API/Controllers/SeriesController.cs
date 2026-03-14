@@ -1,4 +1,5 @@
 using Admin.API.Models;
+using Admin.API.Services;
 using Admin.API.Stores;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,10 +7,10 @@ namespace Admin.API.Controllers;
 
 [ApiController]
 [Route("api/admin/series")]
-public sealed class SeriesController(AdminDataStore store) : ControllerBase
+public sealed class SeriesController(AdminDataStore store, INotificationService notificationService) : ControllerBase
 {
     [HttpPost]
-    public IActionResult CreateSeries([FromBody] CreateUpdateSeriesRequest request)
+    public async Task<IActionResult> CreateSeries([FromBody] CreateUpdateSeriesRequest request, CancellationToken cancellationToken)
     {
         store.Locked(() =>
         {
@@ -21,11 +22,19 @@ public sealed class SeriesController(AdminDataStore store) : ControllerBase
             });
         });
 
+        await notificationService.PublishAsync(new CreateNotificationRequest
+        {
+            Title = "Series created",
+            Message = $"Series '{request.Name}' was created.",
+            Link = "/admin/dashboard",
+            Type = "Series"
+        }, cancellationToken);
+
         return Ok();
     }
 
     [HttpPut]
-    public IActionResult UpdateSeries(Guid id, [FromBody] CreateUpdateSeriesRequest request)
+    public async Task<IActionResult> UpdateSeries(Guid id, [FromBody] CreateUpdateSeriesRequest request, CancellationToken cancellationToken)
     {
         var updated = store.Locked(() =>
         {
@@ -41,12 +50,25 @@ public sealed class SeriesController(AdminDataStore store) : ControllerBase
             return true;
         });
 
-        return updated ? Ok() : NotFound();
+        if (!updated)
+        {
+            return NotFound();
+        }
+
+        await notificationService.PublishAsync(new CreateNotificationRequest
+        {
+            Title = "Series updated",
+            Message = $"Series '{request.Name}' was updated.",
+            Link = "/admin/dashboard",
+            Type = "Series"
+        }, cancellationToken);
+
+        return Ok();
     }
 
     [Route("post-series")]
     [HttpPut]
-    public IActionResult AddPostSeries([FromBody] AddPostSeriesRequest request)
+    public async Task<IActionResult> AddPostSeries([FromBody] AddPostSeriesRequest request, CancellationToken cancellationToken)
     {
         var updated = store.Locked(() =>
         {
@@ -74,12 +96,25 @@ public sealed class SeriesController(AdminDataStore store) : ControllerBase
             return true;
         });
 
-        return updated ? Ok() : BadRequest();
+        if (!updated)
+        {
+            return BadRequest();
+        }
+
+        await notificationService.PublishAsync(new CreateNotificationRequest
+        {
+            Title = "Post linked to series",
+            Message = $"Post {request.PostId} was added to series {request.SeriesId}.",
+            Link = "/admin/dashboard",
+            Type = "Series"
+        }, cancellationToken);
+
+        return Ok();
     }
 
     [Route("post-series")]
     [HttpDelete]
-    public IActionResult DeletePostSeries([FromBody] AddPostSeriesRequest request)
+    public async Task<IActionResult> DeletePostSeries([FromBody] AddPostSeriesRequest request, CancellationToken cancellationToken)
     {
         var updated = store.Locked(() =>
         {
@@ -92,7 +127,20 @@ public sealed class SeriesController(AdminDataStore store) : ControllerBase
             return series.Posts.RemoveAll(x => x.PostId == request.PostId) > 0;
         });
 
-        return updated ? Ok() : NotFound();
+        if (!updated)
+        {
+            return NotFound();
+        }
+
+        await notificationService.PublishAsync(new CreateNotificationRequest
+        {
+            Title = "Post unlinked from series",
+            Message = $"Post {request.PostId} was removed from series {request.SeriesId}.",
+            Link = "/admin/dashboard",
+            Type = "Series"
+        }, cancellationToken);
+
+        return Ok();
     }
 
     [Route("post-series/{seriesId:guid}")]
@@ -119,9 +167,22 @@ public sealed class SeriesController(AdminDataStore store) : ControllerBase
     }
 
     [HttpDelete]
-    public IActionResult DeleteSeries([FromQuery] Guid[] ids)
+    public async Task<IActionResult> DeleteSeries([FromQuery] Guid[] ids, CancellationToken cancellationToken)
     {
-        store.Locked(() => store.Series.RemoveAll(x => ids.Contains(x.Id)));
+        var deleted = 0;
+        store.Locked(() => deleted = store.Series.RemoveAll(x => ids.Contains(x.Id)));
+
+        if (deleted > 0)
+        {
+            await notificationService.PublishAsync(new CreateNotificationRequest
+            {
+                Title = "Series deleted",
+                Message = $"{deleted} series item(s) were deleted.",
+                Link = "/admin/dashboard",
+                Type = "Series"
+            }, cancellationToken);
+        }
+
         return Ok();
     }
 

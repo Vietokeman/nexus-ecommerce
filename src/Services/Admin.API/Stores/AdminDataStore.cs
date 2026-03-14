@@ -16,6 +16,8 @@ public sealed class AdminDataStore
 
     public List<SeriesModel> Series { get; } = [];
 
+    public List<NotificationModel> Notifications { get; } = [];
+
     public AdminDataStore()
     {
         Seed();
@@ -108,6 +110,14 @@ public sealed class AdminDataStore
             Name = "Admin Basics",
             Slug = "admin-basics",
             Description = "Seed series for admin content workflow"
+        });
+
+        Notifications.Add(new NotificationModel
+        {
+            Title = "Admin service initialized",
+            Message = "Notification center is ready.",
+            Link = "/notifications",
+            Type = "System"
         });
     }
 }

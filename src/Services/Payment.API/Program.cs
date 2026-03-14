@@ -1,6 +1,7 @@
 using Common.Logging;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Infrastructure.Audit;
 using Payment.API.Configuration;
 using Payment.API.Persistence;
 using Payment.API.Repositories;
@@ -36,8 +37,10 @@ Log.Information("Starting Payment API up");
 
 try
 {
+    builder.Services.AddAuditLogging(builder.Configuration, "payment-api");
+
     // Database
-    builder.Services.AddDbContext<PaymentDbContext>(options =>
+    builder.Services.AddDbContext<PaymentDbContext>((sp, options) =>
         options.UseNpgsql(
             builder.Configuration.GetConnectionString("DefaultConnectionString"),
             npgsqlOptions =>
@@ -46,7 +49,8 @@ try
                     maxRetryCount: 5,
                     maxRetryDelay: TimeSpan.FromSeconds(30),
                     errorCodesToAdd: null);
-            }));
+            })
+            .AddInterceptors(sp.GetRequiredService<AuditSaveChangesInterceptor>()));
 
     // PayOS Settings
     builder.Services.Configure<PayOSSettings>(builder.Configuration.GetSection("PayOS"));
