@@ -16,6 +16,7 @@ import { SeriesPostsComponent } from '../../../views/content/series/series-posts
 @Component({
   selector: 'app-series',
   templateUrl: './series.component.html',
+  styleUrls: ['./series.component.scss'],
 })
 export class SeriesComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();

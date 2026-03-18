@@ -1,9 +1,9 @@
-.nx-post-page {
+.nx-series-page {
   .nx-content-panel {
-    border: 1px solid #d8e2f0;
+    border: 1px solid #dae3f1;
     border-radius: 18px;
-    background: linear-gradient(180deg, #fdfefe 0%, #f4f8fd 100%);
-    box-shadow: 0 22px 42px -34px rgba(22, 41, 74, 0.55);
+    background: linear-gradient(180deg, #fcfeff 0%, #f6f9fd 100%);
+    box-shadow: 0 22px 40px -34px rgba(21, 38, 71, 0.55);
   }
 
   .nx-panel-head {
@@ -18,18 +18,19 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.14em;
-    color: #73829f;
+    color: #71819f;
   }
 
   .nx-head-title {
     margin: 0;
-    font-size: 18px;
+    color: #1b2945;
     font-weight: 700;
-    color: #1d2a44;
+    font-size: 18px;
   }
 
   .nx-toolbar {
     display: flex;
+    align-items: center;
     justify-content: space-between;
     gap: 12px;
     flex-wrap: wrap;
@@ -43,21 +44,21 @@
   }
 
   .nx-toolbar-filters {
-    display: grid;
-    grid-template-columns: minmax(180px, 1fr) minmax(180px, 1fr) auto;
+    display: flex;
+    align-items: center;
     gap: 8px;
-    width: min(100%, 760px);
+    width: min(100%, 520px);
   }
 
   .nx-toolbar-filters input {
-    border: 1px solid #cfd9ea;
-    border-radius: 12px;
     width: 100%;
+    border: 1px solid #ccd7ea;
+    border-radius: 12px;
     background: #fff;
   }
 
   .nx-table-wrap {
-    border: 1px solid #d8e1ef;
+    border: 1px solid #d8e2ef;
     border-radius: 14px;
     overflow: hidden;
     background: #fff;
@@ -65,47 +66,34 @@
 
   .nx-summary {
     text-align: left;
-    color: #4c5d7e;
+    color: #4d5f7f;
     font-weight: 600;
-  }
-
-  .nx-row-actions {
-    white-space: nowrap;
   }
 
   :host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
     background: #edf3fc;
-    color: #1c2f56;
+    color: #1e3057;
     font-weight: 700;
     border: none;
-    border-bottom: 1px solid #d5e0ef;
+    border-bottom: 1px solid #d5e0f0;
   }
 
   :host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
     border: none;
-    border-top: 1px solid #ebf1f8;
-    color: #2f3d57;
+    border-top: 1px solid #ecf1f8;
+    color: #2d3b57;
   }
 
   :host ::ng-deep .p-paginator {
     margin-top: 14px;
     border-radius: 12px;
-    border: 1px solid #d7e0ee;
-  }
-}
-
-@media (max-width: 1100px) {
-  .nx-post-page {
-    .nx-toolbar-filters {
-      grid-template-columns: 1fr 1fr;
-    }
+    border: 1px solid #d7e1ee;
   }
 }
 
 @media (max-width: 768px) {
-  .nx-post-page {
+  .nx-series-page {
     .nx-toolbar-filters {
-      grid-template-columns: 1fr;
       width: 100%;
     }
 

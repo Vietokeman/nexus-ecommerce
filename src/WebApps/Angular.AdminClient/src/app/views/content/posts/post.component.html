@@ -1,8 +1,16 @@
-<div class="animated fadeIn nx-crud-page">
-  <p-panel #pnl [style]="{ 'margin-bottom': '10px' }" class="nx-crud-panel">
-    <p-header> Quản lý bài viết </p-header>
-    <div class="row nx-toolbar-row">
-      <div class="col-12 col-xl-5 nx-toolbar-actions">
+<div class="animated fadeIn nx-content-page nx-post-page">
+  <p-panel #pnl [style]="{ 'margin-bottom': '10px' }" class="nx-content-panel">
+    <p-header>
+      <div class="nx-panel-head">
+        <div>
+          <span class="nx-head-overline">Editorial control</span>
+          <h3 class="nx-head-title">Quản lý bài viết</h3>
+        </div>
+      </div>
+    </p-header>
+
+    <div class="nx-toolbar">
+      <div class="nx-toolbar-actions">
         <button
           appPermission
           appPolicy="Permissons.Posts.Add"
@@ -11,7 +19,7 @@
           label="Thêm"
           icon="fa fa-plus"
           (click)="showAddModal()"
-          class="p-button-sm p-button-success ms-1"
+          class="p-button-sm p-button-success"
         ></button>
         <button
           appPermission
@@ -20,7 +28,7 @@
           type="button"
           label="Xóa"
           icon="fa fa-trash"
-          class="p-button-sm p-button-danger ms-1"
+          class="p-button-sm p-button-danger"
           *ngIf="selectedItems.length > 0"
           (click)="deleteItems()"
         ></button>
@@ -31,41 +39,34 @@
           type="button"
           label="Sửa"
           icon="fa fa-edit"
-          class="p-button-sm p-button-warning ms-1"
+          class="p-button-sm p-button-warning"
           *ngIf="selectedItems.length == 1"
           (click)="showEditModal()"
         ></button>
       </div>
-      <div class="col-12 col-xl-7">
-        <div class="row nx-filter-row">
-          <div class="col">
-            <input
-              id="txtKeyword"
-              pInputText
-              (keyup.enter)="loadData()"
-              [(ngModel)]="keyword"
-              placeholder="Nhập từ khóa..."
-              type="text"
-            />
-          </div>
-          <div class="col">
-            <p-dropdown
-              [options]="postCategories"
-              (onChange)="loadData()"
-              [style]="{ width: '100%' }"
-              placeholder="Chọn danh mục"
-              [showClear]="true"
-              [(ngModel)]="categoryId"
-            >
-            </p-dropdown>
-          </div>
-          <div class="col">
-            <button type="button" pButton (click)="loadData()">Tìm</button>
-          </div>
-        </div>
+
+      <div class="nx-toolbar-filters">
+        <input
+          id="txtKeyword"
+          pInputText
+          (keyup.enter)="loadData()"
+          [(ngModel)]="keyword"
+          placeholder="Nhập từ khóa..."
+          type="text"
+        />
+        <p-dropdown
+          [options]="postCategories"
+          (onChange)="loadData()"
+          [style]="{ width: '100%' }"
+          placeholder="Chọn danh mục"
+          [showClear]="true"
+          [(ngModel)]="categoryId"
+        ></p-dropdown>
+        <button type="button" pButton (click)="loadData()" class="p-button-outlined">Tìm</button>
       </div>
     </div>
-    <div class="row mt-3 nx-grid-row">
+
+    <div class="nx-table-wrap">
       <p-table
         #dt
         [value]="items"
@@ -86,7 +87,7 @@
             <th>Ngày tạo</th>
             <th>Nhuận bút</th>
             <th style="width: 150px">Xuất bản</th>
-            <th></th>
+            <th style="width: 230px">Thao tác</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-row>
@@ -98,42 +99,18 @@
             <td>{{ row.name }}</td>
             <td>{{ row.categoryName }}</td>
             <td>{{ row.viewCount | number }}</td>
-            <td>{{ row.dateCreated | date: "dd-MM-yyyy hh:mm" }}</td>
+            <td>{{ row.dateCreated | date: 'dd-MM-yyyy hh:mm' }}</td>
             <td>
-              <p-badge
-                *ngIf="row.isPaid == 0"
-                value="Chưa TT"
-                severity="danger"
-              ></p-badge>
-              <p-badge
-                *ngIf="row.isPaid == 1"
-                value="Đã TT"
-                severity="success"
-              ></p-badge>
+              <p-badge *ngIf="row.isPaid == 0" value="Chưa TT" severity="danger"></p-badge>
+              <p-badge *ngIf="row.isPaid == 1" value="Đã TT" severity="success"></p-badge>
             </td>
             <td style="width: 150px">
-              <p-badge
-                *ngIf="row.status == 0"
-                value="Nháp"
-                severity="info"
-              ></p-badge>
-              <p-badge
-                *ngIf="row.status == 1"
-                value="Đợi duyệt"
-                severity="warn"
-              ></p-badge>
-              <p-badge
-                *ngIf="row.status == 2"
-                value="Từ chối"
-                severity="danger"
-              ></p-badge>
-              <p-badge
-                *ngIf="row.status == 3"
-                value="Đã đăng"
-                severity="success"
-              ></p-badge>
+              <p-badge *ngIf="row.status == 0" value="Nháp" severity="info"></p-badge>
+              <p-badge *ngIf="row.status == 1" value="Đợi duyệt" severity="warn"></p-badge>
+              <p-badge *ngIf="row.status == 2" value="Từ chối" severity="danger"></p-badge>
+              <p-badge *ngIf="row.status == 3" value="Đã đăng" severity="success"></p-badge>
             </td>
-            <td>
+            <td class="nx-row-actions">
               <button
                 pButton
                 pRipple
@@ -199,7 +176,7 @@
           </tr>
         </ng-template>
         <ng-template pTemplate="summary">
-          <div style="text-align: left">Tổng số: {{ totalCount | number }}</div>
+          <div class="nx-summary">Tổng số: {{ totalCount | number }}</div>
         </ng-template>
       </p-table>
     </div>
@@ -218,7 +195,7 @@
           height: '100px',
           position: 'absolute',
           top: '25%',
-          left: '50%',
+          left: '50%'
         }"
         strokeWidth="2"
         animationDuration=".5s"
