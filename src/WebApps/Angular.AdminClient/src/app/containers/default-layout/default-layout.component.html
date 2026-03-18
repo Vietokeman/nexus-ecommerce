@@ -21,10 +21,10 @@
     routerLink="./"
   />
 
-  <div class="nx-sidebar-caption">
+  <section class="nx-sidebar-caption" aria-label="Sidebar intro">
     <span class="nx-sidebar-eyebrow">Điều phối</span>
     <p class="nx-sidebar-title">Trung tâm quản trị nội dung</p>
-  </div>
+  </section>
 
   <ng-scrollbar pointerEventsMethod="scrollbar" class="nx-sidebar-scroll">
     <c-sidebar-nav [navItems]="navItems" />
@@ -52,7 +52,19 @@
 
   <main class="body flex-grow-1 px-3 nx-body-shell">
     <c-container breakpoint="xl" class="h-auto nx-page-wrap">
-      <router-outlet />
+      <section class="nx-page-frame" aria-label="Admin content frame">
+        <header class="nx-page-head">
+          <div class="nx-page-head-copy">
+            <span class="nx-page-overline">Workspace</span>
+            <h2 class="nx-page-title">Nexus admin workspace</h2>
+          </div>
+          <div class="nx-page-pulse" aria-hidden="true"></div>
+        </header>
+
+        <div class="nx-page-content">
+          <router-outlet />
+        </div>
+      </section>
     </c-container>
   </main>
 

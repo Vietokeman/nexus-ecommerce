@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import {
@@ -30,7 +30,10 @@ import {
     SidebarToggleDirective,
   ],
   templateUrl: './default-header.component.html',
+  styleUrls: ['./default-header.component.scss'],
 })
 export class DefaultHeaderComponent {
+  @Input() sidebarId = 'sidebar';
+
   constructor() {}
 }

@@ -7,6 +7,7 @@ import { FooterComponent } from '@coreui/angular';
   standalone: true,
   imports: [CommonModule, FooterComponent],
   templateUrl: './default-footer.component.html',
+  styleUrls: ['./default-footer.component.scss'],
 })
 export class DefaultFooterComponent {
   constructor() {}

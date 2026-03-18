@@ -5,13 +5,13 @@
 :host ::ng-deep c-footer.nx-footer {
   --cui-footer-bg: transparent;
   border-top: none;
-  padding: 0.85rem 0;
+  padding: 0.65rem 0 1rem;
 }
 
 .nx-footer-shell {
   border: 1px solid #e2d4c9;
   background: linear-gradient(145deg, rgba(255, 252, 248, 0.96) 0%, rgba(244, 236, 229, 0.94) 100%);
-  border-radius: 20px;
+  border-radius: 22px;
   padding: 1rem 1.1rem;
   display: flex;
   align-items: center;
@@ -28,7 +28,7 @@
 
 .nx-footer-title {
   color: #4b3b34;
-  font-size: 0.88rem;
+  font-size: 0.9rem;
   font-weight: 600;
   letter-spacing: 0.01em;
 }
