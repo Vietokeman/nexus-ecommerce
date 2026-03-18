@@ -7,7 +7,6 @@ import {
   IconButton,
   Rating,
   Chip,
-  Button,
   Divider,
   useMediaQuery,
   useTheme,
@@ -28,6 +27,8 @@ import { API_ENDPOINTS } from '@/lib/endpoints';
 import { useAuthStore } from '@/store/auth-store';
 import type { SellerDashboard } from '@/types/seller';
 import loadingAnimation from '@/assets/animations/loading.json';
+import { PremiumButton } from '@/components/ui/primitives';
+import { nexus } from '@/theme/theme';
 
 interface StatCardProps {
   title: string;
@@ -114,7 +115,7 @@ export default function SellerDashboardPage() {
     return (
       <Stack
         width={is480 ? 'auto' : '25rem'}
-        height="calc(100vh - 4rem)"
+        minHeight="calc(100dvh - 4rem)"
         justifyContent="center"
         alignItems="center"
         mx="auto"
@@ -168,26 +169,26 @@ export default function SellerDashboardPage() {
             </motion.div>
             <div>
               <Typography variant="h4" fontWeight={700}>
-                🏪 Seller Dashboard
+                Seller Dashboard
               </Typography>
               <Typography variant="body2" color="text.secondary">
                 Xin chào, {user?.firstName || user?.userName || 'Seller'}!
               </Typography>
             </div>
           </Stack>
-          <Button
+          <PremiumButton
             variant="contained"
             startIcon={<AddIcon />}
+            magnetic={false}
             onClick={() => navigate('/seller/create-product')}
             sx={{
-              background: 'linear-gradient(135deg, #7c3aed, #2563eb)',
+              background: nexus.gradient.button,
               fontWeight: 600,
-              borderRadius: 2,
               px: 3,
             }}
           >
             Đăng sản phẩm mới
-          </Button>
+          </PremiumButton>
         </Stack>
 
         {/* Stat Cards */}
@@ -205,15 +206,15 @@ export default function SellerDashboardPage() {
             Thao tác nhanh
           </Typography>
           <Stack direction="row" flexWrap="wrap" gap={2}>
-            <Button variant="outlined" onClick={() => navigate('/seller/products')}>
-              📦 Quản lý sản phẩm
-            </Button>
-            <Button variant="outlined" onClick={() => navigate('/seller/create-product')}>
-              ➕ Đăng sản phẩm
-            </Button>
-            <Button variant="outlined" onClick={() => navigate('/orders')}>
-              🛒 Xem đơn hàng
-            </Button>
+            <PremiumButton variant="outlined" magnetic={false} onClick={() => navigate('/seller/products')}>
+              Quản lý sản phẩm
+            </PremiumButton>
+            <PremiumButton variant="outlined" magnetic={false} onClick={() => navigate('/seller/create-product')}>
+              Đăng sản phẩm
+            </PremiumButton>
+            <PremiumButton variant="outlined" magnetic={false} onClick={() => navigate('/orders')}>
+              Xem đơn hàng
+            </PremiumButton>
           </Stack>
         </Paper>
 
@@ -223,9 +224,9 @@ export default function SellerDashboardPage() {
             <Typography variant="h6" fontWeight={600}>
               Sản phẩm gần đây
             </Typography>
-            <Button size="small" onClick={() => navigate('/seller/products')}>
+            <PremiumButton size="small" variant="text" magnetic={false} onClick={() => navigate('/seller/products')}>
               Xem tất cả →
-            </Button>
+            </PremiumButton>
           </Stack>
           <Divider sx={{ mb: 2 }} />
 
