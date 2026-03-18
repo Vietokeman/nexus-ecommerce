@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button, Divider, FormHelperText, Stack, TextField, Typography } from '@mui/material';
+import { Divider, Stack, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { Google as GoogleIcon, GitHub as GitHubIcon } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
@@ -11,6 +11,7 @@ import type { SignupDto } from '@/types/auth';
 import AuthLayout from '@/components/auth/AuthLayout';
 import { itemVariants } from '@/lib/motion';
 import { nexus } from '@/theme/theme';
+import { PremiumButton, PremiumInput } from '@/components/ui/primitives';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
 
@@ -59,37 +60,32 @@ export default function SignupPage() {
         <motion.div variants={itemVariants}>
           <Stack direction="row" spacing={1.5}>
             <Stack flex={1}>
-              <TextField
+              <PremiumInput
                 fullWidth
+                label="First Name"
                 {...register('firstName', { required: 'First name is required' })}
                 placeholder="First name"
                 autoComplete="given-name"
+                errorText={errors.firstName?.message}
               />
-              {errors.firstName && (
-                <FormHelperText sx={{ mt: 0.5 }} error>
-                  {errors.firstName.message}
-                </FormHelperText>
-              )}
             </Stack>
             <Stack flex={1}>
-              <TextField
+              <PremiumInput
                 fullWidth
+                label="Last Name"
                 {...register('lastName', { required: 'Last name is required' })}
                 placeholder="Last name"
                 autoComplete="family-name"
+                errorText={errors.lastName?.message}
               />
-              {errors.lastName && (
-                <FormHelperText sx={{ mt: 0.5 }} error>
-                  {errors.lastName.message}
-                </FormHelperText>
-              )}
             </Stack>
           </Stack>
         </motion.div>
 
         <motion.div variants={itemVariants}>
-          <TextField
+          <PremiumInput
             fullWidth
+            label="Email"
             {...register('email', {
               required: 'Email is required',
               pattern: {
@@ -100,18 +96,15 @@ export default function SignupPage() {
             })}
             placeholder="Email address"
             autoComplete="email"
+            errorText={errors.email?.message}
           />
-          {errors.email && (
-            <FormHelperText sx={{ mt: 0.5 }} error>
-              {errors.email.message}
-            </FormHelperText>
-          )}
         </motion.div>
 
         <motion.div variants={itemVariants}>
-          <TextField
+          <PremiumInput
             type="password"
             fullWidth
+            label="Password"
             {...register('password', {
               required: 'Password is required',
               pattern: {
@@ -121,30 +114,23 @@ export default function SignupPage() {
             })}
             placeholder="Password"
             autoComplete="new-password"
+            errorText={errors.password?.message}
           />
-          {errors.password && (
-            <FormHelperText sx={{ mt: 0.5 }} error>
-              {errors.password.message}
-            </FormHelperText>
-          )}
         </motion.div>
 
         <motion.div variants={itemVariants}>
-          <TextField
+          <PremiumInput
             type="password"
             fullWidth
+            label="Confirm Password"
             {...register('confirmPassword', {
               required: 'Confirm password is required',
               validate: (value) => value === password || "Passwords don't match",
             })}
             placeholder="Confirm password"
             autoComplete="new-password"
+            errorText={errors.confirmPassword?.message}
           />
-          {errors.confirmPassword && (
-            <FormHelperText sx={{ mt: 0.5 }} error>
-              {errors.confirmPassword.message}
-            </FormHelperText>
-          )}
         </motion.div>
 
         <motion.div
@@ -173,9 +159,10 @@ export default function SignupPage() {
 
         <motion.div variants={itemVariants}>
           <Stack direction="row" spacing={2}>
-            <Button
+            <PremiumButton
               fullWidth
               variant="outlined"
+              magnetic={false}
               startIcon={<GoogleIcon />}
               onClick={() => {
                 window.location.href = `${API_BASE_URL}/api/auth/external-login?provider=Google`;
@@ -194,10 +181,11 @@ export default function SignupPage() {
               }}
             >
               Google
-            </Button>
-            <Button
+            </PremiumButton>
+            <PremiumButton
               fullWidth
               variant="outlined"
+              magnetic={false}
               startIcon={<GitHubIcon />}
               onClick={() => {
                 window.location.href = `${API_BASE_URL}/api/auth/external-login?provider=GitHub`;
@@ -216,7 +204,7 @@ export default function SignupPage() {
               }}
             >
               GitHub
-            </Button>
+            </PremiumButton>
           </Stack>
         </motion.div>
 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FormHelperText, Stack, TextField, Typography, Button } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
@@ -11,6 +11,7 @@ import { useAuthStore } from '@/store/auth-store';
 import AuthLayout from '@/components/auth/AuthLayout';
 import { itemVariants } from '@/lib/motion';
 import { nexus } from '@/theme/theme';
+import { PremiumButton, PremiumInput } from '@/components/ui/primitives';
 
 interface OtpForm {
   otp: string;
@@ -90,20 +91,17 @@ export default function OtpVerificationPage() {
             </motion.div>
 
             <motion.div variants={itemVariants}>
-              <TextField
+              <PremiumInput
                 {...register('otp', {
                   required: 'OTP is required',
                   minLength: { value: 4, message: 'Please enter a 4-digit OTP' },
                 })}
                 fullWidth
                 type="number"
+                label="Verification Code"
                 placeholder="Enter OTP"
+                errorText={errors.otp?.message}
               />
-              {errors.otp && (
-                <FormHelperText sx={{ mt: 0.5 }} error>
-                  {errors.otp.message}
-                </FormHelperText>
-              )}
             </motion.div>
 
             <motion.div
@@ -123,9 +121,10 @@ export default function OtpVerificationPage() {
             </motion.div>
 
             <motion.div variants={itemVariants}>
-              <Button
+              <PremiumButton
                 variant="text"
                 onClick={handleSendOtp}
+                magnetic={false}
                 disabled={resendLoading}
                 sx={{
                   color: nexus.purple[600],
@@ -134,7 +133,7 @@ export default function OtpVerificationPage() {
                 }}
               >
                 Resend OTP
-              </Button>
+              </PremiumButton>
             </motion.div>
           </Stack>
         ) : (
