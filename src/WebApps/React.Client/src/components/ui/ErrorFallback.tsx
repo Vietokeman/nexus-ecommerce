@@ -1,5 +1,7 @@
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { ErrorOutline } from '@mui/icons-material';
+import { PremiumButton } from '@/components/ui/primitives';
+import { nexus } from '@/theme/theme';
 
 interface ErrorFallbackProps {
   error: Error;
@@ -16,7 +18,11 @@ export default function ErrorFallback({ error, resetErrorBoundary }: ErrorFallba
         justifyContent: 'center',
         minHeight: '60vh',
         textAlign: 'center',
-        p: 4,
+        p: 5,
+        borderRadius: nexus.radius.xl,
+        background: 'rgba(255,253,250,0.78)',
+        border: `1px solid ${nexus.neutral[200]}`,
+        boxShadow: nexus.glass.shadow,
       }}
     >
       <ErrorOutline sx={{ fontSize: 80, color: 'error.main', mb: 2 }} />
@@ -26,9 +32,9 @@ export default function ErrorFallback({ error, resetErrorBoundary }: ErrorFallba
       <Typography variant="body2" color="text.secondary" sx={{ mb: 3, maxWidth: 400 }}>
         {error.message}
       </Typography>
-      <Button variant="contained" onClick={resetErrorBoundary}>
+      <PremiumButton variant="contained" onClick={resetErrorBoundary}>
         Try Again
-      </Button>
+      </PremiumButton>
     </Box>
   );
 }

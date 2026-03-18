@@ -1,4 +1,6 @@
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography } from '@mui/material';
+import { PremiumButton } from '@/components/ui/primitives';
+import { nexus } from '@/theme/theme';
 
 interface EmptyStateProps {
   title: string;
@@ -21,8 +23,15 @@ export default function EmptyState({
       flexDirection="column"
       alignItems="center"
       justifyContent="center"
-      py={8}
+      py={12}
+      px={2}
       textAlign="center"
+      sx={{
+        borderRadius: nexus.radius.xl,
+        background: 'rgba(255,253,250,0.72)',
+        border: `1px solid ${nexus.neutral[200]}`,
+        boxShadow: nexus.glass.shadow,
+      }}
     >
       {children}
       <Typography
@@ -44,9 +53,9 @@ export default function EmptyState({
         </Typography>
       )}
       {actionLabel && onAction && (
-        <Button variant="contained" onClick={onAction} sx={{ mt: 3 }}>
+        <PremiumButton variant="contained" onClick={onAction} sx={{ mt: 3 }}>
           {actionLabel}
-        </Button>
+        </PremiumButton>
       )}
     </Box>
   );
