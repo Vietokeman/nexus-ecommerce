@@ -15,6 +15,7 @@ import { PermissionGrantComponent } from './permission-grant.component';
 @Component({
   selector: 'app-role',
   templateUrl: './role.component.html',
+  styleUrls: ['./role.component.scss'],
 })
 export class RoleComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
