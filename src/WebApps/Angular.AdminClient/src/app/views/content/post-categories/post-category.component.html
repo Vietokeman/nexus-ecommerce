@@ -1,10 +1,10 @@
-<div class="animated fadeIn">
-  <p-panel #pnl [style]="{'margin-bottom':'10px'}">
+<div class="animated fadeIn nx-crud-page">
+  <p-panel #pnl [style]="{'margin-bottom':'10px'}" class="nx-crud-panel">
     <p-header>
       Quản lý loại bài viết
     </p-header>
-    <div class="row">
-      <div class="col">
+    <div class="row nx-toolbar-row">
+      <div class="col-12 col-xl-5 nx-toolbar-actions">
         <button appPermission appPolicy="Permissons.PostCategories.Create" pButton type="button" label="Thêm" icon="fa fa-plus"
           (click)="showAddModal()" class="p-button-sm p-button-info ms-1"></button>
         <button appPermission appPolicy="Permissons.PostCategories.Delete" pButton type="button" label="Xóa" icon="fa fa-trash"
@@ -12,8 +12,8 @@
         <button appPermission appPolicy="Permissons.PostCategories.Edit" pButton type="button" label="Sửa" icon="fa fa-edit"
           class="p-button-sm p-button-warning ms-1" *ngIf="selectedItems.length== 1" (click)="showEditModal()"></button>
       </div>
-      <div class="col">
-        <div class="row">
+      <div class="col-12 col-xl-7">
+        <div class="row nx-filter-row">
           <div class="col">
             <input id="txtKeyword" pInputText (keyup.enter)="loadData()" pInputText [(ngModel)]="keyword"
               placeholder="Nhập tên danh mục..." type="text">
@@ -25,7 +25,7 @@
 
       </div>
     </div>
-    <div class="row mt-3">
+    <div class="row mt-3 nx-grid-row">
       <p-table #dt [value]="items" selectionMode="multiple" dataKey="id" [(selection)]="selectedItems"
         [metaKeySelection]="true" [responsive]="true">
         <ng-template pTemplate="header">

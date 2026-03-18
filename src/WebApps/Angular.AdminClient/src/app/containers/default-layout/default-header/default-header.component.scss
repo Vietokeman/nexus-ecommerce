@@ -1,0 +1,41 @@
+:host {
+	display: block;
+}
+
+.nx-header-main {
+	min-height: 4rem;
+}
+
+.nx-header-toggle {
+	border-radius: 9999px;
+	width: 2.4rem;
+	height: 2.4rem;
+	border: 1px solid #e3d8cf;
+	background: rgba(255, 253, 250, 0.9);
+	color: #6b5e57;
+	transition: all 220ms cubic-bezier(0.22, 1, 0.36, 1);
+
+	&:hover {
+		background: rgba(181, 108, 99, 0.12);
+		color: #8a4b45;
+		transform: translateY(-1px);
+	}
+}
+
+.nx-header-links,
+.nx-header-quick-actions {
+	gap: 0.35rem;
+}
+
+.nx-header-dropdown-menu {
+	border-radius: 16px;
+	border: 1px solid #e3d8cf;
+	box-shadow: 0 18px 40px -22px rgba(56, 43, 38, 0.4);
+	overflow: hidden;
+}
+
+.nx-header-breadcrumb {
+	min-height: 2.8rem;
+	display: flex;
+	align-items: center;
+}
