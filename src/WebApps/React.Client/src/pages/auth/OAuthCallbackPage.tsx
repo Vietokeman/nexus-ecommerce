@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { CircularProgress, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { toast } from 'react-toastify';
 import { useAuthStore } from '@/store/auth-store';
 import type { User } from '@/types/auth';
+import Spinner from '@/components/ui/Spinner';
 
 /**
  * Handles the OAuth callback from the backend.
@@ -71,7 +72,7 @@ export default function OAuthCallbackPage() {
 
   if (error) {
     return (
-      <Stack alignItems="center" justifyContent="center" sx={{ minHeight: '100vh', gap: 2 }}>
+      <Stack alignItems="center" justifyContent="center" sx={{ minHeight: '100dvh', gap: 2 }}>
         <Typography variant="h6" color="error">
           Authentication Failed
         </Typography>
@@ -86,8 +87,8 @@ export default function OAuthCallbackPage() {
   }
 
   return (
-    <Stack alignItems="center" justifyContent="center" sx={{ minHeight: '100vh', gap: 2 }}>
-      <CircularProgress size={48} />
+    <Stack alignItems="center" justifyContent="center" sx={{ minHeight: '100dvh', gap: 2 }}>
+      <Spinner />
       <Typography variant="body1" color="text.secondary">
         Completing sign in...
       </Typography>
