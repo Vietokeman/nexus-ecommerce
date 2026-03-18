@@ -171,7 +171,7 @@ Reference these architectural guides when working with the codebase:
 
 ### Backend Skills
 
-📚 **[Microservices Architecture](skills/microservices-architecture/AGENTS.md)**
+📚 **[Microservices Architecture](../.ai/backend-skills/microservices-architecture.md)**
 
 - Service design patterns
 - API Gateway configuration
@@ -182,7 +182,7 @@ Reference these architectural guides when working with the codebase:
 
 ### Frontend Skills
 
-📚 **[React Performance Optimization](skills/react-performance-optimization/SKILL.md)**
+📚 **[React Performance Optimization](../.ai/frontend-skills/react-performance-optimization.md)**
 
 - Bundle size optimization
 - Data fetching strategies
@@ -340,8 +340,8 @@ docker compose -f docker-compose.yml build
 
 ## References
 
-- [Microservices Architecture Guide](skills/microservices-architecture/AGENTS.md)
-- [React Performance Guide](skills/react-performance-optimization/SKILL.md)
+- [Microservices Architecture Guide](../.ai/backend-skills/microservices-architecture.md)
+- [React Performance Guide](../.ai/frontend-skills/react-performance-optimization.md)
 - [Docker Optimization Guide](../DOCKER_OPTIMIZATION.md)
 - [Quick Start Guide](../QUICK_START_GUIDE.md)
 - [Team Development Guide](../TEAM_DEVELOPMENT_GUIDE.md)
