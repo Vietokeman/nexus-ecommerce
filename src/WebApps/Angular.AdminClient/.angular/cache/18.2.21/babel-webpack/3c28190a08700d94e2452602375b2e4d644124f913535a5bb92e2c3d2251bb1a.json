@@ -1,0 +1,1 @@
+{"ast":null,"code":"import Inline from '../blots/inline.js';\nlet Underline = /*#__PURE__*/(() => {\n  class Underline extends Inline {\n    static blotName = 'underline';\n    static tagName = 'U';\n  }\n  return Underline;\n})();\nexport default Underline;\n//# sourceMappingURL=underline.js.map","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}

@@ -1,0 +1,1 @@
+{"ast":null,"code":"import Bold from './bold.js';\nlet Strike = /*#__PURE__*/(() => {\n  class Strike extends Bold {\n    static blotName = 'strike';\n    static tagName = ['S', 'STRIKE'];\n  }\n  return Strike;\n})();\nexport default Strike;\n//# sourceMappingURL=strike.js.map","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}

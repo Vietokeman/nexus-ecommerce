@@ -1,0 +1,1 @@
+{"ast":null,"code":"import Bold from './bold.js';\nlet Italic = /*#__PURE__*/(() => {\n  class Italic extends Bold {\n    static blotName = 'italic';\n    static tagName = ['EM', 'I'];\n  }\n  return Italic;\n})();\nexport default Italic;\n//# sourceMappingURL=italic.js.map","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}

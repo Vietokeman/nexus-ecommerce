@@ -1,0 +1,1 @@
+{"ast":null,"code":"import { ContainerBlot } from 'parchment';\nclass Container extends ContainerBlot {}\nexport default Container;\n//# sourceMappingURL=container.js.map","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}

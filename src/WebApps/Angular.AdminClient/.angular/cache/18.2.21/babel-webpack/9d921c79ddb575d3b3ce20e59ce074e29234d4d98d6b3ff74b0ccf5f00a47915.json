@@ -1,0 +1,1 @@
+{"ast":null,"code":"// src/uuid/index.ts\nvar lastIds = {};\nfunction uuid(prefix = \"pui_id_\") {\n  if (!lastIds.hasOwnProperty(prefix)) {\n    lastIds[prefix] = 0;\n  }\n  lastIds[prefix]++;\n  return `${prefix}${lastIds[prefix]}`;\n}\nexport { uuid };\n//# sourceMappingURL=index.mjs.map","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}
