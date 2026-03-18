@@ -1,36 +1,71 @@
-<form class="form-horizontal form-label-left" skipValidation [formGroup]="form" (ngSubmit)="saveChange()">
-  <p-panel #pnlDetail header="Thông tin" [toggleable]="true" [collapsed]="false">
+<form
+  class="form-horizontal form-label-left nx-dialog-form nx-post-category-detail-form"
+  skipValidation
+  [formGroup]="form"
+  (ngSubmit)="saveChange()"
+>
+  <p-panel #pnlDetail header="Thông tin" [toggleable]="true" [collapsed]="false" class="nx-dialog-panel">
+    <div class="nx-form-head">
+      <h4>Thông tin danh mục bài viết</h4>
+      <p>Thiết lập slug, thứ tự hiển thị và mô tả SEO cho danh mục nội dung.</p>
+    </div>
+
     <div class="formgrid grid">
       <div class="field col-12 md:col-6">
         <label for="name">Tên <span class="required">*</span></label>
-        <input id="name" type="text" pInputText [pKeyFilter]="noSpecial" formControlName="name" (keyup)="generateSlug()"
-          [style]="{ width: '100%' }" />
-        <app-validation-message [entityForm]="form" fieldName="name"
-          [validationMessages]="validationMessages"></app-validation-message>
+        <input
+          id="name"
+          type="text"
+          pInputText
+          [pKeyFilter]="noSpecial"
+          formControlName="name"
+          (keyup)="generateSlug()"
+          [style]="{ width: '100%' }"
+        />
+        <app-validation-message
+          [entityForm]="form"
+          fieldName="name"
+          [validationMessages]="validationMessages"
+        ></app-validation-message>
       </div>
       <div class="field col-12 md:col-6">
-        <label for="slug">Slug<span class="required">*</span></label>
-        <input id="slug" type="text" pInputText [pKeyFilter]="noSpecial" formControlName="slug"
-          [style]="{ width: '100%' }" />
-        <app-validation-message [entityForm]="form" fieldName="slug"
-          [validationMessages]="validationMessages"></app-validation-message>
+        <label for="slug">Slug <span class="required">*</span></label>
+        <input
+          id="slug"
+          type="text"
+          pInputText
+          [pKeyFilter]="noSpecial"
+          formControlName="slug"
+          [style]="{ width: '100%' }"
+        />
+        <app-validation-message
+          [entityForm]="form"
+          fieldName="slug"
+          [validationMessages]="validationMessages"
+        ></app-validation-message>
       </div>
       <div class="field col-12 md:col-12">
         <label for="sortOrder">Thứ tự <span class="required">*</span></label>
-        <p-inputNumber id="sortOrder" formControlName="sortOrder" [style]="{ width: '100%' }">
-        </p-inputNumber>
+        <p-inputNumber id="sortOrder" formControlName="sortOrder" [style]="{ width: '100%' }"></p-inputNumber>
       </div>
-     
       <div class="field col-12">
         <label for="shortDesc">Mô tả SEO</label>
-        <textarea id="shortDesc" type="text" rows="4" pInputTextarea [pKeyFilter]="noSpecial"
-          formControlName="seoDescription" [style]="{ width: '100%' }"></textarea>
+        <textarea
+          id="shortDesc"
+          type="text"
+          rows="4"
+          pInputTextarea
+          [pKeyFilter]="noSpecial"
+          formControlName="seoDescription"
+          [style]="{ width: '100%' }"
+        ></textarea>
       </div>
-      <div class="field-checkbox col-12 md:col-6">
+      <div class="field-checkbox col-12 md:col-6 nx-active-toggle">
         <p-checkbox formControlName="isActive" [binary]="true" id="isActive"></p-checkbox>
         <label for="isActive">Kích hoạt</label>
       </div>
     </div>
+
     <ng-template pTemplate="footer">
       <button type="submit" class="btn btn-primary" [disabled]="!form.valid || btnDisabled">
         {{ saveBtnName }}
@@ -38,8 +73,11 @@
     </ng-template>
 
     <p-blockUI [target]="pnlDetail" [blocked]="blockedPanelDetail">
-      <p-progressSpinner [style]="{ width: '100px', height: '100px', position: 'absolute', top: '25%', left: '50%' }"
-        strokeWidth="2" animationDuration=".5s"></p-progressSpinner>
+      <p-progressSpinner
+        [style]="{ width: '100px', height: '100px', position: 'absolute', top: '25%', left: '50%' }"
+        strokeWidth="2"
+        animationDuration=".5s"
+      ></p-progressSpinner>
     </p-blockUI>
   </p-panel>
 </form>

@@ -17,6 +17,7 @@ import { UploadService } from '../../../shared/services/upload.service';
 import { environment } from '../../../../environments/environment';
 @Component({
   templateUrl: 'series-detail.component.html',
+  styleUrls: ['series-detail.component.scss'],
 })
 export class SeriesDetailComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();

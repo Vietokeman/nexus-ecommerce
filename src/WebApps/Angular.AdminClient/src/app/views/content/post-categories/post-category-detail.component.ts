@@ -15,6 +15,7 @@ import { UtilityService } from '../../../shared/services/utility.service';
 
 @Component({
   templateUrl: 'post-category-detail.component.html',
+  styleUrls: ['post-category-detail.component.scss'],
 })
 export class PostCategoryDetailComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
