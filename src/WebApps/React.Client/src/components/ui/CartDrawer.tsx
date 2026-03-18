@@ -36,9 +36,11 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
       PaperProps={{
         sx: {
           width: { xs: '100%', sm: 400 },
-          background: nexus.glass.background,
+          background:
+            'linear-gradient(160deg, rgba(255,252,246,0.96), rgba(245,253,251,0.95) 60%, rgba(255,255,255,0.98))',
           backdropFilter: nexus.glass.blurHeavy,
           WebkitBackdropFilter: nexus.glass.blurHeavy,
+          borderLeft: '1px solid #EADCC8',
         },
       }}
     >
@@ -48,10 +50,10 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
           direction="row"
           alignItems="center"
           justifyContent="space-between"
-          sx={{ px: 2.5, py: 2, borderBottom: `1px solid ${nexus.neutral[200]}` }}
+          sx={{ px: 2.5, py: 2, borderBottom: '1px solid #E8DCCB' }}
         >
           <Stack direction="row" alignItems="center" spacing={1}>
-            <ShoppingCartOutlinedIcon sx={{ color: nexus.purple[600] }} />
+            <ShoppingCartOutlinedIcon sx={{ color: nexus.orange[600] }} />
             <Typography variant="h6" fontWeight={700} sx={{ color: nexus.neutral[900] }}>
               Cart
             </Typography>
@@ -96,7 +98,7 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                     spacing={1.5}
                     sx={{
                       py: 1.5,
-                      borderBottom: `1px solid ${nexus.neutral[100]}`,
+                      borderBottom: '1px solid #F0E6D8',
                     }}
                   >
                     {/* Image */}
@@ -105,9 +107,10 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                         width: 64,
                         height: 64,
                         borderRadius: nexus.radius.md,
-                        backgroundColor: nexus.neutral[100],
+                        backgroundColor: '#FFFDF8',
                         overflow: 'hidden',
                         flexShrink: 0,
+                        border: '1px solid #EDE2D2',
                       }}
                     >
                       {item.imageUrl ? (
@@ -152,9 +155,10 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                         direction="row"
                         alignItems="center"
                         sx={{
-                          border: `1px solid ${nexus.neutral[200]}`,
+                          border: '1px solid #E8DCC9',
                           borderRadius: nexus.radius.sm,
                           overflow: 'hidden',
+                          background: '#FFFFFF',
                         }}
                       >
                         <IconButton
@@ -228,7 +232,7 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                 fullWidth
                 variant="contained"
                 onClick={handleCheckout}
-                sx={{ height: '3rem', fontSize: '1rem' }}
+                sx={{ height: '3rem', fontSize: '1rem', fontWeight: 700 }}
               >
                 Proceed to Checkout
               </PremiumButton>

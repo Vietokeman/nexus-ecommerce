@@ -23,29 +23,43 @@ export default function OrderSuccessPage() {
             textAlign: 'center',
             borderRadius: nexus.radius.xl,
             maxWidth: 520,
-            border: `1px solid ${nexus.neutral[200]}`,
-            boxShadow: nexus.glass.shadow,
+            border: '1px solid #E9DCC7',
+            boxShadow: '0 20px 40px rgba(127, 94, 53, 0.12)',
+            background:
+              'linear-gradient(145deg, rgba(255,248,236,0.92), rgba(239,251,248,0.9) 62%, rgba(255,255,255,0.96))',
           }}
           elevation={0}
         >
           <Box sx={{ width: 200, height: 200, mx: 'auto', mb: 2 }}>
             <Lottie animationData={orderSuccessAnimation} loop={false} />
           </Box>
-          <Typography variant="h4" fontWeight={700} gutterBottom>
+          <Typography variant="h4" fontWeight={800} gutterBottom sx={{ letterSpacing: '-0.02em' }}>
             Order Placed!
           </Typography>
           <Typography variant="body1" color="text.secondary" sx={{ mb: 1 }}>
             Your order has been confirmed successfully.
           </Typography>
           {orderNo && (
-            <Typography variant="h6" sx={{ my: 2, fontFamily: 'monospace' }}>
+            <Typography
+              variant="h6"
+              sx={{
+                my: 2,
+                fontFamily: 'monospace',
+                border: '1px dashed #D9C2A1',
+                borderRadius: 2,
+                px: 1.5,
+                py: 0.75,
+                display: 'inline-block',
+                bgcolor: '#FFFDF7',
+              }}
+            >
               {orderNo}
             </Typography>
           )}
           <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
             Check order status in my orders
           </Typography>
-          <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
+          <Box sx={{ display: 'flex', gap: 1.5, justifyContent: 'center', flexWrap: 'wrap' }}>
             <PremiumButton variant="contained" magnetic={false} onClick={() => navigate('/orders')}>
               Track Order
             </PremiumButton>

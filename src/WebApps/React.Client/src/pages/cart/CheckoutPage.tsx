@@ -133,26 +133,52 @@ export default function CheckoutPage() {
       mt={2}
       columnGap={4}
       alignItems="flex-start"
+      sx={{
+        borderRadius: { xs: 0, md: 4 },
+      }}
     >
       {/* left box */}
-      <Stack rowGap={4}>
+      <Stack
+        rowGap={4}
+        sx={{
+          p: { xs: 1.25, md: 2.25 },
+          borderRadius: 3,
+          border: '1px solid #EEDFCB',
+          background:
+            'linear-gradient(145deg, rgba(255,248,236,0.9), rgba(240,251,248,0.9) 62%, rgba(255,255,255,0.96))',
+          boxShadow: '0 18px 34px rgba(126, 93, 53, 0.1)',
+        }}
+      >
         {/* heading */}
         <Stack flexDirection="row" columnGap={is480 ? 0.3 : 1} alignItems="center">
           <motion.div whileHover={{ x: -5 }}>
-            <IconButton component={Link} to="/cart">
+            <IconButton component={Link} to="/cart" sx={{ border: '1px solid #E7DCCB', bgcolor: '#FFFFFF' }}>
               <ArrowBackIcon fontSize={is480 ? 'medium' : 'large'} />
             </IconButton>
           </motion.div>
-          <Typography variant="h4">Shipping Information</Typography>
+          <Typography variant="h4" fontWeight={800} sx={{ letterSpacing: '-0.02em' }}>
+            Shipping Information
+          </Typography>
         </Stack>
 
         {/* address form */}
-        <Stack component="form" noValidate rowGap={2} onSubmit={handleSubmit(handleAddAddress)}>
+        <Stack
+          component="form"
+          noValidate
+          rowGap={2}
+          onSubmit={handleSubmit(handleAddAddress)}
+          sx={{
+            p: { xs: 1, sm: 1.75 },
+            borderRadius: 2.5,
+            border: '1px solid #EBDCC7',
+            background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF6 100%)',
+          }}
+        >
           <PremiumInput label="Type" placeholder="Eg. Home, Business" {...register('type', { required: true })} />
           <PremiumInput label="Street" {...register('street', { required: true })} />
           <PremiumInput label="Country" {...register('country', { required: true })} />
           <PremiumInput label="Phone Number" type="number" {...register('phoneNumber', { required: true })} />
-          <Stack flexDirection="row">
+          <Stack flexDirection={{ xs: 'column', sm: 'row' }} gap={1}>
             <Stack width="100%">
               <PremiumInput label="City" {...register('city', { required: true })} />
             </Stack>
@@ -168,7 +194,11 @@ export default function CheckoutPage() {
             </Stack>
           </Stack>
           <Stack flexDirection="row" alignSelf="flex-end" columnGap={1}>
-            <LoadingButton type="submit" variant="contained" sx={{ borderRadius: '9999px', px: 2.5 }}>
+            <LoadingButton
+              type="submit"
+              variant="contained"
+              sx={{ borderRadius: '9999px', px: 2.5, fontWeight: 700 }}
+            >
               add
             </LoadingButton>
             <PremiumButton color="error" variant="outlined" magnetic={false} onClick={() => reset()}>
@@ -200,7 +230,16 @@ export default function CheckoutPage() {
                   height={is480 ? 'auto' : '15rem'}
                   rowGap={2}
                   component={Paper}
-                  elevation={1}
+                  elevation={0}
+                  sx={{
+                    borderRadius: 2.5,
+                    border: selectedAddress?._id === address._id ? '1px solid #DCB47A' : '1px solid #E9DFD1',
+                    background: selectedAddress?._id === address._id ? '#FFF8ED' : '#FFFFFF',
+                    boxShadow:
+                      selectedAddress?._id === address._id
+                        ? '0 12px 24px rgba(126, 93, 53, 0.13)'
+                        : '0 8px 18px rgba(126, 93, 53, 0.07)',
+                  }}
                 >
                   <Stack flexDirection="row" alignItems="center">
                     <Radio
@@ -251,8 +290,20 @@ export default function CheckoutPage() {
       </Stack>
 
       {/* right box */}
-      <Stack width={is900 ? '100%' : 'auto'} alignItems={is900 ? 'flex-start' : undefined}>
-        <Typography variant="h4">Order summary</Typography>
+      <Stack
+        width={is900 ? '100%' : 'auto'}
+        alignItems={is900 ? 'flex-start' : undefined}
+        sx={{
+          p: { xs: 1.25, md: 2 },
+          borderRadius: 3,
+          border: '1px solid #EADCC8',
+          background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF6 100%)',
+          boxShadow: '0 16px 30px rgba(126, 93, 53, 0.08)',
+        }}
+      >
+        <Typography variant="h4" fontWeight={800} sx={{ letterSpacing: '-0.02em' }}>
+          Order summary
+        </Typography>
         <CartContent checkout />
         <LoadingButton
           fullWidth
@@ -260,6 +311,7 @@ export default function CheckoutPage() {
           variant="contained"
           onClick={handleCreateOrder}
           size="large"
+          sx={{ borderRadius: 999, fontWeight: 700 }}
         >
           Pay and order
         </LoadingButton>
