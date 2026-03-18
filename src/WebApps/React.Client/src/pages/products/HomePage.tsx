@@ -5,8 +5,6 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
-  Button,
-  Checkbox,
   Chip,
   FormControl,
   FormControlLabel,
@@ -46,6 +44,7 @@ import { nexus } from '@/theme/theme';
 import type { Product } from '@/types/product';
 import { APP_NAME } from '@/constants';
 import loadingAnimation from '@/assets/animations/loading.json';
+import { PremiumButton, PremiumCheckbox } from '@/components/ui/primitives';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -156,7 +155,7 @@ function ProductCard({
                 whileTap={{ scale: 1 }}
                 transition={{ duration: 0.4, type: 'spring' }}
               >
-                <Checkbox
+                <PremiumCheckbox
                   onClick={(e) => e.stopPropagation()}
                   checked={isInWishlist}
                   onChange={(e) => onToggleWishlist(String(product.id), e.target.checked)}
@@ -177,25 +176,19 @@ function ProductCard({
             </Typography>
           ) : (
             !isAdmin && (
-              <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 1 }}
+              <PremiumButton
+                magnetic={false}
                 onClick={handleAddToCart}
-                style={{
-                  padding: '10px 15px',
-                  borderRadius: '3px',
-                  outline: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  backgroundColor: 'black',
-                  color: 'white',
-                  fontSize: is408 ? '.9rem' : is488 ? '.7rem' : is500 ? '.8rem' : '.9rem',
+                variant="contained"
+                sx={{
+                  minWidth: 'fit-content',
+                  fontSize: is408 ? '.86rem' : is488 ? '.72rem' : is500 ? '.84rem' : '.9rem',
+                  px: is488 ? 1.6 : 2.2,
+                  py: is488 ? 0.75 : 0.9,
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', columnGap: '.5rem' }}>
-                  <p>Add To Cart</p>
-                </div>
-              </motion.button>
+                Add To Cart
+              </PremiumButton>
             )
           )}
         </Stack>
@@ -303,7 +296,7 @@ export default function HomePage() {
     return (
       <Stack
         width={is500 ? '35vh' : '25rem'}
-        height="calc(100vh - 4rem)"
+        minHeight="calc(100dvh - 4rem)"
         justifyContent="center"
         marginRight="auto"
         marginLeft="auto"
@@ -319,8 +312,8 @@ export default function HomePage() {
       <motion.div
         style={{
           position: 'fixed',
-          backgroundColor: 'white',
-          height: '100vh',
+          backgroundColor: '#fffcf8',
+          minHeight: '100dvh',
           padding: '1rem',
           overflowY: 'scroll',
           width: is500 ? '100vw' : '30rem',
@@ -382,7 +375,7 @@ export default function HomePage() {
                     >
                       <FormControlLabel
                         sx={{ ml: 1 }}
-                        control={<Checkbox />}
+                        control={<PremiumCheckbox />}
                         label={brand.name}
                         value={brand.name}
                       />
@@ -410,7 +403,7 @@ export default function HomePage() {
                     >
                       <FormControlLabel
                         sx={{ ml: 1 }}
-                        control={<Checkbox />}
+                        control={<PremiumCheckbox />}
                         label={cat.name}
                         value={cat.name}
                       />
@@ -455,13 +448,15 @@ export default function HomePage() {
                 onItemClick={() => navigate(`/flash-sale/${activeFlashSession.id}`)}
               />
               <Stack alignItems="center" mt={1}>
-                <Button
+                <PremiumButton
                   onClick={() => navigate(`/flash-sale/${activeFlashSession.id}`)}
                   endIcon={<ArrowForwardIcon />}
+                  variant="outlined"
+                  magnetic={false}
                   sx={{ fontWeight: 600, color: nexus.purple[600] }}
                 >
                   View All Flash Deals
-                </Button>
+                </PremiumButton>
               </Stack>
             </Box>
           )}

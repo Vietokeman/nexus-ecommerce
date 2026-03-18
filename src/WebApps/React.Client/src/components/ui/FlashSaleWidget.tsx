@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Box, Card, CardMedia, Chip, LinearProgress, Stack, Typography } from '@mui/material';
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import { motion } from 'framer-motion';
 import { nexus } from '@/theme/theme';
 import type { FlashSaleItem, FlashSaleSession } from '@/types/flash-sale';
@@ -181,9 +182,7 @@ export default function FlashSaleWidget({ session, onItemClick }: FlashSaleWidge
                       alignItems="center"
                       justifyContent="center"
                     >
-                      <Typography variant="h3" sx={{ color: nexus.neutral[300] }}>
-                        🛒
-                      </Typography>
+                      <ShoppingCartOutlinedIcon sx={{ color: nexus.neutral[300], fontSize: 36 }} />
                     </Stack>
                   )}
 
