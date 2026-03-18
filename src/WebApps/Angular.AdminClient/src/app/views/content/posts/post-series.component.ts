@@ -20,6 +20,7 @@ import { UtilityService } from '../../../shared/services/utility.service';
 
 @Component({
   templateUrl: 'post-series.component.html',
+  styleUrls: ['post-series.component.scss'],
 })
 export class PostSeriesComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();

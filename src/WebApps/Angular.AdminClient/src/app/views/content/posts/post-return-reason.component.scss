@@ -1,0 +1,32 @@
+.nx-post-return-form {
+  .nx-dialog-panel {
+    border: 1px solid #dae3f1;
+    border-radius: 16px;
+    box-shadow: 0 18px 30px -28px rgba(16, 35, 61, 0.45);
+  }
+
+  .nx-form-head {
+    margin-bottom: 14px;
+    padding: 12px 14px;
+    border: 1px solid #e2eaf5;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #fbfdff 0%, #f3f7fc 100%);
+  }
+
+  .nx-form-head h4 {
+    margin: 0 0 4px;
+    color: #1f2f4d;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .nx-form-head p {
+    margin: 0;
+    color: #607294;
+    font-size: 13px;
+  }
+
+  .required {
+    color: #de3d60;
+  }
+}

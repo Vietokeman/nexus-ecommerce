@@ -12,6 +12,7 @@ import { AlertService } from '../../../shared/services/alert.service';
 
 @Component({
   templateUrl: 'series-posts.component.html',
+  styleUrls: ['series-posts.component.scss'],
 })
 export class SeriesPostsComponent implements OnInit {
   private ngUnsubscribe = new Subject<void>();

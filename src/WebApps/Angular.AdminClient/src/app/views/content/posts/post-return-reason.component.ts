@@ -10,6 +10,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { AdminApiPostApiClient } from '../../../api/admin-api.service.generated';
 @Component({
   templateUrl: 'post-return-reason.component.html',
+  styleUrls: ['post-return-reason.component.scss'],
 })
 export class PostReturnReasonComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
