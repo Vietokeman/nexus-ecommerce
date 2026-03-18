@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { Box, Typography, CircularProgress, Button, Stack } from '@mui/material';
+import { Box, Typography, Stack } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { motion } from 'framer-motion';
 import { api } from '@/lib/api';
 import { API_ENDPOINTS } from '@/lib/endpoints';
 import { useCartStore } from '@/store/cart-store';
 import { nexus } from '@/theme/theme';
+import Spinner from '@/components/ui/Spinner';
+import { PremiumButton } from '@/components/ui/primitives';
 
 export default function PaymentSuccessPage() {
   const [searchParams] = useSearchParams();
@@ -34,8 +36,8 @@ export default function PaymentSuccessPage() {
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', pt: 10 }}>
-        <CircularProgress sx={{ color: nexus.purple[500] }} />
+      <Box sx={{ display: 'flex', justifyContent: 'center', pt: { xs: 5, md: 10 } }}>
+        <Spinner />
       </Box>
     );
   }
@@ -90,12 +92,12 @@ export default function PaymentSuccessPage() {
           )}
 
           <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
-            <Button variant="contained" onClick={() => navigate('/orders')}>
+            <PremiumButton variant="contained" magnetic={false} onClick={() => navigate('/orders')}>
               View Orders
-            </Button>
-            <Button variant="outlined" onClick={() => navigate('/')}>
+            </PremiumButton>
+            <PremiumButton variant="outlined" magnetic={false} onClick={() => navigate('/')}>
               Continue Shopping
-            </Button>
+            </PremiumButton>
           </Stack>
         </Stack>
       </motion.div>
