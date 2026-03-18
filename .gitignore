@@ -13,6 +13,10 @@
 #remove idea from git 
 
 
+# Angular workspace cache (must never be committed)
+src/WebApps/Angular.AdminClient/.angular/
+
+
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

@@ -1,1 +1,0 @@
-{"ast":null,"code":"export const environment = {\n  production: true,\n  API_URL: 'https://api.tedu.work'\n};","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}
