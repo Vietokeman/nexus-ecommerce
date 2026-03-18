@@ -87,19 +87,39 @@ export default function UserOrdersPage() {
           <Lottie animationData={loadingAnimation} />
         </Stack>
       ) : (
-        <Stack width={is1200 ? 'auto' : '60rem'} p={is480 ? 2 : 4} mb="5rem">
+        <Stack
+          width={is1200 ? 'auto' : '60rem'}
+          p={is480 ? 2 : 4}
+          mb="5rem"
+          sx={{
+            borderRadius: is480 ? 0 : 4,
+            border: is480 ? 'none' : '1px solid #ECE2D4',
+            background: is480 ? 'transparent' : 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF6 100%)',
+            boxShadow: is480 ? 'none' : '0 20px 38px rgba(120, 94, 52, 0.08)',
+          }}
+        >
           {/* heading and navigation */}
-          <Stack flexDirection="row" columnGap={2}>
+          <Stack
+            flexDirection="row"
+            columnGap={2}
+            sx={{
+              p: { xs: 0, sm: 1.5 },
+              borderRadius: 3,
+              background:
+                'linear-gradient(130deg, rgba(255,247,232,0.9), rgba(241,251,249,0.9) 58%, rgba(255,255,255,1))',
+              border: '1px solid #EFE1CB',
+            }}
+          >
             {!is480 && (
               <motion.div whileHover={{ x: -5 }} style={{ alignSelf: 'center' }}>
-                <IconButton component={Link} to="/">
+                <IconButton component={Link} to="/" sx={{ bgcolor: '#FFFFFF', border: '1px solid #E8DCCB' }}>
                   <ArrowBackIcon fontSize="large" />
                 </IconButton>
               </motion.div>
             )}
 
             <Stack rowGap={1}>
-              <Typography variant="h4" fontWeight={500}>
+              <Typography variant="h4" fontWeight={800} sx={{ letterSpacing: '-0.02em' }}>
                 Order history
               </Typography>
               <Typography sx={{ wordWrap: 'break-word' }} color="text.secondary">
@@ -113,10 +133,16 @@ export default function UserOrdersPage() {
             {orders.map((order) => (
               <Stack
                 key={order.id}
-                p={is480 ? 0 : 2}
+                p={is480 ? 0 : 2.25}
                 component={is480 ? 'div' : Paper}
-                elevation={1}
+                elevation={0}
                 rowGap={2}
+                sx={{
+                  borderRadius: 3,
+                  border: is480 ? 'none' : '1px solid #E7DCCD',
+                  background: is480 ? 'transparent' : 'linear-gradient(180deg, #FFFFFF, #FFFCF8)',
+                  boxShadow: is480 ? 'none' : '0 16px 30px rgba(130, 95, 53, 0.07)',
+                }}
               >
                 {/* upper */}
                 <Stack
@@ -138,11 +164,13 @@ export default function UserOrdersPage() {
                     </Stack>
                     <Stack>
                       <Typography>Total Amount</Typography>
-                      <Typography>${order.totalPrice}</Typography>
+                      <Typography fontWeight={700} color="primary.main">
+                        ${order.totalPrice}
+                      </Typography>
                     </Stack>
                   </Stack>
                   <Stack>
-                    <Typography>Item: {order.orderItems?.length || 0}</Typography>
+                    <Typography fontWeight={600}>Item: {order.orderItems?.length || 0}</Typography>
                   </Stack>
                 </Stack>
 
@@ -156,6 +184,12 @@ export default function UserOrdersPage() {
                       rowGap={is768 ? '2rem' : undefined}
                       columnGap={4}
                       flexWrap={is768 ? 'wrap' : 'nowrap'}
+                      sx={{
+                        p: { xs: 1.5, sm: 1.75 },
+                        borderRadius: 2.5,
+                        border: '1px solid #EEE4D7',
+                        background: '#FFFFFF',
+                      }}
                     >
                       <Stack>
                         <img
@@ -163,6 +197,9 @@ export default function UserOrdersPage() {
                             width: '100%',
                             aspectRatio: is480 ? '3/2' : '1/1',
                             objectFit: 'contain',
+                            borderRadius: 12,
+                            border: '1px solid #EFE5D7',
+                            background: '#FFFCF7',
                           }}
                           src={product.imageUrl || 'https://via.placeholder.com/200'}
                           alt={product.productName}
@@ -193,11 +230,18 @@ export default function UserOrdersPage() {
                             component={Link}
                             to={`/product-details/${product.itemNo}`}
                             variant="outlined"
+                            sx={{ borderRadius: 999, px: 1.6 }}
                           >
                             View Product
                           </Button>
                           {cartItems.some((ci) => ci.itemNo === product.itemNo) ? (
-                            <Button size="small" variant="contained" component={Link} to="/cart">
+                            <Button
+                              size="small"
+                              variant="contained"
+                              component={Link}
+                              to="/cart"
+                              sx={{ borderRadius: 999, px: 1.6 }}
+                            >
                               Already in Cart
                             </Button>
                           ) : (
@@ -205,6 +249,7 @@ export default function UserOrdersPage() {
                               size="small"
                               variant="contained"
                               onClick={() => handleAddToCart(product)}
+                              sx={{ borderRadius: 999, px: 1.6 }}
                             >
                               Buy Again
                             </Button>
@@ -217,13 +262,15 @@ export default function UserOrdersPage() {
 
                 {/* lower */}
                 <Stack mt={2} flexDirection="row" justifyContent="space-between" alignItems="center">
-                  <Typography mb={2}>Status : {order.status}</Typography>
+                  <Typography mb={2} fontWeight={600}>
+                    Status : {order.status}
+                  </Typography>
                   <Button
                     size="small"
                     variant="outlined"
                     component={Link}
                     to={`/orders/${order.documentNo}/tracking`}
-                    sx={{ mb: 2, fontWeight: 600 }}
+                    sx={{ mb: 2, fontWeight: 700, borderRadius: 999, px: 1.8 }}
                   >
                     📦 Theo dõi đơn hàng
                   </Button>

@@ -59,12 +59,12 @@ const ColorConnector = styled(StepConnector)(() => ({
   },
   [`&.${stepConnectorClasses.active}`]: {
     [`& .${stepConnectorClasses.line}`]: {
-      background: 'linear-gradient(90deg, #7c3aed 0%, #2563eb 100%)',
+      background: 'linear-gradient(90deg, #f59e0b 0%, #0f766e 100%)',
     },
   },
   [`&.${stepConnectorClasses.completed}`]: {
     [`& .${stepConnectorClasses.line}`]: {
-      background: 'linear-gradient(90deg, #10b981 0%, #059669 100%)',
+      background: 'linear-gradient(90deg, #0f766e 0%, #065f46 100%)',
     },
   },
   [`& .${stepConnectorClasses.line}`]: {
@@ -85,9 +85,9 @@ interface StepIconOwnProps {
 function ColorStepIcon({ active, completed, icon, stepIndex }: StepIconOwnProps) {
   const step = ORDER_STEPS[stepIndex];
   const bg = completed
-    ? 'linear-gradient(135deg, #10b981, #059669)'
+    ? 'linear-gradient(135deg, #0f766e, #065f46)'
     : active
-      ? `linear-gradient(135deg, ${step?.color || '#7c3aed'}, #2563eb)`
+      ? `linear-gradient(135deg, ${step?.color || '#f59e0b'}, #0f766e)`
       : '#e0e0e0';
 
   return (
@@ -100,7 +100,7 @@ function ColorStepIcon({ active, completed, icon, stepIndex }: StepIconOwnProps)
         justifyContent: 'center',
         alignItems: 'center',
         color: completed || active ? '#fff' : '#9e9e9e',
-        boxShadow: active ? '0 4px 14px rgba(124, 58, 237, 0.4)' : 'none',
+        boxShadow: active ? '0 6px 16px rgba(15, 118, 110, 0.35)' : 'none',
         transition: 'all 0.3s',
       }}
     >
@@ -186,14 +186,27 @@ export default function OrderTrackingPage() {
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
       <Stack sx={{ maxWidth: 900, mx: 'auto', py: 4, px: is480 ? 2 : 4 }}>
         {/* Header */}
-        <Stack direction="row" alignItems="center" gap={1} mb={4}>
+        <Stack
+          direction="row"
+          alignItems="center"
+          gap={1}
+          mb={4}
+          sx={{
+            p: { xs: 1.5, sm: 2 },
+            borderRadius: 3,
+            border: '1px solid #EFE3D1',
+            background:
+              'linear-gradient(135deg, rgba(255,247,233,0.9), rgba(241,250,248,0.9) 65%, rgba(255,255,255,1))',
+            boxShadow: '0 14px 28px rgba(132, 96, 54, 0.1)',
+          }}
+        >
           <motion.div whileHover={{ x: -5 }}>
-            <IconButton component={Link} to="/orders">
+            <IconButton component={Link} to="/orders" sx={{ bgcolor: '#FFFFFF', border: '1px solid #E8DAC3' }}>
               <ArrowBackIcon />
             </IconButton>
           </motion.div>
           <div>
-            <Typography variant="h4" fontWeight={700}>
+            <Typography variant="h4" fontWeight={800} sx={{ letterSpacing: '-0.02em' }}>
               📦 Theo dõi đơn hàng
             </Typography>
             <Typography variant="body2" color="text.secondary">
@@ -209,15 +222,16 @@ export default function OrderTrackingPage() {
             mb: 4,
             borderRadius: 3,
             background: isCancelled
-              ? 'linear-gradient(135deg, #fef2f2, #fee2e2)'
+              ? 'linear-gradient(135deg, #fef2f2, #fde8e8)'
               : currentStep >= 5
-                ? 'linear-gradient(135deg, #ecfdf5, #d1fae5)'
-                : 'linear-gradient(135deg, #f5f3ff, #eff6ff)',
+                ? 'linear-gradient(135deg, #ecfdf5, #d7f5eb)'
+                : 'linear-gradient(135deg, #fffbf1, #e8f7f4)',
             border: isCancelled
               ? '1px solid #fca5a5'
               : currentStep >= 5
                 ? '1px solid #6ee7b7'
-                : '1px solid #c4b5fd',
+                : '1px solid #EBCFA5',
+            boxShadow: '0 16px 30px rgba(111, 84, 46, 0.1)',
           }}
         >
           <Stack direction="row" alignItems="center" gap={2} flexWrap="wrap">
@@ -246,7 +260,16 @@ export default function OrderTrackingPage() {
 
         {/* Timeline Stepper */}
         {!isCancelled && (
-          <Paper sx={{ p: is480 ? 2 : 4, mb: 4, borderRadius: 3 }}>
+          <Paper
+            sx={{
+              p: is480 ? 2 : 4,
+              mb: 4,
+              borderRadius: 3,
+              border: '1px solid #ECE1D1',
+              background: 'linear-gradient(180deg, #FFFFFF, #FFFCF7)',
+              boxShadow: '0 14px 28px rgba(125, 95, 54, 0.08)',
+            }}
+          >
             <Typography variant="h6" fontWeight={600} mb={3}>
               Tiến trình đơn hàng
             </Typography>
@@ -278,7 +301,15 @@ export default function OrderTrackingPage() {
         )}
 
         {/* Order Info */}
-        <Paper sx={{ p: 3, mb: 4, borderRadius: 3 }}>
+        <Paper
+          sx={{
+            p: 3,
+            mb: 4,
+            borderRadius: 3,
+            border: '1px solid #ECE1D2',
+            background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF7 100%)',
+          }}
+        >
           <Typography variant="h6" fontWeight={600} mb={2}>
             Thông tin đơn hàng
           </Typography>
@@ -309,7 +340,14 @@ export default function OrderTrackingPage() {
 
         {/* Order Items */}
         {order.orderItems && order.orderItems.length > 0 && (
-          <Paper sx={{ p: 3, borderRadius: 3 }}>
+          <Paper
+            sx={{
+              p: 3,
+              borderRadius: 3,
+              border: '1px solid #ECE1D2',
+              background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF7 100%)',
+            }}
+          >
             <Typography variant="h6" fontWeight={600} mb={2}>
               Sản phẩm ({order.orderItems.length})
             </Typography>
@@ -321,7 +359,12 @@ export default function OrderTrackingPage() {
                   direction="row"
                   alignItems="center"
                   gap={2}
-                  sx={{ p: 1.5, borderRadius: 2, '&:hover': { bgcolor: 'action.hover' } }}
+                  sx={{
+                    p: 1.5,
+                    borderRadius: 2,
+                    border: '1px solid #EEE3D4',
+                    '&:hover': { bgcolor: '#FFFBF4' },
+                  }}
                 >
                   <img
                     src={item.imageUrl || `https://via.placeholder.com/60?text=${item.productName[0]}`}
