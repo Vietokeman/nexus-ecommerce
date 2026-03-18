@@ -1,7 +1,7 @@
 <!--sidebar-->
 <c-sidebar
   #sidebar="cSidebar"
-  class="d-print-none sidebar sidebar-fixed"
+  class="d-print-none sidebar sidebar-fixed nx-sidebar"
   id="sidebar"
   visible
 >
@@ -32,16 +32,16 @@
 </c-sidebar>
 
 <!--main-->
-<div class="wrapper d-flex flex-column min-vh-100 bg-light dark:bg-transparent">
+<div class="wrapper d-flex flex-column min-vh-100 nx-layout-shell">
   <!--app-header-->
   <app-default-header
-    class="mb-4 d-print-none header header-sticky"
+    class="mb-4 d-print-none header header-sticky nx-header-shell"
     position="sticky"
     sidebarId="sidebar"
   />
   <!--app-body-->
-  <div class="body flex-grow-1 px-3">
-    <c-container breakpoint="lg" class="h-auto">
+  <div class="body flex-grow-1 px-3 nx-body-shell">
+    <c-container breakpoint="lg" class="h-auto nx-page-wrap">
       <router-outlet />
     </c-container>
   </div>

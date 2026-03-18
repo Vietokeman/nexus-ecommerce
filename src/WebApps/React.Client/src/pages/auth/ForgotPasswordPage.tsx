@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FormHelperText, Stack, TextField, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
@@ -11,6 +11,7 @@ import AuthLayout from '@/components/auth/AuthLayout';
 import { itemVariants } from '@/lib/motion';
 import { nexus } from '@/theme/theme';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import { PremiumInput } from '@/components/ui/primitives';
 
 interface ForgotForm {
   email: string;
@@ -79,8 +80,9 @@ export default function ForgotPasswordPage() {
           onSubmit={handleSubmit(handleForgotPassword)}
         >
           <motion.div variants={itemVariants}>
-            <TextField
+            <PremiumInput
               fullWidth
+              label="Email"
               {...register('email', {
                 required: 'Please enter your email',
                 pattern: {
@@ -91,12 +93,8 @@ export default function ForgotPasswordPage() {
               })}
               placeholder="Email address"
               autoComplete="email"
+              errorText={errors.email?.message}
             />
-            {errors.email && (
-              <FormHelperText sx={{ mt: 0.5 }} error>
-                {errors.email.message}
-              </FormHelperText>
-            )}
           </motion.div>
 
           <motion.div

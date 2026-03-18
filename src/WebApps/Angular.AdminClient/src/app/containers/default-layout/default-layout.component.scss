@@ -1,44 +1,45 @@
 :host {
   ng-scrollbar {
-    --scrollbar-thumb-color: var(--cui-border-color, #999);
-    --scrollbar-track-color: var(--cui-body-color, #fff);
+    --scrollbar-thumb-color: #c6bbb0;
+    --scrollbar-track-color: #f6efe8;
     --scrollbar-hover-size: calc(var(--scrollbar-size) * 1.5);
   }
 }
 
-/* Modern Sidebar Styles */
 .sidebar {
-  background: #ffffff;
-  border-right: 1px solid #e5e7eb;
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+  background: rgba(255, 253, 250, 0.96);
+  border-right: 1px solid #ded5cc;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 18px 45px -24px rgba(56, 43, 38, 0.24);
 
   ::ng-deep {
     .sidebar-brand {
-      padding: 1.5rem 1rem;
-      border-bottom: 1px solid #e5e7eb;
+      padding: 1.6rem 1rem;
+      border-bottom: 1px solid #e9dfd7;
     }
 
     .sidebar-nav {
-      padding: 1rem 0;
+      padding: 1.2rem 0;
 
       .nav-item {
         margin: 0.25rem 0.75rem;
 
         .nav-link {
-          border-radius: 8px;
+          border-radius: 12px;
           padding: 0.75rem 1rem;
-          color: #6b7280;
+          color: #6b5e57;
           font-weight: 500;
-          transition: all 0.2s ease;
+          transition: all 0.22s cubic-bezier(0.22, 1, 0.36, 1);
 
           &:hover {
-            background: #f3f4f6;
-            color: #667eea;
+            background: rgba(181, 108, 99, 0.09);
+            color: #8a4b45;
+            transform: translateX(1px);
           }
 
           &.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #8a4b45 0%, #b56c63 100%);
             color: white;
+            box-shadow: 0 14px 28px -18px rgba(138, 75, 69, 0.55);
           }
 
           .nav-icon {
@@ -50,18 +51,16 @@
   }
 }
 
-/* Modern Header Styles */
 .header {
-  background: white;
-  border-bottom: 1px solid #e5e7eb;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 253, 250, 0.86);
+  border-bottom: 1px solid #ded5cc;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.56);
 }
 
-/* Main Content Area */
 .wrapper {
-  background: #f8f9fa;
+  background: transparent;
 
   .body {
-    background: #f8f9fa;
+    background: transparent;
   }
 }

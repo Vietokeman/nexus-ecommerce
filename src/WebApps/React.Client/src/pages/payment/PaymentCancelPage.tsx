@@ -1,8 +1,9 @@
 import { useNavigate } from 'react-router-dom';
-import { Box, Typography, Button, Stack } from '@mui/material';
+import { Box, Typography, Stack } from '@mui/material';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { motion } from 'framer-motion';
 import { nexus } from '@/theme/theme';
+import { PremiumButton } from '@/components/ui/primitives';
 
 export default function PaymentCancelPage() {
   const navigate = useNavigate();
@@ -42,12 +43,12 @@ export default function PaymentCancelPage() {
           </Typography>
 
           <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
-            <Button variant="contained" onClick={() => navigate('/cart')}>
+            <PremiumButton variant="contained" magnetic={false} onClick={() => navigate('/cart')}>
               Back to Cart
-            </Button>
-            <Button variant="outlined" onClick={() => navigate('/')}>
+            </PremiumButton>
+            <PremiumButton variant="outlined" magnetic={false} onClick={() => navigate('/')}>
               Continue Shopping
-            </Button>
+            </PremiumButton>
           </Stack>
         </Stack>
       </motion.div>

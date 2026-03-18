@@ -23,7 +23,7 @@ export default function Providers({ children }: ProvidersProps) {
         </ErrorBoundary>
         <ToastContainer
           position="top-right"
-          autoClose={1500}
+          autoClose={2200}
           hideProgressBar={false}
           newestOnTop
           closeOnClick
@@ -31,6 +31,15 @@ export default function Providers({ children }: ProvidersProps) {
           draggable
           pauseOnHover
           theme="light"
+          toastStyle={{
+            borderRadius: 18,
+            border: '1px solid rgba(222,213,204,0.9)',
+            background: 'rgba(255,253,250,0.96)',
+            boxShadow: '0 18px 45px -24px rgba(58, 40, 35, 0.26)',
+            color: '#2b211d',
+            fontWeight: 500,
+            letterSpacing: '0.004em',
+          }}
         />
       </ThemeProvider>
       <ReactQueryDevtools initialIsOpen={false} />
