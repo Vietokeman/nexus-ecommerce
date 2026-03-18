@@ -56,7 +56,7 @@ export default function ForgotPasswordPage() {
       {status === 'fulfilled' ? (
         <motion.div variants={itemVariants}>
           <Stack alignItems="center" spacing={3} mt={2}>
-            <CheckCircleOutlineIcon sx={{ fontSize: 64, color: nexus.purple[500] }} />
+            <CheckCircleOutlineIcon sx={{ fontSize: 64, color: nexus.orange[500] }} />
             <Typography
               variant="body2"
               component={Link}
@@ -64,8 +64,8 @@ export default function ForgotPasswordPage() {
               sx={{
                 textDecoration: 'none',
                 fontWeight: 600,
-                color: nexus.purple[600],
-                '&:hover': { color: nexus.purple[800] },
+                color: nexus.orange[600],
+                '&:hover': { color: nexus.orange[700] },
               }}
             >
               Back to Sign In
@@ -103,7 +103,11 @@ export default function ForgotPasswordPage() {
             whileTap={{ scale: 0.99 }}
           >
             <LoadingButton
-              sx={{ height: '3rem', fontSize: '1rem' }}
+              sx={{
+                height: '3rem',
+                fontSize: '1rem',
+                boxShadow: '0 14px 24px -16px rgba(154, 88, 82, 0.75)',
+              }}
               fullWidth
               loading={status === 'pending'}
               type="submit"
@@ -127,8 +131,8 @@ export default function ForgotPasswordPage() {
                 sx={{
                   textDecoration: 'none',
                   fontWeight: 600,
-                  color: nexus.purple[600],
-                  '&:hover': { color: nexus.purple[800] },
+                  color: nexus.orange[600],
+                  '&:hover': { color: nexus.orange[700] },
                 }}
               >
                 Sign in

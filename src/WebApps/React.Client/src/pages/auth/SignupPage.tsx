@@ -139,7 +139,11 @@ export default function SignupPage() {
           whileTap={{ scale: 0.99 }}
         >
           <LoadingButton
-            sx={{ height: '3rem', fontSize: '1rem' }}
+            sx={{
+              height: '3rem',
+              fontSize: '1rem',
+              boxShadow: '0 14px 24px -16px rgba(154, 88, 82, 0.75)',
+            }}
             fullWidth
             loading={loading}
             type="submit"
@@ -151,7 +155,7 @@ export default function SignupPage() {
 
         <motion.div variants={itemVariants}>
           <Divider sx={{ my: 1 }}>
-            <Typography variant="body2" sx={{ color: nexus.neutral[400], px: 1 }}>
+            <Typography variant="body2" sx={{ color: nexus.neutral[500], px: 1.5, fontWeight: 500 }}>
               or sign up with
             </Typography>
           </Divider>
@@ -173,9 +177,10 @@ export default function SignupPage() {
                 fontWeight: 500,
                 borderColor: nexus.neutral[300],
                 color: nexus.neutral[700],
+                backgroundColor: 'rgba(255,255,255,0.78)',
                 '&:hover': {
                   borderColor: '#ea4335',
-                  backgroundColor: 'rgba(234, 67, 53, 0.04)',
+                  backgroundColor: 'rgba(234, 67, 53, 0.08)',
                   color: '#ea4335',
                 },
               }}
@@ -196,9 +201,10 @@ export default function SignupPage() {
                 fontWeight: 500,
                 borderColor: nexus.neutral[300],
                 color: nexus.neutral[700],
+                backgroundColor: 'rgba(255,255,255,0.78)',
                 '&:hover': {
                   borderColor: '#333',
-                  backgroundColor: 'rgba(51, 51, 51, 0.04)',
+                  backgroundColor: 'rgba(51, 51, 51, 0.08)',
                   color: '#333',
                 },
               }}
@@ -218,8 +224,8 @@ export default function SignupPage() {
               sx={{
                 textDecoration: 'none',
                 fontWeight: 600,
-                color: nexus.purple[600],
-                '&:hover': { color: nexus.purple[800] },
+                color: nexus.orange[600],
+                '&:hover': { color: nexus.orange[700] },
               }}
             >
               Sign in

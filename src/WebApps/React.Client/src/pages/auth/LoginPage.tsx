@@ -91,9 +91,10 @@ export default function LoginPage() {
               to="/forgot-password"
               sx={{
                 textDecoration: 'none',
-                color: nexus.purple[600],
-                fontWeight: 500,
-                '&:hover': { color: nexus.purple[800] },
+                color: nexus.orange[600],
+                fontWeight: 600,
+                letterSpacing: '0.01em',
+                '&:hover': { color: nexus.orange[700] },
               }}
             >
               Forgot password?
@@ -108,7 +109,11 @@ export default function LoginPage() {
         >
           <LoadingButton
             fullWidth
-            sx={{ height: '3rem', fontSize: '1rem' }}
+            sx={{
+              height: '3rem',
+              fontSize: '1rem',
+              boxShadow: '0 14px 24px -16px rgba(154, 88, 82, 0.75)',
+            }}
             loading={loading}
             type="submit"
             variant="contained"
@@ -119,7 +124,7 @@ export default function LoginPage() {
 
         <motion.div variants={itemVariants}>
           <Divider sx={{ my: 1 }}>
-            <Typography variant="body2" sx={{ color: nexus.neutral[400], px: 1 }}>
+            <Typography variant="body2" sx={{ color: nexus.neutral[500], px: 1.5, fontWeight: 500 }}>
               or continue with
             </Typography>
           </Divider>
@@ -141,9 +146,10 @@ export default function LoginPage() {
                 fontWeight: 500,
                 borderColor: nexus.neutral[300],
                 color: nexus.neutral[700],
+                backgroundColor: 'rgba(255,255,255,0.78)',
                 '&:hover': {
                   borderColor: '#ea4335',
-                  backgroundColor: 'rgba(234, 67, 53, 0.04)',
+                  backgroundColor: 'rgba(234, 67, 53, 0.08)',
                   color: '#ea4335',
                 },
               }}
@@ -164,9 +170,10 @@ export default function LoginPage() {
                 fontWeight: 500,
                 borderColor: nexus.neutral[300],
                 color: nexus.neutral[700],
+                backgroundColor: 'rgba(255,255,255,0.78)',
                 '&:hover': {
                   borderColor: '#333',
-                  backgroundColor: 'rgba(51, 51, 51, 0.04)',
+                  backgroundColor: 'rgba(51, 51, 51, 0.08)',
                   color: '#333',
                 },
               }}
@@ -186,8 +193,8 @@ export default function LoginPage() {
               sx={{
                 textDecoration: 'none',
                 fontWeight: 600,
-                color: nexus.purple[600],
-                '&:hover': { color: nexus.purple[800] },
+                color: nexus.orange[600],
+                '&:hover': { color: nexus.orange[700] },
               }}
             >
               Create account
