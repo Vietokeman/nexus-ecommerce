@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Box, Checkbox, Rating, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Rating, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
 import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
@@ -17,6 +17,7 @@ import type { Product } from '@/types/product';
 import loadingAnimation from '@/assets/animations/loading.json';
 import ProductReviewsSection from '@/components/reviews/ProductReviewsSection';
 import type { ReviewSummary } from '@/types/seller';
+import { PremiumButton, PremiumCheckbox } from '@/components/ui/primitives';
 
 const SIZES = ['XS', 'S', 'M', 'L', 'XL'];
 const COLORS = ['#020202', '#F6F6F6', '#B82222', '#BEA9A9', '#E2BB8D'];
@@ -132,7 +133,7 @@ export default function ProductDetailsPage() {
   }
 
   return (
-    <Stack sx={{ justifyContent: 'center', alignItems: 'center', mb: '2rem', rowGap: '2rem' }}>
+    <Stack sx={{ justifyContent: 'center', alignItems: 'center', mb: '3rem', rowGap: '2.5rem' }}>
       <Stack>
         {/* Product details */}
         <Stack
@@ -287,19 +288,19 @@ export default function ProductDetailsPage() {
                       <motion.div
                         key={size}
                         onClick={() => setSelectedSize(size)}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 1 }}
+                        whileHover={{ scale: 1.04 }}
+                        whileTap={{ scale: 0.99 }}
                         style={{
                           border: selectedSize === size ? '' : '1px solid grayText',
-                          borderRadius: '8px',
-                          width: '30px',
-                          height: '30px',
+                          borderRadius: '10px',
+                          width: '36px',
+                          height: '36px',
                           display: 'flex',
                           justifyContent: 'center',
                           alignItems: 'center',
                           cursor: 'pointer',
                           padding: '1.2rem',
-                          backgroundColor: selectedSize === size ? '#DB4444' : 'whitesmoke',
+                          backgroundColor: selectedSize === size ? '#9a5852' : '#fffcf8',
                           color: selectedSize === size ? 'white' : '',
                         }}
                       >
@@ -314,77 +315,53 @@ export default function ProductDetailsPage() {
                   {/* Quantity */}
                   <Stack flexDirection="row" alignItems="center" justifyContent="space-between">
                     <MotionConfig>
-                      <motion.button
+                      <PremiumButton
+                        magnetic={false}
                         onClick={handleDecreaseQty}
-                        style={{
-                          padding: '10px 15px',
-                          fontSize: '1.05rem',
-                          backgroundColor: '',
-                          color: 'black',
-                          outline: 'none',
-                          border: '1px solid black',
-                          borderRadius: '8px',
-                          cursor: 'pointer',
+                        variant="outlined"
+                        sx={{
+                          minWidth: 46,
+                          px: 0,
+                          borderRadius: '10px',
                         }}
                       >
                         -
-                      </motion.button>
+                      </PremiumButton>
                       <p style={{ margin: '0 1rem', fontSize: '1.1rem', fontWeight: '400' }}>
                         {quantity}
                       </p>
-                      <motion.button
+                      <PremiumButton
+                        magnetic={false}
                         onClick={handleIncreaseQty}
-                        style={{
-                          padding: '10px 15px',
-                          fontSize: '1.05rem',
-                          backgroundColor: 'black',
-                          color: 'white',
-                          outline: 'none',
-                          border: 'none',
-                          borderRadius: '8px',
-                          cursor: 'pointer',
+                        variant="contained"
+                        sx={{
+                          minWidth: 46,
+                          px: 0,
+                          borderRadius: '10px',
                         }}
                       >
                         +
-                      </motion.button>
+                      </PremiumButton>
                     </MotionConfig>
                   </Stack>
 
                   {/* Add to cart */}
                   {isProductAlreadyInCart ? (
-                    <button
-                      style={{
-                        padding: '10px 15px',
-                        fontSize: '1.05rem',
-                        backgroundColor: 'black',
-                        color: 'white',
-                        outline: 'none',
-                        border: 'none',
-                        borderRadius: '8px',
-                        cursor: 'pointer',
-                      }}
+                    <PremiumButton
+                      variant="contained"
+                      magnetic={false}
                       onClick={() => navigate('/cart')}
                     >
                       In Cart
-                    </button>
+                    </PremiumButton>
                   ) : (
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 1 }}
+                    <PremiumButton
                       onClick={handleAddToCart}
-                      style={{
-                        padding: '10px 15px',
-                        fontSize: '1.05rem',
-                        backgroundColor: 'black',
-                        color: 'white',
-                        outline: 'none',
-                        border: 'none',
-                        borderRadius: '8px',
-                        cursor: 'pointer',
-                      }}
+                      variant="contained"
+                      magnetic={false}
                     >
                       Add To Cart
-                    </motion.button>
+                    </PremiumButton>
                   )}
 
                   {/* Wishlist */}
@@ -397,7 +374,7 @@ export default function ProductDetailsPage() {
                       alignItems: 'center',
                     }}
                   >
-                    <Checkbox
+                    <PremiumCheckbox
                       checked={isProductAlreadyInWishlist}
                       onChange={handleAddRemoveFromWishlist}
                       icon={<FavoriteBorder />}
