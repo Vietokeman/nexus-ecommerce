@@ -75,11 +75,12 @@ export default function RootLayout() {
       <AppBar
         position="sticky"
         sx={{
-          background: nexus.glass.background,
+          background:
+            'linear-gradient(145deg, rgba(255,253,250,0.92) 0%, rgba(247,241,236,0.86) 58%, rgba(242,237,231,0.9) 100%)',
           backdropFilter: nexus.glass.blur,
           WebkitBackdropFilter: nexus.glass.blur,
           borderBottom: `1px solid ${nexus.neutral[200]}`,
-          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.56)',
+          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.62), 0 10px 24px -20px rgba(79,67,62,0.65)',
           color: nexus.neutral[900],
         }}
       >
@@ -238,7 +239,7 @@ export default function RootLayout() {
 
             {isProductList && (
               <IconButton onClick={toggleFilter} size="small">
-                <TuneIcon sx={{ color: isFilterOpen ? nexus.purple[700] : nexus.neutral[500] }} />
+                <TuneIcon sx={{ color: isFilterOpen ? nexus.orange[700] : nexus.neutral[500] }} />
               </IconButton>
             )}
           </Stack>
@@ -260,7 +261,8 @@ export default function RootLayout() {
           pt: 6,
           pb: 3,
           px: { xs: 2, md: 6 },
-          color: 'rgba(255,255,255,0.8)',
+          color: 'rgba(255,255,255,0.84)',
+          borderTop: '1px solid rgba(255,255,255,0.08)',
         }}
       >
         <Stack
@@ -288,7 +290,7 @@ export default function RootLayout() {
               </Typography>
             </Stack>
             <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', lineHeight: 1.7 }}>
-              Where smart shopping meets seamless experience. Get 10% off your first order.
+              Crafted commerce for modern shoppers with curated products and trusted fulfillment.
             </Typography>
           </Stack>
 
@@ -305,7 +307,7 @@ export default function RootLayout() {
                 color: 'rgba(255,255,255,0.5)',
                 cursor: 'pointer',
                 textDecoration: 'none',
-                '&:hover': { color: nexus.purple[300] },
+                '&:hover': { color: nexus.orange[300] },
               }}
             >
               support@nexus.com
@@ -318,7 +320,7 @@ export default function RootLayout() {
                 color: 'rgba(255,255,255,0.5)',
                 cursor: 'pointer',
                 textDecoration: 'none',
-                '&:hover': { color: nexus.purple[300] },
+                '&:hover': { color: nexus.orange[300] },
               }}
             >
               +84 888-888-999
@@ -350,7 +352,7 @@ export default function RootLayout() {
                 sx={{
                   color: 'rgba(255,255,255,0.5)',
                   cursor: 'pointer',
-                  '&:hover': { color: nexus.purple[300] },
+                  '&:hover': { color: nexus.orange[300] },
                 }}
                 onClick={() => navigate(item.to)}
               >
@@ -371,7 +373,7 @@ export default function RootLayout() {
                 sx={{
                   color: 'rgba(255,255,255,0.5)',
                   cursor: 'pointer',
-                  '&:hover': { color: nexus.purple[300] },
+                  '&:hover': { color: nexus.orange[300] },
                 }}
               >
                 {t}

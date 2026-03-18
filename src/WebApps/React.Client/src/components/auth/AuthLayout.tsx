@@ -67,6 +67,8 @@ export default function AuthLayout({ children, title, subtitle }: AuthLayoutProp
         justifyContent="center"
         alignItems="center"
         sx={{
+          background:
+            'radial-gradient(120% 120% at 0% 0%, rgba(213,171,163,0.2) 0%, rgba(247,243,238,0.72) 40%, rgba(247,243,238,0.95) 100%)',
           px: { xs: 2, sm: 5 },
           py: { xs: 5, md: 7 },
           overflowY: 'auto',
@@ -90,7 +92,7 @@ export default function AuthLayout({ children, title, subtitle }: AuthLayoutProp
                     WebkitTextFillColor: 'transparent',
                     backgroundClip: 'text',
                     fontWeight: 700,
-                    letterSpacing: '-0.03em',
+                    letterSpacing: '-0.025em',
                   }}
                 >
                   Nexus Commerce
@@ -102,7 +104,16 @@ export default function AuthLayout({ children, title, subtitle }: AuthLayoutProp
           {/* Title */}
           {title && (
             <motion.div variants={itemVariants}>
-              <Typography variant="h4" fontWeight={700} sx={{ mb: 0.5, color: nexus.neutral[900] }}>
+              <Typography
+                variant="h4"
+                fontWeight={700}
+                sx={{
+                  mb: 0.5,
+                  color: nexus.neutral[900],
+                  letterSpacing: '-0.02em',
+                  textWrap: 'balance',
+                }}
+              >
                 {title}
               </Typography>
             </motion.div>
@@ -111,7 +122,7 @@ export default function AuthLayout({ children, title, subtitle }: AuthLayoutProp
           {/* Subtitle */}
           {subtitle && (
             <motion.div variants={itemVariants}>
-              <Typography variant="body2" sx={{ mb: 3, color: nexus.neutral[500] }}>
+              <Typography variant="body2" sx={{ mb: 3, color: nexus.neutral[600], maxWidth: '34ch' }}>
                 {subtitle}
               </Typography>
             </motion.div>

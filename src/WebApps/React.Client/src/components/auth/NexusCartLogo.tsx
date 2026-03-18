@@ -17,7 +17,7 @@ export default function NexusCartLogo({ size = 80 }: NexusCartLogoProps) {
       sx={{
         width: size,
         height: size,
-        filter: 'drop-shadow(0 4px 16px rgba(124, 58, 237, 0.3))',
+        filter: 'drop-shadow(0 8px 18px rgba(154, 88, 82, 0.32))',
       }}
     >
       <svg
@@ -29,9 +29,9 @@ export default function NexusCartLogo({ size = 80 }: NexusCartLogoProps) {
       >
         <defs>
           <linearGradient id={id} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor={nexus.purple[500]} />
-            <stop offset="50%" stopColor={nexus.purple[400]} />
-            <stop offset="100%" stopColor={nexus.orange[500]} />
+            <stop offset="0%" stopColor={nexus.orange[700]} />
+            <stop offset="50%" stopColor={nexus.orange[500]} />
+            <stop offset="100%" stopColor={nexus.purple[300]} />
           </linearGradient>
         </defs>
         {/* Cart body */}

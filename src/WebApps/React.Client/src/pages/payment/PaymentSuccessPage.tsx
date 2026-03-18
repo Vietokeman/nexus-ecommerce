@@ -57,6 +57,10 @@ export default function PaymentSuccessPage() {
             borderRadius: nexus.radius.xl,
             maxWidth: 480,
             alignItems: 'center',
+            border: `1px solid ${nexus.neutral[200]}`,
+            background:
+              'radial-gradient(130% 130% at 0% 0%, rgba(78,122,98,0.18) 0%, rgba(255,253,250,0.82) 45%, rgba(247,243,238,0.9) 100%)',
+            boxShadow: nexus.glass.shadow,
           }}
           spacing={2}
         >
@@ -91,7 +95,7 @@ export default function PaymentSuccessPage() {
             </Typography>
           )}
 
-          <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mt: 2.5, width: '100%' }}>
             <PremiumButton variant="contained" magnetic={false} onClick={() => navigate('/orders')}>
               View Orders
             </PremiumButton>

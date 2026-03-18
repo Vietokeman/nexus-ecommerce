@@ -29,9 +29,11 @@ export default function NotFoundPage() {
             px: { xs: 3, md: 5 },
             py: { xs: 4, md: 6 },
             borderRadius: nexus.radius.xl,
-            background: 'rgba(255,253,250,0.78)',
+            background:
+              'radial-gradient(120% 120% at 0% 0%, rgba(203,148,139,0.2) 0%, rgba(255,253,250,0.85) 42%, rgba(247,243,238,0.92) 100%)',
             border: `1px solid ${nexus.neutral[200]}`,
             boxShadow: nexus.glass.shadow,
+            maxWidth: 640,
           }}
         >
           <Stack width={{ xs: '16rem', md: '22rem' }}>
@@ -55,7 +57,7 @@ export default function NotFoundPage() {
           </Typography>
 
           <PremiumButton
-            sx={{ mt: 2, height: '3rem', px: 4 }}
+            sx={{ mt: 2.5, height: '3rem', px: 4, boxShadow: '0 14px 24px -16px rgba(154, 88, 82, 0.75)' }}
             size="large"
             onClick={() => navigate('/')}
             variant="contained"
