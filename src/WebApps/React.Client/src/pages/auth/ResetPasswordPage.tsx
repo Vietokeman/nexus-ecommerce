@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FormHelperText, Stack, TextField } from '@mui/material';
+import { Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
@@ -9,6 +9,7 @@ import { api } from '@/lib/api';
 import { API_ENDPOINTS } from '@/lib/endpoints';
 import AuthLayout from '@/components/auth/AuthLayout';
 import { itemVariants } from '@/lib/motion';
+import { PremiumInput } from '@/components/ui/primitives';
 
 interface ResetForm {
   password: string;
@@ -52,9 +53,10 @@ export default function ResetPasswordPage() {
     <AuthLayout title="Reset password" subtitle="Enter and confirm your new password">
       <Stack spacing={2.5} component="form" noValidate onSubmit={handleSubmit(handleResetPassword)}>
         <motion.div variants={itemVariants}>
-          <TextField
+          <PremiumInput
             type="password"
             fullWidth
+            label="New Password"
             {...register('password', {
               required: 'Please enter a password',
               pattern: {
@@ -64,18 +66,15 @@ export default function ResetPasswordPage() {
             })}
             placeholder="New password"
             autoComplete="new-password"
+            errorText={errors.password?.message}
           />
-          {errors.password && (
-            <FormHelperText sx={{ mt: 0.5 }} error>
-              {errors.password.message}
-            </FormHelperText>
-          )}
         </motion.div>
 
         <motion.div variants={itemVariants}>
-          <TextField
+          <PremiumInput
             type="password"
             fullWidth
+            label="Confirm Password"
             {...register('confirmPassword', {
               required: 'Please confirm the password',
               validate: (value, formValues) =>
@@ -83,12 +82,8 @@ export default function ResetPasswordPage() {
             })}
             placeholder="Confirm new password"
             autoComplete="new-password"
+            errorText={errors.confirmPassword?.message}
           />
-          {errors.confirmPassword && (
-            <FormHelperText sx={{ mt: 0.5 }} error>
-              {errors.confirmPassword.message}
-            </FormHelperText>
-          )}
         </motion.div>
 
         <motion.div

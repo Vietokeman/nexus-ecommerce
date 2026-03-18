@@ -3,6 +3,9 @@ services:
   nexusdb:
     image: postgis/postgis:16-3.4
     container_name: src-nexusdb
+  nexusaidb:
+    image: pgvector/pgvector:pg16
+    container_name: src-nexusaidb
   basketdb:
     image: redis:alpine
     container_name: src-basketdb
@@ -95,6 +98,34 @@ services:
       context: .
       dockerfile: Services/GroupBuy.API/Dockerfile
 
+  seller.api:
+    image: ${DOCKER_REGISTRY-}src/seller-api:${PLATFORM:-linux}-${TAG:-latest}
+    container_name: src-seller-api
+    build:
+      context: .
+      dockerfile: Services/Seller.API/Dockerfile
+
+  nexus.ai.service:
+    image: ${DOCKER_REGISTRY-}src/nexus-ai-service:${PLATFORM:-linux}-${TAG:-latest}
+    container_name: src-nexus-ai-service
+    build:
+      context: .
+      dockerfile: Services/Nexus.AI.Service/Dockerfile
+
+  admin.api:
+    image: ${DOCKER_REGISTRY-}src/admin-api:${PLATFORM:-linux}-${TAG:-latest}
+    container_name: src-admin-api
+    build:
+      context: .
+      dockerfile: Services/Admin.API/Dockerfile
+
+  angular.admin.client:
+    image: ${DOCKER_REGISTRY-}src/angular-admin-client:${PLATFORM:-linux}-${TAG:-latest}
+    container_name: src-angular-admin-client
+    build:
+      context: ./WebApps/Angular.AdminClient
+      dockerfile: Dockerfile
+
   # API Gateway section
   ocelot.apigw:
     image: ${DOCKER_REGISTRY-}src/ocelot-apigw:${PLATFORM:-linux}-${TAG:-latest}
@@ -128,6 +159,8 @@ networks:
 volumes:
   nexusdb_data:
     name: nexusdb_data
+  nexusaidb_data:
+    name: nexusaidb_data
   portainer_data:
     name: portainer_data
   elasticsearch_data:
@@ -138,3 +171,5 @@ volumes:
     name: pgadmin_data
   react_node_modules:
     name: react_node_modules
+  angular_admin_node_modules:
+    name: angular_admin_node_modules

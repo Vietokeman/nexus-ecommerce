@@ -4,6 +4,7 @@ using Identity.API.Data;
 using Identity.API.Entities;
 using Identity.API.Services;
 using Identity.API.Services.Interfaces;
+using Infrastructure.Audit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -40,8 +41,10 @@ Log.Information("Starting Identity API up");
 
 try
 {
+    builder.Services.AddAuditLogging(builder.Configuration, "identity-api");
+
     // Database
-    builder.Services.AddDbContext<IdentityDbContext>(options =>
+    builder.Services.AddDbContext<IdentityDbContext>((sp, options) =>
         options.UseNpgsql(
             builder.Configuration.GetConnectionString("DefaultConnectionString"),
             npgsqlOptions =>
@@ -51,7 +54,8 @@ try
                     maxRetryDelay: TimeSpan.FromSeconds(30),
                     errorCodesToAdd: null);
                 npgsqlOptions.MigrationsAssembly(typeof(IdentityDbContext).Assembly.FullName);
-            }));
+            })
+            .AddInterceptors(sp.GetRequiredService<AuditSaveChangesInterceptor>()));
 
     // ASP.NET Core Identity
     builder.Services.AddIdentity<AppUser, IdentityRole>(options =>

@@ -33,6 +33,28 @@ services:
       retries: 5
       start_period: 30s
 
+  nexusaidb:
+    container_name: src-nexusaidb
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=change_me_with_postgres_password
+      - POSTGRES_DB=NexusAiDb
+    restart: always
+    ports:
+      - "5436:5432"
+    volumes:
+      - nexusaidb_data:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d NexusAiDb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
   basketdb:
     container_name: src-basketdb
     restart: always
@@ -115,7 +137,11 @@ services:
         limits:
           memory: 512M
     healthcheck:
-      test: ["CMD-SHELL", "curl -sf http://localhost:9200/_cluster/health || exit 1"]
+      test:
+        [
+          "CMD-SHELL",
+          "curl -sf http://localhost:9200/_cluster/health || exit 1",
+        ]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -409,6 +435,79 @@ services:
           memory: 512M
     restart: always
 
+  seller.api:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    container_name: src-seller-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
+      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=SellerDb;Username=admin;Password=change_me_with_postgres_password;"
+      - "OpenAI:ApiKey=${OPENAI_API_KEY:-your-api-key-here}"
+      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
+    volumes:
+      - .:/src
+    working_dir: /src/Services/Seller.API
+    command: dotnet watch run --no-launch-profile
+    depends_on:
+      nexusdb:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    restart: always
+
+  nexus.ai.service:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    container_name: src-nexus-ai-service
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
+      - "ConnectionStrings:Database=Host=nexusaidb;Port=5432;Database=NexusAiDb;Username=admin;Password=change_me_with_postgres_password;"
+      - "Ai:ProductCatalog:BaseUrl=http://product.api"
+      - "Ai:Google:ApiKey=${GOOGLE_AI_API_KEY:-change-me}"
+      - "Ai:Security:ApiKey=${NEXUS_AI_ADMIN_KEY:-change-me}"
+    volumes:
+      - .:/src
+    working_dir: /src/Services/Nexus.AI.Service
+    command: dotnet watch run --no-launch-profile
+    depends_on:
+      nexusaidb:
+        condition: service_healthy
+      product.api:
+        condition: service_started
+    ports:
+      - "6013:80"
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    restart: always
+
+  admin.api:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    container_name: src-admin-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
+    volumes:
+      - .:/src
+    working_dir: /src/Services/Admin.API
+    command: dotnet watch run --no-launch-profile
+    ports:
+      - "6014:80"
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    restart: always
+
   # ==================== API GATEWAY (SDK + Volume + Hot Reload) ====================
   ocelot.apigw:
     image: mcr.microsoft.com/dotnet/sdk:8.0
@@ -433,6 +532,9 @@ services:
       - identity.api
       - flashsale.api
       - groupbuy.api
+      - seller.api
+      - nexus.ai.service
+      - admin.api
       - elasticsearch
     ports:
       - "5000:80"
@@ -459,6 +561,24 @@ services:
       - ocelot.apigw
     ports:
       - "3000:3000"
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    restart: always
+
+  angular.admin.client:
+    image: node:20-alpine
+    container_name: src-angular-admin-client
+    volumes:
+      - ./WebApps/Angular.AdminClient:/app
+      - angular_admin_node_modules:/app/node_modules
+    working_dir: /app
+    command: sh -c "npm install && npm run start -- --host 0.0.0.0"
+    depends_on:
+      - ocelot.apigw
+    ports:
+      - "4201:4201"
     deploy:
       resources:
         limits:

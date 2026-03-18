@@ -11,21 +11,26 @@ import {
   Menu,
   MenuItem,
   Stack,
-  Tooltip,
-  Button,
   Container,
 } from '@mui/material';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import TuneIcon from '@mui/icons-material/Tune';
+import StorefrontIcon from '@mui/icons-material/Storefront';
 import { useCartStore } from '@/store/cart-store';
 import { useWishlistStore } from '@/store/wishlist-store';
 import { useAuthStore } from '@/store/auth-store';
 import { useUIStore } from '@/store/ui-store';
+import { useSignalRNotification } from '@/hooks/useSignalRNotification';
 import { nexus } from '@/theme/theme';
 import NexusCartLogo from '@/components/auth/NexusCartLogo';
+import NotificationDropdown from '@/components/notifications/NotificationDropdown';
+import { APP_NAME } from '@/constants';
+import { PremiumButton, PremiumTooltip } from '@/components/ui/primitives';
 
 export default function RootLayout() {
+  useSignalRNotification();
+
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const totalItems = useCartStore((s) => s.totalItems);
   const cartItems = useCartStore((s) => s.items);
@@ -65,7 +70,7 @@ export default function RootLayout() {
   const displayName = user?.firstName || user?.userName || 'User';
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100dvh' }}>
       {/* ─── Navbar — Nexus glassmorphism ─── */}
       <AppBar
         position="sticky"
@@ -74,11 +79,11 @@ export default function RootLayout() {
           backdropFilter: nexus.glass.blur,
           WebkitBackdropFilter: nexus.glass.blur,
           borderBottom: `1px solid ${nexus.neutral[200]}`,
-          boxShadow: 'none',
+          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.56)',
           color: nexus.neutral[900],
         }}
       >
-        <Toolbar sx={{ px: { xs: 2, md: 4 }, height: '4rem', justifyContent: 'space-between' }}>
+        <Toolbar sx={{ px: { xs: 2, md: 4.5 }, height: '4.5rem', justifyContent: 'space-between' }}>
           {/* Brand */}
           <Stack
             direction="row"
@@ -102,13 +107,15 @@ export default function RootLayout() {
                 backgroundClip: 'text',
               }}
             >
-              Nexus Commerce
+              {APP_NAME}
             </Typography>
           </Stack>
 
           {/* Actions */}
           <Stack direction="row" alignItems="center" spacing={1.5}>
-            <Tooltip title="Settings">
+            <NotificationDropdown />
+
+            <PremiumTooltip title="Settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar
                   alt={displayName}
@@ -123,7 +130,7 @@ export default function RootLayout() {
                   {displayName.charAt(0).toUpperCase()}
                 </Avatar>
               </IconButton>
-            </Tooltip>
+            </PremiumTooltip>
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"
@@ -144,6 +151,29 @@ export default function RootLayout() {
                     Add new Product
                   </Typography>
                 </MenuItem>
+              )}
+              {/* Seller menu items — only for non-admin users */}
+              {!user?.isAdmin && (
+                <>
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography
+                      component={Link}
+                      sx={{ textDecoration: 'none', color: nexus.neutral[900] }}
+                      to="/seller/dashboard"
+                    >
+                      Seller Dashboard
+                    </Typography>
+                  </MenuItem>
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography
+                      component={Link}
+                      sx={{ textDecoration: 'none', color: nexus.neutral[900] }}
+                      to="/seller/products"
+                    >
+                      My Products
+                    </Typography>
+                  </MenuItem>
+                </>
               )}
               {settings.map((setting) => (
                 <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
@@ -173,9 +203,21 @@ export default function RootLayout() {
             </Typography>
 
             {user?.isAdmin && (
-              <Button variant="contained" size="small" sx={{ fontSize: '0.75rem' }}>
+              <PremiumButton variant="contained" size="small" magnetic={false} sx={{ fontSize: '0.75rem' }}>
                 Admin
-              </Button>
+              </PremiumButton>
+            )}
+
+            {!user?.isAdmin && (
+              <PremiumTooltip title="Seller Dashboard">
+                <IconButton
+                  onClick={() => navigate('/seller/dashboard')}
+                  size="small"
+                  sx={{ display: { xs: 'none', sm: 'inline-flex' } }}
+                >
+                  <StorefrontIcon sx={{ color: nexus.neutral[700] }} />
+                </IconButton>
+              </PremiumTooltip>
             )}
 
             {cartItems.length > 0 && (
@@ -205,7 +247,7 @@ export default function RootLayout() {
 
       {/* ─── Main Content ─── */}
       <Box component="main" sx={{ flex: 1 }}>
-        <Container maxWidth="xl" sx={{ py: 3 }}>
+        <Container maxWidth="xl" sx={{ py: { xs: 3, md: 5 } }}>
           <Outlet />
         </Container>
       </Box>
@@ -225,7 +267,7 @@ export default function RootLayout() {
           direction={{ xs: 'column', md: 'row' }}
           justifyContent="space-between"
           flexWrap="wrap"
-          spacing={4}
+          spacing={5}
           mb={5}
         >
           {/* Brand column */}
@@ -242,7 +284,7 @@ export default function RootLayout() {
                   backgroundClip: 'text',
                 }}
               >
-                Nexus Commerce
+                {APP_NAME}
               </Typography>
             </Stack>
             <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', lineHeight: 1.7 }}>
@@ -255,19 +297,40 @@ export default function RootLayout() {
             <Typography variant="body1" fontWeight={600} sx={{ color: 'rgba(255,255,255,0.9)' }}>
               Support
             </Typography>
-            {['support@nexus.com', '+84 888-888-999', 'Ho Chi Minh City, Vietnam'].map((t) => (
-              <Typography
-                key={t}
-                variant="body2"
-                sx={{
-                  color: 'rgba(255,255,255,0.5)',
-                  cursor: 'pointer',
-                  '&:hover': { color: nexus.purple[300] },
-                }}
-              >
-                {t}
-              </Typography>
-            ))}
+            <Typography
+              component="a"
+              href="mailto:support@nexus.com"
+              variant="body2"
+              sx={{
+                color: 'rgba(255,255,255,0.5)',
+                cursor: 'pointer',
+                textDecoration: 'none',
+                '&:hover': { color: nexus.purple[300] },
+              }}
+            >
+              support@nexus.com
+            </Typography>
+            <Typography
+              component="a"
+              href="tel:+84888888999"
+              variant="body2"
+              sx={{
+                color: 'rgba(255,255,255,0.5)',
+                cursor: 'pointer',
+                textDecoration: 'none',
+                '&:hover': { color: nexus.purple[300] },
+              }}
+            >
+              +84 888-888-999
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{
+                color: 'rgba(255,255,255,0.5)',
+              }}
+            >
+              Ho Chi Minh City, Vietnam
+            </Typography>
           </Stack>
 
           {/* Account */}
@@ -320,7 +383,7 @@ export default function RootLayout() {
         {/* Divider & Copyright */}
         <Box sx={{ borderTop: '1px solid rgba(255,255,255,0.1)', pt: 2, textAlign: 'center' }}>
           <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.35)' }}>
-            &copy; Nexus Commerce {new Date().getFullYear()}. All rights reserved.
+            &copy; {APP_NAME} {new Date().getFullYear()}. All rights reserved.
           </Typography>
         </Box>
       </Box>

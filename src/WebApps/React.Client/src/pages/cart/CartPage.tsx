@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
-  Button,
   Chip,
   IconButton,
   Paper,
@@ -15,9 +14,8 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import { useCartStore } from '@/store/cart-store';
-
-const SHIPPING = 5.55;
-const TAXES = 2.0;
+import { SHIPPING, TAXES } from '@/constants';
+import { PremiumButton } from '@/components/ui/primitives';
 
 /* ── CartItem sub-component ─────────────────────────────────── */
 interface CartItemProps {
@@ -114,13 +112,14 @@ function CartItem({ itemNo, productName, price, quantity, imageUrl }: CartItemPr
         alignItems="flex-end"
       >
         <Typography variant="body2">${price}</Typography>
-        <Button
+        <PremiumButton
           size={is480 ? 'small' : undefined}
           onClick={handleProductRemove}
           variant="contained"
+          magnetic={false}
         >
           Remove
-        </Button>
+        </PremiumButton>
       </Stack>
     </Stack>
   );
@@ -185,13 +184,13 @@ export function CartContent({ checkout }: CartProps) {
                 <Typography>${SHIPPING}</Typography>
               </Stack>
               <Stack flexDirection="row" justifyContent="space-between">
-                <Typography>Taxes</Typography>
-                <Typography>${TAXES}</Typography>
+                <Typography>Taxes ({TAXES}%)</Typography>
+                <Typography>${((subtotal() * TAXES) / 100).toFixed(2)}</Typography>
               </Stack>
               <hr />
               <Stack flexDirection="row" justifyContent="space-between">
                 <Typography>Total</Typography>
-                <Typography>${subtotal() + SHIPPING + TAXES}</Typography>
+                <Typography>${(subtotal() + SHIPPING + (subtotal() * TAXES) / 100).toFixed(2)}</Typography>
               </Stack>
             </Stack>
           ) : (
@@ -217,9 +216,13 @@ export function CartContent({ checkout }: CartProps) {
         {/* checkout or continue shopping */}
         {!checkout && (
           <Stack rowGap="1rem">
-            <Button variant="contained" component={Link} to="/checkout">
+            <PremiumButton
+              variant="contained"
+              magnetic={false}
+              onClick={() => navigate('/checkout')}
+            >
               Checkout
-            </Button>
+            </PremiumButton>
             <motion.div style={{ alignSelf: 'center' }} whileHover={{ y: 2 }}>
               <Chip
                 sx={{ cursor: 'pointer', borderRadius: '8px' }}

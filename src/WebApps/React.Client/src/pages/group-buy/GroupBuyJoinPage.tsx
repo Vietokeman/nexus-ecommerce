@@ -20,10 +20,17 @@ import { useGroupBuySessionByCode, useJoinGroup } from '@/hooks/useGroupBuy';
 import { useAuthStore } from '@/store/auth-store';
 import { containerVariants, itemVariants } from '@/lib/motion';
 import { toast } from 'react-toastify';
+import { useState, useEffect } from 'react';
 
 function CountdownTimer({ deadline }: { deadline: string }) {
+  const [now, setNow] = useState(Date.now());
+
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 1_000);
+    return () => clearInterval(timer);
+  }, []);
+
   const target = new Date(deadline).getTime();
-  const now = Date.now();
   const diff = Math.max(0, target - now);
   const h = Math.floor(diff / 3_600_000);
   const m = Math.floor((diff % 3_600_000) / 60_000);

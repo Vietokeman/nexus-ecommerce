@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button, Divider, FormHelperText, Stack, TextField, Typography } from '@mui/material';
+import { Divider, Stack, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { Google as GoogleIcon, GitHub as GitHubIcon } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
@@ -11,6 +11,7 @@ import type { LoginDto } from '@/types/auth';
 import AuthLayout from '@/components/auth/AuthLayout';
 import { itemVariants } from '@/lib/motion';
 import { nexus } from '@/theme/theme';
+import { PremiumButton, PremiumInput } from '@/components/ui/primitives';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
 
@@ -53,39 +54,33 @@ export default function LoginPage() {
     <AuthLayout title="Welcome back" subtitle="Sign in to continue shopping">
       <Stack spacing={2.5} component="form" noValidate onSubmit={handleSubmit(handleLogin)}>
         <motion.div variants={itemVariants}>
-          <TextField
+          <PremiumInput
             fullWidth
+            label="Email"
             {...register('email', {
               required: 'Email is required',
               pattern: {
                 value:
-                  /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g,
+                  /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
                 message: 'Enter a valid email',
               },
             })}
             placeholder="Email address"
             autoComplete="email"
+            errorText={errors.email?.message}
           />
-          {errors.email && (
-            <FormHelperText sx={{ mt: 0.5 }} error>
-              {errors.email.message}
-            </FormHelperText>
-          )}
         </motion.div>
 
         <motion.div variants={itemVariants}>
-          <TextField
+          <PremiumInput
             type="password"
             fullWidth
+            label="Password"
             {...register('password', { required: 'Password is required' })}
             placeholder="Password"
             autoComplete="current-password"
+            errorText={errors.password?.message}
           />
-          {errors.password && (
-            <FormHelperText sx={{ mt: 0.5 }} error>
-              {errors.password.message}
-            </FormHelperText>
-          )}
         </motion.div>
 
         <motion.div variants={itemVariants}>
@@ -132,9 +127,10 @@ export default function LoginPage() {
 
         <motion.div variants={itemVariants}>
           <Stack direction="row" spacing={2}>
-            <Button
+            <PremiumButton
               fullWidth
               variant="outlined"
+              magnetic={false}
               startIcon={<GoogleIcon />}
               onClick={() => {
                 window.location.href = `${API_BASE_URL}/api/auth/external-login?provider=Google`;
@@ -153,10 +149,11 @@ export default function LoginPage() {
               }}
             >
               Google
-            </Button>
-            <Button
+            </PremiumButton>
+            <PremiumButton
               fullWidth
               variant="outlined"
+              magnetic={false}
               startIcon={<GitHubIcon />}
               onClick={() => {
                 window.location.href = `${API_BASE_URL}/api/auth/external-login?provider=GitHub`;
@@ -175,7 +172,7 @@ export default function LoginPage() {
               }}
             >
               GitHub
-            </Button>
+            </PremiumButton>
           </Stack>
         </motion.div>
 

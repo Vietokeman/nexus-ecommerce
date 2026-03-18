@@ -1,0 +1,35 @@
+/* You can add global styles to this file, and also import other style files */
+// If you want to override variables do it here
+@import "variables";
+
+$enable-ltr: true;
+$enable-rtl: true;
+
+// Import styles with default layout.
+// Temporary workaround: Using compiled CSS instead of SCSS due to Sass compilation issues in CoreUI 5.2.0
+// @import "@coreui/coreui/scss/coreui";
+
+// Import Chart.js custom tooltips styles
+// Temporary workaround: Using compiled CSS instead of SCSS due to Sass compilation issues in CoreUI 5.2.0
+// @import "@coreui/chartjs/scss/coreui-chartjs";
+
+// Temporarily commented out due to CoreUI SCSS dependency
+// @import "layout";
+
+// Some temp fixes
+@import "fixes";
+
+// Temporarily commented out due to CoreUI SCSS dependency
+// Prism.js
+// @import "examples";
+
+// If you want to add something do it here
+@import "custom";
+
+// Enhanced UI improvements
+@import "enhanced-ui";
+
+// Figma design system
+@import "figma-design";
+@import "premium-overhaul";
+@import "primeicons/primeicons.css";

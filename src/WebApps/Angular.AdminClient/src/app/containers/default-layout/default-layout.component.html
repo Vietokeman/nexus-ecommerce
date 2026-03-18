@@ -1,0 +1,60 @@
+<c-sidebar
+  #sidebar="cSidebar"
+  class="d-print-none sidebar sidebar-fixed nx-sidebar"
+  id="sidebar"
+  visible
+>
+  <c-sidebar-brand
+    class="nx-sidebar-brand"
+    [brandFull]="{
+      src: 'assets/img/brand/coreui-angular.svg',
+      width: 184,
+      height: 42,
+      alt: 'Vietokeman Admin',
+    }"
+    [brandNarrow]="{
+      src: 'assets/img/brand/coreui-signet-white.svg',
+      width: 40,
+      height: 40,
+      alt: 'Vietokeman Admin',
+    }"
+    routerLink="./"
+  />
+
+  <div class="nx-sidebar-caption">
+    <span class="nx-sidebar-eyebrow">Điều phối</span>
+    <p class="nx-sidebar-title">Trung tâm quản trị nội dung</p>
+  </div>
+
+  <ng-scrollbar pointerEventsMethod="scrollbar" class="nx-sidebar-scroll">
+    <c-sidebar-nav [navItems]="navItems" />
+  </ng-scrollbar>
+
+  <div class="nx-sidebar-footer">
+    <span class="nx-sidebar-footer-label">Compact mode</span>
+    <c-sidebar-toggler
+      *ngIf="!sidebar.narrow"
+      toggle="unfoldable"
+      cSidebarToggle="sidebar"
+      class="nx-sidebar-toggler"
+    />
+  </div>
+</c-sidebar>
+
+<div class="wrapper d-flex flex-column min-vh-100 nx-layout-shell">
+  <div class="nx-atmosphere" aria-hidden="true"></div>
+
+  <app-default-header
+    class="d-print-none nx-header-shell"
+    position="sticky"
+    sidebarId="sidebar"
+  />
+
+  <main class="body flex-grow-1 px-3 nx-body-shell">
+    <c-container breakpoint="xl" class="h-auto nx-page-wrap">
+      <router-outlet />
+    </c-container>
+  </main>
+
+  <app-default-footer />
+</div>

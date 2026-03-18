@@ -6,7 +6,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/architecture-microservices-blue.svg" />
   <img src="https://img.shields.io/badge/backend-.NET%208-green" />
-  <img src="https://img.shields.io/badge/frontend-React%2BVite-cyan" />
+  <img src="https://img.shields.io/badge/frontend-React%2BVite%20%2B%20Angular18-cyan" />
   <img src="https://img.shields.io/badge/orchestration-Docker--Compose-orange" />
   <img src="https://img.shields.io/badge/database-PostgreSQL%2FRedis-informational" />
   <img src="https://img.shields.io/badge/gateway-Ocelot-purple" />
@@ -30,6 +30,7 @@ docker-compose up -d
 **✅ Đã xong!** Tất cả microservices chạy qua API Gateway duy nhất:
 
 - **Frontend**: http://localhost:3000
+- **Admin Client**: http://localhost:4201
 - **API Gateway**: http://localhost:5000 ⭐
 - **Swagger**: http://localhost:5000/swagger
 
@@ -54,6 +55,8 @@ This repository provides a **complete e-commerce platform** built using **Micros
 - ✅ **Event-Driven**: RabbitMQ for inter-service communication
 - ✅ **Monitoring**: Elasticsearch + Kibana + Health Checks
 - ✅ **Modern Frontend**: React + Vite + Zustand + Tailwind CSS
+- ✅ **Dedicated Admin App**: Angular + CoreUI back-office separated from customer web app
+- ✅ **Admin Service**: `Admin.API` for admin routes under `/api/admin/*`
 
 ---
 
@@ -104,6 +107,15 @@ product.api: # Product Catalog Service
 customer.api: # Customer Management Service
 basket.api: # Shopping Cart Service
 ordering.api: # Order Processing Service
+admin.api: # Admin service for users, roles, posts, categories, series, media
+nexus.ai.service: # AI assistant and vector search service
+```
+
+### Web Apps
+
+```yaml
+react.client: # Customer-facing React + Vite app
+angular.admin.client: # Dedicated Angular + CoreUI admin web app
 ```
 
 ### API Gateway
@@ -188,6 +200,7 @@ ocelot.apigw: # API Gateway (Port 5000)
 - ⭐ ONLY port 5000 (Gateway) is exposed for API access
 - All microservices run on internal Docker network
 - Frontend (React) runs on port 3000
+- Admin client (Angular) runs on port 4201
 - Management tools: pgAdmin :5050, RabbitMQ UI :15672, Portainer :9000, Kibana :5601
 - Database: PostgreSQL :5433 (nexusdb) for all microservices
 ```

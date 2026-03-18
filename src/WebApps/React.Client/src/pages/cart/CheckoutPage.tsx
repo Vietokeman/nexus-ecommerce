@@ -1,14 +1,12 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
-  Button,
   FormControl,
   Grid,
   IconButton,
   Paper,
   Radio,
   Stack,
-  TextField,
   Typography,
   useMediaQuery,
   useTheme,
@@ -23,9 +21,8 @@ import { useAuthStore } from '@/store/auth-store';
 import { CartContent } from './CartPage';
 import { api } from '@/lib/api';
 import { API_ENDPOINTS } from '@/lib/endpoints';
-
-const SHIPPING = 5.55;
-const TAXES = 2.0;
+import { SHIPPING, TAXES, VND_RATE } from '@/constants';
+import { PremiumButton, PremiumInput } from '@/components/ui/primitives';
 
 interface AddressForm {
   type: string;
@@ -73,7 +70,7 @@ export default function CheckoutPage() {
     setOrderLoading(true);
     try {
       const orderNo = `ORD-${Date.now()}`;
-      const total = subtotal() + SHIPPING + TAXES;
+      const total = subtotal() + SHIPPING + (subtotal() * TAXES) / 100;
 
       await api.post(API_ENDPOINTS.BASKETS.UPDATE, {
         userName: user?.email || user?.userName,
@@ -98,14 +95,14 @@ export default function CheckoutPage() {
       if (selectedPaymentMethod === 'CARD') {
         const paymentData = {
           orderNo,
-          amount: Math.round(total * 23000),
+          amount: Math.round(total * VND_RATE),
           description: `Order ${orderNo}`,
           buyerName: `${user?.firstName} ${user?.lastName}`,
           buyerEmail: user?.email || user?.userName,
           items: items.map((i) => ({
             name: i.productName,
             quantity: i.quantity,
-            price: Math.round(i.price * 23000),
+            price: Math.round(i.price * VND_RATE),
           })),
         };
         const { data } = await api.post(API_ENDPOINTS.PAYMENT.CREATE, paymentData);
@@ -151,43 +148,32 @@ export default function CheckoutPage() {
 
         {/* address form */}
         <Stack component="form" noValidate rowGap={2} onSubmit={handleSubmit(handleAddAddress)}>
-          <Stack>
-            <Typography gutterBottom>Type</Typography>
-            <TextField placeholder="Eg. Home, Business" {...register('type', { required: true })} />
-          </Stack>
-          <Stack>
-            <Typography gutterBottom>Street</Typography>
-            <TextField {...register('street', { required: true })} />
-          </Stack>
-          <Stack>
-            <Typography gutterBottom>Country</Typography>
-            <TextField {...register('country', { required: true })} />
-          </Stack>
-          <Stack>
-            <Typography gutterBottom>Phone Number</Typography>
-            <TextField type="number" {...register('phoneNumber', { required: true })} />
-          </Stack>
+          <PremiumInput label="Type" placeholder="Eg. Home, Business" {...register('type', { required: true })} />
+          <PremiumInput label="Street" {...register('street', { required: true })} />
+          <PremiumInput label="Country" {...register('country', { required: true })} />
+          <PremiumInput label="Phone Number" type="number" {...register('phoneNumber', { required: true })} />
           <Stack flexDirection="row">
             <Stack width="100%">
-              <Typography gutterBottom>City</Typography>
-              <TextField {...register('city', { required: true })} />
+              <PremiumInput label="City" {...register('city', { required: true })} />
             </Stack>
             <Stack width="100%">
-              <Typography gutterBottom>State</Typography>
-              <TextField {...register('state', { required: true })} />
+              <PremiumInput label="State" {...register('state', { required: true })} />
             </Stack>
             <Stack width="100%">
-              <Typography gutterBottom>Postal Code</Typography>
-              <TextField type="number" {...register('postalCode', { required: true })} />
+              <PremiumInput
+                label="Postal Code"
+                type="number"
+                {...register('postalCode', { required: true })}
+              />
             </Stack>
           </Stack>
           <Stack flexDirection="row" alignSelf="flex-end" columnGap={1}>
-            <LoadingButton type="submit" variant="contained">
+            <LoadingButton type="submit" variant="contained" sx={{ borderRadius: '9999px', px: 2.5 }}>
               add
             </LoadingButton>
-            <Button color="error" variant="outlined" onClick={() => reset()}>
+            <PremiumButton color="error" variant="outlined" magnetic={false} onClick={() => reset()}>
               Reset
-            </Button>
+            </PremiumButton>
           </Stack>
         </Stack>
 

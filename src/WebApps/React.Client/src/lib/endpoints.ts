@@ -68,4 +68,28 @@ export const API_ENDPOINTS = {
     JOIN_GROUP: '/api/groupbuys/sessions/join',
     SESSION_BY_CODE: (code: string) => `/api/groupbuys/sessions/invite/${code}`,
   },
+  SELLER: {
+    PRODUCTS: '/api/sellerproducts',
+    PRODUCT_DETAIL: (id: number) => `/api/sellerproducts/${id}`,
+    BY_SELLER: (username: string) => `/api/sellerproducts/by-seller/${username}`,
+    BY_CATEGORY: (category: string) => `/api/sellerproducts/by-category/${category}`,
+    PREVIEW_AI: '/api/sellerproducts/preview-ai',
+    DASHBOARD: (username: string) => `/api/sellerproducts/dashboard/${username}`,
+  },
+  REVIEWS: {
+    BY_PRODUCT: (productId: number) => `/api/reviews/product/${productId}`,
+    SUMMARY: (productId: number) => `/api/reviews/product/${productId}/summary`,
+    BY_USER: (userName: string) => `/api/reviews/user/${userName}`,
+    CREATE: '/api/reviews',
+    REPLY: (reviewId: number) => `/api/reviews/${reviewId}/reply`,
+  },
+  NOTIFICATIONS: {
+    LIST: '/api/admin/notifications',
+    UNREAD_COUNT: '/api/admin/notifications/unread-count',
+    MARK_AS_READ: (id: string) => `/api/admin/notifications/${id}/mark-as-read`,
+    MARK_ALL_AS_READ: '/api/admin/notifications/mark-all-as-read',
+  },
+  AUDIT_LOGS: {
+    LIST: '/api/admin/audit-logs',
+  },
 } as const;

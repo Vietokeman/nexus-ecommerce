@@ -1,0 +1,247 @@
+:host {
+  display: block;
+}
+
+:host ::ng-deep c-header.nx-header {
+  --cui-header-bg: rgba(255, 252, 248, 0.9);
+  --cui-header-color: #3f342f;
+  --cui-header-border-color: transparent;
+  backdrop-filter: blur(14px);
+  border: 1px solid #e4d7cc;
+  border-radius: 24px;
+  box-shadow: 0 24px 55px -38px rgba(69, 50, 42, 0.58), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  margin: 0.85rem 0.35rem 0;
+}
+
+.nx-header-wrap {
+  min-height: 4.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nx-sidebar-trigger {
+  width: 2.8rem;
+  height: 2.8rem;
+  border-radius: 999px;
+  border: 1px solid #dbcabd;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(246, 237, 228, 0.96) 100%);
+  color: #523f37;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 220ms cubic-bezier(0.22, 1, 0.36, 1), border-color 220ms cubic-bezier(0.22, 1, 0.36, 1);
+
+  &:hover {
+    transform: translateY(-1px);
+    border-color: #c8a693;
+    box-shadow: 0 18px 30px -22px rgba(121, 84, 65, 0.52);
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.98);
+  }
+}
+
+.nx-hamburger {
+  width: 1rem;
+  height: 0.95rem;
+  position: relative;
+  display: inline-flex;
+
+  &::before,
+  &::after,
+  span {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+  }
+
+  &::before {
+    top: 0;
+  }
+
+  span {
+    top: 0.42rem;
+  }
+
+  &::after {
+    bottom: 0;
+  }
+}
+
+.nx-header-title-block {
+  display: flex;
+  flex-direction: column;
+  margin-right: auto;
+  gap: 0.15rem;
+}
+
+.nx-header-eyebrow {
+  font-size: 0.63rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8d7468;
+  font-weight: 600;
+}
+
+.nx-header-title {
+  margin: 0;
+  font-size: clamp(1rem, 1.3vw, 1.2rem);
+  line-height: 1.2;
+  color: #342a26;
+  font-weight: 600;
+}
+
+.nx-header-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.nx-header-link {
+  border-radius: 999px;
+  border: 1px solid transparent;
+  padding: 0.55rem 0.95rem;
+  color: #5f4d45;
+  font-size: 0.86rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 220ms cubic-bezier(0.22, 1, 0.36, 1), color 220ms cubic-bezier(0.22, 1, 0.36, 1), transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+
+  &:hover,
+  &.active {
+    background: rgba(181, 108, 99, 0.12);
+    border-color: rgba(181, 108, 99, 0.28);
+    color: #8a4b45;
+    transform: translateY(-1px);
+  }
+}
+
+.nx-header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nx-action-chip {
+  border-radius: 999px;
+  border: 1px solid #dbcabd;
+  background: rgba(255, 255, 255, 0.72);
+  color: #5f4d45;
+  min-width: 2.25rem;
+  height: 2.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+  font-weight: 600;
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 220ms cubic-bezier(0.22, 1, 0.36, 1);
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px -16px rgba(110, 76, 61, 0.62);
+  }
+}
+
+.nx-profile-trigger {
+  border: 1px solid #d8c6b9;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.75);
+  padding: 0.35rem 0.45rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: #4f3d36;
+  line-height: 1;
+
+  &:hover {
+    border-color: #bf9a84;
+  }
+}
+
+.nx-profile-avatar {
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 999px;
+  background: linear-gradient(145deg, #8a4b45 0%, #b56c63 100%);
+  color: #fff7f2;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nx-profile-meta {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1rem;
+}
+
+.nx-profile-name {
+  font-size: 0.74rem;
+  font-weight: 600;
+}
+
+.nx-profile-role {
+  font-size: 0.63rem;
+  color: #8d7468;
+}
+
+.nx-profile-menu {
+  width: 15rem;
+  border-radius: 18px;
+  border: 1px solid #e4d7cc;
+  box-shadow: 0 22px 42px -28px rgba(57, 44, 37, 0.56);
+  overflow: hidden;
+
+  .dropdown-item {
+    color: #5f4d45;
+    font-size: 0.88rem;
+    padding: 0.65rem 0.95rem;
+
+    &:hover {
+      background: rgba(181, 108, 99, 0.12);
+      color: #7e463f;
+    }
+  }
+}
+
+.nx-profile-header {
+  padding: 0.8rem 0.95rem;
+  background: #f6efe8;
+  color: #6f5b52;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.62rem;
+  font-weight: 700;
+}
+
+.nx-header-breadcrumb {
+  min-height: 2.9rem;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid #e8ddd4;
+}
+
+@media (max-width: 991.98px) {
+  :host ::ng-deep c-header.nx-header {
+    margin: 0.6rem 0.1rem 0;
+    border-radius: 20px;
+  }
+
+  .nx-header-wrap {
+    min-height: 3.8rem;
+  }
+
+  .nx-header-title {
+    font-size: 0.95rem;
+  }
+}

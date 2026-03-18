@@ -1,19 +1,39 @@
-import { Link } from 'react-router-dom';
-import { Button, Stack, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { Stack, Typography } from '@mui/material';
 import Lottie from 'lottie-react';
 import { motion } from 'framer-motion';
 import notFoundPageAnimation from '@/assets/animations/notFoundPage.json';
 import { nexus } from '@/theme/theme';
+import { PremiumButton } from '@/components/ui/primitives';
 
 export default function NotFoundPage() {
+  const navigate = useNavigate();
+
   return (
-    <Stack justifyContent="center" alignItems="center" height="100vh" sx={{ px: 2 }}>
+    <Stack
+      justifyContent="center"
+      alignItems="center"
+      minHeight="calc(100dvh - 4rem)"
+      sx={{ px: 2, py: { xs: 4, md: 8 } }}
+    >
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <Stack spacing={2} justifyContent="center" alignItems="center">
+        <Stack
+          spacing={2}
+          justifyContent="center"
+          alignItems="center"
+          sx={{
+            px: { xs: 3, md: 5 },
+            py: { xs: 4, md: 6 },
+            borderRadius: nexus.radius.xl,
+            background: 'rgba(255,253,250,0.78)',
+            border: `1px solid ${nexus.neutral[200]}`,
+            boxShadow: nexus.glass.shadow,
+          }}
+        >
           <Stack width={{ xs: '16rem', md: '22rem' }}>
             <Lottie animationData={notFoundPageAnimation} />
           </Stack>
@@ -34,15 +54,14 @@ export default function NotFoundPage() {
             The page you&apos;re looking for doesn&apos;t exist or has been moved.
           </Typography>
 
-          <Button
+          <PremiumButton
             sx={{ mt: 2, height: '3rem', px: 4 }}
             size="large"
-            component={Link}
-            to="/"
+            onClick={() => navigate('/')}
             variant="contained"
           >
             Back to Home
-          </Button>
+          </PremiumButton>
         </Stack>
       </motion.div>
     </Stack>

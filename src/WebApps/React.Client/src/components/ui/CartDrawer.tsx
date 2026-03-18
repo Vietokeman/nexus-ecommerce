@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Drawer, IconButton, Stack, Typography } from '@mui/material';
+import { Box, Divider, Drawer, IconButton, Stack, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useCartStore } from '@/store/cart-store';
 import { nexus } from '@/theme/theme';
+import { PremiumBadge, PremiumButton } from '@/components/ui/primitives';
 
 interface CartDrawerProps {
   open: boolean;
@@ -54,20 +55,7 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
             <Typography variant="h6" fontWeight={700} sx={{ color: nexus.neutral[900] }}>
               Cart
             </Typography>
-            <Typography
-              variant="body2"
-              sx={{
-                background: nexus.gradient.button,
-                color: '#fff',
-                borderRadius: nexus.radius.pill,
-                px: 1,
-                py: 0.25,
-                fontSize: '0.75rem',
-                fontWeight: 700,
-              }}
-            >
-              {items.length}
-            </Typography>
+            <PremiumBadge label={items.length} sx={{ background: nexus.gradient.button, color: '#fff' }} />
           </Stack>
           <IconButton onClick={onClose} size="small">
             <CloseIcon />
@@ -82,15 +70,16 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
               <Typography variant="body1" sx={{ color: nexus.neutral[500] }}>
                 Your cart is empty
               </Typography>
-              <Button
+              <PremiumButton
                 variant="outlined"
+                magnetic={false}
                 onClick={() => {
                   onClose();
                   navigate('/');
                 }}
               >
                 Start Shopping
-              </Button>
+              </PremiumButton>
             </Stack>
           ) : (
             <AnimatePresence initial={false}>
@@ -133,7 +122,7 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                           justifyContent="center"
                           sx={{ width: '100%', height: '100%' }}
                         >
-                          <Typography sx={{ color: nexus.neutral[300] }}>🛒</Typography>
+                          <ShoppingCartOutlinedIcon sx={{ color: nexus.neutral[300], fontSize: 20 }} />
                         </Stack>
                       )}
                     </Box>
@@ -235,14 +224,14 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
               </Typography>
             </Stack>
             <motion.div whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.99 }}>
-              <Button
+              <PremiumButton
                 fullWidth
                 variant="contained"
                 onClick={handleCheckout}
                 sx={{ height: '3rem', fontSize: '1rem' }}
               >
                 Proceed to Checkout
-              </Button>
+              </PremiumButton>
             </motion.div>
           </Stack>
         )}

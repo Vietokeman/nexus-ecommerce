@@ -1,0 +1,123 @@
+<section class="nx-role-page">
+  <p-panel #pnl [style]="{ 'margin-bottom': '10px' }" class="nx-role-panel">
+    <p-header>
+      <div class="nx-page-header">
+        <div>
+          <div class="nx-page-eyebrow">Access governance</div>
+          <h1>Quản lý quyền</h1>
+          <p>Thiết lập vai trò, mô tả quyền hạn và phân quyền chi tiết theo chính sách hệ thống.</p>
+        </div>
+      </div>
+    </p-header>
+
+    <div class="nx-toolbar">
+      <div class="nx-toolbar-actions">
+        <button
+          appPermission
+          appPolicy="Permissons.Roles.Create"
+          pButton
+          type="button"
+          label="Thêm"
+          icon="fa fa-plus"
+          (click)="showAddModal()"
+          class="p-button-sm p-button-success"
+        ></button>
+        <button
+          appPermission
+          appPolicy="Permissons.Roles.Delete"
+          pButton
+          type="button"
+          label="Xóa"
+          icon="fa fa-trash"
+          *ngIf="selectedItems.length > 0"
+          (click)="deleteItems()"
+          class="p-button-sm p-button-danger"
+        ></button>
+        <button
+          appPermission
+          appPolicy="Permissons.Roles.Edit"
+          pButton
+          type="button"
+          label="Sửa"
+          icon="fa fa-edit"
+          *ngIf="selectedItems.length == 1"
+          (click)="showEditModal()"
+          class="p-button-sm p-button-warning"
+        ></button>
+      </div>
+
+      <div class="nx-toolbar-search">
+        <input
+          id="txtKeyword"
+          pInputText
+          (keyup.enter)="loadData()"
+          [(ngModel)]="keyword"
+          placeholder="Nhập tên vai trò..."
+          type="text"
+        />
+        <button type="button" pButton (click)="loadData()" label="Tìm"></button>
+      </div>
+    </div>
+
+    <div class="nx-table-shell">
+      <p-table
+        #dt
+        [value]="items"
+        selectionMode="multiple"
+        dataKey="id"
+        [(selection)]="selectedItems"
+        [metaKeySelection]="true"
+        class="nx-role-table"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 10px">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th>Tên vai trò</th>
+            <th>Mô tả</th>
+            <th>Thao tác</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row>
+          <tr [pSelectableRow]="row">
+            <td style="width: 10px">
+              <span class="ui-column-title"></span>
+              <p-tableCheckbox [value]="row"></p-tableCheckbox>
+            </td>
+            <td>{{ row.name }}</td>
+            <td>{{ row.displayName }}</td>
+            <td>
+              <button
+                pButton
+                class="p-button-sm"
+                label="Phân quyền"
+                (click)="showPermissionModal(row.id, row.name)"
+              ></button>
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="summary">
+          <div class="nx-table-summary">Tổng số: {{ totalCount | number }}</div>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <p-paginator
+      [rows]="pageSize"
+      [totalRecords]="totalCount"
+      (onPageChange)="pageChanged($event)"
+      [rowsPerPageOptions]="[10, 20, 50, 100]"
+    ></p-paginator>
+
+    <p-blockUI [target]="pnl" [blocked]="blockedPanel">
+      <p-progressSpinner
+        [style]="{ width: '100px', height: '100px', position: 'absolute', top: '25%', left: '50%' }"
+        strokeWidth="2"
+        animationDuration=".5s"
+      ></p-progressSpinner>
+    </p-blockUI>
+  </p-panel>
+</section>

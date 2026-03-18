@@ -5,8 +5,6 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
-  Button,
-  Checkbox,
   Chip,
   FormControl,
   FormControlLabel,
@@ -44,7 +42,9 @@ import { useActiveGroupBuyCampaigns } from '@/hooks/useGroupBuy';
 import FlashSaleWidget from '@/components/ui/FlashSaleWidget';
 import { nexus } from '@/theme/theme';
 import type { Product } from '@/types/product';
+import { APP_NAME } from '@/constants';
 import loadingAnimation from '@/assets/animations/loading.json';
+import { PremiumButton, PremiumCheckbox } from '@/components/ui/primitives';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -155,7 +155,7 @@ function ProductCard({
                 whileTap={{ scale: 1 }}
                 transition={{ duration: 0.4, type: 'spring' }}
               >
-                <Checkbox
+                <PremiumCheckbox
                   onClick={(e) => e.stopPropagation()}
                   checked={isInWishlist}
                   onChange={(e) => onToggleWishlist(String(product.id), e.target.checked)}
@@ -176,25 +176,19 @@ function ProductCard({
             </Typography>
           ) : (
             !isAdmin && (
-              <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 1 }}
+              <PremiumButton
+                magnetic={false}
                 onClick={handleAddToCart}
-                style={{
-                  padding: '10px 15px',
-                  borderRadius: '3px',
-                  outline: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  backgroundColor: 'black',
-                  color: 'white',
-                  fontSize: is408 ? '.9rem' : is488 ? '.7rem' : is500 ? '.8rem' : '.9rem',
+                variant="contained"
+                sx={{
+                  minWidth: 'fit-content',
+                  fontSize: is408 ? '.86rem' : is488 ? '.72rem' : is500 ? '.84rem' : '.9rem',
+                  px: is488 ? 1.6 : 2.2,
+                  py: is488 ? 0.75 : 0.9,
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', columnGap: '.5rem' }}>
-                  <p>Add To Cart</p>
-                </div>
-              </motion.button>
+                Add To Cart
+              </PremiumButton>
             )
           )}
         </Stack>
@@ -207,7 +201,6 @@ export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [_totalResults, setTotalResults] = useState(0);
   const [sort, setSortValue] = useState<string>('');
   const [brandFilters, setBrandFilters] = useState<Set<string>>(new Set());
   const [categoryFilters, setCategoryFilters] = useState<Set<string>>(new Set());
@@ -242,7 +235,6 @@ export default function HomePage() {
         const { data } = await api.get(API_ENDPOINTS.PRODUCTS.LIST);
         const list = Array.isArray(data) ? data : (data.result ?? []);
         setProducts(list);
-        setTotalResults(list.length);
       } catch {
         toast.error('Error fetching products, please try again later');
       } finally {
@@ -304,7 +296,7 @@ export default function HomePage() {
     return (
       <Stack
         width={is500 ? '35vh' : '25rem'}
-        height="calc(100vh - 4rem)"
+        minHeight="calc(100dvh - 4rem)"
         justifyContent="center"
         marginRight="auto"
         marginLeft="auto"
@@ -320,8 +312,8 @@ export default function HomePage() {
       <motion.div
         style={{
           position: 'fixed',
-          backgroundColor: 'white',
-          height: '100vh',
+          backgroundColor: '#fffcf8',
+          minHeight: '100dvh',
           padding: '1rem',
           overflowY: 'scroll',
           width: is500 ? '100vw' : '30rem',
@@ -343,21 +335,27 @@ export default function HomePage() {
           </IconButton>
 
           <Stack rowGap={2} mt={4}>
-            <Typography sx={{ cursor: 'pointer' }} variant="body2">
-              Totes
-            </Typography>
-            <Typography sx={{ cursor: 'pointer' }} variant="body2">
-              Backpacks
-            </Typography>
-            <Typography sx={{ cursor: 'pointer' }} variant="body2">
-              Travel Bags
-            </Typography>
-            <Typography sx={{ cursor: 'pointer' }} variant="body2">
-              Hip Bags
-            </Typography>
-            <Typography sx={{ cursor: 'pointer' }} variant="body2">
-              Laptop Sleeves
-            </Typography>
+            {categories.map((cat) => (
+              <Typography
+                key={cat.id}
+                sx={{
+                  cursor: 'pointer',
+                  fontWeight: categoryFilters.has(cat.name) ? 600 : 400,
+                  color: categoryFilters.has(cat.name) ? 'primary.main' : 'text.secondary',
+                  '&:hover': { color: 'primary.main' },
+                }}
+                variant="body2"
+                onClick={() => {
+                  const newSet = new Set(categoryFilters);
+                  if (newSet.has(cat.name)) newSet.delete(cat.name);
+                  else newSet.add(cat.name);
+                  setCategoryFilters(newSet);
+                  setPage(1);
+                }}
+              >
+                {cat.name}
+              </Typography>
+            ))}
           </Stack>
 
           {/* Brand filters */}
@@ -367,7 +365,7 @@ export default function HomePage() {
                 <Typography>Brands</Typography>
               </AccordionSummary>
               <AccordionDetails sx={{ p: 0 }}>
-                <FormGroup onChange={handleBrandFilter as never}>
+                <FormGroup onChange={(e) => handleBrandFilter(e as React.ChangeEvent<HTMLInputElement>)}>
                   {brands.map((brand) => (
                     <motion.div
                       key={brand.id}
@@ -377,7 +375,7 @@ export default function HomePage() {
                     >
                       <FormControlLabel
                         sx={{ ml: 1 }}
-                        control={<Checkbox />}
+                        control={<PremiumCheckbox />}
                         label={brand.name}
                         value={brand.name}
                       />
@@ -395,7 +393,7 @@ export default function HomePage() {
                 <Typography>Category</Typography>
               </AccordionSummary>
               <AccordionDetails sx={{ p: 0 }}>
-                <FormGroup onChange={handleCategoryFilter as never}>
+                <FormGroup onChange={(e) => handleCategoryFilter(e as React.ChangeEvent<HTMLInputElement>)}>
                   {categories.map((cat) => (
                     <motion.div
                       key={cat.id}
@@ -405,7 +403,7 @@ export default function HomePage() {
                     >
                       <FormControlLabel
                         sx={{ ml: 1 }}
-                        control={<Checkbox />}
+                        control={<PremiumCheckbox />}
                         label={cat.name}
                         value={cat.name}
                       />
@@ -435,7 +433,7 @@ export default function HomePage() {
             }}
           >
             <Typography variant="h3" color="white" fontWeight={700}>
-              Nexus Commerce
+              {APP_NAME}
             </Typography>
           </Stack>
         )}
@@ -450,13 +448,15 @@ export default function HomePage() {
                 onItemClick={() => navigate(`/flash-sale/${activeFlashSession.id}`)}
               />
               <Stack alignItems="center" mt={1}>
-                <Button
+                <PremiumButton
                   onClick={() => navigate(`/flash-sale/${activeFlashSession.id}`)}
                   endIcon={<ArrowForwardIcon />}
+                  variant="outlined"
+                  magnetic={false}
                   sx={{ fontWeight: 600, color: nexus.purple[600] }}
                 >
                   View All Flash Deals
-                </Button>
+                </PremiumButton>
               </Stack>
             </Box>
           )}

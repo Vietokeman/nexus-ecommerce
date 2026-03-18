@@ -1,0 +1,101 @@
+:host {
+  display: block;
+}
+
+.nx-user-page {
+  display: block;
+}
+
+.nx-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+
+  h1 {
+    margin: 0;
+    font-family: 'Fraunces', 'Times New Roman', serif;
+    font-size: clamp(1.6rem, 2.2vw, 2.2rem);
+    letter-spacing: -0.025em;
+  }
+
+  p {
+    margin: 0.55rem 0 0;
+    color: #6b5e57;
+    line-height: 1.62;
+  }
+}
+
+.nx-page-eyebrow {
+  display: inline-flex;
+  margin-bottom: 0.75rem;
+  border: 1px solid #e3d8cf;
+  border-radius: 999px;
+  padding: 0.18rem 0.66rem;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #7a6861;
+}
+
+.nx-toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(16rem, 29rem);
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 0.9rem;
+}
+
+.nx-toolbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.nx-toolbar-search {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.5rem;
+}
+
+.nx-table-shell {
+  border: 1px solid #e8ddd5;
+  border-radius: 18px;
+  overflow: hidden;
+  background: rgba(255, 253, 250, 0.9);
+}
+
+.nx-user-table {
+  ::ng-deep .p-datatable-wrapper {
+    border-radius: 18px;
+  }
+}
+
+.nx-row-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.12rem;
+}
+
+.nx-table-summary {
+  text-align: left;
+  color: #6b5e57;
+  font-weight: 500;
+}
+
+@media (max-width: 991px) {
+  .nx-toolbar {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 767px) {
+  .nx-toolbar-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .nx-toolbar-search {
+    grid-template-columns: 1fr;
+  }
+}
