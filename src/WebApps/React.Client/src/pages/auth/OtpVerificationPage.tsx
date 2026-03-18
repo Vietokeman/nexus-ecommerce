@@ -70,7 +70,7 @@ export default function OtpVerificationPage() {
           : 'Click below to receive a verification code'
       }
     >
-      <Stack spacing={2.5} alignItems="center">
+      <Stack spacing={2.5} alignItems="center" width="100%">
         {otpSent ? (
           <Stack
             width="100%"
@@ -78,6 +78,13 @@ export default function OtpVerificationPage() {
             component="form"
             noValidate
             onSubmit={handleSubmit(handleVerifyOtp)}
+            sx={{
+              p: { xs: 0.5, sm: 1.5 },
+              borderRadius: 2.5,
+              border: '1px solid #F0DFCB',
+              background:
+                'linear-gradient(140deg, rgba(255,248,236,0.83), rgba(239,251,248,0.9) 65%, rgba(255,255,255,0.94))',
+            }}
           >
             <motion.div variants={itemVariants}>
               <Stack spacing={0.5}>
@@ -110,7 +117,13 @@ export default function OtpVerificationPage() {
               whileTap={{ scale: 0.99 }}
             >
               <LoadingButton
-                sx={{ height: '3rem', fontSize: '1rem' }}
+                sx={{
+                  height: '3.1rem',
+                  fontSize: '1rem',
+                  borderRadius: 999,
+                  fontWeight: 700,
+                  boxShadow: '0 16px 30px -14px rgba(154, 88, 82, 0.75)',
+                }}
                 type="submit"
                 variant="contained"
                 fullWidth
@@ -127,9 +140,9 @@ export default function OtpVerificationPage() {
                 magnetic={false}
                 disabled={resendLoading}
                 sx={{
-                  color: nexus.purple[600],
-                  fontWeight: 600,
-                  '&:hover': { backgroundColor: nexus.purple[50] },
+                  color: nexus.orange[700],
+                  fontWeight: 700,
+                  '&:hover': { backgroundColor: nexus.orange[50] },
                 }}
               >
                 Resend OTP
@@ -146,7 +159,14 @@ export default function OtpVerificationPage() {
               variant="contained"
               loading={resendLoading}
               onClick={handleSendOtp}
-              sx={{ height: '3rem', px: 4, fontSize: '1rem' }}
+              sx={{
+                height: '3.1rem',
+                px: 4,
+                fontSize: '1rem',
+                borderRadius: 999,
+                fontWeight: 700,
+                boxShadow: '0 16px 30px -14px rgba(154, 88, 82, 0.75)',
+              }}
             >
               Send OTP
             </LoadingButton>
