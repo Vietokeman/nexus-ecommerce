@@ -42,12 +42,27 @@ export default function PremiumButton<C extends ElementType = 'button'>({
         onBlur={reset}
         sx={{
           borderRadius: '9999px',
-          px: 2.75,
-          py: 1.15,
+          px: 2.85,
+          py: 1.18,
           textTransform: 'none',
-          fontWeight: 600,
+          fontWeight: 700,
           letterSpacing: '0.01em',
+          backgroundImage:
+            props.variant === 'contained'
+              ? 'linear-gradient(135deg, rgba(154, 88, 82, 1), rgba(181, 108, 99, 1))'
+              : undefined,
+          boxShadow:
+            props.variant === 'contained'
+              ? '0 14px 28px -14px rgba(154, 88, 82, 0.8)'
+              : '0 6px 16px rgba(120, 94, 52, 0.06)',
           transition: 'transform 280ms cubic-bezier(0.22, 1, 0.36, 1)',
+          '&:hover': {
+            transform: 'translateY(-1px)',
+            boxShadow:
+              props.variant === 'contained'
+                ? '0 16px 30px -12px rgba(154, 88, 82, 0.85)'
+                : '0 8px 18px rgba(120, 94, 52, 0.12)',
+          },
           '&:active': { transform: 'translateY(1px) scale(0.985)' },
           ...sx,
         }}

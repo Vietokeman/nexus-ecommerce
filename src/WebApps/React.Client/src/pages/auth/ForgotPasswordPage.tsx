@@ -56,15 +56,26 @@ export default function ForgotPasswordPage() {
       {status === 'fulfilled' ? (
         <motion.div variants={itemVariants}>
           <Stack alignItems="center" spacing={3} mt={2}>
-            <CheckCircleOutlineIcon sx={{ fontSize: 64, color: nexus.orange[500] }} />
+            <CheckCircleOutlineIcon
+              sx={{
+                fontSize: 68,
+                color: nexus.orange[500],
+                filter: 'drop-shadow(0 8px 18px rgba(154, 88, 82, 0.32))',
+              }}
+            />
             <Typography
               variant="body2"
               component={Link}
               to="/login"
               sx={{
                 textDecoration: 'none',
-                fontWeight: 600,
-                color: nexus.orange[600],
+                fontWeight: 700,
+                color: nexus.orange[700],
+                border: '1px solid #EBDAC5',
+                borderRadius: 999,
+                px: 2.1,
+                py: 0.85,
+                background: 'rgba(255, 255, 255, 0.9)',
                 '&:hover': { color: nexus.orange[700] },
               }}
             >
@@ -78,6 +89,13 @@ export default function ForgotPasswordPage() {
           component="form"
           noValidate
           onSubmit={handleSubmit(handleForgotPassword)}
+          sx={{
+            p: { xs: 0.5, sm: 1.5 },
+            borderRadius: 2.5,
+            border: '1px solid #F0DFCB',
+            background:
+              'linear-gradient(140deg, rgba(255,248,236,0.83), rgba(239,251,248,0.9) 65%, rgba(255,255,255,0.94))',
+          }}
         >
           <motion.div variants={itemVariants}>
             <PremiumInput
@@ -104,9 +122,11 @@ export default function ForgotPasswordPage() {
           >
             <LoadingButton
               sx={{
-                height: '3rem',
+                height: '3.1rem',
                 fontSize: '1rem',
-                boxShadow: '0 14px 24px -16px rgba(154, 88, 82, 0.75)',
+                borderRadius: 999,
+                fontWeight: 700,
+                boxShadow: '0 16px 30px -14px rgba(154, 88, 82, 0.75)',
               }}
               fullWidth
               loading={status === 'pending'}
@@ -121,7 +141,7 @@ export default function ForgotPasswordPage() {
             <Typography
               variant="body2"
               textAlign="center"
-              sx={{ color: nexus.neutral[500], mt: 1 }}
+              sx={{ color: nexus.neutral[500], mt: 1.25, fontWeight: 500 }}
             >
               Remember your password?{' '}
               <Typography
@@ -130,8 +150,8 @@ export default function ForgotPasswordPage() {
                 variant="body2"
                 sx={{
                   textDecoration: 'none',
-                  fontWeight: 600,
-                  color: nexus.orange[600],
+                  fontWeight: 700,
+                  color: nexus.orange[700],
                   '&:hover': { color: nexus.orange[700] },
                 }}
               >

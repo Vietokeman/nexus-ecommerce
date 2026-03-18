@@ -51,7 +51,19 @@ export default function ResetPasswordPage() {
 
   return (
     <AuthLayout title="Reset password" subtitle="Enter and confirm your new password">
-      <Stack spacing={2.5} component="form" noValidate onSubmit={handleSubmit(handleResetPassword)}>
+      <Stack
+        spacing={2.5}
+        component="form"
+        noValidate
+        onSubmit={handleSubmit(handleResetPassword)}
+        sx={{
+          p: { xs: 0.5, sm: 1.5 },
+          borderRadius: 2.5,
+          border: '1px solid #F0DFCB',
+          background:
+            'linear-gradient(140deg, rgba(255,248,236,0.83), rgba(239,251,248,0.9) 65%, rgba(255,255,255,0.94))',
+        }}
+      >
         <motion.div variants={itemVariants}>
           <PremiumInput
             type="password"
@@ -92,7 +104,13 @@ export default function ResetPasswordPage() {
           whileTap={{ scale: 0.99 }}
         >
           <LoadingButton
-            sx={{ height: '3rem', fontSize: '1rem' }}
+            sx={{
+              height: '3.1rem',
+              fontSize: '1rem',
+              borderRadius: 999,
+              fontWeight: 700,
+              boxShadow: '0 16px 30px -14px rgba(154, 88, 82, 0.75)',
+            }}
             fullWidth
             loading={status === 'pending'}
             type="submit"
