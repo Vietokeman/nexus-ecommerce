@@ -26,7 +26,7 @@ import { nexus } from '@/theme/theme';
 import NexusCartLogo from '@/components/auth/NexusCartLogo';
 import NotificationDropdown from '@/components/notifications/NotificationDropdown';
 import { APP_NAME } from '@/constants';
-import { PremiumButton, PremiumTooltip } from '@/components/ui/primitives';
+import { PremiumTooltip } from '@/components/ui/primitives';
 
 export default function RootLayout() {
   useSignalRNotification();
@@ -60,11 +60,8 @@ export default function RootLayout() {
 
   const settings = [
     { name: 'Home', to: '/' },
-    { name: 'Profile', to: user?.isAdmin ? '/admin/profile' : '/profile' },
-    {
-      name: user?.isAdmin ? 'Orders' : 'My orders',
-      to: user?.isAdmin ? '/admin/orders' : '/orders',
-    },
+    { name: 'Profile', to: '/profile' },
+    { name: 'My orders', to: '/orders' },
   ];
 
   const displayName = user?.firstName || user?.userName || 'User';
@@ -142,17 +139,6 @@ export default function RootLayout() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {user?.isAdmin && (
-                <MenuItem onClick={handleCloseUserMenu}>
-                  <Typography
-                    component={Link}
-                    sx={{ textDecoration: 'none', color: nexus.neutral[900] }}
-                    to="/admin/add-product"
-                  >
-                    Add new Product
-                  </Typography>
-                </MenuItem>
-              )}
               {/* Seller menu items — only for non-admin users */}
               {!user?.isAdmin && (
                 <>
@@ -202,12 +188,6 @@ export default function RootLayout() {
             >
               Hey, {displayName}
             </Typography>
-
-            {user?.isAdmin && (
-              <PremiumButton variant="contained" size="small" magnetic={false} sx={{ fontSize: '0.75rem' }}>
-                Admin
-              </PremiumButton>
-            )}
 
             {!user?.isAdmin && (
               <PremiumTooltip title="Seller Dashboard">

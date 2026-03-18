@@ -2,7 +2,6 @@ import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import RootLayout from '@/components/layouts/RootLayout';
 import Protected from '@/components/auth/Protected';
-import AdminRoute from '@/components/auth/AdminRoute';
 import Spinner from '@/components/ui/Spinner';
 
 /* ─── Lazy Pages: Auth (Public) ─── */
@@ -25,13 +24,6 @@ const UserOrdersPage = lazy(() => import('@/pages/orders/UserOrdersPage'));
 const UserProfilePage = lazy(() => import('@/pages/user/UserProfilePage'));
 const WishlistPage = lazy(() => import('@/pages/user/WishlistPage'));
 const NotificationsPage = lazy(() => import('@/pages/notifications/NotificationsPage'));
-
-/* ─── Lazy Pages: Admin ─── */
-const AdminDashboardPage = lazy(() => import('@/pages/admin/AdminDashboardPage'));
-const AddProductPage = lazy(() => import('@/pages/admin/AddProductPage'));
-const ProductUpdatePage = lazy(() => import('@/pages/admin/ProductUpdatePage'));
-const AdminOrdersPage = lazy(() => import('@/pages/admin/AdminOrdersPage'));
-const AdminAuditLogsPage = lazy(() => import('@/pages/admin/AdminAuditLogsPage'));
 
 /* ─── Lazy Pages: GroupBuy ─── */
 const GroupBuyListPage = lazy(() => import('@/pages/group-buy/GroupBuyListPage'));
@@ -61,14 +53,6 @@ function P({ children }: { children: React.ReactNode }) {
     <Protected>
       <S>{children}</S>
     </Protected>
-  );
-}
-
-function A({ children }: { children: React.ReactNode }) {
-  return (
-    <AdminRoute>
-      <S>{children}</S>
-    </AdminRoute>
   );
 }
 
@@ -295,56 +279,6 @@ export const router = createBrowserRouter([
           <P>
             <SellerCreateProductPage />
           </P>
-        ),
-      },
-
-      /* ─── Admin Routes ─── */
-      {
-        path: 'admin/dashboard',
-        element: (
-          <A>
-            <AdminDashboardPage />
-          </A>
-        ),
-      },
-      {
-        path: 'admin/add-product',
-        element: (
-          <A>
-            <AddProductPage />
-          </A>
-        ),
-      },
-      {
-        path: 'admin/product-update/:id',
-        element: (
-          <A>
-            <ProductUpdatePage />
-          </A>
-        ),
-      },
-      {
-        path: 'admin/orders',
-        element: (
-          <A>
-            <AdminOrdersPage />
-          </A>
-        ),
-      },
-      {
-        path: 'admin/audit-logs',
-        element: (
-          <A>
-            <AdminAuditLogsPage />
-          </A>
-        ),
-      },
-      {
-        path: 'admin/profile',
-        element: (
-          <A>
-            <UserProfilePage />
-          </A>
         ),
       },
 
