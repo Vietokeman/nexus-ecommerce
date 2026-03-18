@@ -15,6 +15,7 @@ import { UtilityService } from '../../../shared/services/utility.service';
 
 @Component({
   templateUrl: 'role-detail.component.html',
+  styleUrls: ['role-detail.component.scss'],
 })
 export class RoleDetailComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();

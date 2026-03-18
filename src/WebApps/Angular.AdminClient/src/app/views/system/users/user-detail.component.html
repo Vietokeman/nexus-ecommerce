@@ -1,15 +1,15 @@
 <form
-  class="form-horizontal form-label-left"
+  class="form-horizontal form-label-left nx-dialog-form nx-user-detail-form"
   skipValidation
   [formGroup]="form"
   (ngSubmit)="saveChange()"
 >
-  <p-panel
-    #pnlDetail
-    header="Thông tin"
-    [toggleable]="true"
-    [collapsed]="false"
-  >
+  <p-panel #pnlDetail header="Thông tin" [toggleable]="true" [collapsed]="false" class="nx-dialog-panel">
+    <div class="nx-form-head">
+      <h4>Thông tin người dùng</h4>
+      <p>Cập nhật hồ sơ tài khoản, thông tin liên hệ và trạng thái kích hoạt.</p>
+    </div>
+
     <div class="formgrid grid">
       <div class="field col-12 md:col-6">
         <label for="userName">Tài khoản <span class="required">*</span></label>
@@ -25,8 +25,7 @@
           [entityForm]="form"
           fieldName="userName"
           [validationMessages]="validationMessages"
-        >
-        </app-validation-message>
+        ></app-validation-message>
       </div>
       <div class="field col-12 md:col-6">
         <label for="password">Mật khẩu <span class="required">*</span></label>
@@ -42,13 +41,11 @@
           [entityForm]="form"
           fieldName="password"
           [validationMessages]="validationMessages"
-        >
-        </app-validation-message>
+        ></app-validation-message>
       </div>
+
       <div class="field col-12 md:col-6">
-        <label for="lastName" class="block"
-          >Họ <span class="required">*</span></label
-        >
+        <label for="lastName" class="block">Họ <span class="required">*</span></label>
         <input
           id="lastName"
           type="text"
@@ -61,13 +58,10 @@
           [entityForm]="form"
           fieldName="lastName"
           [validationMessages]="validationMessages"
-        >
-        </app-validation-message>
+        ></app-validation-message>
       </div>
       <div class="field col-12 md:col-6">
-        <label for="firstName" class="block"
-          >Tên <span class="required">*</span></label
-        >
+        <label for="firstName" class="block">Tên <span class="required">*</span></label>
         <input
           id="firstName"
           type="text"
@@ -80,13 +74,11 @@
           [entityForm]="form"
           fieldName="firstName"
           [validationMessages]="validationMessages"
-        >
-        </app-validation-message>
+        ></app-validation-message>
       </div>
+
       <div class="field col-12 md:col-6">
-        <label for="phoneNumber"
-          >Số điện thoại<span class="required">*</span></label
-        >
+        <label for="phoneNumber">Số điện thoại <span class="required">*</span></label>
         <input
           id="phoneNumber"
           type="text"
@@ -99,8 +91,7 @@
           [entityForm]="form"
           fieldName="phoneNumber"
           [validationMessages]="validationMessages"
-        >
-        </app-validation-message>
+        ></app-validation-message>
       </div>
       <div class="field col-12 md:col-6">
         <label for="email">Email <span class="required">*</span></label>
@@ -112,8 +103,7 @@
           formControlName="email"
           [style]="{ width: '100%' }"
         />
-        <app-validation-message [entityForm]="form" fieldName="email">
-        </app-validation-message>
+        <app-validation-message [entityForm]="form" fieldName="email"></app-validation-message>
       </div>
 
       <div class="field col-12 md:col-4">
@@ -128,36 +118,20 @@
         />
       </div>
 
-      <div class="field col-6 md:col-6">
+      <div class="field col-12 md:col-8">
         <label for="avatarFile">Ảnh đại diện</label>
-        <input
-          id="avatarFile"
-          (change)="onFileChange($event)"
-          type="file"
-          [style]="{ width: '100%' }"
-        />
-        <p-image
-          *ngIf="avatarImage"
-          [src]="avatarImage"
-          [preview]="true"
-          width="250"
-        >
-        </p-image>
+        <input id="avatarFile" (change)="onFileChange($event)" type="file" [style]="{ width: '100%' }" />
+        <p-image *ngIf="avatarImage" [src]="avatarImage" [preview]="true" width="250"></p-image>
       </div>
-      <div class="field col-6 md:col-6"></div>
-      <div class="field-checkbox col-12 md:col-3">
-        <p-checkbox
-          formControlName="isActive"
-          [binary]="true"
-          id="isActive"
-        ></p-checkbox>
+
+      <div class="field-checkbox col-12 md:col-3 nx-active-toggle">
+        <p-checkbox formControlName="isActive" [binary]="true" id="isActive"></p-checkbox>
         <label for="isActive">Kích hoạt</label>
       </div>
     </div>
+
     <ng-template pTemplate="footer">
-      <button type="submit" pButton [disabled]="!form.valid || btnDisabled">
-        Lưu lại
-      </button>
+      <button type="submit" pButton [disabled]="!form.valid || btnDisabled">Lưu lại</button>
     </ng-template>
 
     <p-blockUI [target]="pnlDetail" [blocked]="blockedPanelDetail">
@@ -167,7 +141,7 @@
           height: '100px',
           position: 'absolute',
           top: '25%',
-          left: '50%',
+          left: '50%'
         }"
         strokeWidth="2"
         animationDuration=".5s"

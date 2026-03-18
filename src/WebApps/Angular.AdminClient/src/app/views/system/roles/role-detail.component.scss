@@ -1,0 +1,37 @@
+.nx-role-detail-form {
+  .nx-dialog-panel {
+    border: 1px solid #dae3f1;
+    border-radius: 16px;
+    box-shadow: 0 20px 32px -28px rgba(15, 35, 66, 0.45);
+  }
+
+  .nx-form-head {
+    margin-bottom: 14px;
+    padding: 12px 14px;
+    border: 1px solid #e2e9f4;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #fafdff 0%, #f3f7fc 100%);
+  }
+
+  .nx-form-head h4 {
+    margin: 0 0 4px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #1f2f4d;
+  }
+
+  .nx-form-head p {
+    margin: 0;
+    color: #5f7194;
+    font-size: 13px;
+  }
+
+  .required {
+    color: #df3c5f;
+  }
+
+  :host ::ng-deep .p-inputtext {
+    border-radius: 10px;
+    border-color: #ccd8ea;
+  }
+}

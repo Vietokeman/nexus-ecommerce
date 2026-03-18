@@ -24,6 +24,7 @@ import {
 } from '../../../api/admin-api.service.generated';
 @Component({
   templateUrl: 'user-detail.component.html',
+  styleUrls: ['user-detail.component.scss'],
 })
 export class UserDetailComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();

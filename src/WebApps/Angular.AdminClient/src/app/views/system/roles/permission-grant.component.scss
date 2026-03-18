@@ -1,0 +1,53 @@
+.nx-permission-form {
+  .nx-dialog-panel {
+    border: 1px solid #dae3f1;
+    border-radius: 16px;
+    box-shadow: 0 20px 34px -30px rgba(16, 35, 64, 0.5);
+  }
+
+  .nx-form-head {
+    margin-bottom: 14px;
+    padding: 12px 14px;
+    border: 1px solid #e3eaf4;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #fafdff 0%, #f3f7fc 100%);
+  }
+
+  .nx-form-head h4 {
+    margin: 0 0 4px;
+    color: #1f2f4d;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .nx-form-head p {
+    margin: 0;
+    color: #5f7295;
+    font-size: 13px;
+  }
+
+  .nx-permission-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    max-height: 420px;
+    overflow: auto;
+    padding-right: 4px;
+  }
+
+  .nx-permission-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border: 1px solid #e3ebf5;
+    border-radius: 10px;
+    background: #fbfdff;
+  }
+
+  .nx-permission-item label {
+    margin: 0;
+    color: #2d3f5f;
+    font-size: 13px;
+  }
+}

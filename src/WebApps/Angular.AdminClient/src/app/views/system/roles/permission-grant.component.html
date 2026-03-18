@@ -1,9 +1,28 @@
-<form class="form-horizontal form-label-left" skipValidation [formGroup]="form" (ngSubmit)="saveChange()">
-    <p-panel #pnlDetail header="Phân quyền cho role" [toggleable]="true" [collapsed]="false">
-        <div [id]="permission.value" class="field-checkbox" *ngFor="let permission of permissions; let i = index">
-            <p-checkbox [value]="permission" [(ngModel)]="selectedPermissions" class="mb-1" [inputId]="permission.value"
-                [ngModelOptions]="{ standalone: true }"></p-checkbox>
-            <label for="permission.value">{{ permission.displayName }}</label>
+<form
+    class="form-horizontal form-label-left nx-dialog-form nx-permission-form"
+    skipValidation
+    [formGroup]="form"
+    (ngSubmit)="saveChange()"
+>
+    <p-panel #pnlDetail header="Phân quyền cho role" [toggleable]="true" [collapsed]="false" class="nx-dialog-panel">
+        <div class="nx-form-head">
+            <h4>Quyền truy cập chức năng</h4>
+            <p>
+                Đã chọn <strong>{{ selectedPermissions.length }}</strong> / {{ permissions.length }} quyền.
+            </p>
+        </div>
+
+        <div class="nx-permission-grid">
+            <div [id]="permission.value" class="nx-permission-item" *ngFor="let permission of permissions; let i = index">
+                <p-checkbox
+                    [value]="permission"
+                    [(ngModel)]="selectedPermissions"
+                    class="mb-1"
+                    [inputId]="permission.value"
+                    [ngModelOptions]="{ standalone: true }"
+                ></p-checkbox>
+                <label [for]="permission.value">{{ permission.displayName }}</label>
+            </div>
         </div>
 
         <ng-template pTemplate="footer">
@@ -13,13 +32,17 @@
         </ng-template>
 
         <p-blockUI [target]="pnlDetail" [blocked]="blockedPanelDetail">
-            <p-progressSpinner [style]="{
+            <p-progressSpinner
+                [style]="{
                     width: '100px',
                     height: '100px',
                     position: 'absolute',
                     top: '25%',
                     left: '50%'
-                }" strokeWidth="2" animationDuration=".5s"></p-progressSpinner>
+                }"
+                strokeWidth="2"
+                animationDuration=".5s"
+            ></p-progressSpinner>
         </p-blockUI>
     </p-panel>
 </form>
