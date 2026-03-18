@@ -1,7 +1,8 @@
-<p-panel #pnl [style]="{ 'margin-bottom': '10px' }">
+<div class="nx-crud-page">
+<p-panel #pnl [style]="{ 'margin-bottom': '10px' }" class="nx-crud-panel">
   <p-header> Quản lý quyền </p-header>
-  <div class="row">
-    <div class="col">
+  <div class="row nx-toolbar-row">
+    <div class="col-12 col-xl-5 nx-toolbar-actions">
       <button appPermission appPolicy="Permissons.Roles.Create" pButton type="button" label="Thêm" icon="fa fa-plus"
         (click)="showAddModal()" class="p-button-sm p-button-success ms-1"></button>
       <button appPermission appPolicy="Permissons.Roles.Delete" pButton type="button" label="Xóa" icon="fa fa-trash"
@@ -10,8 +11,8 @@
         *ngIf="selectedItems.length == 1" (click)="showEditModal()"
         class="p-button-sm p-button-warning ms-1"></button>
     </div>
-    <div class="col">
-      <div class="row">
+    <div class="col-12 col-xl-7">
+      <div class="row nx-filter-row">
         <div class="col">
           <input id="txtKeyword" pInputText (keyup.enter)="loadData()" [(ngModel)]="keyword"
             placeholder="Nhập tên..." type="text" />
@@ -22,7 +23,7 @@
       </div>
     </div>
   </div>
-  <div class="row mt-3">
+  <div class="row mt-3 nx-grid-row">
     <p-table #dt [value]="items" selectionMode="multiple" dataKey="id" [(selection)]="selectedItems"
       [metaKeySelection]="true">
       <ng-template pTemplate="header">
@@ -61,3 +62,4 @@
       strokeWidth="2" animationDuration=".5s"></p-progressSpinner>
   </p-blockUI>
 </p-panel>
+</div>
