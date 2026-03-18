@@ -75,7 +75,7 @@ export default function NotificationDropdown() {
     <>
       <IconButton size="small" onClick={handleOpen}>
         <Badge color="secondary" badgeContent={unreadCount} max={99}>
-          <NotificationsNoneRoundedIcon sx={{ color: nexus.neutral[700] }} />
+          <NotificationsNoneRoundedIcon sx={{ color: nexus.neutral[800] }} />
         </Badge>
       </IconButton>
 
@@ -90,18 +90,31 @@ export default function NotificationDropdown() {
             sx: {
               width: 360,
               maxWidth: '95vw',
-              borderRadius: 3,
-              border: `1px solid ${nexus.neutral[200]}`,
+              borderRadius: 4,
+              border: '1px solid #E9DDCC',
               overflow: 'hidden',
+              boxShadow: '0 18px 34px rgba(120, 94, 52, 0.18)',
+              background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF6 100%)',
             },
           },
         }}
       >
-        <Stack direction="row" alignItems="center" justifyContent="space-between" px={2} py={1.5}>
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+          px={2}
+          py={1.75}
+          sx={{
+            borderBottom: '1px solid #EFE4D4',
+            background:
+              'linear-gradient(135deg, rgba(255,247,232,0.8), rgba(245,252,251,0.9) 60%, rgba(255,255,255,1))',
+          }}
+        >
           <Typography variant="subtitle1" fontWeight={700}>
             Notifications
           </Typography>
-          <Typography variant="caption" color="text.secondary">
+          <Typography variant="caption" color="text.secondary" fontWeight={600}>
             {unreadCount} unread
           </Typography>
         </Stack>
@@ -119,16 +132,20 @@ export default function NotificationDropdown() {
                 key={item.id}
                 onClick={() => void handleItemClick(item)}
                 sx={{
-                  py: 1.25,
+                  py: 1.4,
                   px: 2,
                   alignItems: 'flex-start',
-                  borderBottom: `1px solid ${nexus.neutral[100]}`,
-                  bgcolor: item.isRead ? '#FFFFFF' : nexus.purple[50],
+                  borderBottom: '1px solid #F1E7D8',
+                  bgcolor: item.isRead ? '#FFFFFF' : '#FFF8EB',
+                  transition: 'background-color 160ms ease',
+                  '&:hover': {
+                    bgcolor: item.isRead ? '#FFFBF4' : '#FFF3DE',
+                  },
                 }}
               >
                 <ListItemText
                   primary={
-                    <Typography variant="body2" fontWeight={item.isRead ? 500 : 700}>
+                    <Typography variant="body2" fontWeight={item.isRead ? 600 : 800}>
                       {item.title}
                     </Typography>
                   }
@@ -155,10 +172,16 @@ export default function NotificationDropdown() {
         <Box p={1.5}>
           <Button
             fullWidth
-            variant="outlined"
+            variant="contained"
             onClick={() => {
               handleClose();
               navigate('/notifications');
+            }}
+            sx={{
+              borderRadius: 999,
+              fontWeight: 700,
+              py: 0.9,
+              boxShadow: '0 10px 22px rgba(15, 118, 110, 0.2)',
             }}
           >
             View all notifications

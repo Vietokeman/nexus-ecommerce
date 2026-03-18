@@ -63,41 +63,94 @@ export default function UserProfilePage() {
   };
 
   return (
-    <Stack height="calc(100vh - 4rem)" justifyContent="flex-start" alignItems="center">
+    <Stack
+      minHeight="calc(100vh - 4rem)"
+      justifyContent="flex-start"
+      alignItems="center"
+      sx={{
+        py: { xs: 1.5, md: 4 },
+      }}
+    >
       <Stack
         component={is480 ? 'div' : Paper}
-        elevation={1}
-        width={is900 ? '100%' : '50rem'}
-        p={2}
-        mt={is480 ? 0 : 5}
-        rowGap={2}
+        elevation={0}
+        width={is900 ? '100%' : '56rem'}
+        p={{ xs: 2, md: 3 }}
+        mt={is480 ? 0 : 1}
+        rowGap={2.5}
+        sx={{
+          borderRadius: is480 ? 0 : 4,
+          border: is480 ? 'none' : '1px solid #EDE2D2',
+          background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF7 100%)',
+          boxShadow: is480 ? 'none' : '0 20px 40px rgba(130, 95, 53, 0.08)',
+        }}
       >
         {/* user details */}
         <Stack
-          bgcolor={theme.palette.primary.light}
-          color={theme.palette.primary.main}
-          p={2}
+          bgcolor="#FFF8EE"
+          color="text.primary"
+          p={{ xs: 2.25, md: 2.5 }}
           rowGap={1}
-          borderRadius=".6rem"
+          borderRadius={3}
+          border="1px solid #EFD9B7"
           justifyContent="center"
           alignItems="center"
+          sx={{
+            position: 'relative',
+            overflow: 'hidden',
+            '&::after': {
+              content: '""',
+              position: 'absolute',
+              right: -60,
+              top: -80,
+              width: 180,
+              height: 180,
+              borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(15,118,110,0.18), rgba(15,118,110,0))',
+            },
+          }}
         >
-          <Avatar src="none" alt={displayName} sx={{ width: 70, height: 70 }} />
-          <Typography>{displayName}</Typography>
-          <Typography>{email}</Typography>
+          <Avatar
+            src="none"
+            alt={displayName}
+            sx={{
+              width: 78,
+              height: 78,
+              bgcolor: theme.palette.primary.main,
+              color: '#fff',
+              fontWeight: 700,
+              fontSize: '1.4rem',
+            }}
+          >
+            {displayName.charAt(0).toUpperCase()}
+          </Avatar>
+          <Typography variant="h6" fontWeight={800} sx={{ letterSpacing: '-0.01em' }}>
+            {displayName}
+          </Typography>
+          <Typography color="text.secondary">{email}</Typography>
         </Stack>
 
         {/* address section */}
-        <Stack justifyContent="center" alignItems="center" rowGap={3}>
+        <Stack justifyContent="center" alignItems="stretch" rowGap={3}>
           {/* heading and add button */}
-          <Stack flexDirection="row" alignItems="center" justifyContent="center" columnGap={1}>
-            <Typography variant="h6" fontWeight={400}>
+          <Stack
+            flexDirection="row"
+            alignItems="center"
+            justifyContent="space-between"
+            columnGap={1}
+          >
+            <Typography variant="h6" fontWeight={700}>
               Manage addresses
             </Typography>
             <Button
               onClick={() => setAddAddress(true)}
               size={is480 ? 'small' : undefined}
               variant="contained"
+              sx={{
+                borderRadius: 999,
+                px: 2.25,
+                fontWeight: 700,
+              }}
             >
               Add
             </Button>
@@ -111,6 +164,12 @@ export default function UserProfilePage() {
               noValidate
               onSubmit={handleSubmit(handleAddAddress)}
               rowGap={2}
+              sx={{
+                p: { xs: 2, md: 2.5 },
+                borderRadius: 3,
+                border: '1px solid #ECDCC8',
+                background: 'linear-gradient(180deg, #FFFFFF, #FFF9F0)',
+              }}
             >
               <Stack>
                 <Typography gutterBottom>Type</Typography>
@@ -125,7 +184,7 @@ export default function UserProfilePage() {
               </Stack>
               <Stack>
                 <Typography gutterBottom>Postal Code</Typography>
-                <TextField type="number" {...register('postalCode', { required: true })} />
+                <TextField type="text" {...register('postalCode', { required: true })} />
               </Stack>
               <Stack>
                 <Typography gutterBottom>Country</Typography>
@@ -133,7 +192,7 @@ export default function UserProfilePage() {
               </Stack>
               <Stack>
                 <Typography gutterBottom>Phone Number</Typography>
-                <TextField type="number" {...register('phoneNumber', { required: true })} />
+                <TextField type="text" {...register('phoneNumber', { required: true })} />
               </Stack>
               <Stack>
                 <Typography gutterBottom>State</Typography>
@@ -149,6 +208,7 @@ export default function UserProfilePage() {
                   type="submit"
                   size={is480 ? 'small' : undefined}
                   variant="contained"
+                  sx={{ borderRadius: 999, fontWeight: 700, px: 2.5 }}
                 >
                   add
                 </LoadingButton>
@@ -157,6 +217,7 @@ export default function UserProfilePage() {
                   onClick={() => setAddAddress(false)}
                   variant={is480 ? 'outlined' : 'text'}
                   size={is480 ? 'small' : undefined}
+                  sx={{ borderRadius: 999, px: 2 }}
                 >
                   cancel
                 </Button>
@@ -168,15 +229,27 @@ export default function UserProfilePage() {
           <Stack width="100%" rowGap={2}>
             {addresses.length > 0 ? (
               addresses.map((address) => (
-                <Stack key={address._id} component={Paper} elevation={1} p={2} rowGap={1}>
+                <Stack
+                  key={address._id}
+                  component={Paper}
+                  elevation={0}
+                  p={{ xs: 2, md: 2.25 }}
+                  rowGap={1}
+                  sx={{
+                    borderRadius: 3,
+                    border: '1px solid #E9DECF',
+                    background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFDF8 100%)',
+                  }}
+                >
                   <Stack flexDirection="row" justifyContent="space-between" alignItems="center">
-                    <Typography variant="h6" fontWeight={500}>
+                    <Typography variant="h6" fontWeight={700}>
                       {address.type}
                     </Typography>
                     <Button
                       color="error"
                       size="small"
                       onClick={() => handleDeleteAddress(address._id)}
+                      sx={{ borderRadius: 999 }}
                     >
                       Delete
                     </Button>
@@ -189,7 +262,7 @@ export default function UserProfilePage() {
                 </Stack>
               ))
             ) : (
-              <Typography textAlign="center" mt={2} variant="body2">
+              <Typography textAlign="center" mt={2} variant="body2" color="text.secondary">
                 You have no added addresses
               </Typography>
             )}
