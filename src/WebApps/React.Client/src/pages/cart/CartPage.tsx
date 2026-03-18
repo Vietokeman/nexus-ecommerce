@@ -56,6 +56,13 @@ function CartItem({ itemNo, productName, price, quantity, imageUrl }: CartItemPr
       flexDirection="row"
       justifyContent="space-between"
       alignItems="center"
+      sx={{
+        borderRadius: '20px',
+        border: '1px solid rgba(118,102,95,0.22)',
+        background:
+          'linear-gradient(150deg, rgba(255,253,250,0.92) 0%, rgba(247,243,238,0.9) 60%, rgba(242,237,231,0.95) 100%)',
+        boxShadow: '0 20px 32px -28px rgba(79,67,62,0.65)',
+      }}
     >
       {/* image and details */}
       <Stack flexDirection="row" rowGap="1rem" alignItems="center" columnGap={2} flexWrap="wrap">
@@ -81,7 +88,7 @@ function CartItem({ itemNo, productName, price, quantity, imageUrl }: CartItemPr
           <Typography
             component={Link}
             to={`/product-details/${itemNo}`}
-            sx={{ textDecoration: 'none', color: theme.palette.primary.main }}
+            sx={{ textDecoration: 'none', color: theme.palette.primary.main, fontWeight: 600 }}
             variant="h6"
             fontWeight={500}
           >
@@ -156,6 +163,15 @@ export function CartContent({ checkout }: CartProps) {
         paddingLeft={checkout ? 0 : 2}
         paddingRight={checkout ? 0 : 2}
         rowGap={4}
+        sx={{
+          borderRadius: checkout ? '0px' : '24px',
+          background: checkout
+            ? 'transparent'
+            : 'linear-gradient(160deg, rgba(255,253,250,0.86) 0%, rgba(247,243,238,0.86) 58%, rgba(242,237,231,0.92) 100%)',
+          border: checkout ? 'none' : '1px solid rgba(118,102,95,0.2)',
+          boxShadow: checkout ? 'none' : '0 24px 44px -34px rgba(79,67,62,0.75)',
+          p: checkout ? 0 : { xs: 2, md: 3 },
+        }}
       >
         {/* cart items */}
         <Stack rowGap={2}>
@@ -220,6 +236,7 @@ export function CartContent({ checkout }: CartProps) {
               variant="contained"
               magnetic={false}
               onClick={() => navigate('/checkout')}
+              sx={{ boxShadow: '0 14px 24px -16px rgba(154,88,82,0.75)' }}
             >
               Checkout
             </PremiumButton>

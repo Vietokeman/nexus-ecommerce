@@ -146,6 +146,13 @@ export default function ProductDetailsPage() {
           mb={5}
           flexDirection={is840 ? 'column' : 'row'}
           columnGap={is990 ? '2rem' : '5rem'}
+          sx={{
+            borderRadius: '26px',
+            border: `1px solid ${theme.palette.grey[300]}`,
+            background:
+              'linear-gradient(155deg, rgba(255,253,250,0.92) 0%, rgba(247,243,238,0.9) 55%, rgba(242,237,231,0.95) 100%)',
+            boxShadow: '0 24px 44px -34px rgba(79,67,62,0.75)',
+          }}
         >
           {/* Left stack (images) */}
           <Stack
@@ -221,7 +228,9 @@ export default function ProductDetailsPage() {
                 </Typography>
                 <Typography color="green">In Stock</Typography>
               </Stack>
-              <Typography variant="h5">${product.price}</Typography>
+              <Typography variant="h5" sx={{ color: theme.palette.text.primary, fontWeight: 700 }}>
+                ${product.price}
+              </Typography>
             </Stack>
 
             {/* Description */}
@@ -268,6 +277,7 @@ export default function ProductDetailsPage() {
                             backgroundColor: color,
                             borderRadius: '100%',
                             cursor: 'pointer',
+                            transition: 'transform 200ms cubic-bezier(0.22,1,0.36,1)',
                           }}
                         />
                       </div>
@@ -302,6 +312,10 @@ export default function ProductDetailsPage() {
                           padding: '1.2rem',
                           backgroundColor: selectedSize === size ? '#9a5852' : '#fffcf8',
                           color: selectedSize === size ? 'white' : '',
+                          boxShadow:
+                            selectedSize === size
+                              ? '0 12px 22px -16px rgba(154,88,82,0.75)'
+                              : 'none',
                         }}
                       >
                         <p>{size}</p>
@@ -391,8 +405,9 @@ export default function ProductDetailsPage() {
               sx={{
                 justifyContent: 'center',
                 alignItems: 'center',
-                border: '1px grayText solid',
-                borderRadius: '7px',
+                border: '1px solid rgba(118, 102, 95, 0.35)',
+                borderRadius: '14px',
+                background: 'rgba(255,255,255,0.62)',
               }}
             >
               <Stack

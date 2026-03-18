@@ -128,7 +128,19 @@ function ProductCard({
       elevation={1}
       p={2}
       width={cardWidth}
-      sx={{ cursor: 'pointer' }}
+      sx={{
+        cursor: 'pointer',
+        borderRadius: '20px',
+        border: `1px solid ${nexus.neutral[200]}`,
+        background:
+          'linear-gradient(150deg, rgba(255,253,250,0.92) 0%, rgba(247,243,238,0.92) 65%, rgba(242,237,231,0.96) 100%)',
+        boxShadow: '0 18px 30px -26px rgba(79,67,62,0.65)',
+        transition: 'transform 260ms cubic-bezier(0.22,1,0.36,1), box-shadow 260ms cubic-bezier(0.22,1,0.36,1)',
+        '&:hover': {
+          transform: 'translateY(-4px)',
+          boxShadow: '0 26px 42px -26px rgba(79,67,62,0.72)',
+        },
+      }}
       onClick={() => navigate(`/product-details/${product.id}`)}
     >
       {/* Image */}
@@ -169,7 +181,7 @@ function ProductCard({
         </Stack>
 
         <Stack sx={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography>${product.price}</Typography>
+          <Typography sx={{ fontWeight: 600, color: nexus.neutral[800] }}>${product.price}</Typography>
           {isProductAlreadyInCart ? (
             <Typography variant="body2" color="text.secondary">
               Added to cart
@@ -312,13 +324,16 @@ export default function HomePage() {
       <motion.div
         style={{
           position: 'fixed',
-          backgroundColor: '#fffcf8',
+          background:
+            'linear-gradient(165deg, rgba(255,253,250,0.98) 0%, rgba(247,243,238,0.98) 58%, rgba(242,237,231,0.98) 100%)',
           minHeight: '100dvh',
-          padding: '1rem',
+          padding: '1.25rem',
           overflowY: 'scroll',
           width: is500 ? '100vw' : '30rem',
           zIndex: 500,
           top: 0,
+          borderRight: `1px solid ${nexus.neutral[200]}`,
+          boxShadow: '20px 0 46px -32px rgba(79,67,62,0.7)',
         }}
         variants={{ show: { left: 0 }, hide: { left: -500 } }}
         initial="hide"
@@ -326,7 +341,9 @@ export default function HomePage() {
         animate={isFilterOpen ? 'show' : 'hide'}
       >
         <Stack mb="5rem" sx={{ scrollBehavior: 'smooth', overflowY: 'scroll' }}>
-          <Typography variant="h4">New Arrivals</Typography>
+          <Typography variant="h4" sx={{ letterSpacing: '-0.02em' }}>
+            New Arrivals
+          </Typography>
 
           <IconButton onClick={toggleFilter} style={{ position: 'absolute', top: 15, right: 15 }}>
             <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
@@ -341,8 +358,8 @@ export default function HomePage() {
                 sx={{
                   cursor: 'pointer',
                   fontWeight: categoryFilters.has(cat.name) ? 600 : 400,
-                  color: categoryFilters.has(cat.name) ? 'primary.main' : 'text.secondary',
-                  '&:hover': { color: 'primary.main' },
+                  color: categoryFilters.has(cat.name) ? nexus.orange[700] : 'text.secondary',
+                  '&:hover': { color: nexus.orange[700] },
                 }}
                 variant="body2"
                 onClick={() => {
@@ -362,7 +379,7 @@ export default function HomePage() {
           <Stack mt={2}>
             <Accordion>
               <AccordionSummary expandIcon={<AddIcon />}>
-                <Typography>Brands</Typography>
+                <Typography sx={{ fontWeight: 600 }}>Brands</Typography>
               </AccordionSummary>
               <AccordionDetails sx={{ p: 0 }}>
                 <FormGroup onChange={(e) => handleBrandFilter(e as React.ChangeEvent<HTMLInputElement>)}>
@@ -390,7 +407,7 @@ export default function HomePage() {
           <Stack mt={2}>
             <Accordion>
               <AccordionSummary expandIcon={<AddIcon />}>
-                <Typography>Category</Typography>
+                <Typography sx={{ fontWeight: 600 }}>Category</Typography>
               </AccordionSummary>
               <AccordionDetails sx={{ p: 0 }}>
                 <FormGroup onChange={(e) => handleCategoryFilter(e as React.ChangeEvent<HTMLInputElement>)}>
