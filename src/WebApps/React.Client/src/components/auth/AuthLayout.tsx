@@ -25,7 +25,7 @@ export default function AuthLayout({ children, title, subtitle }: AuthLayoutProp
       direction="row"
       sx={{
         width: '100vw',
-        height: '100vh',
+        minHeight: '100dvh',
         overflow: 'hidden',
       }}
     >
@@ -67,8 +67,8 @@ export default function AuthLayout({ children, title, subtitle }: AuthLayoutProp
         justifyContent="center"
         alignItems="center"
         sx={{
-          px: { xs: 2, sm: 4 },
-          py: 4,
+          px: { xs: 2, sm: 5 },
+          py: { xs: 5, md: 7 },
           overflowY: 'auto',
         }}
       >
@@ -81,7 +81,7 @@ export default function AuthLayout({ children, title, subtitle }: AuthLayoutProp
           {/* Mobile-only logo */}
           {isMobile && (
             <motion.div variants={itemVariants}>
-              <Stack alignItems="center" mb={3}>
+              <Stack alignItems="center" mb={4}>
                 <Typography
                   variant="h4"
                   sx={{
@@ -90,7 +90,7 @@ export default function AuthLayout({ children, title, subtitle }: AuthLayoutProp
                     WebkitTextFillColor: 'transparent',
                     backgroundClip: 'text',
                     fontWeight: 700,
-                    letterSpacing: '-0.02em',
+                    letterSpacing: '-0.03em',
                   }}
                 >
                   Nexus Commerce

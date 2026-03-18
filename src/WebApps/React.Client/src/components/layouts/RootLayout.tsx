@@ -11,8 +11,6 @@ import {
   Menu,
   MenuItem,
   Stack,
-  Tooltip,
-  Button,
   Container,
 } from '@mui/material';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
@@ -28,6 +26,7 @@ import { nexus } from '@/theme/theme';
 import NexusCartLogo from '@/components/auth/NexusCartLogo';
 import NotificationDropdown from '@/components/notifications/NotificationDropdown';
 import { APP_NAME } from '@/constants';
+import { PremiumButton, PremiumTooltip } from '@/components/ui/primitives';
 
 export default function RootLayout() {
   useSignalRNotification();
@@ -71,7 +70,7 @@ export default function RootLayout() {
   const displayName = user?.firstName || user?.userName || 'User';
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100dvh' }}>
       {/* ─── Navbar — Nexus glassmorphism ─── */}
       <AppBar
         position="sticky"
@@ -80,11 +79,11 @@ export default function RootLayout() {
           backdropFilter: nexus.glass.blur,
           WebkitBackdropFilter: nexus.glass.blur,
           borderBottom: `1px solid ${nexus.neutral[200]}`,
-          boxShadow: 'none',
+          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.56)',
           color: nexus.neutral[900],
         }}
       >
-        <Toolbar sx={{ px: { xs: 2, md: 4 }, height: '4rem', justifyContent: 'space-between' }}>
+        <Toolbar sx={{ px: { xs: 2, md: 4.5 }, height: '4.5rem', justifyContent: 'space-between' }}>
           {/* Brand */}
           <Stack
             direction="row"
@@ -116,7 +115,7 @@ export default function RootLayout() {
           <Stack direction="row" alignItems="center" spacing={1.5}>
             <NotificationDropdown />
 
-            <Tooltip title="Settings">
+            <PremiumTooltip title="Settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar
                   alt={displayName}
@@ -131,7 +130,7 @@ export default function RootLayout() {
                   {displayName.charAt(0).toUpperCase()}
                 </Avatar>
               </IconButton>
-            </Tooltip>
+            </PremiumTooltip>
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"
@@ -162,7 +161,7 @@ export default function RootLayout() {
                       sx={{ textDecoration: 'none', color: nexus.neutral[900] }}
                       to="/seller/dashboard"
                     >
-                      🏪 Seller Dashboard
+                      Seller Dashboard
                     </Typography>
                   </MenuItem>
                   <MenuItem onClick={handleCloseUserMenu}>
@@ -171,7 +170,7 @@ export default function RootLayout() {
                       sx={{ textDecoration: 'none', color: nexus.neutral[900] }}
                       to="/seller/products"
                     >
-                      📦 My Products
+                      My Products
                     </Typography>
                   </MenuItem>
                 </>
@@ -204,13 +203,13 @@ export default function RootLayout() {
             </Typography>
 
             {user?.isAdmin && (
-              <Button variant="contained" size="small" sx={{ fontSize: '0.75rem' }}>
+              <PremiumButton variant="contained" size="small" magnetic={false} sx={{ fontSize: '0.75rem' }}>
                 Admin
-              </Button>
+              </PremiumButton>
             )}
 
             {!user?.isAdmin && (
-              <Tooltip title="Seller Dashboard">
+              <PremiumTooltip title="Seller Dashboard">
                 <IconButton
                   onClick={() => navigate('/seller/dashboard')}
                   size="small"
@@ -218,7 +217,7 @@ export default function RootLayout() {
                 >
                   <StorefrontIcon sx={{ color: nexus.neutral[700] }} />
                 </IconButton>
-              </Tooltip>
+              </PremiumTooltip>
             )}
 
             {cartItems.length > 0 && (
@@ -248,7 +247,7 @@ export default function RootLayout() {
 
       {/* ─── Main Content ─── */}
       <Box component="main" sx={{ flex: 1 }}>
-        <Container maxWidth="xl" sx={{ py: 3 }}>
+        <Container maxWidth="xl" sx={{ py: { xs: 3, md: 5 } }}>
           <Outlet />
         </Container>
       </Box>
@@ -268,7 +267,7 @@ export default function RootLayout() {
           direction={{ xs: 'column', md: 'row' }}
           justifyContent="space-between"
           flexWrap="wrap"
-          spacing={4}
+          spacing={5}
           mb={5}
         >
           {/* Brand column */}
