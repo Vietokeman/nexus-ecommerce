@@ -14,6 +14,7 @@ import {
 
 @Component({
   templateUrl: 'change-email.component.html',
+  styleUrls: ['change-email.component.scss'],
 })
 export class ChangeEmailComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();

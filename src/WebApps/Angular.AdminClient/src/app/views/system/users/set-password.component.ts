@@ -18,6 +18,7 @@ import {
 
 @Component({
   templateUrl: 'set-password.component.html',
+  styleUrls: ['set-password.component.scss'],
 })
 export class SetPasswordComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();

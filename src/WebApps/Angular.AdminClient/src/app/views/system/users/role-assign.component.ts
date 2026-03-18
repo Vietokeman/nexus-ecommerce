@@ -10,6 +10,7 @@ import {
 
 @Component({
   templateUrl: 'role-assign.component.html',
+  styleUrls: ['role-assign.component.scss'],
 })
 export class RoleAssignComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
