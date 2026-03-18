@@ -31,6 +31,7 @@ import { IconModule } from '@coreui/icons-angular';
     BreadcrumbModule,
   ],
   templateUrl: './default-header.component.html',
+  styleUrls: ['./default-header.component.scss'],
 })
 export class DefaultHeaderComponent extends HeaderComponent {
   @Input() sidebarId: string = 'sidebar';

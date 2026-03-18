@@ -21,6 +21,7 @@ import { UtilityService } from '../../../shared/services/utility.service';
 
 @Component({
   templateUrl: 'post-activity-logs.component.html',
+  styleUrls: ['post-activity-logs.component.scss'],
 })
 export class PostActivityLogsComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();

@@ -1,6 +1,14 @@
-<div *ngIf="entityForm.controls[fieldName].invalid && entityForm.controls[fieldName].dirty">
+<div
+    class="nx-validation-wrap"
+    *ngIf="entityForm.controls[fieldName].invalid && entityForm.controls[fieldName].dirty"
+>
     <div *ngFor="let validation of validationMessages[fieldName]">
-        <small *ngIf="entityForm.controls[fieldName].errors[validation.type]" id="username-help"
-            class="p-error">{{validation.message}}.</small>
+        <small
+            *ngIf="entityForm.controls[fieldName].errors[validation.type]"
+            id="username-help"
+            class="p-error nx-validation-item"
+        >
+            {{ validation.message }}.
+        </small>
     </div>
 </div>
