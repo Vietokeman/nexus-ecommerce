@@ -54,6 +54,22 @@ export default function LoginPage() {
     <AuthLayout title="Welcome back" subtitle="Sign in to continue shopping">
       <Stack spacing={2.5} component="form" noValidate onSubmit={handleSubmit(handleLogin)}>
         <motion.div variants={itemVariants}>
+          <Stack
+            sx={{
+              p: 1.5,
+              borderRadius: 2,
+              border: '1px solid #F0DEC4',
+              background:
+                'linear-gradient(140deg, rgba(255,247,234,0.82), rgba(241,252,248,0.88) 65%, rgba(255,255,255,0.94))',
+            }}
+          >
+            <Typography variant="caption" sx={{ color: nexus.neutral[600], letterSpacing: '0.01em' }}>
+              Secure login with real-time order and checkout sync.
+            </Typography>
+          </Stack>
+        </motion.div>
+
+        <motion.div variants={itemVariants}>
           <PremiumInput
             fullWidth
             label="Email"
@@ -91,8 +107,8 @@ export default function LoginPage() {
               to="/forgot-password"
               sx={{
                 textDecoration: 'none',
-                color: nexus.orange[600],
-                fontWeight: 600,
+                color: nexus.orange[700],
+                fontWeight: 700,
                 letterSpacing: '0.01em',
                 '&:hover': { color: nexus.orange[700] },
               }}
@@ -110,9 +126,11 @@ export default function LoginPage() {
           <LoadingButton
             fullWidth
             sx={{
-              height: '3rem',
+              height: '3.1rem',
               fontSize: '1rem',
-              boxShadow: '0 14px 24px -16px rgba(154, 88, 82, 0.75)',
+              borderRadius: 999,
+              fontWeight: 700,
+              boxShadow: '0 16px 30px -14px rgba(154, 88, 82, 0.75)',
             }}
             loading={loading}
             type="submit"
@@ -131,7 +149,7 @@ export default function LoginPage() {
         </motion.div>
 
         <motion.div variants={itemVariants}>
-          <Stack direction="row" spacing={2}>
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
             <PremiumButton
               fullWidth
               variant="outlined"
@@ -141,12 +159,13 @@ export default function LoginPage() {
                 window.location.href = `${API_BASE_URL}/api/auth/external-login?provider=Google`;
               }}
               sx={{
-                height: '2.8rem',
+                height: '2.95rem',
                 textTransform: 'none',
-                fontWeight: 500,
-                borderColor: nexus.neutral[300],
+                borderRadius: 999,
+                fontWeight: 600,
+                borderColor: '#EBDCC9',
                 color: nexus.neutral[700],
-                backgroundColor: 'rgba(255,255,255,0.78)',
+                backgroundColor: 'rgba(255,255,255,0.9)',
                 '&:hover': {
                   borderColor: '#ea4335',
                   backgroundColor: 'rgba(234, 67, 53, 0.08)',
@@ -165,12 +184,13 @@ export default function LoginPage() {
                 window.location.href = `${API_BASE_URL}/api/auth/external-login?provider=GitHub`;
               }}
               sx={{
-                height: '2.8rem',
+                height: '2.95rem',
                 textTransform: 'none',
-                fontWeight: 500,
-                borderColor: nexus.neutral[300],
+                borderRadius: 999,
+                fontWeight: 600,
+                borderColor: '#EBDCC9',
                 color: nexus.neutral[700],
-                backgroundColor: 'rgba(255,255,255,0.78)',
+                backgroundColor: 'rgba(255,255,255,0.9)',
                 '&:hover': {
                   borderColor: '#333',
                   backgroundColor: 'rgba(51, 51, 51, 0.08)',
@@ -184,7 +204,11 @@ export default function LoginPage() {
         </motion.div>
 
         <motion.div variants={itemVariants}>
-          <Typography variant="body2" textAlign="center" sx={{ color: nexus.neutral[500], mt: 1 }}>
+          <Typography
+            variant="body2"
+            textAlign="center"
+            sx={{ color: nexus.neutral[500], mt: 1.25, fontWeight: 500 }}
+          >
             Don&apos;t have an account?{' '}
             <Typography
               component={Link}
@@ -192,8 +216,8 @@ export default function LoginPage() {
               variant="body2"
               sx={{
                 textDecoration: 'none',
-                fontWeight: 600,
-                color: nexus.orange[600],
+                fontWeight: 700,
+                color: nexus.orange[700],
                 '&:hover': { color: nexus.orange[700] },
               }}
             >

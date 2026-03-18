@@ -56,9 +56,25 @@ export default function SignupPage() {
   return (
     <AuthLayout title="Create account" subtitle="Join Nexus Commerce and start shopping">
       <Stack spacing={2.5} component="form" noValidate onSubmit={handleSubmit(handleSignup)}>
+        <motion.div variants={itemVariants}>
+          <Stack
+            sx={{
+              p: 1.5,
+              borderRadius: 2,
+              border: '1px solid #F0DEC4',
+              background:
+                'linear-gradient(140deg, rgba(255,248,236,0.86), rgba(239,251,248,0.9) 65%, rgba(255,255,255,0.95))',
+            }}
+          >
+            <Typography variant="caption" sx={{ color: nexus.neutral[600], letterSpacing: '0.01em' }}>
+              Build your account in seconds and unlock personalized recommendations.
+            </Typography>
+          </Stack>
+        </motion.div>
+
         {/* First & Last Name side-by-side */}
         <motion.div variants={itemVariants}>
-          <Stack direction="row" spacing={1.5}>
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
             <Stack flex={1}>
               <PremiumInput
                 fullWidth
@@ -140,9 +156,11 @@ export default function SignupPage() {
         >
           <LoadingButton
             sx={{
-              height: '3rem',
+              height: '3.1rem',
               fontSize: '1rem',
-              boxShadow: '0 14px 24px -16px rgba(154, 88, 82, 0.75)',
+              borderRadius: 999,
+              fontWeight: 700,
+              boxShadow: '0 16px 30px -14px rgba(154, 88, 82, 0.75)',
             }}
             fullWidth
             loading={loading}
@@ -162,7 +180,7 @@ export default function SignupPage() {
         </motion.div>
 
         <motion.div variants={itemVariants}>
-          <Stack direction="row" spacing={2}>
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
             <PremiumButton
               fullWidth
               variant="outlined"
@@ -172,12 +190,13 @@ export default function SignupPage() {
                 window.location.href = `${API_BASE_URL}/api/auth/external-login?provider=Google`;
               }}
               sx={{
-                height: '2.8rem',
+                height: '2.95rem',
                 textTransform: 'none',
-                fontWeight: 500,
-                borderColor: nexus.neutral[300],
+                borderRadius: 999,
+                fontWeight: 600,
+                borderColor: '#EBDCC9',
                 color: nexus.neutral[700],
-                backgroundColor: 'rgba(255,255,255,0.78)',
+                backgroundColor: 'rgba(255,255,255,0.9)',
                 '&:hover': {
                   borderColor: '#ea4335',
                   backgroundColor: 'rgba(234, 67, 53, 0.08)',
@@ -196,12 +215,13 @@ export default function SignupPage() {
                 window.location.href = `${API_BASE_URL}/api/auth/external-login?provider=GitHub`;
               }}
               sx={{
-                height: '2.8rem',
+                height: '2.95rem',
                 textTransform: 'none',
-                fontWeight: 500,
-                borderColor: nexus.neutral[300],
+                borderRadius: 999,
+                fontWeight: 600,
+                borderColor: '#EBDCC9',
                 color: nexus.neutral[700],
-                backgroundColor: 'rgba(255,255,255,0.78)',
+                backgroundColor: 'rgba(255,255,255,0.9)',
                 '&:hover': {
                   borderColor: '#333',
                   backgroundColor: 'rgba(51, 51, 51, 0.08)',
@@ -215,7 +235,11 @@ export default function SignupPage() {
         </motion.div>
 
         <motion.div variants={itemVariants}>
-          <Typography variant="body2" textAlign="center" sx={{ color: nexus.neutral[500], mt: 1 }}>
+          <Typography
+            variant="body2"
+            textAlign="center"
+            sx={{ color: nexus.neutral[500], mt: 1.25, fontWeight: 500 }}
+          >
             Already have an account?{' '}
             <Typography
               component={Link}
@@ -223,8 +247,8 @@ export default function SignupPage() {
               variant="body2"
               sx={{
                 textDecoration: 'none',
-                fontWeight: 600,
-                color: nexus.orange[600],
+                fontWeight: 700,
+                color: nexus.orange[700],
                 '&:hover': { color: nexus.orange[700] },
               }}
             >
