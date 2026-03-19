@@ -58,11 +58,12 @@ function CampaignCard({ campaign }: { campaign: GroupBuyCampaign }) {
           borderRadius: nexus.radius.xl,
           overflow: 'hidden',
           border: '1px solid',
-          borderColor: nexus.neutral[200],
+          borderColor: '#E7DAC5',
+          background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF6 100%)',
           transition: nexus.transition.base,
           '&:hover': {
-            borderColor: nexus.purple[300],
-            boxShadow: `0 8px 30px ${nexus.purple[100]}`,
+            borderColor: '#D9BA89',
+            boxShadow: '0 14px 30px rgba(124, 92, 52, 0.14)',
             transform: 'translateY(-4px)',
           },
         }}
@@ -85,7 +86,7 @@ function CampaignCard({ campaign }: { campaign: GroupBuyCampaign }) {
             />
           ) : (
             <Stack justifyContent="center" alignItems="center" height="100%">
-              <GroupsOutlinedIcon sx={{ fontSize: 48, color: nexus.purple[300] }} />
+              <GroupsOutlinedIcon sx={{ fontSize: 48, color: nexus.orange[300] }} />
             </Stack>
           )}
         </Box>
@@ -129,10 +130,10 @@ function CampaignCard({ campaign }: { campaign: GroupBuyCampaign }) {
               icon={<GroupsOutlinedIcon sx={{ fontSize: 16 }} />}
               label={`Min ${campaign.minParticipants} people`}
               sx={{
-                bgcolor: nexus.purple[50],
-                color: nexus.purple[700],
+                bgcolor: '#FFF5E8',
+                color: nexus.orange[700],
                 fontWeight: 500,
-                '& .MuiChip-icon': { color: nexus.purple[500] },
+                '& .MuiChip-icon': { color: nexus.orange[500] },
               }}
             />
             {daysLeft !== null && (
@@ -155,7 +156,7 @@ function CampaignCard({ campaign }: { campaign: GroupBuyCampaign }) {
             direction="row"
             alignItems="center"
             spacing={0.5}
-            sx={{ color: nexus.purple[600], fontWeight: 600, fontSize: '0.875rem', mt: 1 }}
+            sx={{ color: nexus.orange[700], fontWeight: 700, fontSize: '0.875rem', mt: 1 }}
           >
             <Typography variant="body2" fontWeight={600}>
               View & Start Group
@@ -173,16 +174,35 @@ export default function GroupBuyListPage() {
   const [tab, setTab] = useState<'active' | 'all'>('active');
 
   return (
-    <Stack spacing={4} sx={{ px: { xs: 2, md: 4 }, py: 4, maxWidth: 1200, mx: 'auto' }}>
+    <Stack
+      spacing={4}
+      sx={{
+        px: { xs: 2, md: 4 },
+        py: 4,
+        maxWidth: 1200,
+        mx: 'auto',
+      }}
+    >
       {/* Header */}
-      <Stack spacing={1}>
+      <Stack
+        spacing={1}
+        sx={{
+          p: { xs: 2, md: 2.5 },
+          borderRadius: 3,
+          border: '1px solid #EEDFCB',
+          background:
+            'linear-gradient(145deg, rgba(255,248,236,0.9), rgba(240,251,248,0.88) 60%, rgba(255,255,255,0.96))',
+          boxShadow: '0 16px 30px rgba(126, 93, 53, 0.1)',
+        }}
+      >
         <Typography
           variant="h4"
-          fontWeight={700}
+          fontWeight={800}
           sx={{
             background: nexus.gradient.primary,
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
+            letterSpacing: '-0.02em',
           }}
         >
           Group Buy
@@ -201,9 +221,9 @@ export default function GroupBuyListPage() {
             onClick={() => setTab(t)}
             sx={{
               fontWeight: 600,
-              bgcolor: tab === t ? nexus.purple[700] : nexus.neutral[100],
+              bgcolor: tab === t ? nexus.orange[700] : nexus.neutral[100],
               color: tab === t ? '#fff' : nexus.neutral[600],
-              '&:hover': { bgcolor: tab === t ? nexus.purple[800] : nexus.neutral[200] },
+              '&:hover': { bgcolor: tab === t ? nexus.orange[700] : nexus.neutral[200] },
             }}
           />
         ))}
@@ -212,7 +232,7 @@ export default function GroupBuyListPage() {
       {/* Content */}
       {isLoading ? (
         <Stack alignItems="center" py={8}>
-          <CircularProgress sx={{ color: nexus.purple[600] }} />
+          <CircularProgress sx={{ color: nexus.orange[600] }} />
         </Stack>
       ) : error ? (
         <Alert severity="error">Failed to load campaigns. Please try again.</Alert>

@@ -46,7 +46,7 @@ function TimeBox({ value, label }: { value: number; label: string }) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          boxShadow: '0 2px 8px rgba(124, 58, 237, 0.25)',
+          boxShadow: '0 8px 16px rgba(124, 92, 52, 0.2)',
         }}
       >
         {String(value).padStart(2, '0')}
@@ -69,7 +69,16 @@ export default function FlashSaleWidget({ session, onItemClick }: FlashSaleWidge
   if (isExpired || items.length === 0) return null;
 
   return (
-    <Box sx={{ mb: 4 }}>
+    <Box
+      sx={{
+        mb: 4,
+        p: { xs: 1.5, md: 2 },
+        borderRadius: 3,
+        border: '1px solid #E9DCC8',
+        background: 'linear-gradient(145deg, rgba(255,248,236,0.9), rgba(240,251,248,0.9) 62%, rgba(255,255,255,0.97))',
+        boxShadow: '0 14px 30px rgba(124, 92, 52, 0.1)',
+      }}
+    >
       {/* Header */}
       <Stack
         direction="row"
@@ -147,10 +156,11 @@ export default function FlashSaleWidget({ session, onItemClick }: FlashSaleWidge
                 sx={{
                   cursor: 'pointer',
                   overflow: 'hidden',
-                  border: `1px solid ${nexus.neutral[200]}`,
+                  border: '1px solid #E8DCC9',
+                  background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF7 100%)',
                   '&:hover': {
-                    borderColor: nexus.purple[300],
-                    boxShadow: nexus.glass.shadowHover,
+                    borderColor: '#D7BA8C',
+                    boxShadow: '0 14px 28px rgba(124, 92, 52, 0.14)',
                   },
                 }}
               >

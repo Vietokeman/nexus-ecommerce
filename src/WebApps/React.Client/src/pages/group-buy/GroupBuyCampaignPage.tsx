@@ -69,7 +69,7 @@ export default function GroupBuyCampaignPage() {
   if (isLoading) {
     return (
       <Stack alignItems="center" justifyContent="center" minHeight="60vh">
-        <CircularProgress sx={{ color: nexus.purple[600] }} />
+        <CircularProgress sx={{ color: nexus.orange[600] }} />
       </Stack>
     );
   }
@@ -97,7 +97,9 @@ export default function GroupBuyCampaignPage() {
               borderRadius: nexus.radius.xl,
               overflow: 'hidden',
               border: '1px solid',
-              borderColor: nexus.neutral[200],
+              borderColor: '#E7D9C5',
+              background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF6 100%)',
+              boxShadow: '0 16px 34px rgba(126, 93, 53, 0.12)',
             }}
           >
             <Stack direction={{ xs: 'column', md: 'row' }}>
@@ -119,7 +121,7 @@ export default function GroupBuyCampaignPage() {
                   />
                 ) : (
                   <Stack justifyContent="center" alignItems="center" height="100%">
-                    <GroupsOutlinedIcon sx={{ fontSize: 80, color: nexus.purple[200] }} />
+                    <GroupsOutlinedIcon sx={{ fontSize: 80, color: nexus.orange[300] }} />
                   </Stack>
                 )}
                 <Box
@@ -175,7 +177,7 @@ export default function GroupBuyCampaignPage() {
                   <Chip
                     icon={<GroupsOutlinedIcon />}
                     label={`Min ${campaign.minParticipants} people`}
-                    sx={{ bgcolor: nexus.purple[50], color: nexus.purple[700], fontWeight: 500 }}
+                    sx={{ bgcolor: '#FFF5E8', color: nexus.orange[700], fontWeight: 500 }}
                   />
                   <Chip
                     icon={<TimerOutlinedIcon />}
@@ -196,7 +198,7 @@ export default function GroupBuyCampaignPage() {
                       sx={{
                         minWidth: 36,
                         border: '1px solid',
-                        borderColor: nexus.neutral[300],
+                        borderColor: '#E9DDCB',
                         color: nexus.neutral[700],
                       }}
                     >
@@ -211,7 +213,7 @@ export default function GroupBuyCampaignPage() {
                       sx={{
                         minWidth: 36,
                         border: '1px solid',
-                        borderColor: nexus.neutral[300],
+                        borderColor: '#E9DDCB',
                         color: nexus.neutral[700],
                       }}
                     >
@@ -233,7 +235,7 @@ export default function GroupBuyCampaignPage() {
                       fontWeight: 700,
                       py: 1.5,
                       fontSize: '1rem',
-                      borderRadius: nexus.radius.lg,
+                      borderRadius: 999,
                       '&:hover': { opacity: 0.9 },
                     }}
                   >
@@ -245,9 +247,9 @@ export default function GroupBuyCampaignPage() {
                     sx={{
                       p: 3,
                       borderRadius: nexus.radius.lg,
-                      bgcolor: nexus.purple[50],
+                      bgcolor: '#FFF8ED',
                       border: '2px solid',
-                      borderColor: nexus.purple[200],
+                      borderColor: '#E4C48F',
                     }}
                   >
                     <Stack spacing={2}>
@@ -333,6 +335,7 @@ export default function GroupBuyCampaignPage() {
                               height: 28,
                               fontSize: '0.75rem',
                               bgcolor: nexus.purple[600],
+                              bgcolor: nexus.orange[600],
                             }}
                           >
                             {session.leaderUserName[0]?.toUpperCase()}
@@ -347,7 +350,7 @@ export default function GroupBuyCampaignPage() {
                               fontFamily: 'monospace',
                               fontWeight: 600,
                               fontSize: '0.7rem',
-                              bgcolor: nexus.neutral[100],
+                              bgcolor: '#FFF7EA',
                             }}
                           />
                         </Stack>
@@ -380,9 +383,9 @@ export default function GroupBuyCampaignPage() {
                         sx={{
                           ml: 2,
                           fontWeight: 600,
-                          color: nexus.purple[700],
-                          borderColor: nexus.purple[300],
-                          '&:hover': { bgcolor: nexus.purple[50] },
+                          color: nexus.orange[700],
+                          borderColor: '#E4C48F',
+                          '&:hover': { bgcolor: '#FFF5E8' },
                         }}
                         variant="outlined"
                       >
