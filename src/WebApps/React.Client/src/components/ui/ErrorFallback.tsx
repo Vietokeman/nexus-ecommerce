@@ -22,8 +22,8 @@ export default function ErrorFallback({ error, resetErrorBoundary }: ErrorFallba
         borderRadius: nexus.radius.xl,
         background:
           'linear-gradient(145deg, rgba(255,253,250,0.9) 0%, rgba(247,241,236,0.84) 56%, rgba(234,220,212,0.82) 100%)',
-        border: `1px solid ${nexus.neutral[200]}`,
-        boxShadow: nexus.glass.shadow,
+        border: '1px solid #E8DCC9',
+        boxShadow: '0 18px 34px rgba(124, 92, 52, 0.14)',
         position: 'relative',
         overflow: 'hidden',
         '&::after': {
@@ -58,7 +58,7 @@ export default function ErrorFallback({ error, resetErrorBoundary }: ErrorFallba
       <Typography variant="body2" color="text.secondary" sx={{ mb: 3.25, maxWidth: 460 }}>
         {error.message}
       </Typography>
-      <PremiumButton variant="contained" onClick={resetErrorBoundary}>
+      <PremiumButton variant="contained" onClick={resetErrorBoundary} sx={{ fontWeight: 700 }}>
         Try Again
       </PremiumButton>
     </Box>

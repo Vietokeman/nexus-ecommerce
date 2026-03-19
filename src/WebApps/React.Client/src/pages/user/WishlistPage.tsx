@@ -20,6 +20,7 @@ import { toast } from 'react-toastify';
 import { useWishlistStore } from '@/store/wishlist-store';
 import { useCartStore } from '@/store/cart-store';
 import emptyWishlistAnimation from '@/assets/animations/emptyWishlist.json';
+import { nexus } from '@/theme/theme';
 
 export default function WishlistPage() {
   const wishlistItems = useWishlistStore((s) => s.items);
@@ -57,13 +58,20 @@ export default function WishlistPage() {
           columnGap={1}
           justifyContent="center"
           alignItems="center"
+          sx={{
+            p: { xs: 1, sm: 1.5 },
+            borderRadius: 3,
+            border: '1px solid #EEDFCB',
+            background:
+              'linear-gradient(145deg, rgba(255,248,236,0.9), rgba(240,251,248,0.88) 60%, rgba(255,255,255,0.96))',
+          }}
         >
           <motion.div whileHover={{ x: -5 }}>
             <IconButton component={Link} to="/">
               <ArrowBackIcon fontSize={is480 ? 'medium' : 'large'} />
             </IconButton>
           </motion.div>
-          <Typography variant="h4" fontWeight={500}>
+          <Typography variant="h4" fontWeight={800} sx={{ letterSpacing: '-0.02em' }}>
             Your wishlist
           </Typography>
         </Stack>
@@ -89,7 +97,15 @@ export default function WishlistPage() {
               {wishlistItems.map((item) => (
                 <Stack key={item.id} component={is480 ? 'div' : Paper} elevation={1}>
                   {/* product card */}
-                  <Stack p={2} width={is480 ? '100%' : '18rem'}>
+                  <Stack
+                    p={2}
+                    width={is480 ? '100%' : '18rem'}
+                    sx={{
+                      borderRadius: 2.5,
+                      border: '1px solid #E9DCCB',
+                      background: 'linear-gradient(180deg, #FFFFFF, #FFFCF7)',
+                    }}
+                  >
                     <Stack flexDirection="row" justifyContent="flex-end">
                       <Checkbox
                         checked
@@ -104,7 +120,7 @@ export default function WishlistPage() {
                       sx={{ textDecoration: 'none', color: 'inherit' }}
                       alignItems="center"
                     >
-                      <Typography variant="h6" fontWeight={500} noWrap>
+                      <Typography variant="h6" fontWeight={700} noWrap>
                         {item.name}
                       </Typography>
                       <Typography variant="h6" fontWeight={600}>
@@ -122,15 +138,16 @@ export default function WishlistPage() {
                         variant="outlined"
                         component={Link}
                         to="/cart"
+                        color="warning"
                       >
                         Already in cart
                       </Button>
                     ) : (
                       <Button
-                        sx={{ mt: 2 }}
                         size="small"
                         onClick={() => handleAddToCart(item)}
-                        variant="outlined"
+                        variant="contained"
+                        sx={{ mt: 2, borderRadius: 999, fontWeight: 700, background: nexus.gradient.button }}
                       >
                         Add To Cart
                       </Button>

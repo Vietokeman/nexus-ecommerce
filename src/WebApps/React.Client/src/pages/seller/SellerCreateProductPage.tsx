@@ -22,6 +22,7 @@ import { api } from '@/lib/api';
 import { API_ENDPOINTS } from '@/lib/endpoints';
 import { useAuthStore } from '@/store/auth-store';
 import type { AIContentResponse, CreateSellerProductDto } from '@/types/seller';
+import { nexus } from '@/theme/theme';
 
 const categories = [
   'Thời trang nam',
@@ -111,7 +112,7 @@ export default function SellerCreateProductPage() {
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
       <Stack spacing={3} sx={{ maxWidth: 900, mx: 'auto', py: 4 }}>
-        <Typography variant="h4" fontWeight={700}>
+        <Typography variant="h4" fontWeight={800} sx={{ letterSpacing: '-0.02em' }}>
           📦 Đăng Sản Phẩm Mới
         </Typography>
         <Typography variant="body2" color="text.secondary">
@@ -119,7 +120,16 @@ export default function SellerCreateProductPage() {
         </Typography>
 
         {/* Basic Info */}
-        <Paper sx={{ p: 3 }}>
+        <Paper
+          sx={{
+            p: 3,
+            borderRadius: 3,
+            border: '1px solid #EBDDC9',
+            background:
+              'linear-gradient(145deg, rgba(255,248,236,0.9), rgba(240,251,248,0.88) 60%, rgba(255,255,255,0.96))',
+            boxShadow: '0 16px 30px rgba(126, 93, 53, 0.1)',
+          }}
+        >
           <Typography variant="h6" fontWeight={600} gutterBottom>
             Thông tin cơ bản
           </Typography>
@@ -219,6 +229,7 @@ export default function SellerCreateProductPage() {
                   objectFit: 'cover',
                   borderRadius: 12,
                   border: '2px solid #e0e0e0',
+                  boxShadow: '0 12px 24px rgba(124, 92, 52, 0.14)',
                 }}
               />
             )}
@@ -231,10 +242,11 @@ export default function SellerCreateProductPage() {
           onClick={handleGenerateAI}
           disabled={!form.name || isGenerating}
           sx={{
-            background: 'linear-gradient(135deg, #7c3aed, #2563eb)',
+            background: nexus.gradient.button,
             py: 1.5,
-            fontWeight: 600,
+            fontWeight: 700,
             fontSize: '1rem',
+            borderRadius: 999,
           }}
           startIcon={isGenerating ? <CircularProgress size={20} color="inherit" /> : undefined}
         >
@@ -246,8 +258,9 @@ export default function SellerCreateProductPage() {
           <Paper
             sx={{
               p: 3,
-              background: 'linear-gradient(135deg, #f5f3ff 0%, #eff6ff 100%)',
-              border: '1px solid #c4b5fd',
+              borderRadius: 3,
+              background: 'linear-gradient(145deg, rgba(255,248,236,0.9), rgba(240,251,248,0.9))',
+              border: '1px solid #E4C48F',
             }}
           >
             <Stack spacing={2}>
