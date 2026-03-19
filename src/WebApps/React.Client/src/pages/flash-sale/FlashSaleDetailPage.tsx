@@ -95,12 +95,13 @@ function FlashItemCard({ item }: { item: FlashSaleItem }) {
         sx={{
           borderRadius: nexus.radius.xl,
           border: '1px solid',
-          borderColor: nexus.neutral[200],
+          borderColor: '#E8DBCA',
+          background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF7 100%)',
           overflow: 'hidden',
           transition: nexus.transition.base,
           '&:hover': {
-            borderColor: nexus.purple[300],
-            boxShadow: `0 8px 30px ${nexus.purple[100]}`,
+            borderColor: '#DAB98B',
+            boxShadow: '0 14px 30px rgba(124, 92, 52, 0.14)',
             transform: 'translateY(-4px)',
           },
           opacity: soldOut ? 0.6 : 1,
@@ -232,7 +233,7 @@ function FlashItemCard({ item }: { item: FlashSaleItem }) {
             sx={{
               background: soldOut ? nexus.neutral[300] : nexus.gradient.button,
               fontWeight: 700,
-              borderRadius: nexus.radius.lg,
+              borderRadius: 999,
               '&:hover': { opacity: 0.9 },
             }}
           >
@@ -253,7 +254,7 @@ export default function FlashSaleDetailPage() {
   if (isLoading) {
     return (
       <Stack alignItems="center" justifyContent="center" minHeight="60vh">
-        <CircularProgress sx={{ color: nexus.purple[600] }} />
+        <CircularProgress sx={{ color: nexus.orange[600] }} />
       </Stack>
     );
   }
@@ -278,10 +279,12 @@ export default function FlashSaleDetailPage() {
             sx={{
               p: { xs: 3, md: 4 },
               borderRadius: nexus.radius.xl,
-              background: nexus.gradient.dark,
+              background:
+                'linear-gradient(145deg, rgba(39,31,26,1) 0%, rgba(72,52,42,0.98) 60%, rgba(102,70,55,0.98) 100%)',
               color: '#fff',
               position: 'relative',
               overflow: 'hidden',
+              boxShadow: '0 20px 38px rgba(53, 35, 28, 0.35)',
             }}
           >
             <Stack

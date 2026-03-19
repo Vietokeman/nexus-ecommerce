@@ -106,7 +106,7 @@ export default function GroupBuyJoinPage() {
   if (isLoading) {
     return (
       <Stack alignItems="center" justifyContent="center" minHeight="60vh">
-        <CircularProgress sx={{ color: nexus.purple[600] }} />
+        <CircularProgress sx={{ color: nexus.orange[600] }} />
       </Stack>
     );
   }
@@ -156,7 +156,9 @@ export default function GroupBuyJoinPage() {
             sx={{
               borderRadius: nexus.radius.xl,
               border: '2px solid',
-              borderColor: isSucceeded ? '#10B981' : isFailed ? '#EF4444' : nexus.purple[200],
+              borderColor: isSucceeded ? '#10B981' : isFailed ? '#EF4444' : '#E4C48F',
+              boxShadow: '0 16px 32px rgba(126, 93, 53, 0.12)',
+              background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF7 100%)',
               overflow: 'hidden',
             }}
           >
@@ -265,7 +267,7 @@ export default function GroupBuyJoinPage() {
                           width: 30,
                           height: 30,
                           fontSize: '0.75rem',
-                          bgcolor: nexus.purple[600],
+                          bgcolor: nexus.orange[600],
                         }}
                       >
                         {p.userName[0]?.toUpperCase()}
@@ -303,7 +305,7 @@ export default function GroupBuyJoinPage() {
                               ? '#065F46'
                               : p.status === 'Refunded'
                                 ? '#991B1B'
-                                : nexus.purple[700],
+                                : nexus.orange[700],
                         }}
                       />
                     </Stack>
@@ -348,7 +350,7 @@ export default function GroupBuyJoinPage() {
                     background: nexus.gradient.button,
                     fontWeight: 700,
                     py: 1.5,
-                    borderRadius: nexus.radius.lg,
+                    borderRadius: 999,
                     '&:hover': { opacity: 0.9 },
                   }}
                 >

@@ -30,8 +30,8 @@ export default function EmptyState({
         borderRadius: nexus.radius.xl,
         background:
           'radial-gradient(120% 120% at 0% 0%, rgba(203,148,139,0.22) 0%, rgba(255,253,250,0.86) 42%, rgba(242,237,231,0.9) 100%)',
-        border: `1px solid ${nexus.neutral[200]}`,
-        boxShadow: nexus.glass.shadow,
+        border: '1px solid #E9DCC8',
+        boxShadow: '0 16px 32px rgba(124, 92, 52, 0.12)',
         position: 'relative',
         overflow: 'hidden',
         '&::before': {
@@ -62,7 +62,7 @@ export default function EmptyState({
       </Box>
       <Typography
         variant="h5"
-        fontWeight={600}
+        fontWeight={800}
         mt={1.5}
         sx={{
           background: 'linear-gradient(140deg, #6E3A35 0%, #9A5852 52%, #B56C63 100%)',
@@ -70,6 +70,7 @@ export default function EmptyState({
           WebkitTextFillColor: 'transparent',
           backgroundClip: 'text',
           maxWidth: 560,
+          letterSpacing: '-0.01em',
         }}
       >
         {title}
