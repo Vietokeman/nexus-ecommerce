@@ -334,7 +334,6 @@ export default function GroupBuyCampaignPage() {
                               width: 28,
                               height: 28,
                               fontSize: '0.75rem',
-                              bgcolor: nexus.purple[600],
                               bgcolor: nexus.orange[600],
                             }}
                           >
