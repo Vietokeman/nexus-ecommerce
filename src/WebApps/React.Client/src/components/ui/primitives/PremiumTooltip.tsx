@@ -10,12 +10,13 @@ export default function PremiumTooltip({ componentsProps, ...props }: TooltipPro
         tooltip: {
           ...componentsProps?.tooltip,
           sx: {
-            backgroundColor: 'rgba(43, 33, 29, 0.94)',
+            backgroundColor: 'rgba(56, 40, 33, 0.96)',
             color: '#fffdfa',
-            border: '1px solid rgba(255,255,255,0.18)',
-            boxShadow: '0 18px 45px -24px rgba(58, 40, 35, 0.36)',
-            fontSize: '0.75rem',
+            border: '1px solid rgba(244, 223, 188, 0.34)',
+            boxShadow: '0 18px 45px -22px rgba(58, 40, 35, 0.45)',
+            fontSize: '0.76rem',
             letterSpacing: '0.01em',
+            fontWeight: 500,
           },
         },
       }}
