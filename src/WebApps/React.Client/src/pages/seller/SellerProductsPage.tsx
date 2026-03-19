@@ -112,7 +112,21 @@ export default function SellerProductsPage() {
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
       <Stack sx={{ maxWidth: 1100, mx: 'auto', py: 4, px: is480 ? 2 : 4 }}>
         {/* Header */}
-        <Stack direction="row" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={2}>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          flexWrap="wrap"
+          gap={2}
+          sx={{
+            p: { xs: 2, md: 2.5 },
+            borderRadius: 3,
+            border: '1px solid #EEDFCB',
+            background:
+              'linear-gradient(145deg, rgba(255,248,236,0.9), rgba(240,251,248,0.88) 60%, rgba(255,255,255,0.96))',
+            boxShadow: '0 16px 30px rgba(126, 93, 53, 0.1)',
+          }}
+        >
           <Stack direction="row" alignItems="center" gap={1}>
             <motion.div whileHover={{ x: -5 }}>
               <IconButton component={Link} to="/seller/dashboard">
@@ -120,7 +134,7 @@ export default function SellerProductsPage() {
               </IconButton>
             </motion.div>
             <div>
-              <Typography variant="h4" fontWeight={600}>
+              <Typography variant="h4" fontWeight={800} sx={{ letterSpacing: '-0.02em' }}>
                 Sản phẩm của tôi
               </Typography>
               <Typography variant="body2" color="text.secondary">
@@ -144,7 +158,16 @@ export default function SellerProductsPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           size="small"
-          sx={{ mt: 3, mb: 2, maxWidth: 400 }}
+          sx={{
+            mt: 3,
+            mb: 2,
+            maxWidth: 420,
+            '& .MuiOutlinedInput-root': {
+              borderRadius: 2.5,
+              background: '#FFFFFF',
+              boxShadow: '0 8px 18px rgba(126, 93, 53, 0.08)',
+            },
+          }}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -170,8 +193,10 @@ export default function SellerProductsPage() {
                   flexDirection: is768 ? 'column' : 'row',
                   gap: 2,
                   alignItems: is768 ? 'stretch' : 'center',
+                  border: '1px solid #E9DCCB',
+                  background: 'linear-gradient(180deg, #FFFFFF, #FFFCF7)',
                   transition: 'box-shadow 0.2s',
-                  '&:hover': { boxShadow: 4 },
+                  '&:hover': { boxShadow: '0 16px 30px rgba(126, 93, 53, 0.14)' },
                 }}
               >
                 {/* Image */}

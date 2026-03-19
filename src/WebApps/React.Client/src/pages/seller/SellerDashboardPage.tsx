@@ -40,8 +40,19 @@ interface StatCardProps {
 
 function StatCard({ title, value, icon, color, subtitle }: StatCardProps) {
   return (
-    <motion.div whileHover={{ y: -4, boxShadow: '0 8px 24px rgba(0,0,0,0.12)' }} style={{ borderRadius: 16 }}>
-      <Paper sx={{ p: 3, borderRadius: 4, height: '100%', position: 'relative', overflow: 'hidden' }}>
+    <motion.div whileHover={{ y: -4 }} style={{ borderRadius: 16 }}>
+      <Paper
+        sx={{
+          p: 3,
+          borderRadius: 4,
+          height: '100%',
+          position: 'relative',
+          overflow: 'hidden',
+          border: '1px solid #E9DCC9',
+          background: 'linear-gradient(180deg, #FFFFFF, #FFFCF7)',
+          boxShadow: '0 14px 26px rgba(124, 92, 52, 0.08)',
+        }}
+      >
         <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
           <Stack spacing={0.5}>
             <Typography variant="body2" color="text.secondary" fontWeight={500}>
@@ -160,7 +171,22 @@ export default function SellerDashboardPage() {
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
       <Stack sx={{ maxWidth: 1200, mx: 'auto', py: 4, px: is480 ? 2 : 4 }}>
         {/* Header */}
-        <Stack direction="row" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={2} mb={4}>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          flexWrap="wrap"
+          gap={2}
+          mb={4}
+          sx={{
+            p: { xs: 2, md: 2.5 },
+            borderRadius: 3,
+            border: '1px solid #EEDFCB',
+            background:
+              'linear-gradient(145deg, rgba(255,248,236,0.9), rgba(240,251,248,0.88) 60%, rgba(255,255,255,0.96))',
+            boxShadow: '0 16px 30px rgba(126, 93, 53, 0.1)',
+          }}
+        >
           <Stack direction="row" alignItems="center" gap={1}>
             <motion.div whileHover={{ x: -5 }}>
               <IconButton component={Link} to="/">
@@ -168,7 +194,7 @@ export default function SellerDashboardPage() {
               </IconButton>
             </motion.div>
             <div>
-              <Typography variant="h4" fontWeight={700}>
+              <Typography variant="h4" fontWeight={800} sx={{ letterSpacing: '-0.02em' }}>
                 Seller Dashboard
               </Typography>
               <Typography variant="body2" color="text.secondary">
@@ -201,7 +227,15 @@ export default function SellerDashboardPage() {
         </Grid>
 
         {/* Quick Actions */}
-        <Paper sx={{ p: 3, mb: 4, borderRadius: 3 }}>
+        <Paper
+          sx={{
+            p: 3,
+            mb: 4,
+            borderRadius: 3,
+            border: '1px solid #EADCCA',
+            background: 'linear-gradient(180deg, #FFFFFF, #FFFCF7)',
+          }}
+        >
           <Typography variant="h6" fontWeight={600} gutterBottom>
             Thao tác nhanh
           </Typography>
@@ -219,7 +253,15 @@ export default function SellerDashboardPage() {
         </Paper>
 
         {/* Recent Products */}
-        <Paper sx={{ p: 3, borderRadius: 3, mb: 4 }}>
+        <Paper
+          sx={{
+            p: 3,
+            borderRadius: 3,
+            mb: 4,
+            border: '1px solid #EADCCA',
+            background: 'linear-gradient(180deg, #FFFFFF, #FFFCF7)',
+          }}
+        >
           <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
             <Typography variant="h6" fontWeight={600}>
               Sản phẩm gần đây
@@ -275,7 +317,14 @@ export default function SellerDashboardPage() {
         </Paper>
 
         {/* Recent Reviews */}
-        <Paper sx={{ p: 3, borderRadius: 3 }}>
+        <Paper
+          sx={{
+            p: 3,
+            borderRadius: 3,
+            border: '1px solid #EADCCA',
+            background: 'linear-gradient(180deg, #FFFFFF, #FFFCF7)',
+          }}
+        >
           <Typography variant="h6" fontWeight={600} mb={2}>
             Đánh giá gần đây
           </Typography>

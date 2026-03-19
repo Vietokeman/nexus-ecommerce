@@ -19,6 +19,7 @@ import { api } from '@/lib/api';
 import { API_ENDPOINTS } from '@/lib/endpoints';
 import { useAuthStore } from '@/store/auth-store';
 import type { ProductReview, ReviewSummary, CreateReviewDto } from '@/types/seller';
+import { nexus } from '@/theme/theme';
 
 interface ProductReviewsSectionProps {
   productId: number;
@@ -91,13 +92,21 @@ export default function ProductReviewsSection({ productId }: ProductReviewsSecti
   return (
     <Stack spacing={3} mt={4}>
       <Divider />
-      <Typography variant="h5" fontWeight={700}>
+      <Typography variant="h5" fontWeight={800} sx={{ letterSpacing: '-0.01em' }}>
         Đánh giá sản phẩm
       </Typography>
 
       {/* Summary */}
       {summary && (
-        <Paper sx={{ p: 3, borderRadius: 3 }}>
+        <Paper
+          sx={{
+            p: 3,
+            borderRadius: 3,
+            border: '1px solid #E9DCC9',
+            background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF7 100%)',
+            boxShadow: '0 12px 24px rgba(124, 92, 52, 0.08)',
+          }}
+        >
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={4} alignItems="center">
             {/* Average rating */}
             <Stack alignItems="center" spacing={1} minWidth={140}>
@@ -144,9 +153,9 @@ export default function ProductReviewsSection({ productId }: ProductReviewsSecti
       {/* Write Review Button */}
       {user && !showForm && (
         <Button
-          variant="outlined"
+          variant="contained"
           onClick={() => setShowForm(true)}
-          sx={{ alignSelf: 'flex-start', borderRadius: 2, fontWeight: 600 }}
+          sx={{ alignSelf: 'flex-start', borderRadius: 999, fontWeight: 700 }}
         >
           ✍️ Viết đánh giá
         </Button>
@@ -156,7 +165,14 @@ export default function ProductReviewsSection({ productId }: ProductReviewsSecti
       <AnimatePresence>
         {showForm && (
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}>
-            <Paper sx={{ p: 3, borderRadius: 3, border: '1px solid', borderColor: 'primary.main' }}>
+            <Paper
+              sx={{
+                p: 3,
+                borderRadius: 3,
+                border: '1px solid #E4C48F',
+                background: 'linear-gradient(180deg, #FFFFFF, #FFFAF1)',
+              }}
+            >
               <Typography variant="h6" fontWeight={600} gutterBottom>
                 Đánh giá của bạn
               </Typography>
@@ -207,12 +223,27 @@ export default function ProductReviewsSection({ productId }: ProductReviewsSecti
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
             >
-              <Paper sx={{ p: 2.5, borderRadius: 2.5 }}>
+              <Paper
+                sx={{
+                  p: 2.5,
+                  borderRadius: 2.5,
+                  border: '1px solid #E9DCCB',
+                  background: 'linear-gradient(180deg, #FFFFFF, #FFFCF8)',
+                }}
+              >
                 <Stack spacing={1.5}>
                   {/* Header */}
                   <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
                     <Stack direction="row" alignItems="center" spacing={1.5}>
-                      <Avatar sx={{ width: 36, height: 36, bgcolor: 'primary.main', fontSize: '0.9rem' }}>
+                      <Avatar
+                        sx={{
+                          width: 36,
+                          height: 36,
+                          bgcolor: 'primary.main',
+                          fontSize: '0.9rem',
+                          boxShadow: '0 8px 16px rgba(124, 92, 52, 0.18)',
+                        }}
+                      >
                         {(review.displayName || review.userName)[0]?.toUpperCase()}
                       </Avatar>
                       <Stack>
@@ -244,8 +275,8 @@ export default function ProductReviewsSection({ productId }: ProductReviewsSecti
                     <Paper
                       sx={{
                         p: 2,
-                        bgcolor: '#f5f3ff',
-                        borderLeft: '3px solid #7c3aed',
+                        bgcolor: '#FFF6E8',
+                        borderLeft: `3px solid ${nexus.orange[500]}`,
                         borderRadius: 1,
                       }}
                     >
@@ -268,7 +299,15 @@ export default function ProductReviewsSection({ productId }: ProductReviewsSecti
           ))}
         </Stack>
       ) : (
-        <Paper sx={{ p: 4, textAlign: 'center', borderRadius: 3, bgcolor: '#fafafa' }}>
+        <Paper
+          sx={{
+            p: 4,
+            textAlign: 'center',
+            borderRadius: 3,
+            bgcolor: '#FFFDF8',
+            border: '1px dashed #E5D2B5',
+          }}
+        >
           <Typography variant="h6" color="text.secondary">
             Chưa có đánh giá nào
           </Typography>
