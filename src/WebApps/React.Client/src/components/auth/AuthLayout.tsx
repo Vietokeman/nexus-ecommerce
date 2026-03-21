@@ -1,9 +1,10 @@
-import { Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { lazy, Suspense, useEffect, useState } from 'react';
+import { Box, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { motion } from 'framer-motion';
-import Lottie from 'lottie-react';
-import ecommerceAnimation from '@/assets/animations/ecommerceOutlook.json';
 import { nexus } from '@/theme/theme';
 import { containerVariants, itemVariants } from '@/lib/motion';
+
+const LazyLottie = lazy(() => import('lottie-react'));
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -19,6 +20,20 @@ interface AuthLayoutProps {
 export default function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const [animationData, setAnimationData] = useState<object | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    import('@/assets/animations/ecommerceOutlook.json').then((mod) => {
+      if (mounted) {
+        setAnimationData(mod.default);
+      }
+    });
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   return (
     <Stack
@@ -29,14 +44,19 @@ export default function AuthLayout({ children, title, subtitle }: AuthLayoutProp
         overflow: 'hidden',
       }}
     >
-      {/* ─── LEFT: Dark branding panel with Lottie animation ─── */}
+      {/* ─── LEFT: Keep Lottie animation but load it lazily for faster first paint ─── */}
       {!isMobile && (
         <Stack
           flex={1}
           className="nx-auth-panel"
           justifyContent="center"
           alignItems="center"
-          sx={{ position: 'relative' }}
+          sx={{
+            position: 'relative',
+            px: 6,
+            background:
+              'radial-gradient(120% 120% at 20% 10%, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0) 55%), linear-gradient(150deg, #3E2A25 0%, #5C4038 55%, #7B5748 100%)',
+          }}
         >
           <motion.div
             initial={{ opacity: 0 }}
@@ -45,17 +65,35 @@ export default function AuthLayout({ children, title, subtitle }: AuthLayoutProp
             style={{ width: '100%', height: '100%' }}
           >
             <div className="nx-lottie-container">
-              <Lottie
-                animationData={ecommerceAnimation}
-                loop={true}
-                autoplay={true}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  maxWidth: '700px',
-                  maxHeight: '700px',
-                }}
-              />
+              <Suspense
+                fallback={
+                  <Box
+                    sx={{
+                      width: '100%',
+                      height: '100%',
+                      maxWidth: '700px',
+                      maxHeight: '700px',
+                      borderRadius: 4,
+                      background:
+                        'radial-gradient(90% 90% at 50% 50%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.04) 60%, rgba(255,255,255,0) 100%)',
+                    }}
+                  />
+                }
+              >
+                {animationData ? (
+                  <LazyLottie
+                    animationData={animationData}
+                    loop
+                    autoplay
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      maxWidth: '700px',
+                      maxHeight: '700px',
+                    }}
+                  />
+                ) : null}
+              </Suspense>
             </div>
           </motion.div>
         </Stack>
