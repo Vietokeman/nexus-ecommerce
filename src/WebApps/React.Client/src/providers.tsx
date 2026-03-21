@@ -6,6 +6,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { queryClient } from '@/lib/react-query';
+import { LAYERS } from '@/lib/layers';
 import theme from '@/theme/theme';
 import ErrorFallback from '@/components/ui/ErrorFallback';
 
@@ -31,7 +32,7 @@ export default function Providers({ children }: ProvidersProps) {
           theme="light"
           toastClassName={() => 'nexus-toast'}
           progressClassName="nexus-toast-progress"
-          style={{ zIndex: 1700 }}
+          style={{ zIndex: LAYERS.modal }}
           toastStyle={{
             borderRadius: 16,
             border: '1px solid rgba(228, 214, 191, 0.9)',
@@ -44,7 +45,7 @@ export default function Providers({ children }: ProvidersProps) {
           }}
         />
       </ThemeProvider>
-      <ReactQueryDevtools initialIsOpen={false} />
+      {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
     </QueryClientProvider>
   );
 }

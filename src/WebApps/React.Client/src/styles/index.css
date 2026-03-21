@@ -133,7 +133,6 @@ body::before {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: -1;
   background: repeating-linear-gradient(
     0deg,
     rgba(255, 255, 255, 0.14) 0,
@@ -260,7 +259,20 @@ p {
 
 .nexus-toast {
   font-size: 0.92rem;
-  line-height: 1.35;
+  line-height: 1.45;
+  min-height: 60px;
+  padding: 12px 14px;
+}
+
+.nexus-toast .Toastify__toast-body {
+  margin: 0;
+  padding: 0;
+  line-height: 1.45;
+  align-items: flex-start;
+}
+
+.nexus-toast .Toastify__close-button {
+  align-self: flex-start;
 }
 
 .nexus-toast-progress {

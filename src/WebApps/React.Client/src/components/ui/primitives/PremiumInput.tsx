@@ -11,15 +11,15 @@ interface PremiumInputProps extends Omit<TextFieldProps, 'label'> {
 }
 
 const densityConfig: Record<PremiumInputDensity, { minHeight: number; py: number }> = {
-  compact: { minHeight: 44, py: 10.5 },
-  normal: { minHeight: 52, py: 14 },
+  compact: { minHeight: 44, py: 10 },
+  normal: { minHeight: 48, py: 11.5 },
 };
 
 export default function PremiumInput({
   label,
   helperText,
   errorText,
-  density = 'normal',
+  density = 'compact',
   reserveHelperSpace = true,
   sx,
   ...props

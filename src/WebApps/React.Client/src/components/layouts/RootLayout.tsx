@@ -27,6 +27,7 @@ import NexusCartLogo from '@/components/auth/NexusCartLogo';
 import NotificationDropdown from '@/components/notifications/NotificationDropdown';
 import { APP_NAME } from '@/constants';
 import { PremiumTooltip } from '@/components/ui/primitives';
+import { LAYERS } from '@/lib/layers';
 
 export default function RootLayout() {
   useSignalRNotification();
@@ -79,6 +80,7 @@ export default function RootLayout() {
           borderBottom: `1px solid ${nexus.neutral[200]}`,
           boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.62), 0 10px 24px -20px rgba(79,67,62,0.65)',
           color: nexus.neutral[900],
+          zIndex: LAYERS.shell,
         }}
       >
         <Toolbar sx={{ px: { xs: 2, md: 4.5 }, height: '4.5rem', justifyContent: 'space-between' }}>
@@ -130,7 +132,7 @@ export default function RootLayout() {
               </IconButton>
             </PremiumTooltip>
             <Menu
-              sx={{ mt: '45px' }}
+              sx={{ mt: '45px', zIndex: LAYERS.overlay }}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
@@ -228,7 +230,7 @@ export default function RootLayout() {
 
       {/* ─── Main Content ─── */}
       <Box component="main" sx={{ flex: 1 }}>
-        <Container maxWidth="xl" sx={{ py: { xs: 3, md: 5 } }}>
+        <Container maxWidth={false} sx={{ py: { xs: 3, md: 5 }, maxWidth: '1280px' }}>
           <Outlet />
         </Container>
       </Box>
