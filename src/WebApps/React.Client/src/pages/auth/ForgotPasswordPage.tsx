@@ -4,8 +4,8 @@ import { Stack, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
-import { toast } from 'react-toastify';
 import { api } from '@/lib/api';
+import { appToast } from '@/lib/toast';
 import { API_ENDPOINTS } from '@/lib/endpoints';
 import AuthLayout from '@/components/auth/AuthLayout';
 import { itemVariants } from '@/lib/motion';
@@ -31,12 +31,16 @@ export default function ForgotPasswordPage() {
     try {
       await api.post(API_ENDPOINTS.AUTH.FORGOT_PASSWORD, data);
       setStatus('fulfilled');
-      toast.success('Password reset link sent to your email');
+      appToast.successAction('Password reset link sent to your email', 'auth-forgot-password-success');
       reset();
     } catch (err: unknown) {
       setStatus('rejected');
       const error = err as { response?: { data?: { message?: string } } };
-      toast.error(error.response?.data?.message || 'Something went wrong');
+      appToast.errorAction(
+        'Something went wrong',
+        error.response?.data?.message,
+        'auth-forgot-password-error',
+      );
     }
   };
 
@@ -100,6 +104,7 @@ export default function ForgotPasswordPage() {
           <motion.div variants={itemVariants}>
             <PremiumInput
               fullWidth
+              density="compact"
               label="Email"
               {...register('email', {
                 required: 'Please enter your email',

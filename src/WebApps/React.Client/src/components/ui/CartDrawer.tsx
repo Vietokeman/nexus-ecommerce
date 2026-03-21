@@ -57,7 +57,10 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
             <Typography variant="h6" fontWeight={700} sx={{ color: nexus.neutral[900] }}>
               Cart
             </Typography>
-            <PremiumBadge label={items.length} sx={{ background: nexus.gradient.button, color: '#fff' }} />
+            <PremiumBadge
+              label={items.length}
+              sx={{ background: nexus.gradient.button, color: '#fff' }}
+            />
           </Stack>
           <IconButton onClick={onClose} size="small">
             <CloseIcon />
@@ -125,7 +128,9 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                           justifyContent="center"
                           sx={{ width: '100%', height: '100%' }}
                         >
-                          <ShoppingCartOutlinedIcon sx={{ color: nexus.neutral[300], fontSize: 20 }} />
+                          <ShoppingCartOutlinedIcon
+                            sx={{ color: nexus.neutral[300], fontSize: 20 }}
+                          />
                         </Stack>
                       )}
                     </Box>

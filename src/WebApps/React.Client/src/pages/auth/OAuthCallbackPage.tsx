@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Paper, Stack, Typography } from '@mui/material';
-import { toast } from 'react-toastify';
 import { useAuthStore } from '@/store/auth-store';
+import { appToast } from '@/lib/toast';
 import type { User } from '@/types/auth';
 import Spinner from '@/components/ui/Spinner';
 import { nexus } from '@/theme/theme';
@@ -25,14 +25,14 @@ export default function OAuthCallbackPage() {
 
     if (errorParam) {
       setError(errorParam);
-      toast.error(errorParam);
+      appToast.errorAction('Authentication failed', errorParam, 'auth-oauth-callback-error');
       setTimeout(() => navigate('/login'), 3000);
       return;
     }
 
     if (!token) {
       setError('No authentication token received');
-      toast.error('Authentication failed');
+      appToast.errorAction('Authentication failed', undefined, 'auth-oauth-callback-missing-token');
       setTimeout(() => navigate('/login'), 3000);
       return;
     }
@@ -64,7 +64,7 @@ export default function OAuthCallbackPage() {
       isAuthenticated: true,
     });
 
-    toast.success('Login successful!');
+    appToast.successAction('Login successful!', 'auth-oauth-callback-success');
 
     // Redirect to returnUrl or home
     const returnUrl = searchParams.get('returnUrl') || '/';

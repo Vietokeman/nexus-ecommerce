@@ -36,7 +36,9 @@ export default function ProductReviewsSection({ productId }: ProductReviewsSecti
   const { data: reviews = [], isLoading: loadingReviews } = useQuery<ProductReview[]>({
     queryKey: ['product-reviews', productId],
     queryFn: () =>
-      api.get(API_ENDPOINTS.REVIEWS.BY_PRODUCT(productId)).then((r) => r.data?.result || r.data || []),
+      api
+        .get(API_ENDPOINTS.REVIEWS.BY_PRODUCT(productId))
+        .then((r) => r.data?.result || r.data || []),
     enabled: !!productId,
   });
 
@@ -76,7 +78,8 @@ export default function ProductReviewsSection({ productId }: ProductReviewsSecti
     submitReview.mutate({
       productId,
       userName: user?.userName || user?.email || '',
-      displayName: `${user?.firstName || ''} ${user?.lastName || ''}`.trim() || user?.userName || '',
+      displayName:
+        `${user?.firstName || ''} ${user?.lastName || ''}`.trim() || user?.userName || '',
       rating,
       comment: comment.trim(),
     });
@@ -164,7 +167,11 @@ export default function ProductReviewsSection({ productId }: ProductReviewsSecti
       {/* Review Form */}
       <AnimatePresence>
         {showForm && (
-          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}>
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+          >
             <Paper
               sx={{
                 p: 3,
@@ -194,7 +201,11 @@ export default function ProductReviewsSection({ productId }: ProductReviewsSecti
                     variant="contained"
                     onClick={handleSubmitReview}
                     disabled={submitReview.isPending}
-                    startIcon={submitReview.isPending ? <CircularProgress size={18} color="inherit" /> : undefined}
+                    startIcon={
+                      submitReview.isPending ? (
+                        <CircularProgress size={18} color="inherit" />
+                      ) : undefined
+                    }
                     sx={{ fontWeight: 600 }}
                   >
                     {submitReview.isPending ? 'Đang gửi...' : 'Gửi đánh giá'}
@@ -252,7 +263,13 @@ export default function ProductReviewsSection({ productId }: ProductReviewsSecti
                             {review.displayName || review.userName}
                           </Typography>
                           {review.isVerifiedPurchase && (
-                            <Chip label="✓ Đã mua hàng" size="small" color="success" variant="outlined" sx={{ height: 22 }} />
+                            <Chip
+                              label="✓ Đã mua hàng"
+                              size="small"
+                              color="success"
+                              variant="outlined"
+                              sx={{ height: 22 }}
+                            />
                           )}
                         </Stack>
                         <Typography variant="caption" color="text.secondary">

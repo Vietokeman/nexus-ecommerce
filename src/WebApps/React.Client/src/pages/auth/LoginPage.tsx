@@ -5,13 +5,13 @@ import { LoadingButton } from '@mui/lab';
 import { Google as GoogleIcon, GitHub as GitHubIcon } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
-import { toast } from 'react-toastify';
 import { useAuthStore } from '@/store/auth-store';
+import { appToast } from '@/lib/toast';
 import type { LoginDto } from '@/types/auth';
 import AuthLayout from '@/components/auth/AuthLayout';
 import { itemVariants } from '@/lib/motion';
 import { nexus } from '@/theme/theme';
-import { PremiumButton, PremiumInput } from '@/components/ui/primitives';
+import { PremiumButton, PremiumInput, PremiumPasswordInput } from '@/components/ui/primitives';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
 
@@ -40,11 +40,11 @@ export default function LoginPage() {
     setLoading(true);
     try {
       await login(data);
-      toast.success('Login successful');
+      appToast.successAction('Login successful', 'auth-login-success');
       reset();
     } catch (err: unknown) {
       const error = err as { response?: { data?: { message?: string } } };
-      toast.error(error.response?.data?.message || 'Login failed');
+      appToast.errorAction('Login failed', error.response?.data?.message, 'auth-login-error');
     } finally {
       setLoading(false);
     }
@@ -63,7 +63,10 @@ export default function LoginPage() {
                 'linear-gradient(140deg, rgba(255,247,234,0.82), rgba(241,252,248,0.88) 65%, rgba(255,255,255,0.94))',
             }}
           >
-            <Typography variant="caption" sx={{ color: nexus.neutral[600], letterSpacing: '0.01em' }}>
+            <Typography
+              variant="caption"
+              sx={{ color: nexus.neutral[600], letterSpacing: '0.01em' }}
+            >
               Secure login with real-time order and checkout sync.
             </Typography>
           </Stack>
@@ -72,6 +75,7 @@ export default function LoginPage() {
         <motion.div variants={itemVariants}>
           <PremiumInput
             fullWidth
+            density="compact"
             label="Email"
             {...register('email', {
               required: 'Email is required',
@@ -88,9 +92,9 @@ export default function LoginPage() {
         </motion.div>
 
         <motion.div variants={itemVariants}>
-          <PremiumInput
-            type="password"
+          <PremiumPasswordInput
             fullWidth
+            density="compact"
             label="Password"
             {...register('password', { required: 'Password is required' })}
             placeholder="Password"
@@ -142,7 +146,10 @@ export default function LoginPage() {
 
         <motion.div variants={itemVariants}>
           <Divider sx={{ my: 1 }}>
-            <Typography variant="body2" sx={{ color: nexus.neutral[500], px: 1.5, fontWeight: 500 }}>
+            <Typography
+              variant="body2"
+              sx={{ color: nexus.neutral[500], px: 1.5, fontWeight: 500 }}
+            >
               or continue with
             </Typography>
           </Divider>

@@ -122,7 +122,10 @@ export default function AuthLayout({ children, title, subtitle }: AuthLayoutProp
           {/* Subtitle */}
           {subtitle && (
             <motion.div variants={itemVariants}>
-              <Typography variant="body2" sx={{ mb: 3, color: nexus.neutral[600], maxWidth: '34ch' }}>
+              <Typography
+                variant="body2"
+                sx={{ mb: 3, color: nexus.neutral[600], maxWidth: '34ch' }}
+              >
                 {subtitle}
               </Typography>
             </motion.div>

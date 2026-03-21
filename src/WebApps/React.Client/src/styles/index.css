@@ -258,6 +258,15 @@ p {
   align-items: center;
 }
 
+.nexus-toast {
+  font-size: 0.92rem;
+  line-height: 1.35;
+}
+
+.nexus-toast-progress {
+  background: linear-gradient(90deg, #b56c63 0%, #c98f85 100%);
+}
+
 .nx-lottie-container svg {
   max-width: 100%;
   max-height: 100%;

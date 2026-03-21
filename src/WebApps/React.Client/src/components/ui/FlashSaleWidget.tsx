@@ -75,7 +75,8 @@ export default function FlashSaleWidget({ session, onItemClick }: FlashSaleWidge
         p: { xs: 1.5, md: 2 },
         borderRadius: 3,
         border: '1px solid #E9DCC8',
-        background: 'linear-gradient(145deg, rgba(255,248,236,0.9), rgba(240,251,248,0.9) 62%, rgba(255,255,255,0.97))',
+        background:
+          'linear-gradient(145deg, rgba(255,248,236,0.9), rgba(240,251,248,0.9) 62%, rgba(255,255,255,0.97))',
         boxShadow: '0 14px 30px rgba(124, 92, 52, 0.1)',
       }}
     >

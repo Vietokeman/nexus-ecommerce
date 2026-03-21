@@ -4,12 +4,12 @@ import { Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
-import { toast } from 'react-toastify';
 import { api } from '@/lib/api';
+import { appToast } from '@/lib/toast';
 import { API_ENDPOINTS } from '@/lib/endpoints';
 import AuthLayout from '@/components/auth/AuthLayout';
 import { itemVariants } from '@/lib/motion';
-import { PremiumInput } from '@/components/ui/primitives';
+import { PremiumPasswordInput } from '@/components/ui/primitives';
 
 interface ResetForm {
   password: string;
@@ -39,12 +39,16 @@ export default function ResetPasswordPage() {
         token: passwordResetToken,
       });
       setStatus('fullfilled');
-      toast.success('Password has been reset successfully');
+      appToast.successAction('Password has been reset successfully', 'auth-reset-password-success');
       navigate('/login');
     } catch (err: unknown) {
       setStatus('idle');
       const error = err as { response?: { data?: { message?: string } } };
-      toast.error(error.response?.data?.message || 'Error resetting password');
+      appToast.errorAction(
+        'Error resetting password',
+        error.response?.data?.message,
+        'auth-reset-password-error',
+      );
     }
     reset();
   };
@@ -65,9 +69,9 @@ export default function ResetPasswordPage() {
         }}
       >
         <motion.div variants={itemVariants}>
-          <PremiumInput
-            type="password"
+          <PremiumPasswordInput
             fullWidth
+            density="compact"
             label="New Password"
             {...register('password', {
               required: 'Please enter a password',
@@ -83,9 +87,9 @@ export default function ResetPasswordPage() {
         </motion.div>
 
         <motion.div variants={itemVariants}>
-          <PremiumInput
-            type="password"
+          <PremiumPasswordInput
             fullWidth
+            density="compact"
             label="Confirm Password"
             {...register('confirmPassword', {
               required: 'Please confirm the password',

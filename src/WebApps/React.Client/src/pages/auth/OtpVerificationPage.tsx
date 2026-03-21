@@ -4,8 +4,8 @@ import { Stack, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
-import { toast } from 'react-toastify';
 import { api } from '@/lib/api';
+import { appToast } from '@/lib/toast';
 import { API_ENDPOINTS } from '@/lib/endpoints';
 import { useAuthStore } from '@/store/auth-store';
 import AuthLayout from '@/components/auth/AuthLayout';
@@ -38,10 +38,10 @@ export default function OtpVerificationPage() {
     try {
       await api.post(API_ENDPOINTS.AUTH.RESEND_OTP, { userId: user?.id });
       setOtpSent(true);
-      toast.success('OTP sent to your email');
+      appToast.successAction('OTP sent to your email', 'auth-otp-resend-success');
     } catch (err: unknown) {
       const error = err as { response?: { data?: { message?: string } } };
-      toast.error(error.response?.data?.message || 'Failed to send OTP');
+      appToast.errorAction('Failed to send OTP', error.response?.data?.message, 'auth-otp-resend-error');
     } finally {
       setResendLoading(false);
     }
@@ -51,11 +51,11 @@ export default function OtpVerificationPage() {
     setVerifyLoading(true);
     try {
       await api.post(API_ENDPOINTS.AUTH.VERIFY_OTP, { otp: data.otp, userId: user?.id });
-      toast.success('Email verified! Welcome!');
+      appToast.successAction('Email verified! Welcome!', 'auth-otp-verify-success');
       navigate('/');
     } catch (err: unknown) {
       const error = err as { response?: { data?: { message?: string } } };
-      toast.error(error.response?.data?.message || 'Invalid OTP');
+      appToast.errorAction('Invalid OTP', error.response?.data?.message, 'auth-otp-verify-error');
     } finally {
       setVerifyLoading(false);
     }
@@ -99,6 +99,7 @@ export default function OtpVerificationPage() {
 
             <motion.div variants={itemVariants}>
               <PremiumInput
+                density="compact"
                 {...register('otp', {
                   required: 'OTP is required',
                   minLength: { value: 4, message: 'Please enter a 4-digit OTP' },

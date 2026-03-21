@@ -1,14 +1,6 @@
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import {
-  Chip,
-  IconButton,
-  Paper,
-  Stack,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from '@mui/material';
+import { Chip, IconButton, Paper, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { motion } from 'framer-motion';
@@ -206,7 +198,9 @@ export function CartContent({ checkout }: CartProps) {
               <hr />
               <Stack flexDirection="row" justifyContent="space-between">
                 <Typography>Total</Typography>
-                <Typography>${(subtotal() + SHIPPING + (subtotal() * TAXES) / 100).toFixed(2)}</Typography>
+                <Typography>
+                  ${(subtotal() + SHIPPING + (subtotal() * TAXES) / 100).toFixed(2)}
+                </Typography>
               </Stack>
             </Stack>
           ) : (

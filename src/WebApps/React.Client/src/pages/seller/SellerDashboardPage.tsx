@@ -240,10 +240,18 @@ export default function SellerDashboardPage() {
             Thao tác nhanh
           </Typography>
           <Stack direction="row" flexWrap="wrap" gap={2}>
-            <PremiumButton variant="outlined" magnetic={false} onClick={() => navigate('/seller/products')}>
+            <PremiumButton
+              variant="outlined"
+              magnetic={false}
+              onClick={() => navigate('/seller/products')}
+            >
               Quản lý sản phẩm
             </PremiumButton>
-            <PremiumButton variant="outlined" magnetic={false} onClick={() => navigate('/seller/create-product')}>
+            <PremiumButton
+              variant="outlined"
+              magnetic={false}
+              onClick={() => navigate('/seller/create-product')}
+            >
               Đăng sản phẩm
             </PremiumButton>
             <PremiumButton variant="outlined" magnetic={false} onClick={() => navigate('/orders')}>
@@ -266,7 +274,12 @@ export default function SellerDashboardPage() {
             <Typography variant="h6" fontWeight={600}>
               Sản phẩm gần đây
             </Typography>
-            <PremiumButton size="small" variant="text" magnetic={false} onClick={() => navigate('/seller/products')}>
+            <PremiumButton
+              size="small"
+              variant="text"
+              magnetic={false}
+              onClick={() => navigate('/seller/products')}
+            >
               Xem tất cả →
             </PremiumButton>
           </Stack>
@@ -304,7 +317,13 @@ export default function SellerDashboardPage() {
                   <Chip
                     label={p.status}
                     size="small"
-                    color={p.status === 'Active' ? 'success' : p.status === 'Draft' ? 'default' : 'warning'}
+                    color={
+                      p.status === 'Active'
+                        ? 'success'
+                        : p.status === 'Draft'
+                          ? 'default'
+                          : 'warning'
+                    }
                   />
                 </Stack>
               ))}
@@ -333,13 +352,19 @@ export default function SellerDashboardPage() {
           {dashboard?.recentReviews && dashboard.recentReviews.length > 0 ? (
             <Stack spacing={2}>
               {dashboard.recentReviews.map((r) => (
-                <Stack key={r.id} sx={{ p: 2, borderRadius: 2, bgcolor: 'action.hover' }} spacing={1}>
+                <Stack
+                  key={r.id}
+                  sx={{ p: 2, borderRadius: 2, bgcolor: 'action.hover' }}
+                  spacing={1}
+                >
                   <Stack direction="row" justifyContent="space-between" alignItems="center">
                     <Stack direction="row" alignItems="center" gap={1}>
                       <Typography fontWeight={600} fontSize="0.9rem">
                         {r.displayName || r.userName}
                       </Typography>
-                      {r.isVerifiedPurchase && <Chip label="Đã mua" size="small" color="success" variant="outlined" />}
+                      {r.isVerifiedPurchase && (
+                        <Chip label="Đã mua" size="small" color="success" variant="outlined" />
+                      )}
                     </Stack>
                     <Rating value={r.rating} readOnly size="small" />
                   </Stack>

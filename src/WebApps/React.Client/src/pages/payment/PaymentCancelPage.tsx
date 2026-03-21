@@ -46,7 +46,11 @@ export default function PaymentCancelPage() {
             Your payment was cancelled. No charges were made.
           </Typography>
 
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mt: 2.5, width: '100%' }}>
+          <Stack
+            direction={{ xs: 'column', sm: 'row' }}
+            spacing={2}
+            sx={{ mt: 2.5, width: '100%' }}
+          >
             <PremiumButton variant="contained" magnetic={false} onClick={() => navigate('/cart')}>
               Back to Cart
             </PremiumButton>

@@ -110,7 +110,11 @@ export default function SellerCreateProductPage() {
   };
 
   return (
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <Stack spacing={3} sx={{ maxWidth: 900, mx: 'auto', py: 4 }}>
         <Typography variant="h4" fontWeight={800} sx={{ letterSpacing: '-0.02em' }}>
           📦 Đăng Sản Phẩm Mới
@@ -277,7 +281,9 @@ export default function SellerCreateProductPage() {
                 <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                   Mô tả sản phẩm
                 </Typography>
-                <Paper sx={{ p: 2, whiteSpace: 'pre-wrap', fontSize: '0.9rem' }}>{aiContent.description}</Paper>
+                <Paper sx={{ p: 2, whiteSpace: 'pre-wrap', fontSize: '0.9rem' }}>
+                  {aiContent.description}
+                </Paper>
               </div>
 
               <Stack direction="row" spacing={2}>
@@ -301,7 +307,13 @@ export default function SellerCreateProductPage() {
                 </Typography>
                 <Stack direction="row" flexWrap="wrap" gap={1}>
                   {aiContent.seoKeywords.split(',').map((kw, i) => (
-                    <Chip key={i} label={`#${kw.trim()}`} size="small" variant="outlined" color="primary" />
+                    <Chip
+                      key={i}
+                      label={`#${kw.trim()}`}
+                      size="small"
+                      variant="outlined"
+                      color="primary"
+                    />
                   ))}
                 </Stack>
               </div>
@@ -319,7 +331,12 @@ export default function SellerCreateProductPage() {
                 </Stack>
               </div>
 
-              <Button variant="outlined" onClick={handleGenerateAI} disabled={isGenerating} size="small">
+              <Button
+                variant="outlined"
+                onClick={handleGenerateAI}
+                disabled={isGenerating}
+                size="small"
+              >
                 🔄 Viết lại
               </Button>
             </Stack>
@@ -345,8 +362,8 @@ export default function SellerCreateProductPage() {
 
         {!aiContent && (
           <Alert severity="info">
-            💡 Bấm "AI Viết Mô Tả & SEO" để AI tự động tạo nội dung chuẩn SEO cho sản phẩm. Bạn cũng có thể đăng
-            trực tiếp và AI sẽ tự generate.
+            💡 Bấm "AI Viết Mô Tả & SEO" để AI tự động tạo nội dung chuẩn SEO cho sản phẩm. Bạn cũng
+            có thể đăng trực tiếp và AI sẽ tự generate.
           </Alert>
         )}
       </Stack>

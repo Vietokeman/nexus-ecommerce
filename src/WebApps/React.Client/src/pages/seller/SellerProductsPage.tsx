@@ -69,9 +69,7 @@ export default function SellerProductsPage() {
   } = useQuery<SellerProduct[]>({
     queryKey: ['seller-products', userName],
     queryFn: () =>
-      api
-        .get(API_ENDPOINTS.SELLER.BY_SELLER(userName))
-        .then((r) => r.data?.result || r.data || []),
+      api.get(API_ENDPOINTS.SELLER.BY_SELLER(userName)).then((r) => r.data?.result || r.data || []),
     enabled: !!userName,
   });
 
@@ -102,14 +100,24 @@ export default function SellerProductsPage() {
 
   if (isLoading) {
     return (
-      <Stack width={is480 ? 'auto' : '25rem'} height="calc(100vh - 4rem)" justifyContent="center" alignItems="center" mx="auto">
+      <Stack
+        width={is480 ? 'auto' : '25rem'}
+        height="calc(100vh - 4rem)"
+        justifyContent="center"
+        alignItems="center"
+        mx="auto"
+      >
         <Lottie animationData={loadingAnimation} />
       </Stack>
     );
   }
 
   return (
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+    >
       <Stack sx={{ maxWidth: 1100, mx: 'auto', py: 4, px: is480 ? 2 : 4 }}>
         {/* Header */}
         <Stack
@@ -146,7 +154,11 @@ export default function SellerProductsPage() {
             variant="contained"
             startIcon={<AddIcon />}
             onClick={() => navigate('/seller/create-product')}
-            sx={{ background: 'linear-gradient(135deg, #7c3aed, #2563eb)', fontWeight: 600, borderRadius: 2 }}
+            sx={{
+              background: 'linear-gradient(135deg, #7c3aed, #2563eb)',
+              fontWeight: 600,
+              borderRadius: 2,
+            }}
           >
             Đăng sản phẩm mới
           </Button>
@@ -201,7 +213,9 @@ export default function SellerProductsPage() {
               >
                 {/* Image */}
                 <img
-                  src={product.imageUrl || `https://via.placeholder.com/100?text=${product.name[0]}`}
+                  src={
+                    product.imageUrl || `https://via.placeholder.com/100?text=${product.name[0]}`
+                  }
                   alt={product.name}
                   style={{
                     width: is768 ? '100%' : 100,
@@ -243,12 +257,19 @@ export default function SellerProductsPage() {
                 {/* Actions */}
                 <Stack direction="row" spacing={1} alignItems="center" flexShrink={0}>
                   <Tooltip title="Xem chi tiết">
-                    <IconButton size="small" onClick={() => navigate(`/product-details/${product.no}`)}>
+                    <IconButton
+                      size="small"
+                      onClick={() => navigate(`/product-details/${product.no}`)}
+                    >
                       <VisibilityIcon fontSize="small" />
                     </IconButton>
                   </Tooltip>
                   <Tooltip title="Chỉnh sửa">
-                    <IconButton size="small" color="primary" onClick={() => navigate(`/seller/edit-product/${product.id}`)}>
+                    <IconButton
+                      size="small"
+                      color="primary"
+                      onClick={() => navigate(`/seller/edit-product/${product.id}`)}
+                    >
                       <EditIcon fontSize="small" />
                     </IconButton>
                   </Tooltip>
@@ -268,7 +289,11 @@ export default function SellerProductsPage() {
                 {products.length === 0 ? 'Chưa có sản phẩm nào' : 'Không tìm thấy sản phẩm'}
               </Typography>
               {products.length === 0 && (
-                <Button variant="contained" startIcon={<AddIcon />} onClick={() => navigate('/seller/create-product')}>
+                <Button
+                  variant="contained"
+                  startIcon={<AddIcon />}
+                  onClick={() => navigate('/seller/create-product')}
+                >
                   Đăng sản phẩm đầu tiên
                 </Button>
               )}
@@ -280,11 +305,17 @@ export default function SellerProductsPage() {
         <Dialog open={deleteId !== null} onClose={() => setDeleteId(null)}>
           <DialogTitle>Xác nhận xóa sản phẩm</DialogTitle>
           <DialogContent>
-            <Typography>Bạn có chắc muốn xóa sản phẩm này? Hành động không thể hoàn tác.</Typography>
+            <Typography>
+              Bạn có chắc muốn xóa sản phẩm này? Hành động không thể hoàn tác.
+            </Typography>
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setDeleteId(null)}>Hủy</Button>
-            <Button color="error" variant="contained" onClick={() => deleteId && deleteMutation.mutate(deleteId)}>
+            <Button
+              color="error"
+              variant="contained"
+              onClick={() => deleteId && deleteMutation.mutate(deleteId)}
+            >
               Xóa
             </Button>
           </DialogActions>

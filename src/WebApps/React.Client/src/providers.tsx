@@ -18,9 +18,7 @@ export default function Providers({ children }: ProvidersProps) {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
-          {children}
-        </ErrorBoundary>
+        <ErrorBoundary FallbackComponent={ErrorFallback}>{children}</ErrorBoundary>
         <ToastContainer
           position="top-right"
           autoClose={2200}
@@ -31,14 +29,18 @@ export default function Providers({ children }: ProvidersProps) {
           draggable
           pauseOnHover
           theme="light"
+          toastClassName={() => 'nexus-toast'}
+          progressClassName="nexus-toast-progress"
+          style={{ zIndex: 1700 }}
           toastStyle={{
-            borderRadius: 18,
-            border: '1px solid rgba(222,213,204,0.9)',
-            background: 'rgba(255,253,250,0.96)',
-            boxShadow: '0 18px 45px -24px rgba(58, 40, 35, 0.26)',
+            borderRadius: 16,
+            border: '1px solid rgba(228, 214, 191, 0.9)',
+            background: 'linear-gradient(150deg, rgba(255,249,239,0.97), rgba(241,252,248,0.94))',
+            boxShadow: '0 14px 34px -22px rgba(58, 40, 35, 0.4)',
             color: '#2b211d',
             fontWeight: 500,
             letterSpacing: '0.004em',
+            backdropFilter: 'blur(8px)',
           }}
         />
       </ThemeProvider>

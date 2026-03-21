@@ -147,7 +147,12 @@ export default function WishlistPage() {
                         size="small"
                         onClick={() => handleAddToCart(item)}
                         variant="contained"
-                        sx={{ mt: 2, borderRadius: 999, fontWeight: 700, background: nexus.gradient.button }}
+                        sx={{
+                          mt: 2,
+                          borderRadius: 999,
+                          fontWeight: 700,
+                          background: nexus.gradient.button,
+                        }}
                       >
                         Add To Cart
                       </Button>

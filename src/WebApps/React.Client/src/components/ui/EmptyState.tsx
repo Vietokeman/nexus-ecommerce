@@ -54,7 +54,8 @@ export default function EmptyState({
           mb: 1,
           display: 'grid',
           placeItems: 'center',
-          background: 'linear-gradient(140deg, rgba(203,148,139,0.22) 0%, rgba(181,108,99,0.1) 100%)',
+          background:
+            'linear-gradient(140deg, rgba(203,148,139,0.22) 0%, rgba(181,108,99,0.1) 100%)',
           border: `1px solid ${nexus.neutral[200]}`,
         }}
       >

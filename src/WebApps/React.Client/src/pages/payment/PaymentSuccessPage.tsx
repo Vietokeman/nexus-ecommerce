@@ -95,7 +95,11 @@ export default function PaymentSuccessPage() {
             </Typography>
           )}
 
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mt: 2.5, width: '100%' }}>
+          <Stack
+            direction={{ xs: 'column', sm: 'row' }}
+            spacing={2}
+            sx={{ mt: 2.5, width: '100%' }}
+          >
             <PremiumButton variant="contained" magnetic={false} onClick={() => navigate('/orders')}>
               View Orders
             </PremiumButton>

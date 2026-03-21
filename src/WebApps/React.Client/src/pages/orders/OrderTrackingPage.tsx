@@ -133,7 +133,8 @@ export default function OrderTrackingPage() {
   const is768 = useMediaQuery(theme.breakpoints.down(768));
   const is480 = useMediaQuery(theme.breakpoints.down(480));
 
-  const userName = useAuthStore((s) => s.user)?.userName || useAuthStore((s) => s.user)?.email || '';
+  const userName =
+    useAuthStore((s) => s.user)?.userName || useAuthStore((s) => s.user)?.email || '';
 
   const {
     data: order,
@@ -183,7 +184,11 @@ export default function OrderTrackingPage() {
   const currentStep = statusToStep[order.status] ?? 0;
 
   return (
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <Stack sx={{ maxWidth: 900, mx: 'auto', py: 4, px: is480 ? 2 : 4 }}>
         {/* Header */}
         <Stack
@@ -201,7 +206,11 @@ export default function OrderTrackingPage() {
           }}
         >
           <motion.div whileHover={{ x: -5 }}>
-            <IconButton component={Link} to="/orders" sx={{ bgcolor: '#FFFFFF', border: '1px solid #E8DAC3' }}>
+            <IconButton
+              component={Link}
+              to="/orders"
+              sx={{ bgcolor: '#FFFFFF', border: '1px solid #E8DAC3' }}
+            >
               <ArrowBackIcon />
             </IconButton>
           </motion.div>
@@ -251,10 +260,21 @@ export default function OrderTrackingPage() {
                     : ORDER_STEPS[currentStep]?.label || order.status}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Ngày đặt: {new Date(order.createdDate).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                Ngày đặt:{' '}
+                {new Date(order.createdDate).toLocaleDateString('vi-VN', {
+                  day: '2-digit',
+                  month: '2-digit',
+                  year: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
               </Typography>
             </Stack>
-            <Chip label={order.status} color={isCancelled ? 'error' : 'primary'} sx={{ ml: 'auto' }} />
+            <Chip
+              label={order.status}
+              color={isCancelled ? 'error' : 'primary'}
+              sx={{ ml: 'auto' }}
+            />
           </Stack>
         </Paper>
 
@@ -367,7 +387,9 @@ export default function OrderTrackingPage() {
                   }}
                 >
                   <img
-                    src={item.imageUrl || `https://via.placeholder.com/60?text=${item.productName[0]}`}
+                    src={
+                      item.imageUrl || `https://via.placeholder.com/60?text=${item.productName[0]}`
+                    }
                     alt={item.productName}
                     style={{ width: 60, height: 60, borderRadius: 8, objectFit: 'cover' }}
                   />

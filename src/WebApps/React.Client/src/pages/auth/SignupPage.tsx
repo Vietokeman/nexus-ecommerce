@@ -5,13 +5,13 @@ import { LoadingButton } from '@mui/lab';
 import { Google as GoogleIcon, GitHub as GitHubIcon } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
-import { toast } from 'react-toastify';
 import { useAuthStore } from '@/store/auth-store';
+import { appToast } from '@/lib/toast';
 import type { SignupDto } from '@/types/auth';
 import AuthLayout from '@/components/auth/AuthLayout';
 import { itemVariants } from '@/lib/motion';
 import { nexus } from '@/theme/theme';
-import { PremiumButton, PremiumInput } from '@/components/ui/primitives';
+import { PremiumButton, PremiumInput, PremiumPasswordInput } from '@/components/ui/primitives';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
 
@@ -43,11 +43,11 @@ export default function SignupPage() {
     setLoading(true);
     try {
       await signup(data);
-      toast.success('Welcome! Verify your email to start shopping.');
+      appToast.successAction('Welcome! Verify your email to start shopping.', 'auth-signup-success');
       reset();
     } catch (err: unknown) {
       const error = err as { response?: { data?: { message?: string } } };
-      toast.error(error.response?.data?.message || 'Signup failed');
+      appToast.errorAction('Signup failed', error.response?.data?.message, 'auth-signup-error');
     } finally {
       setLoading(false);
     }
@@ -66,7 +66,10 @@ export default function SignupPage() {
                 'linear-gradient(140deg, rgba(255,248,236,0.86), rgba(239,251,248,0.9) 65%, rgba(255,255,255,0.95))',
             }}
           >
-            <Typography variant="caption" sx={{ color: nexus.neutral[600], letterSpacing: '0.01em' }}>
+            <Typography
+              variant="caption"
+              sx={{ color: nexus.neutral[600], letterSpacing: '0.01em' }}
+            >
               Build your account in seconds and unlock personalized recommendations.
             </Typography>
           </Stack>
@@ -78,6 +81,7 @@ export default function SignupPage() {
             <Stack flex={1}>
               <PremiumInput
                 fullWidth
+                density="compact"
                 label="First Name"
                 {...register('firstName', { required: 'First name is required' })}
                 placeholder="First name"
@@ -88,6 +92,7 @@ export default function SignupPage() {
             <Stack flex={1}>
               <PremiumInput
                 fullWidth
+                density="compact"
                 label="Last Name"
                 {...register('lastName', { required: 'Last name is required' })}
                 placeholder="Last name"
@@ -101,6 +106,7 @@ export default function SignupPage() {
         <motion.div variants={itemVariants}>
           <PremiumInput
             fullWidth
+            density="compact"
             label="Email"
             {...register('email', {
               required: 'Email is required',
@@ -117,9 +123,9 @@ export default function SignupPage() {
         </motion.div>
 
         <motion.div variants={itemVariants}>
-          <PremiumInput
-            type="password"
+          <PremiumPasswordInput
             fullWidth
+            density="compact"
             label="Password"
             {...register('password', {
               required: 'Password is required',
@@ -135,9 +141,9 @@ export default function SignupPage() {
         </motion.div>
 
         <motion.div variants={itemVariants}>
-          <PremiumInput
-            type="password"
+          <PremiumPasswordInput
             fullWidth
+            density="compact"
             label="Confirm Password"
             {...register('confirmPassword', {
               required: 'Confirm password is required',
@@ -173,7 +179,10 @@ export default function SignupPage() {
 
         <motion.div variants={itemVariants}>
           <Divider sx={{ my: 1 }}>
-            <Typography variant="body2" sx={{ color: nexus.neutral[500], px: 1.5, fontWeight: 500 }}>
+            <Typography
+              variant="body2"
+              sx={{ color: nexus.neutral[500], px: 1.5, fontWeight: 500 }}
+            >
               or sign up with
             </Typography>
           </Divider>

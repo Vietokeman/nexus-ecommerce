@@ -57,7 +57,12 @@ export default function NotFoundPage() {
           </Typography>
 
           <PremiumButton
-            sx={{ mt: 2.5, height: '3rem', px: 4, boxShadow: '0 14px 24px -16px rgba(154, 88, 82, 0.75)' }}
+            sx={{
+              mt: 2.5,
+              height: '3rem',
+              px: 4,
+              boxShadow: '0 14px 24px -16px rgba(154, 88, 82, 0.75)',
+            }}
             size="large"
             onClick={() => navigate('/')}
             variant="contained"
