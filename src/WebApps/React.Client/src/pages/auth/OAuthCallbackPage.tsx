@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Paper, Stack, Typography } from '@mui/material';
 import { useAuthStore } from '@/store/auth-store';
 import { appToast } from '@/lib/toast';
 import type { User } from '@/types/auth';
+import { api } from '@/lib/api';
+import { API_ENDPOINTS } from '@/lib/endpoints';
 import Spinner from '@/components/ui/Spinner';
 import { nexus } from '@/theme/theme';
 
@@ -18,14 +20,65 @@ export default function OAuthCallbackPage() {
   const setToken = useAuthStore((s) => s.setToken);
   const setRefreshToken = useAuthStore((s) => s.setRefreshToken);
   const [error, setError] = useState<string | null>(null);
+  const processedRef = useRef(false);
+
+  const mapQueryUser = (): User => ({
+    id: searchParams.get('userId') ?? '',
+    email: searchParams.get('email') ?? '',
+    firstName: searchParams.get('firstName') ?? '',
+    lastName: searchParams.get('lastName') ?? '',
+    userName: searchParams.get('userName') ?? searchParams.get('email') ?? '',
+    isAdmin: searchParams.get('isAdmin') === 'true',
+    isVerified: searchParams.get('isVerified') === 'true',
+  });
+
+  const normalizeUser = (raw: unknown): User | null => {
+    if (!raw || typeof raw !== 'object') {
+      return null;
+    }
+
+    const dto = raw as Partial<User>;
+    if (!dto.id || !dto.email) {
+      return null;
+    }
+
+    return {
+      id: dto.id,
+      email: dto.email,
+      firstName: dto.firstName ?? '',
+      lastName: dto.lastName ?? '',
+      userName: dto.userName ?? dto.email,
+      isAdmin: Boolean(dto.isAdmin),
+      isVerified: Boolean(dto.isVerified),
+    };
+  };
+
+  const hydrateUserFromMe = async (): Promise<User | null> => {
+    try {
+      const { data } = await api.get(API_ENDPOINTS.AUTH.ME);
+      const candidate = (data?.result ?? data) as unknown;
+      return normalizeUser(candidate);
+    } catch {
+      return null;
+    }
+  };
 
   useEffect(() => {
-    const token = searchParams.get('token');
+    if (processedRef.current) {
+      return;
+    }
+    processedRef.current = true;
+
+    const token =
+      searchParams.get('token') ??
+      searchParams.get('accessToken') ??
+      searchParams.get('jwt');
     const errorParam = searchParams.get('error');
 
     if (errorParam) {
-      setError(errorParam);
-      appToast.errorAction('Authentication failed', errorParam, 'auth-oauth-callback-error');
+      const decodedError = decodeURIComponent(errorParam);
+      setError(decodedError);
+      appToast.errorAction('Authentication failed', decodedError, 'auth-oauth-callback-error');
       setTimeout(() => navigate('/login'), 3000);
       return;
     }
@@ -37,38 +90,42 @@ export default function OAuthCallbackPage() {
       return;
     }
 
-    // Build user from query params
-    const user: User = {
-      id: searchParams.get('userId') ?? '',
-      email: searchParams.get('email') ?? '',
-      firstName: searchParams.get('firstName') ?? '',
-      lastName: searchParams.get('lastName') ?? '',
-      userName: searchParams.get('email') ?? '',
-      isAdmin: searchParams.get('isAdmin') === 'true',
-      isVerified: searchParams.get('isVerified') === 'true',
+    const run = async () => {
+      setToken(token);
+      const refreshToken = searchParams.get('refreshToken');
+      if (refreshToken) {
+        setRefreshToken(refreshToken);
+      }
+
+      const hydrated = await hydrateUserFromMe();
+      const fallbackUser = mapQueryUser();
+      const user = hydrated ?? fallbackUser;
+
+      if (!user.id || !user.email) {
+        setError('Unable to resolve account details from OAuth callback');
+        appToast.errorAction(
+          'Authentication failed',
+          'Unable to resolve account details from OAuth callback',
+          'auth-oauth-callback-user-hydration-failed',
+        );
+        setTimeout(() => navigate('/login', { replace: true }), 3000);
+        return;
+      }
+
+      setUser(user);
+      useAuthStore.setState({
+        user,
+        token,
+        refreshToken: refreshToken ?? null,
+        isAuthenticated: true,
+      });
+
+      appToast.successAction('Login successful!', 'auth-oauth-callback-success');
+      const returnUrl = searchParams.get('returnUrl') || '/';
+      navigate(returnUrl, { replace: true });
     };
 
-    // Store token, refreshToken, and user
-    setToken(token);
-    const refreshToken = searchParams.get('refreshToken');
-    if (refreshToken) {
-      setRefreshToken(refreshToken);
-    }
-    setUser(user);
-
-    // Update zustand persist state
-    useAuthStore.setState({
-      user,
-      token,
-      refreshToken: refreshToken ?? null,
-      isAuthenticated: true,
-    });
-
-    appToast.successAction('Login successful!', 'auth-oauth-callback-success');
-
-    // Redirect to returnUrl or home
-    const returnUrl = searchParams.get('returnUrl') || '/';
-    navigate(returnUrl, { replace: true });
+    void run();
   }, [searchParams, navigate, setUser, setToken, setRefreshToken]);
 
   if (error) {
