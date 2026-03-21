@@ -24,11 +24,6 @@ export const routes: Routes = [
           import('./views/system/system.module').then((m) => m.SystemModule),
       },
       {
-        path: 'content',
-        loadChildren: () =>
-          import('./views/content/content.module').then((m) => m.ContentModule),
-      },
-      {
         path: 'audit-logs',
         loadChildren: () =>
           import('./views/audit-logs/audit-logs.module').then(

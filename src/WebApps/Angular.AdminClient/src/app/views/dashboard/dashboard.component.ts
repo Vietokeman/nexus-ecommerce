@@ -80,22 +80,27 @@ export class DashboardComponent {
       status: 'Active',
     },
     {
-      name: 'Content / Categories',
-      route: '/content/post-categories',
-      summary: 'Maintain post taxonomy for admin-managed publishing flows.',
+      name: 'Operations / Audit logs',
+      route: '/audit-logs',
+      summary: 'Search and monitor admin/user actions for traceability.',
       status: 'Active',
     },
     {
-      name: 'Content / Posts',
-      route: '/content/posts',
-      summary:
-        'Create, review, return, approve, and categorize editorial posts.',
+      name: 'Operations / Payments',
+      route: '/payments',
+      summary: 'Track payment states and trigger cancellation checks.',
       status: 'Active',
     },
     {
-      name: 'Content / Series',
-      route: '/content/series',
-      summary: 'Group posts into ordered series for longer content journeys.',
+      name: 'Operations / Products',
+      route: '/products',
+      summary: 'Inspect catalog stock and product number lookups.',
+      status: 'Active',
+    },
+    {
+      name: 'Operations / Sellers',
+      route: '/sellers',
+      summary: 'Review seller storefronts and seller operational dashboard.',
       status: 'Active',
     },
   ];

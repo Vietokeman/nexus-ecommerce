@@ -10,34 +10,6 @@ export const navItems: INavData[] = [
     },
   },
   {
-    name: 'Nội dung',
-    url: '/content',
-    iconComponent: { name: 'cil-puzzle' },
-    children: [
-      {
-        name: 'Danh mục',
-        url: '/content/post-categories',
-        attributes: {
-          policyName: 'Permissions.PostCategories.View',
-        },
-      },
-      {
-        name: 'Bài viết',
-        url: '/content/posts',
-        attributes: {
-          policyName: 'Permissions.Posts.View',
-        },
-      },
-      {
-        name: 'Loạt bài',
-        url: '/content/series',
-        attributes: {
-          policyName: 'Permissions.Series.View',
-        },
-      },
-    ],
-  },
-  {
     name: 'Hệ thống',
     url: '/system',
     iconComponent: { name: 'cil-notes' },

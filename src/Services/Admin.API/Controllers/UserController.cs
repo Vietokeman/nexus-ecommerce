@@ -12,7 +12,7 @@ public sealed class UserController(AdminDataStore store, INotificationService no
     [HttpGet("{id:guid}")]
     public ActionResult<UserModel> GetUserById(Guid id)
     {
-        var user = store.Locked(() => store.Users.FirstOrDefault(x => x.Id == id));
+        var user = store.FindUserById(id);
         return user is null ? NotFound() : Ok(user);
     }
 
@@ -61,12 +61,12 @@ public sealed class UserController(AdminDataStore store, INotificationService no
 
         var created = store.Locked(() =>
         {
-            if (store.Users.Any(x => x.UserName.Equals(request.UserName, StringComparison.OrdinalIgnoreCase)))
+            if (store.ExistsUserName(request.UserName))
             {
                 return false;
             }
 
-            if (store.Users.Any(x => x.Email.Equals(request.Email, StringComparison.OrdinalIgnoreCase)))
+            if (store.ExistsUserEmail(request.Email))
             {
                 return false;
             }
@@ -80,6 +80,8 @@ public sealed class UserController(AdminDataStore store, INotificationService no
                 PhoneNumber = request.PhoneNumber,
                 Roles = []
             });
+
+            store.RebuildIndexes();
 
             return true;
         });
@@ -111,10 +113,16 @@ public sealed class UserController(AdminDataStore store, INotificationService no
                 return false;
             }
 
+            if (store.ExistsUserEmail(request.Email, id))
+            {
+                return false;
+            }
+
             user.Email = request.Email.Trim();
             user.FirstName = request.FirstName.Trim();
             user.LastName = request.LastName.Trim();
             user.PhoneNumber = request.PhoneNumber;
+            store.RebuildIndexes();
             return true;
         });
 
@@ -146,6 +154,7 @@ public sealed class UserController(AdminDataStore store, INotificationService no
                 .ToHashSet();
 
             deletedCount = store.Users.RemoveAll(user => parsedIds.Contains(user.Id));
+            store.RebuildIndexes();
         });
 
         if (deletedCount > 0)
@@ -176,7 +185,7 @@ public sealed class UserController(AdminDataStore store, INotificationService no
     [HttpPost("set-password/{id:guid}")]
     public IActionResult SetPassword(Guid id, [FromBody] SetPasswordRequest request)
     {
-        var exists = store.Locked(() => store.Users.Any(x => x.Id == id));
+        var exists = store.FindUserById(id) is not null;
         if (!exists)
         {
             return NotFound();
@@ -201,7 +210,13 @@ public sealed class UserController(AdminDataStore store, INotificationService no
                 return false;
             }
 
+            if (store.ExistsUserEmail(request.Email, id))
+            {
+                return false;
+            }
+
             user.Email = request.Email.Trim();
+            store.RebuildIndexes();
             return true;
         });
 

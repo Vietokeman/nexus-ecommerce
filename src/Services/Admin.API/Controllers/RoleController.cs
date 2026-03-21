@@ -19,7 +19,7 @@ public sealed class RoleController(AdminDataStore store, INotificationService no
 
         var created = store.Locked(() =>
         {
-            if (store.Roles.Any(x => x.Name.Equals(request.Name, StringComparison.OrdinalIgnoreCase)))
+            if (store.ExistsRoleName(request.Name))
             {
                 return false;
             }
@@ -29,6 +29,7 @@ public sealed class RoleController(AdminDataStore store, INotificationService no
                 Name = request.Name.Trim(),
                 DisplayName = request.DisplayName.Trim()
             });
+            store.RebuildIndexes();
             return true;
         });
 
@@ -59,8 +60,14 @@ public sealed class RoleController(AdminDataStore store, INotificationService no
                 return false;
             }
 
+            if (store.ExistsRoleName(request.Name, id))
+            {
+                return false;
+            }
+
             role.Name = request.Name.Trim();
             role.DisplayName = request.DisplayName.Trim();
+            store.RebuildIndexes();
             return true;
         });
 
@@ -84,7 +91,11 @@ public sealed class RoleController(AdminDataStore store, INotificationService no
     public async Task<IActionResult> DeleteRoles([FromQuery] Guid[] ids, CancellationToken cancellationToken)
     {
         var deleted = 0;
-        store.Locked(() => deleted = store.Roles.RemoveAll(role => ids.Contains(role.Id)));
+        store.Locked(() =>
+        {
+            deleted = store.Roles.RemoveAll(role => ids.Contains(role.Id));
+            store.RebuildIndexes();
+        });
 
         if (deleted > 0)
         {
@@ -103,7 +114,7 @@ public sealed class RoleController(AdminDataStore store, INotificationService no
     [HttpGet("{id:guid}")]
     public ActionResult<RoleModel> GetRoleById(Guid id)
     {
-        var role = store.Locked(() => store.Roles.FirstOrDefault(x => x.Id == id));
+        var role = store.FindRoleById(id);
         return role is null ? NotFound() : Ok(role);
     }
 
