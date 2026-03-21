@@ -44,6 +44,23 @@ interface Address extends AddressForm {
   _id: string;
 }
 
+const parseAvailableQuantity = (payload: unknown): number | null => {
+  if (!payload || typeof payload !== 'object') {
+    return null;
+  }
+
+  const source = payload as Record<string, unknown>;
+  const result = (source.result as Record<string, unknown> | undefined) ?? source;
+
+  const candidate =
+    result.availableQuantity ??
+    result.quantity ??
+    result.stockQuantity ??
+    result.availableStock;
+
+  return typeof candidate === 'number' ? candidate : null;
+};
+
 export default function CheckoutPage() {
   const { register, handleSubmit, reset } = useForm<AddressForm>();
   const [addresses, setAddresses] = useState<Address[]>([]);
@@ -127,6 +144,22 @@ export default function CheckoutPage() {
     }
     setOrderLoading(true);
     try {
+      for (const item of items) {
+        let available = 0;
+        try {
+          const basketStock = await api.get(API_ENDPOINTS.BASKETS.STOCK(item.itemNo));
+          available = parseAvailableQuantity(basketStock.data) ?? 0;
+        } catch {
+          const inventoryStock = await api.get(API_ENDPOINTS.INVENTORY.STOCK(item.itemNo));
+          available = parseAvailableQuantity(inventoryStock.data) ?? 0;
+        }
+
+        if (available < item.quantity) {
+          toast.error(`Insufficient stock for ${item.productName}. Please update cart quantity.`);
+          return;
+        }
+      }
+
       const orderNo = `ORD-${Date.now()}`;
       const total = grandTotal;
 

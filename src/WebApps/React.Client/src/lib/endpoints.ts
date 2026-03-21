@@ -30,6 +30,7 @@ export const API_ENDPOINTS = {
     GET: (username: string) => `/api/baskets/${username}`,
     UPDATE: '/api/baskets',
     DELETE: (username: string) => `/api/baskets/${username}`,
+    STOCK: (itemNo: string) => `/api/baskets/stock/${itemNo}`,
     CHECKOUT: '/api/baskets/checkout',
   },
   ORDERS: {
