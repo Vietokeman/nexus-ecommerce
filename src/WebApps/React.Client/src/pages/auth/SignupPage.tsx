@@ -7,6 +7,8 @@ import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
 import { useAuthStore } from '@/store/auth-store';
 import { appToast } from '@/lib/toast';
+import { api } from '@/lib/api';
+import { API_ENDPOINTS } from '@/lib/endpoints';
 import type { SignupDto } from '@/types/auth';
 import AuthLayout from '@/components/auth/AuthLayout';
 import { itemVariants } from '@/lib/motion';
@@ -14,6 +16,10 @@ import { nexus } from '@/theme/theme';
 import { PremiumButton, PremiumInput, PremiumPasswordInput } from '@/components/ui/primitives';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+
+type ExternalProvider = {
+  name: string;
+};
 
 export default function SignupPage() {
   const {
@@ -28,6 +34,7 @@ export default function SignupPage() {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [providers, setProviders] = useState({ google: true, github: true });
 
   const password = watch('password');
 
@@ -38,6 +45,33 @@ export default function SignupPage() {
       navigate('/');
     }
   }, [isAuthenticated, user, navigate]);
+
+  useEffect(() => {
+    const fetchProviders = async () => {
+      try {
+        const { data } = await api.get(API_ENDPOINTS.AUTH.EXTERNAL_PROVIDERS);
+        const list: ExternalProvider[] = Array.isArray(data) ? data : data?.result ?? [];
+        if (!Array.isArray(list) || list.length === 0) {
+          return;
+        }
+
+        const providerNames = new Set(
+          list
+            .map((p) => p?.name?.toLowerCase())
+            .filter((name): name is string => Boolean(name)),
+        );
+
+        setProviders({
+          google: providerNames.has('google'),
+          github: providerNames.has('github'),
+        });
+      } catch {
+        // Keep default social providers when provider discovery fails.
+      }
+    };
+
+    void fetchProviders();
+  }, []);
 
   const handleSignup = async (data: SignupDto) => {
     setLoading(true);
@@ -188,60 +222,66 @@ export default function SignupPage() {
           </Divider>
         </motion.div>
 
-        <motion.div variants={itemVariants}>
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
-            <PremiumButton
-              fullWidth
-              variant="outlined"
-              magnetic={false}
-              startIcon={<GoogleIcon />}
-              onClick={() => {
-                window.location.href = `${API_BASE_URL}/api/auth/external-login?provider=Google`;
-              }}
-              sx={{
-                height: '2.95rem',
-                textTransform: 'none',
-                borderRadius: 999,
-                fontWeight: 600,
-                borderColor: '#EBDCC9',
-                color: nexus.neutral[700],
-                backgroundColor: 'rgba(255,255,255,0.9)',
-                '&:hover': {
-                  borderColor: '#ea4335',
-                  backgroundColor: 'rgba(234, 67, 53, 0.08)',
-                  color: '#ea4335',
-                },
-              }}
-            >
-              Google
-            </PremiumButton>
-            <PremiumButton
-              fullWidth
-              variant="outlined"
-              magnetic={false}
-              startIcon={<GitHubIcon />}
-              onClick={() => {
-                window.location.href = `${API_BASE_URL}/api/auth/external-login?provider=GitHub`;
-              }}
-              sx={{
-                height: '2.95rem',
-                textTransform: 'none',
-                borderRadius: 999,
-                fontWeight: 600,
-                borderColor: '#EBDCC9',
-                color: nexus.neutral[700],
-                backgroundColor: 'rgba(255,255,255,0.9)',
-                '&:hover': {
-                  borderColor: '#333',
-                  backgroundColor: 'rgba(51, 51, 51, 0.08)',
-                  color: '#333',
-                },
-              }}
-            >
-              GitHub
-            </PremiumButton>
-          </Stack>
-        </motion.div>
+        {(providers.google || providers.github) && (
+          <motion.div variants={itemVariants}>
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
+              {providers.google && (
+                <PremiumButton
+                  fullWidth
+                  variant="outlined"
+                  magnetic={false}
+                  startIcon={<GoogleIcon />}
+                  onClick={() => {
+                    window.location.href = `${API_BASE_URL}/api/auth/external-login?provider=Google`;
+                  }}
+                  sx={{
+                    height: '2.95rem',
+                    textTransform: 'none',
+                    borderRadius: 999,
+                    fontWeight: 600,
+                    borderColor: '#EBDCC9',
+                    color: nexus.neutral[700],
+                    backgroundColor: 'rgba(255,255,255,0.9)',
+                    '&:hover': {
+                      borderColor: '#ea4335',
+                      backgroundColor: 'rgba(234, 67, 53, 0.08)',
+                      color: '#ea4335',
+                    },
+                  }}
+                >
+                  Google
+                </PremiumButton>
+              )}
+              {providers.github && (
+                <PremiumButton
+                  fullWidth
+                  variant="outlined"
+                  magnetic={false}
+                  startIcon={<GitHubIcon />}
+                  onClick={() => {
+                    window.location.href = `${API_BASE_URL}/api/auth/external-login?provider=GitHub`;
+                  }}
+                  sx={{
+                    height: '2.95rem',
+                    textTransform: 'none',
+                    borderRadius: 999,
+                    fontWeight: 600,
+                    borderColor: '#EBDCC9',
+                    color: nexus.neutral[700],
+                    backgroundColor: 'rgba(255,255,255,0.9)',
+                    '&:hover': {
+                      borderColor: '#333',
+                      backgroundColor: 'rgba(51, 51, 51, 0.08)',
+                      color: '#333',
+                    },
+                  }}
+                >
+                  GitHub
+                </PremiumButton>
+              )}
+            </Stack>
+          </motion.div>
+        )}
 
         <motion.div variants={itemVariants}>
           <Typography

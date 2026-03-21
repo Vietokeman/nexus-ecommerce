@@ -9,6 +9,7 @@ const LoginPage = lazy(() => import('@/pages/auth/LoginPage'));
 const SignupPage = lazy(() => import('@/pages/auth/SignupPage'));
 const ForgotPasswordPage = lazy(() => import('@/pages/auth/ForgotPasswordPage'));
 const ResetPasswordPage = lazy(() => import('@/pages/auth/ResetPasswordPage'));
+const ConfirmEmailPage = lazy(() => import('@/pages/auth/ConfirmEmailPage'));
 const OtpVerificationPage = lazy(() => import('@/pages/auth/OtpVerificationPage'));
 const OAuthCallbackPage = lazy(() => import('@/pages/auth/OAuthCallbackPage'));
 
@@ -95,6 +96,14 @@ export const router = createBrowserRouter([
     element: (
       <S>
         <ResetPasswordPage />
+      </S>
+    ),
+  },
+  {
+    path: '/confirm-email',
+    element: (
+      <S>
+        <ConfirmEmailPage />
       </S>
     ),
   },
