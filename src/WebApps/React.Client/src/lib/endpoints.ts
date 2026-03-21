@@ -15,7 +15,7 @@ export const API_ENDPOINTS = {
   PRODUCTS: {
     LIST: '/api/products',
     DETAIL: (id: string | number) => `/api/products/${id}`,
-    BY_NO: (productNo: string) => `/api/products/get-product-by-no/${productNo}`,
+    BY_NO: (productNo: string) => `/api/products/search/${productNo}`,
     CREATE: '/api/products',
     UPDATE: (id: string | number) => `/api/products/${id}`,
     DELETE: (id: string | number) => `/api/products/${id}`,
@@ -92,5 +92,10 @@ export const API_ENDPOINTS = {
   },
   AUDIT_LOGS: {
     LIST: '/api/admin/audit-logs',
+  },
+  AI: {
+    CHAT_SESSIONS: '/api/ai/chat/sessions',
+    SESSION_DETAIL: (sessionId: string) => `/api/ai/chat/sessions/${sessionId}`,
+    ADMIN_SEARCH: '/api/ai/admin/search',
   },
 } as const;

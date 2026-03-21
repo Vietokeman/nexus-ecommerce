@@ -37,6 +37,7 @@ export default function ProductReviewsSection({ productId }: ProductReviewsSecti
   const [showForm, setShowForm] = useState(false);
   const [rating, setRating] = useState<number | null>(5);
   const [comment, setComment] = useState('');
+  const [replyDrafts, setReplyDrafts] = useState<Record<number, string>>({});
 
   // Fetch reviews
   const { data: reviews = [], isLoading: loadingReviews } = useQuery<ProductReview[]>({
@@ -77,6 +78,21 @@ export default function ProductReviewsSection({ productId }: ProductReviewsSecti
     },
   });
 
+  const submitReply = useMutation({
+    mutationFn: ({ reviewId, reply }: { reviewId: number; reply: string }) =>
+      api.post(API_ENDPOINTS.REVIEWS.REPLY(reviewId), {
+        reply,
+        userName: user?.userName || user?.email,
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['product-reviews', productId] });
+      toast.success('Phản hồi đã được gửi');
+    },
+    onError: () => {
+      toast.error('Không thể gửi phản hồi cho đánh giá này');
+    },
+  });
+
   const handleSubmitReview = () => {
     if (!rating) {
       toast.error('Vui lòng chọn số sao');
@@ -94,6 +110,20 @@ export default function ProductReviewsSection({ productId }: ProductReviewsSecti
       rating,
       comment: comment.trim(),
     });
+  };
+
+  const handleReplyChange = (reviewId: number, value: string) => {
+    setReplyDrafts((prev) => ({ ...prev, [reviewId]: value }));
+  };
+
+  const handleSubmitReply = (reviewId: number) => {
+    const reply = (replyDrafts[reviewId] || '').trim();
+    if (!reply) {
+      toast.error('Vui lòng nhập nội dung phản hồi');
+      return;
+    }
+
+    submitReply.mutate({ reviewId, reply });
   };
 
   // Rating distribution bars
@@ -320,6 +350,28 @@ export default function ProductReviewsSection({ productId }: ProductReviewsSecti
                         </Typography>
                       )}
                     </Paper>
+                  )}
+
+                  {user?.isAdmin && !review.sellerReply && (
+                    <Stack spacing={1} mt={0.5}>
+                      <TextField
+                        size="small"
+                        placeholder="Phan hoi danh gia nay..."
+                        value={replyDrafts[review.id] || ''}
+                        onChange={(e) => handleReplyChange(review.id, e.target.value)}
+                        fullWidth
+                      />
+                      <Stack direction="row" justifyContent="flex-end">
+                        <Button
+                          variant="outlined"
+                          size="small"
+                          disabled={submitReply.isPending}
+                          onClick={() => handleSubmitReply(review.id)}
+                        >
+                          Gui phan hoi
+                        </Button>
+                      </Stack>
+                    </Stack>
                   )}
                 </Stack>
               </Paper>

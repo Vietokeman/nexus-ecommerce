@@ -75,6 +75,18 @@ const categories = [
   { id: '6', name: 'Home Decoration' },
 ];
 
+const normalizeProduct = (raw: any): Product => ({
+  id: Number(raw.id ?? raw.productId ?? Date.now()),
+  no: String(raw.no ?? raw.productNo ?? raw.itemNo ?? raw.id ?? ''),
+  name: String(raw.name ?? raw.productName ?? 'Unnamed product'),
+  summary: String(raw.summary ?? raw.shortDescription ?? raw.category ?? ''),
+  description: String(raw.description ?? raw.summary ?? ''),
+  price: Number(raw.price ?? raw.unitPrice ?? 0),
+  category: raw.category ?? raw.categoryName,
+  attributes: raw.attributes,
+  imageUrl: raw.imageUrl ?? raw.thumbnailUrl ?? raw.image,
+});
+
 // Product Card component
 function ProductCard({
   product,
@@ -168,7 +180,11 @@ function ProductCard({
               {product.name}
             </Typography>
             {!isAdmin && (
-              <motion.div whileHover={{ scale: 1.3, y: -10 }} whileTap={{ scale: 1 }} transition={{ duration: 0.4, type: 'spring' }}>
+              <motion.div
+                whileHover={{ scale: 1.3, y: -10 }}
+                whileTap={{ scale: 1 }}
+                transition={{ duration: 0.4, type: 'spring' }}
+              >
                 <PremiumCheckbox
                   onClick={(e) => e.stopPropagation()}
                   checked={isInWishlist}
@@ -220,6 +236,7 @@ export default function HomePage() {
   const [sort, setSortValue] = useState<string>('');
   const [brandFilters, setBrandFilters] = useState<Set<string>>(new Set());
   const [categoryFilters, setCategoryFilters] = useState<Set<string>>(new Set());
+  const categoryFilterKey = Array.from(categoryFilters).sort().join('|');
 
   const theme = useTheme();
   const is1200 = useMediaQuery(theme.breakpoints.down(1200));
@@ -257,9 +274,30 @@ export default function HomePage() {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const { data } = await api.get(API_ENDPOINTS.PRODUCTS.LIST);
-        const list = Array.isArray(data) ? data : (data.result ?? []);
-        setProducts(list);
+        const selectedCategories = Array.from(categoryFilters);
+
+        if (selectedCategories.length === 0) {
+          const { data } = await api.get(API_ENDPOINTS.PRODUCTS.LIST);
+          const list = Array.isArray(data) ? data : (data.result ?? []);
+          setProducts(list.map((item: any) => normalizeProduct(item)));
+          return;
+        }
+
+        const responses = await Promise.all(
+          selectedCategories.map((category) => api.get(API_ENDPOINTS.SELLER.BY_CATEGORY(category))),
+        );
+
+        const merged = responses.flatMap(({ data }) => {
+          if (Array.isArray(data)) return data;
+          if (Array.isArray(data?.result)) return data.result;
+          return [];
+        });
+
+        const deduped = Array.from(
+          new Map(merged.map((item: any) => [String(item.id ?? item.itemNo ?? item.productNo), item])).values(),
+        );
+
+        setProducts(deduped.map((item) => normalizeProduct(item)));
       } catch {
         toast.error('Error fetching products, please try again later');
       } finally {
@@ -267,7 +305,7 @@ export default function HomePage() {
       }
     };
     fetchProducts();
-  }, []);
+  }, [categoryFilterKey]);
 
   // Client-side filtering & sorting
   const filtered = products
@@ -275,12 +313,6 @@ export default function HomePage() {
       if (brandFilters.size > 0) {
         const match = Array.from(brandFilters).some((b) =>
           p.summary?.toLowerCase().includes(b.toLowerCase()),
-        );
-        if (!match) return false;
-      }
-      if (categoryFilters.size > 0) {
-        const match = Array.from(categoryFilters).some((c) =>
-          p.name?.toLowerCase().includes(c.toLowerCase()),
         );
         if (!match) return false;
       }
@@ -475,20 +507,28 @@ export default function HomePage() {
             }}
           >
             <Stack rowGap={1.5} maxWidth="42rem">
-              <Typography variant="overline" sx={{ color: 'rgba(255,255,255,0.78)', letterSpacing: '.16em' }}>
+              <Typography
+                variant="overline"
+                sx={{ color: 'rgba(255,255,255,0.78)', letterSpacing: '.16em' }}
+              >
                 TET 2026 CURATION
               </Typography>
               <Typography variant="h2" color="white" fontWeight={700}>
                 {APP_NAME} Premium Tet Collection
               </Typography>
               <Typography sx={{ color: 'rgba(255,255,255,0.72)', maxWidth: '34rem' }}>
-                Curated gift sets, flash promotions, and group-buy bundles for enterprise and family celebrations.
+                Curated gift sets, flash promotions, and group-buy bundles for enterprise and family
+                celebrations.
               </Typography>
               <Stack direction="row" gap={1.2} flexWrap="wrap" pt={0.8}>
                 <PremiumButton magnetic={false} variant="contained" onClick={toggleFilter}>
                   Open Smart Filters
                 </PremiumButton>
-                <PremiumButton magnetic={false} variant="outlined" onClick={() => navigate('/group-buy')}>
+                <PremiumButton
+                  magnetic={false}
+                  variant="outlined"
+                  onClick={() => navigate('/group-buy')}
+                >
                   Explore Group Buy
                 </PremiumButton>
               </Stack>

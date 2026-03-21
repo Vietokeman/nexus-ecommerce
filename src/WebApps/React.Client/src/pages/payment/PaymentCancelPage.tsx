@@ -1,12 +1,27 @@
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Box, Typography, Stack } from '@mui/material';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { motion } from 'framer-motion';
 import { nexus } from '@/theme/theme';
 import { PremiumButton } from '@/components/ui/primitives';
+import { api } from '@/lib/api';
+import { API_ENDPOINTS } from '@/lib/endpoints';
 
 export default function PaymentCancelPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    const orderNo = searchParams.get('orderNo');
+    if (!orderNo) {
+      return;
+    }
+
+    api.post(API_ENDPOINTS.PAYMENT.CANCEL(orderNo)).catch(() => {
+      // no-op: this page is best-effort confirmation
+    });
+  }, [searchParams]);
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', pt: { xs: 4, md: 8 } }}>

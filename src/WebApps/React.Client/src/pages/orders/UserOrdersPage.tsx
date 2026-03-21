@@ -140,6 +140,11 @@ export default function UserOrdersPage() {
               <Typography sx={{ wordWrap: 'break-word' }} color="text.secondary">
                 Check the status of recent orders, manage returns, and discover similar products.
               </Typography>
+              <Stack direction="row" mt={0.5}>
+                <Button component={Link} to="/payment/history" variant="outlined" size="small">
+                  View payment history
+                </Button>
+              </Stack>
             </Stack>
           </Stack>
 
@@ -314,7 +319,12 @@ export default function UserOrdersPage() {
                 <Typography textAlign="center" alignSelf="center" variant="h6">
                   oh! Looks like you haven't been shopping lately
                 </Typography>
-                <Button component={Link} to="/" variant="contained" sx={{ borderRadius: 999, px: 2.2 }}>
+                <Button
+                  component={Link}
+                  to="/"
+                  variant="contained"
+                  sx={{ borderRadius: 999, px: 2.2 }}
+                >
                   Explore Tet Collection
                 </Button>
               </Stack>

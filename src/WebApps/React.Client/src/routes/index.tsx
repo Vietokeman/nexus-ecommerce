@@ -20,6 +20,7 @@ const CartPage = lazy(() => import('@/pages/cart/CartPage'));
 const CheckoutPage = lazy(() => import('@/pages/cart/CheckoutPage'));
 const PaymentSuccessPage = lazy(() => import('@/pages/payment/PaymentSuccessPage'));
 const PaymentCancelPage = lazy(() => import('@/pages/payment/PaymentCancelPage'));
+const PaymentHistoryPage = lazy(() => import('@/pages/payment/PaymentHistoryPage'));
 const OrderSuccessPage = lazy(() => import('@/pages/orders/OrderSuccessPage'));
 const UserOrdersPage = lazy(() => import('@/pages/orders/UserOrdersPage'));
 const UserProfilePage = lazy(() => import('@/pages/user/UserProfilePage'));
@@ -167,6 +168,14 @@ export const router = createBrowserRouter([
         element: (
           <P>
             <PaymentCancelPage />
+          </P>
+        ),
+      },
+      {
+        path: 'payment/history',
+        element: (
+          <P>
+            <PaymentHistoryPage />
           </P>
         ),
       },
