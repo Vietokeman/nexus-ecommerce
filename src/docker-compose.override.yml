@@ -289,15 +289,17 @@ services:
       - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
       - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=PaymentDb;Username=admin;Password=change_me_with_postgres_password;"
       - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
-      - "PayOSSettings:ClientId=change_me_with_payos_client_id"
-      - "PayOSSettings:ApiKey=change_me_with_payos_api_key"
-      - "PayOSSettings:ChecksumKey=change_me_with_payos_checksum_key"
-      - "PayOSSettings:WebReturnUrl=http://localhost:3000/payment/success"
-      - "PayOSSettings:WebCancelUrl=http://localhost:3000/payment/cancel"
-      - "SmtpSettings:Host=smtp.gmail.com"
-      - "SmtpSettings:Port=587"
-      - "SmtpSettings:UserName=vietbmt19@gmail.com"
-      - "SmtpSettings:Password=change_me_with_smtp_password"
+      - "PayOS:ClientId=${PAYOS_CLIENT_ID:-change_me_with_payos_client_id}"
+      - "PayOS:ApiKey=${PAYOS_API_KEY:-change_me_with_payos_api_key}"
+      - "PayOS:ChecksumKey=${PAYOS_CHECKSUM_KEY:-change_me_with_payos_checksum_key}"
+      - "PayOS:WebReturnUrl=${WEB_RETURN_URL:-http://localhost:3000/payment/success}"
+      - "PayOS:WebCancelUrl=${WEB_CANCEL_URL:-http://localhost:3000/payment/cancel}"
+      - "Smtp:Host=${SMTP_HOST:-smtp.gmail.com}"
+      - "Smtp:Port=${SMTP_PORT:-587}"
+      - "Smtp:User=${SMTP_USERNAME:-vietbmt19@gmail.com}"
+      - "Smtp:Pass=${SMTP_PASSWORD:-change_me_with_smtp_password}"
+      - "Smtp:FromName=${SMTP_FROM_NAME:-Nexus E-Commerce}"
+      - "Smtp:FromEmail=${SMTP_FROM_EMAIL:-vietbmt19@gmail.com}"
       - "Serilog:Using:0=Serilog.Sinks.Elasticsearch"
       - "Serilog:WriteTo:0:Args:nodeUris=http://elasticsearch:9200"
     volumes:
@@ -326,11 +328,11 @@ services:
       - DOTNET_USE_POLLING_FILE_WATCHER=1
       - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
       - "ConnectionStrings:HangfireConnection=Host=nexusdb;Port=5432;Database=HangfireDb;Username=admin;Password=change_me_with_postgres_password;"
-      - "SmtpSettings:Host=smtp.gmail.com"
-      - "SmtpSettings:Port=587"
-      - "SmtpSettings:UserName=vietbmt19@gmail.com"
-      - "SmtpSettings:Password=change_me_with_smtp_password"
-      - "GatewayUrl=http://ocelot.apigw:80"
+      - "SmtpSettings:Host=${SMTP_HOST:-smtp.gmail.com}"
+      - "SmtpSettings:Port=${SMTP_PORT:-587}"
+      - "SmtpSettings:UserName=${SMTP_USERNAME:-vietbmt19@gmail.com}"
+      - "SmtpSettings:Password=${SMTP_PASSWORD:-change_me_with_smtp_password}"
+      - "GatewayUrl=${HANGFIRE_GATEWAY_URL:-http://ocelot.apigw:80}"
       - "ElasticConfiguration:Uri=http://elasticsearch:9200"
     volumes:
       - .:/src
@@ -356,13 +358,13 @@ services:
       - DOTNET_USE_POLLING_FILE_WATCHER=1
       - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
       - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=IdentityDb;Username=admin;Password=change_me_with_postgres_password;"
-      - "JwtSettings:Secret=YourSuperSecretKeyHere_MustBeAtLeast32Characters!"
-      - "JwtSettings:Issuer=distributed-ecommerce-platform"
-      - "JwtSettings:Audience=distributed-ecommerce-client"
-      - "SmtpSettings:Host=smtp.gmail.com"
-      - "SmtpSettings:Port=587"
-      - "SmtpSettings:UserName=vietbmt19@gmail.com"
-      - "SmtpSettings:Password=change_me_with_smtp_password"
+      - "JwtSettings:Secret=${JWT_SECRET:-YourSuperSecretKeyHere_MustBeAtLeast32Characters!}"
+      - "JwtSettings:Issuer=${JWT_ISSUER:-nexus-ecommerce-platform}"
+      - "JwtSettings:Audience=${JWT_AUDIENCE:-nexus-ecommerce-client}"
+      - "SmtpSettings:Host=${SMTP_HOST:-smtp.gmail.com}"
+      - "SmtpSettings:Port=${SMTP_PORT:-587}"
+      - "SmtpSettings:UserName=${SMTP_USERNAME:-vietbmt19@gmail.com}"
+      - "SmtpSettings:Password=${SMTP_PASSWORD:-change_me_with_smtp_password}"
       - "ElasticConfiguration:Uri=http://elasticsearch:9200"
     volumes:
       - .:/src
