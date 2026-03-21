@@ -26,6 +26,7 @@ import { useGroupBuyCampaign, useOpenGroup } from '@/hooks/useGroupBuy';
 import { useAuthStore } from '@/store/auth-store';
 import { containerVariants, itemVariants } from '@/lib/motion';
 import { toast } from 'react-toastify';
+import ImageFallback from '@/components/ui/ImageFallback';
 
 export default function GroupBuyCampaignPage() {
   const { campaignId } = useParams<{ campaignId: string }>();
@@ -114,7 +115,7 @@ export default function GroupBuyCampaignPage() {
                 }}
               >
                 {campaign.imageUrl ? (
-                  <img
+                  <ImageFallback
                     src={campaign.imageUrl}
                     alt={campaign.productName}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}

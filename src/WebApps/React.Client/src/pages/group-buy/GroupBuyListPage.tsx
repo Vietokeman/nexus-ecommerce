@@ -8,6 +8,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { nexus } from '@/theme/theme';
 import { useActiveGroupBuyCampaigns } from '@/hooks/useGroupBuy';
 import type { GroupBuyCampaign } from '@/types/group-buy';
+import ImageFallback from '@/components/ui/ImageFallback';
+import { LAYERS } from '@/lib/layers';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -33,7 +35,7 @@ function DiscountBadge({ original, group }: { original: number; group: number })
         color: '#fff',
         fontWeight: 700,
         fontSize: '0.75rem',
-        zIndex: 2,
+        zIndex: LAYERS.base,
       }}
     >
       -{pct}%
@@ -79,7 +81,7 @@ function CampaignCard({ campaign }: { campaign: GroupBuyCampaign }) {
         >
           <DiscountBadge original={campaign.originalPrice} group={campaign.groupPrice} />
           {campaign.imageUrl ? (
-            <img
+            <ImageFallback
               src={campaign.imageUrl}
               alt={campaign.productName}
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}

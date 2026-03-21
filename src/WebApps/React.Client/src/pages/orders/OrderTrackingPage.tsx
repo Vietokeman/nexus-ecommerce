@@ -32,6 +32,7 @@ import { API_ENDPOINTS } from '@/lib/endpoints';
 import { useAuthStore } from '@/store/auth-store';
 import { styled } from '@mui/material/styles';
 import loadingAnimation from '@/assets/animations/loading.json';
+import ImageFallback from '@/components/ui/ImageFallback';
 
 // Order status progression (matching backend enum)
 const ORDER_STEPS = [
@@ -386,10 +387,9 @@ export default function OrderTrackingPage() {
                     '&:hover': { bgcolor: '#FFFBF4' },
                   }}
                 >
-                  <img
-                    src={
-                      item.imageUrl || `https://via.placeholder.com/60?text=${item.productName[0]}`
-                    }
+                  <ImageFallback
+                    src={item.imageUrl}
+                    fallbackSrc={`https://via.placeholder.com/60?text=${item.productName[0]}`}
                     alt={item.productName}
                     style={{ width: 60, height: 60, borderRadius: 8, objectFit: 'cover' }}
                   />

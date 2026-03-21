@@ -18,6 +18,7 @@ import loadingAnimation from '@/assets/animations/loading.json';
 import ProductReviewsSection from '@/components/reviews/ProductReviewsSection';
 import type { ReviewSummary } from '@/types/seller';
 import { PremiumButton, PremiumCheckbox } from '@/components/ui/primitives';
+import ImageFallback from '@/components/ui/ImageFallback';
 
 const SIZES = ['XS', 'S', 'M', 'L', 'XL'];
 const COLORS = ['#020202', '#F6F6F6', '#B82222', '#BEA9A9', '#E2BB8D'];
@@ -176,7 +177,7 @@ export default function ProductDetailsPage() {
                     style={{ width: '200px', cursor: 'pointer' }}
                     onClick={() => setSelectedImageIndex(index)}
                   >
-                    <img
+                    <ImageFallback
                       style={{ width: '100%', objectFit: 'contain' }}
                       src={image}
                       alt={`${product.name} image`}
@@ -189,9 +190,8 @@ export default function ProductDetailsPage() {
             {/* Selected image */}
             <Stack mt={is480 ? '0rem' : '5rem'}>
               <Stack width={is480 ? '100%' : is990 ? '400px' : '500px'}>
-                <Box
-                  component="img"
-                  sx={{
+                <ImageFallback
+                  style={{
                     width: '100%',
                     objectFit: 'contain',
                     overflow: 'hidden',

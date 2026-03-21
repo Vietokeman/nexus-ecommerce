@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import { useCartStore } from '@/store/cart-store';
 import { SHIPPING, TAXES } from '@/constants';
 import { PremiumButton } from '@/components/ui/primitives';
+import ImageFallback from '@/components/ui/ImageFallback';
 
 /* ── CartItem sub-component ─────────────────────────────────── */
 interface CartItemProps {
@@ -64,14 +65,15 @@ function CartItem({ itemNo, productName, price, quantity, imageUrl }: CartItemPr
           component={Link}
           to={`/product-details/${itemNo}`}
         >
-          <img
+          <ImageFallback
             style={{
               width: '100%',
               height: is552 ? 'auto' : '100%',
               aspectRatio: is552 ? '1/1' : undefined,
               objectFit: 'contain',
             }}
-            src={imageUrl || 'https://via.placeholder.com/200'}
+            src={imageUrl}
+            fallbackSrc="https://via.placeholder.com/200"
             alt={`${productName} image`}
           />
         </Stack>

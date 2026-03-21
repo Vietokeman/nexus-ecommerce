@@ -10,6 +10,7 @@ import { useAuthStore } from '@/store/auth-store';
 import { containerVariants, itemVariants } from '@/lib/motion';
 import { toast } from 'react-toastify';
 import type { FlashSaleItem } from '@/types/flash-sale';
+import ImageFallback from '@/components/ui/ImageFallback';
 
 /* ── Countdown hook ── */
 function useCountdown(endTime: string) {
@@ -117,7 +118,7 @@ function FlashItemCard({ item }: { item: FlashSaleItem }) {
           }}
         >
           {item.imageUrl ? (
-            <img
+            <ImageFallback
               src={item.imageUrl}
               alt={item.productName}
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}

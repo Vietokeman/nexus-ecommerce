@@ -21,6 +21,7 @@ import { useCartStore } from '@/store/cart-store';
 import { useAuthStore } from '@/store/auth-store';
 import loadingAnimation from '@/assets/animations/loading.json';
 import noOrdersAnimation from '@/assets/animations/noOrders.json';
+import ImageFallback from '@/components/ui/ImageFallback';
 
 interface OrderItem {
   productName: string;
@@ -206,7 +207,7 @@ export default function UserOrdersPage() {
                       }}
                     >
                       <Stack>
-                        <img
+                        <ImageFallback
                           style={{
                             width: '100%',
                             aspectRatio: is480 ? '3/2' : '1/1',
@@ -215,7 +216,8 @@ export default function UserOrdersPage() {
                             border: '1px solid #EFE5D7',
                             background: '#FFFCF7',
                           }}
-                          src={product.imageUrl || 'https://via.placeholder.com/200'}
+                          src={product.imageUrl}
+                          fallbackSrc="https://via.placeholder.com/200"
                           alt={product.productName}
                         />
                       </Stack>

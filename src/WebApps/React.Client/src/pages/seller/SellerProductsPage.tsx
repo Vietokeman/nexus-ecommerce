@@ -32,6 +32,7 @@ import { API_ENDPOINTS } from '@/lib/endpoints';
 import { useAuthStore } from '@/store/auth-store';
 import type { SellerProduct } from '@/types/seller';
 import loadingAnimation from '@/assets/animations/loading.json';
+import ImageFallback from '@/components/ui/ImageFallback';
 
 const statusColor: Record<string, 'default' | 'warning' | 'success' | 'error' | 'info'> = {
   Draft: 'default',
@@ -212,10 +213,9 @@ export default function SellerProductsPage() {
                 }}
               >
                 {/* Image */}
-                <img
-                  src={
-                    product.imageUrl || `https://via.placeholder.com/100?text=${product.name[0]}`
-                  }
+                <ImageFallback
+                  src={product.imageUrl}
+                  fallbackSrc={`https://via.placeholder.com/100?text=${product.name[0]}`}
                   alt={product.name}
                   style={{
                     width: is768 ? '100%' : 100,

@@ -46,6 +46,8 @@ import type { Product } from '@/types/product';
 import { APP_NAME } from '@/constants';
 import loadingAnimation from '@/assets/animations/loading.json';
 import { PremiumButton, PremiumCheckbox } from '@/components/ui/primitives';
+import ImageFallback from '@/components/ui/ImageFallback';
+import { LAYERS } from '@/lib/layers';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -147,11 +149,12 @@ function ProductCard({
     >
       {/* Image */}
       <Stack>
-        <img
+        <ImageFallback
           width="100%"
           style={{ aspectRatio: '1/1', objectFit: 'contain' }}
           height="100%"
-          src={product.imageUrl || `https://via.placeholder.com/300?text=${product.name[0]}`}
+          src={product.imageUrl}
+          fallbackSrc={`https://via.placeholder.com/300?text=${product.name[0]}`}
           alt={`${product.name}`}
         />
       </Stack>
@@ -164,11 +167,7 @@ function ProductCard({
               {product.name}
             </Typography>
             {!isAdmin && (
-              <motion.div
-                whileHover={{ scale: 1.3, y: -10, zIndex: 100 }}
-                whileTap={{ scale: 1 }}
-                transition={{ duration: 0.4, type: 'spring' }}
-              >
+              <motion.div whileHover={{ scale: 1.3, y: -10 }} whileTap={{ scale: 1 }} transition={{ duration: 0.4, type: 'spring' }}>
                 <PremiumCheckbox
                   onClick={(e) => e.stopPropagation()}
                   checked={isInWishlist}
@@ -335,7 +334,7 @@ export default function HomePage() {
           padding: '1.25rem',
           overflowY: 'scroll',
           width: is500 ? '100vw' : '30rem',
-          zIndex: 500,
+          zIndex: LAYERS.overlay,
           top: 0,
           borderRight: `1px solid ${nexus.neutral[200]}`,
           boxShadow: '20px 0 46px -32px rgba(79,67,62,0.7)',

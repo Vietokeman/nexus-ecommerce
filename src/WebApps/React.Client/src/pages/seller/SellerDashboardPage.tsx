@@ -29,6 +29,7 @@ import type { SellerDashboard } from '@/types/seller';
 import loadingAnimation from '@/assets/animations/loading.json';
 import { PremiumButton } from '@/components/ui/primitives';
 import { nexus } from '@/theme/theme';
+import ImageFallback from '@/components/ui/ImageFallback';
 
 interface StatCardProps {
   title: string;
@@ -301,8 +302,9 @@ export default function SellerDashboardPage() {
                   }}
                   onClick={() => navigate(`/product-details/${p.no}`)}
                 >
-                  <img
-                    src={p.imageUrl || `https://via.placeholder.com/50?text=${p.name[0]}`}
+                  <ImageFallback
+                    src={p.imageUrl}
+                    fallbackSrc={`https://via.placeholder.com/50?text=${p.name[0]}`}
                     alt={p.name}
                     style={{ width: 50, height: 50, borderRadius: 8, objectFit: 'cover' }}
                   />

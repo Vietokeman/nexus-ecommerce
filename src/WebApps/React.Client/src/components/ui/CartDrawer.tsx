@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useCartStore } from '@/store/cart-store';
 import { nexus } from '@/theme/theme';
+import ImageFallback from '@/components/ui/ImageFallback';
 import { PremiumBadge, PremiumButton } from '@/components/ui/primitives';
 
 interface CartDrawerProps {
@@ -117,7 +118,7 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                       }}
                     >
                       {item.imageUrl ? (
-                        <img
+                        <ImageFallback
                           src={item.imageUrl}
                           alt={item.productName}
                           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
