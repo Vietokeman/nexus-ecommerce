@@ -3,8 +3,9 @@
     <div class="nx-dashboard-eyebrow">Nexus control plane</div>
     <h1 class="nx-dashboard-title">Nexus Admin Overview</h1>
     <p class="nx-dashboard-subtitle">
-      Angular.AdminClient is the dedicated back-office shell for Nexus. It reuses the CoreUI baseline,
-      but focuses only on the capabilities required for this platform.
+      Angular.AdminClient is the dedicated back-office shell for Nexus. It
+      reuses the CoreUI baseline, but focuses only on the capabilities required
+      for this platform.
     </p>
   </section>
 
@@ -23,11 +24,19 @@
     <article class="nx-dashboard-surface nx-dashboard-surface-main">
       <header class="nx-surface-header">
         <h2>Admin surface</h2>
-        <p>Primary routes and responsibilities currently active in this shell.</p>
+        <p>
+          Primary routes and responsibilities currently active in this shell.
+        </p>
       </header>
 
       <div class="nx-table-wrap">
-        <table cTable [striped]="true" [hover]="true" responsive="true" class="nx-surface-table">
+        <table
+          cTable
+          [striped]="true"
+          [hover]="true"
+          responsive="true"
+          class="nx-surface-table"
+        >
           <thead>
             <tr>
               <th>Area</th>
@@ -39,8 +48,12 @@
           <tbody>
             <tr *ngFor="let area of areas">
               <td>{{ area.name }}</td>
-              <td><code>{{ area.route }}</code></td>
-              <td><c-badge color="success">{{ area.status }}</c-badge></td>
+              <td>
+                <code>{{ area.route }}</code>
+              </td>
+              <td>
+                <c-badge color="success">{{ area.status }}</c-badge>
+              </td>
               <td>{{ area.summary }}</td>
             </tr>
           </tbody>
@@ -50,34 +63,67 @@
 
     <article class="nx-dashboard-surface nx-dashboard-surface-side">
       <header class="nx-surface-header">
-        <h2>Migration notes</h2>
-        <p>Current scope boundaries for the Nexus admin client migration.</p>
+        <h2>Operation Pulse</h2>
+        <p>Realtime focus list across catalog, orders, and campaigns.</p>
       </header>
 
-      <div class="nx-note-block">
-        <h3>Scope kept from CMS</h3>
-        <div class="nx-badge-stack">
-          <c-badge color="info">Dashboard</c-badge>
-          <c-badge color="info">Users</c-badge>
-          <c-badge color="info">Roles</c-badge>
-          <c-badge color="info">Posts</c-badge>
-          <c-badge color="info">Series</c-badge>
-          <c-badge color="info">Media Upload</c-badge>
-        </div>
-      </div>
-
-      <div class="nx-note-block">
-        <h3>Scope removed for Nexus</h3>
-        <div class="nx-badge-stack">
-          <c-badge color="secondary">Login UI</c-badge>
-          <c-badge color="secondary">Token Refresh Flow</c-badge>
-          <c-badge color="secondary">Royalty</c-badge>
+      <div class="nx-pulse-list">
+        <div class="nx-pulse-item" *ngFor="let pulse of operationPulse">
+          <div class="nx-pulse-row">
+            <h3>{{ pulse.label }}</h3>
+            <c-badge [color]="pulse.tone">{{ pulse.value }}</c-badge>
+          </div>
+          <p>{{ pulse.note }}</p>
         </div>
       </div>
 
       <p class="nx-note-footnote">
-        The backend is currently in an in-memory stabilization phase for API contracts before persistence rollout.
+        Admin.API remains in-memory for stabilization, while this dashboard mirrors production-like operating patterns.
       </p>
+    </article>
+  </section>
+
+  <section class="nx-board-grid">
+    <article class="nx-dashboard-surface nx-board-card">
+      <header class="nx-surface-header">
+        <h2>Catalog Management</h2>
+        <p>Inventory and merchandising control for Tet collection.</p>
+      </header>
+      <div class="nx-board-content">
+        <div class="nx-board-item" *ngFor="let item of catalogBoard">
+          <h3>{{ item.title }}</h3>
+          <strong>{{ item.amount }}</strong>
+          <p>{{ item.hint }}</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="nx-dashboard-surface nx-board-card">
+      <header class="nx-surface-header">
+        <h2>Order & Payment Board</h2>
+        <p>Lifecycle monitoring for fulfillment and refund execution.</p>
+      </header>
+      <div class="nx-board-content">
+        <div class="nx-board-item" *ngFor="let item of orderBoard">
+          <h3>{{ item.title }}</h3>
+          <strong>{{ item.amount }}</strong>
+          <p>{{ item.hint }}</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="nx-dashboard-surface nx-board-card">
+      <header class="nx-surface-header">
+        <h2>Campaign & CRM</h2>
+        <p>FlashSale and GroupBuy conversion control center.</p>
+      </header>
+      <div class="nx-board-content">
+        <div class="nx-board-item" *ngFor="let item of campaignBoard">
+          <h3>{{ item.title }}</h3>
+          <strong>{{ item.amount }}</strong>
+          <p>{{ item.hint }}</p>
+        </div>
+      </div>
     </article>
   </section>
 </div>

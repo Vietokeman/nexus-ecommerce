@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Button,
+  Chip,
   IconButton,
   Paper,
   Stack,
@@ -37,6 +38,15 @@ interface Order {
   status: string;
   orderItems: OrderItem[];
 }
+
+const statusColorMap: Record<string, 'default' | 'warning' | 'info' | 'success' | 'error'> = {
+  Pending: 'warning',
+  Paid: 'info',
+  Shipping: 'info',
+  Shipped: 'info',
+  Fullfilled: 'success',
+  Cancelled: 'error',
+};
 
 export default function UserOrdersPage() {
   const user = useAuthStore((s) => s.user);
@@ -112,7 +122,11 @@ export default function UserOrdersPage() {
           >
             {!is480 && (
               <motion.div whileHover={{ x: -5 }} style={{ alignSelf: 'center' }}>
-                <IconButton component={Link} to="/" sx={{ bgcolor: '#FFFFFF', border: '1px solid #E8DCCB' }}>
+                <IconButton
+                  component={Link}
+                  to="/"
+                  sx={{ bgcolor: '#FFFFFF', border: '1px solid #E8DCCB' }}
+                >
                   <ArrowBackIcon fontSize="large" />
                 </IconButton>
               </motion.div>
@@ -261,10 +275,21 @@ export default function UserOrdersPage() {
                 </Stack>
 
                 {/* lower */}
-                <Stack mt={2} flexDirection="row" justifyContent="space-between" alignItems="center">
-                  <Typography mb={2} fontWeight={600}>
-                    Status : {order.status}
-                  </Typography>
+                <Stack
+                  mt={2}
+                  flexDirection="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Stack mb={2} direction="row" spacing={1} alignItems="center">
+                    <Typography fontWeight={600}>Status</Typography>
+                    <Chip
+                      size="small"
+                      label={order.status}
+                      color={statusColorMap[order.status] || 'default'}
+                      variant="outlined"
+                    />
+                  </Stack>
                   <Button
                     size="small"
                     variant="outlined"
@@ -272,7 +297,7 @@ export default function UserOrdersPage() {
                     to={`/orders/${order.documentNo}/tracking`}
                     sx={{ mb: 2, fontWeight: 700, borderRadius: 999, px: 1.8 }}
                   >
-                    📦 Theo dõi đơn hàng
+                    Track Order
                   </Button>
                 </Stack>
               </Stack>
@@ -287,6 +312,9 @@ export default function UserOrdersPage() {
                 <Typography textAlign="center" alignSelf="center" variant="h6">
                   oh! Looks like you haven't been shopping lately
                 </Typography>
+                <Button component={Link} to="/" variant="contained" sx={{ borderRadius: 999, px: 2.2 }}>
+                  Explore Tet Collection
+                </Button>
               </Stack>
             )}
           </Stack>

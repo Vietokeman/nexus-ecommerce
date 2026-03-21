@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Box, Rating, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Chip, Rating, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
 import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
@@ -231,11 +231,34 @@ export default function ProductDetailsPage() {
               <Typography variant="h5" sx={{ color: theme.palette.text.primary, fontWeight: 700 }}>
                 ${product.price}
               </Typography>
+              <Stack direction="row" gap={1} flexWrap="wrap" pt={0.5}>
+                <Chip size="small" label="Premium Tet Curated" color="success" variant="outlined" />
+                <Chip size="small" label="Fast Dispatch" color="primary" variant="outlined" />
+                <Chip size="small" label="30-Day Return" color="default" variant="outlined" />
+              </Stack>
             </Stack>
 
             {/* Description */}
             <Stack rowGap=".8rem">
               <Typography>{product.description || product.summary}</Typography>
+              <Stack direction="row" gap={1.2} flexWrap="wrap">
+                <PremiumButton
+                  magnetic={false}
+                  variant="outlined"
+                  onClick={() => navigate('/flash-sale')}
+                  sx={{ borderRadius: '10px' }}
+                >
+                  Check Flash Deals
+                </PremiumButton>
+                <PremiumButton
+                  magnetic={false}
+                  variant="outlined"
+                  onClick={() => navigate('/group-buy')}
+                  sx={{ borderRadius: '10px' }}
+                >
+                  Join Group Buy
+                </PremiumButton>
+              </Stack>
               <hr />
             </Stack>
 
@@ -369,11 +392,7 @@ export default function ProductDetailsPage() {
                       In Cart
                     </PremiumButton>
                   ) : (
-                    <PremiumButton
-                      onClick={handleAddToCart}
-                      variant="contained"
-                      magnetic={false}
-                    >
+                    <PremiumButton onClick={handleAddToCart} variant="contained" magnetic={false}>
                       Add To Cart
                     </PremiumButton>
                   )}

@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
+  Chip,
+  Divider,
   FormControl,
   Grid,
   IconButton,
@@ -53,6 +55,9 @@ export default function CheckoutPage() {
   const theme = useTheme();
   const is900 = useMediaQuery(theme.breakpoints.down(900));
   const is480 = useMediaQuery(theme.breakpoints.down(480));
+  const subTotalValue = subtotal();
+  const taxValue = (subTotalValue * TAXES) / 100;
+  const grandTotal = subTotalValue + SHIPPING + taxValue;
 
   const handleAddAddress = (data: AddressForm) => {
     const newAddress: Address = { ...data, _id: `addr-${Date.now()}` };
@@ -70,7 +75,7 @@ export default function CheckoutPage() {
     setOrderLoading(true);
     try {
       const orderNo = `ORD-${Date.now()}`;
-      const total = subtotal() + SHIPPING + (subtotal() * TAXES) / 100;
+      const total = grandTotal;
 
       await api.post(API_ENDPOINTS.BASKETS.UPDATE, {
         userName: user?.email || user?.userName,
@@ -137,6 +142,27 @@ export default function CheckoutPage() {
         borderRadius: { xs: 0, md: 4 },
       }}
     >
+      {items.length === 0 && (
+        <Stack
+          width="100%"
+          maxWidth="56rem"
+          p={3}
+          sx={{ borderRadius: 3, border: '1px solid #EADCC8', background: '#fff' }}
+        >
+          <Typography variant="h5" fontWeight={700}>
+            Your cart is empty
+          </Typography>
+          <Typography color="text.secondary" mt={0.8} mb={2}>
+            Add products before continuing to checkout.
+          </Typography>
+          <PremiumButton magnetic={false} onClick={() => navigate('/')}>
+            Continue Shopping
+          </PremiumButton>
+        </Stack>
+      )}
+
+      {items.length > 0 && (
+      <>
       {/* left box */}
       <Stack
         rowGap={4}
@@ -152,7 +178,11 @@ export default function CheckoutPage() {
         {/* heading */}
         <Stack flexDirection="row" columnGap={is480 ? 0.3 : 1} alignItems="center">
           <motion.div whileHover={{ x: -5 }}>
-            <IconButton component={Link} to="/cart" sx={{ border: '1px solid #E7DCCB', bgcolor: '#FFFFFF' }}>
+            <IconButton
+              component={Link}
+              to="/cart"
+              sx={{ border: '1px solid #E7DCCB', bgcolor: '#FFFFFF' }}
+            >
               <ArrowBackIcon fontSize={is480 ? 'medium' : 'large'} />
             </IconButton>
           </motion.div>
@@ -174,10 +204,18 @@ export default function CheckoutPage() {
             background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF6 100%)',
           }}
         >
-          <PremiumInput label="Type" placeholder="Eg. Home, Business" {...register('type', { required: true })} />
+          <PremiumInput
+            label="Type"
+            placeholder="Eg. Home, Business"
+            {...register('type', { required: true })}
+          />
           <PremiumInput label="Street" {...register('street', { required: true })} />
           <PremiumInput label="Country" {...register('country', { required: true })} />
-          <PremiumInput label="Phone Number" type="number" {...register('phoneNumber', { required: true })} />
+          <PremiumInput
+            label="Phone Number"
+            type="number"
+            {...register('phoneNumber', { required: true })}
+          />
           <Stack flexDirection={{ xs: 'column', sm: 'row' }} gap={1}>
             <Stack width="100%">
               <PremiumInput label="City" {...register('city', { required: true })} />
@@ -201,7 +239,12 @@ export default function CheckoutPage() {
             >
               add
             </LoadingButton>
-            <PremiumButton color="error" variant="outlined" magnetic={false} onClick={() => reset()}>
+            <PremiumButton
+              color="error"
+              variant="outlined"
+              magnetic={false}
+              onClick={() => reset()}
+            >
               Reset
             </PremiumButton>
           </Stack>
@@ -233,7 +276,10 @@ export default function CheckoutPage() {
                   elevation={0}
                   sx={{
                     borderRadius: 2.5,
-                    border: selectedAddress?._id === address._id ? '1px solid #DCB47A' : '1px solid #E9DFD1',
+                    border:
+                      selectedAddress?._id === address._id
+                        ? '1px solid #DCB47A'
+                        : '1px solid #E9DFD1',
                     background: selectedAddress?._id === address._id ? '#FFF8ED' : '#FFFFFF',
                     boxShadow:
                       selectedAddress?._id === address._id
@@ -270,6 +316,18 @@ export default function CheckoutPage() {
               Please select a payment method
             </Typography>
           </Stack>
+          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+            <Chip
+              label={selectedPaymentMethod === 'COD' ? 'Cash on Delivery selected' : 'Cash on Delivery'}
+              color={selectedPaymentMethod === 'COD' ? 'success' : 'default'}
+              variant={selectedPaymentMethod === 'COD' ? 'filled' : 'outlined'}
+            />
+            <Chip
+              label={selectedPaymentMethod === 'CARD' ? 'Card Payment selected' : 'Card Payment'}
+              color={selectedPaymentMethod === 'CARD' ? 'success' : 'default'}
+              variant={selectedPaymentMethod === 'CARD' ? 'filled' : 'outlined'}
+            />
+          </Stack>
           <Stack rowGap={2}>
             <Stack flexDirection="row" justifyContent="flex-start" alignItems="center">
               <Radio
@@ -305,17 +363,39 @@ export default function CheckoutPage() {
           Order summary
         </Typography>
         <CartContent checkout />
+        <Divider />
+        <Stack rowGap={1}>
+          <Stack direction="row" justifyContent="space-between">
+            <Typography color="text.secondary">Subtotal</Typography>
+            <Typography fontWeight={600}>${subTotalValue.toFixed(2)}</Typography>
+          </Stack>
+          <Stack direction="row" justifyContent="space-between">
+            <Typography color="text.secondary">Shipping</Typography>
+            <Typography fontWeight={600}>${SHIPPING.toFixed(2)}</Typography>
+          </Stack>
+          <Stack direction="row" justifyContent="space-between">
+            <Typography color="text.secondary">Tax ({TAXES}%)</Typography>
+            <Typography fontWeight={600}>${taxValue.toFixed(2)}</Typography>
+          </Stack>
+          <Stack direction="row" justifyContent="space-between" mt={0.5}>
+            <Typography variant="h6">Total</Typography>
+            <Typography variant="h6" fontWeight={800}>${grandTotal.toFixed(2)}</Typography>
+          </Stack>
+        </Stack>
         <LoadingButton
           fullWidth
           loading={orderLoading}
           variant="contained"
           onClick={handleCreateOrder}
           size="large"
+          disabled={!selectedAddress || items.length === 0}
           sx={{ borderRadius: 999, fontWeight: 700 }}
         >
           Pay and order
         </LoadingButton>
       </Stack>
+      </>
+      )}
     </Stack>
   );
 }

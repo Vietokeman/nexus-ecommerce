@@ -40,6 +40,7 @@ import { useAuthStore } from '@/store/auth-store';
 import { useActiveSessions } from '@/hooks/useFlashSale';
 import { useActiveGroupBuyCampaigns } from '@/hooks/useGroupBuy';
 import FlashSaleWidget from '@/components/ui/FlashSaleWidget';
+import EmptyState from '@/components/ui/EmptyState';
 import { nexus } from '@/theme/theme';
 import type { Product } from '@/types/product';
 import { APP_NAME } from '@/constants';
@@ -135,7 +136,8 @@ function ProductCard({
         background:
           'linear-gradient(150deg, rgba(255,253,250,0.92) 0%, rgba(247,243,238,0.92) 65%, rgba(242,237,231,0.96) 100%)',
         boxShadow: '0 18px 30px -26px rgba(79,67,62,0.65)',
-        transition: 'transform 260ms cubic-bezier(0.22,1,0.36,1), box-shadow 260ms cubic-bezier(0.22,1,0.36,1)',
+        transition:
+          'transform 260ms cubic-bezier(0.22,1,0.36,1), box-shadow 260ms cubic-bezier(0.22,1,0.36,1)',
         '&:hover': {
           transform: 'translateY(-4px)',
           boxShadow: '0 26px 42px -26px rgba(79,67,62,0.72)',
@@ -181,7 +183,9 @@ function ProductCard({
         </Stack>
 
         <Stack sx={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography sx={{ fontWeight: 600, color: nexus.neutral[800] }}>${product.price}</Typography>
+          <Typography sx={{ fontWeight: 600, color: nexus.neutral[800] }}>
+            ${product.price}
+          </Typography>
           {isProductAlreadyInCart ? (
             <Typography variant="body2" color="text.secondary">
               Added to cart
@@ -280,6 +284,7 @@ export default function HomePage() {
     });
 
   const paginatedProducts = filtered.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
+  const hasActiveFilters = brandFilters.size > 0 || categoryFilters.size > 0;
 
   const handleBrandFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newSet = new Set(brandFilters);
@@ -382,7 +387,9 @@ export default function HomePage() {
                 <Typography sx={{ fontWeight: 600 }}>Brands</Typography>
               </AccordionSummary>
               <AccordionDetails sx={{ p: 0 }}>
-                <FormGroup onChange={(e) => handleBrandFilter(e as React.ChangeEvent<HTMLInputElement>)}>
+                <FormGroup
+                  onChange={(e) => handleBrandFilter(e as React.ChangeEvent<HTMLInputElement>)}
+                >
                   {brands.map((brand) => (
                     <motion.div
                       key={brand.id}
@@ -410,7 +417,9 @@ export default function HomePage() {
                 <Typography sx={{ fontWeight: 600 }}>Category</Typography>
               </AccordionSummary>
               <AccordionDetails sx={{ p: 0 }}>
-                <FormGroup onChange={(e) => handleCategoryFilter(e as React.ChangeEvent<HTMLInputElement>)}>
+                <FormGroup
+                  onChange={(e) => handleCategoryFilter(e as React.ChangeEvent<HTMLInputElement>)}
+                >
                   {categories.map((cat) => (
                     <motion.div
                       key={cat.id}
@@ -440,18 +449,35 @@ export default function HomePage() {
             sx={{
               width: '100%',
               height: is800 ? '300px' : is1200 ? '400px' : '500px',
-              bgcolor: '#000',
-              borderRadius: 2,
+              borderRadius: 5,
               mb: 3,
               display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              background: nexus.gradient.dark,
+              alignItems: 'flex-start',
+              justifyContent: 'flex-end',
+              p: { xs: 2, md: 4.5 },
+              background:
+                'radial-gradient(circle at 20% 10%, rgba(213,171,163,0.42), transparent 46%), radial-gradient(circle at 85% 0%, rgba(181,108,99,0.24), transparent 40%), linear-gradient(140deg, #1F1916 0%, #2B211D 55%, #4F433E 100%)',
             }}
           >
-            <Typography variant="h3" color="white" fontWeight={700}>
-              {APP_NAME}
-            </Typography>
+            <Stack rowGap={1.5} maxWidth="42rem">
+              <Typography variant="overline" sx={{ color: 'rgba(255,255,255,0.78)', letterSpacing: '.16em' }}>
+                TET 2026 CURATION
+              </Typography>
+              <Typography variant="h2" color="white" fontWeight={700}>
+                {APP_NAME} Premium Tet Collection
+              </Typography>
+              <Typography sx={{ color: 'rgba(255,255,255,0.72)', maxWidth: '34rem' }}>
+                Curated gift sets, flash promotions, and group-buy bundles for enterprise and family celebrations.
+              </Typography>
+              <Stack direction="row" gap={1.2} flexWrap="wrap" pt={0.8}>
+                <PremiumButton magnetic={false} variant="contained" onClick={toggleFilter}>
+                  Open Smart Filters
+                </PremiumButton>
+                <PremiumButton magnetic={false} variant="outlined" onClick={() => navigate('/group-buy')}>
+                  Explore Group Buy
+                </PremiumButton>
+              </Stack>
+            </Stack>
           </Stack>
         )}
 
@@ -534,6 +560,34 @@ export default function HomePage() {
             alignItems="center"
             columnGap={5}
           >
+            {hasActiveFilters && (
+              <Stack direction="row" gap={1} flexWrap="wrap">
+                {Array.from(categoryFilters).map((value) => (
+                  <Chip
+                    key={`cat-${value}`}
+                    label={`Category: ${value}`}
+                    onDelete={() => {
+                      const next = new Set(categoryFilters);
+                      next.delete(value);
+                      setCategoryFilters(next);
+                    }}
+                    sx={{ bgcolor: '#fff', border: `1px solid ${nexus.neutral[300]}` }}
+                  />
+                ))}
+                {Array.from(brandFilters).map((value) => (
+                  <Chip
+                    key={`brand-${value}`}
+                    label={`Brand: ${value}`}
+                    onDelete={() => {
+                      const next = new Set(brandFilters);
+                      next.delete(value);
+                      setBrandFilters(next);
+                    }}
+                    sx={{ bgcolor: '#fff', border: `1px solid ${nexus.neutral[300]}` }}
+                  />
+                ))}
+              </Stack>
+            )}
             <Stack alignSelf="flex-end" width="12rem">
               <FormControl fullWidth>
                 <InputLabel id="sort-dropdown">Sort</InputLabel>
@@ -567,6 +621,22 @@ export default function HomePage() {
               />
             ))}
           </Grid>
+
+          {paginatedProducts.length === 0 && (
+            <Stack px={2}>
+              <EmptyState
+                title="No products match your current filters"
+                description="Try clearing some filters or switch to another category to continue browsing premium Tet offers."
+                actionLabel="Clear Filters"
+                onAction={() => {
+                  setBrandFilters(new Set());
+                  setCategoryFilters(new Set());
+                  setSortValue('');
+                  setPage(1);
+                }}
+              />
+            </Stack>
+          )}
 
           {/* Pagination */}
           <Stack
