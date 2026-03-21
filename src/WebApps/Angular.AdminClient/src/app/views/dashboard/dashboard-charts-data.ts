@@ -2,18 +2,18 @@ import { Injectable } from '@angular/core';
 import { getStyle, hexToRgba } from '@coreui/utils';
 
 export interface IChartProps {
-  data?: any;
-  labels?: any;
-  options?: any;
-  colors?: any;
-  type?: any;
-  legend?: any;
+  data?: unknown;
+  labels?: unknown;
+  options?: unknown;
+  colors?: unknown;
+  type?: unknown;
+  legend?: unknown;
 
-  [propName: string]: any;
+  [propName: string]: unknown;
 }
 
 @Injectable({
-  providedIn: 'any'
+  providedIn: 'root'
 })
 export class DashboardChartsData {
   constructor() {
@@ -125,7 +125,7 @@ export class DashboardChartsData {
       },
       tooltip: {
         callbacks: {
-          labelColor: function(context: any) {
+          labelColor: function(context: { dataset: { borderColor: string } }) {
             return {
               backgroundColor: context.dataset.borderColor
             };
