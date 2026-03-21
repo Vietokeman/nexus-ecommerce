@@ -13,6 +13,11 @@ import {
 import { AlertService } from '../../../shared/services/alert.service';
 import { SeriesPostsComponent } from '../../../views/content/series/series-posts.component';
 
+interface PagedEvent {
+  page?: number;
+  rows?: number;
+}
+
 @Component({
   selector: 'app-series',
   templateUrl: './series.component.html',
@@ -78,9 +83,9 @@ export class SeriesComponent implements OnInit, OnDestroy {
     });
   }
 
-  pageChanged(event: any): void {
-    this.pageIndex = event.page + 1;
-    this.pageSize = event.rows;
+  pageChanged(event: PagedEvent): void {
+    this.pageIndex = (event.page ?? 0) + 1;
+    this.pageSize = event.rows ?? this.pageSize;
     this.loadData();
   }
 
@@ -144,7 +149,7 @@ export class SeriesComponent implements OnInit, OnDestroy {
     });
   }
 
-  deleteItemsConfirm(ids: any[]) {
+  deleteItemsConfirm(ids: string[]) {
     this.toggleBlockUI(true);
 
     this.seriesApiClient.deleteSeries(ids).subscribe({

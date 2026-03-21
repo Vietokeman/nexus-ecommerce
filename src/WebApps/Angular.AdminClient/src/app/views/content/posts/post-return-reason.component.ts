@@ -21,9 +21,9 @@ export class PostReturnReasonComponent implements OnInit, OnDestroy {
   public title: string;
   public btnDisabled = false;
   public saveBtnName: string;
-  public contentTypes: any[] = [];
+  public contentTypes: string[] = [];
 
-  formSavedEventEmitter: EventEmitter<any> = new EventEmitter();
+  formSavedEventEmitter: EventEmitter<unknown> = new EventEmitter();
 
   constructor(
     public ref: DynamicDialogRef,

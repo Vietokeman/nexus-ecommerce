@@ -15,6 +15,16 @@ import {
 } from '../../../api/admin-api.service.generated';
 import { UploadService } from '../../../shared/services/upload.service';
 import { environment } from '../../../../environments/environment';
+
+interface SelectOption {
+  value: string;
+  label: string;
+}
+
+interface UploadResponse {
+  path: string;
+}
+
 @Component({
   templateUrl: 'series-detail.component.html',
   styleUrls: ['series-detail.component.scss'],
@@ -28,14 +38,14 @@ export class SeriesDetailComponent implements OnInit, OnDestroy {
   public title: string;
   public btnDisabled = false;
   public saveBtnName: string;
-  public postCategories: any[] = [];
-  public contentTypes: any[] = [];
-  public series: any[] = [];
+  public postCategories: SelectOption[] = [];
+  public contentTypes: SelectOption[] = [];
+  public series: SelectOption[] = [];
 
   selectedEntity = {} as SeriesDto;
   public thumbnailImage;
 
-  formSavedEventEmitter: EventEmitter<any> = new EventEmitter();
+  formSavedEventEmitter: EventEmitter<unknown> = new EventEmitter();
 
   constructor(
     public ref: DynamicDialogRef,
@@ -95,14 +105,15 @@ export class SeriesDetailComponent implements OnInit, OnDestroy {
       });
   }
 
-  onFileChange(event) {
-    if (event.target.files && event.target.files.length) {
-      this.uploadService.uploadImage('posts', event.target.files).subscribe({
-        next: (response: any) => {
+  onFileChange(event: Event) {
+    const target = event.target as HTMLInputElement | null;
+    if (target?.files && target.files.length) {
+      this.uploadService.uploadImage('posts', Array.from(target.files)).subscribe({
+        next: (response: UploadResponse) => {
           this.form.controls['thumbnail'].setValue(response.path);
           this.thumbnailImage = environment.API_URL + response.path;
         },
-        error: (err: any) => {
+        error: (err: unknown) => {
           console.log(err);
         },
       });
