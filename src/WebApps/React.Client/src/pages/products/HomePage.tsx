@@ -337,7 +337,7 @@ export default function HomePage() {
       <Backdrop
         open={isFilterOpen}
         onClick={closeFilter}
-        sx={{ zIndex: LAYERS.base + 1, backgroundColor: 'rgba(16, 11, 9, 0.3)' }}
+        sx={{ zIndex: LAYERS.overlay - 1, backgroundColor: 'rgba(16, 11, 9, 0.3)' }}
       />
 
       {/* Sliding Filter Sidebar */}
