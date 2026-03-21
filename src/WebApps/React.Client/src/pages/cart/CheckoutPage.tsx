@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Chip,
@@ -26,6 +26,10 @@ import { API_ENDPOINTS } from '@/lib/endpoints';
 import { SHIPPING, TAXES, VND_RATE } from '@/constants';
 import { PremiumButton, PremiumInput } from '@/components/ui/primitives';
 
+const RESERVE_WINDOW_MS = 15 * 60 * 1000;
+
+const getReserveKey = (userIdentity: string) => `checkout-reserve-expire-at:${userIdentity}`;
+
 interface AddressForm {
   type: string;
   street: string;
@@ -46,6 +50,8 @@ export default function CheckoutPage() {
   const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('COD');
   const [orderLoading, setOrderLoading] = useState(false);
+  const [reserveExpiresAt, setReserveExpiresAt] = useState<number | null>(null);
+  const [now, setNow] = useState(Date.now());
 
   const user = useAuthStore((s) => s.user);
   const items = useCartStore((s) => s.items);
@@ -58,6 +64,48 @@ export default function CheckoutPage() {
   const subTotalValue = subtotal();
   const taxValue = (subTotalValue * TAXES) / 100;
   const grandTotal = subTotalValue + SHIPPING + taxValue;
+  const userIdentity = user?.email || user?.userName || 'guest';
+
+  useEffect(() => {
+    if (items.length === 0) {
+      setReserveExpiresAt(null);
+      return;
+    }
+
+    const key = getReserveKey(userIdentity);
+    const saved = Number(window.sessionStorage.getItem(key) ?? 0);
+    const baseTime = Date.now();
+    const nextExpire = saved > baseTime ? saved : baseTime + RESERVE_WINDOW_MS;
+    window.sessionStorage.setItem(key, String(nextExpire));
+    setReserveExpiresAt(nextExpire);
+  }, [items.length, userIdentity]);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(Date.now()), 1000);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const reserveRemainingMs = useMemo(() => {
+    if (!reserveExpiresAt) {
+      return 0;
+    }
+    return Math.max(0, reserveExpiresAt - now);
+  }, [reserveExpiresAt, now]);
+
+  const reserveExpired = items.length > 0 && reserveRemainingMs <= 0;
+  const reserveMinutes = Math.floor(reserveRemainingMs / 60000)
+    .toString()
+    .padStart(2, '0');
+  const reserveSeconds = Math.floor((reserveRemainingMs % 60000) / 1000)
+    .toString()
+    .padStart(2, '0');
+
+  const restartReserveWindow = () => {
+    const key = getReserveKey(userIdentity);
+    const nextExpire = Date.now() + RESERVE_WINDOW_MS;
+    window.sessionStorage.setItem(key, String(nextExpire));
+    setReserveExpiresAt(nextExpire);
+  };
 
   const handleAddAddress = (data: AddressForm) => {
     const newAddress: Address = { ...data, _id: `addr-${Date.now()}` };
@@ -68,6 +116,11 @@ export default function CheckoutPage() {
   };
 
   const handleCreateOrder = async () => {
+    if (reserveExpired) {
+      toast.error('Your 15-minute stock reservation has expired. Please refresh it before checkout.');
+      return;
+    }
+
     if (!selectedAddress) {
       toast.error('Please select a shipping address');
       return;
@@ -163,6 +216,38 @@ export default function CheckoutPage() {
 
       {items.length > 0 && (
       <>
+      <Stack
+        width="100%"
+        maxWidth="56rem"
+        sx={{
+          p: 2,
+          borderRadius: 2.5,
+          border: reserveExpired ? '1px solid #F0B3A8' : '1px solid #E5D9C5',
+          background: reserveExpired
+            ? 'linear-gradient(145deg, rgba(255,244,241,0.92), rgba(255,255,255,0.98))'
+            : 'linear-gradient(145deg, rgba(255,248,236,0.9), rgba(240,251,248,0.88) 62%, rgba(255,255,255,0.96))',
+        }}
+      >
+        <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" spacing={1}>
+          <Typography variant="body1" fontWeight={700}>
+            Temporary stock reservation window
+          </Typography>
+          <Typography variant="h6" fontWeight={800} color={reserveExpired ? 'error.main' : 'success.main'}>
+            {reserveMinutes}:{reserveSeconds}
+          </Typography>
+        </Stack>
+        <Typography variant="body2" color="text.secondary" mt={0.5}>
+          Checkout should be completed within 15 minutes to keep reserved stock stable.
+        </Typography>
+        {reserveExpired && (
+          <Stack direction="row" mt={1.25}>
+            <PremiumButton magnetic={false} variant="outlined" onClick={restartReserveWindow}>
+              Restart 15-minute reservation
+            </PremiumButton>
+          </Stack>
+        )}
+      </Stack>
+
       {/* left box */}
       <Stack
         rowGap={4}
@@ -388,7 +473,7 @@ export default function CheckoutPage() {
           variant="contained"
           onClick={handleCreateOrder}
           size="large"
-          disabled={!selectedAddress || items.length === 0}
+          disabled={!selectedAddress || items.length === 0 || reserveExpired}
           sx={{ borderRadius: 999, fontWeight: 700 }}
         >
           Pay and order
