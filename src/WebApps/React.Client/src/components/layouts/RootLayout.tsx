@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Outlet, useNavigate, Link, useLocation } from 'react-router-dom';
 import {
   AppBar,
@@ -40,10 +40,15 @@ export default function RootLayout() {
   const logout = useAuthStore((s) => s.logout);
   const isFilterOpen = useUIStore((s) => s.isFilterOpen);
   const toggleFilter = useUIStore((s) => s.toggleFilter);
+  const closeAllUI = useUIStore((s) => s.closeAll);
   const navigate = useNavigate();
   const location = useLocation();
 
   const isProductList = location.pathname === '/';
+
+  useEffect(() => {
+    closeAllUI();
+  }, [location.pathname, closeAllUI]);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
