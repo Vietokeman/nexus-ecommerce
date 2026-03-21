@@ -23,6 +23,7 @@ import { API_ENDPOINTS } from '@/lib/endpoints';
 import { useAuthStore } from '@/store/auth-store';
 import type { AIContentResponse, CreateSellerProductDto } from '@/types/seller';
 import { nexus } from '@/theme/theme';
+import ImageFallback from '@/components/ui/ImageFallback';
 
 const categories = [
   'Thời trang nam',
@@ -35,6 +36,12 @@ const categories = [
   'Thể thao',
   'Khác',
 ];
+
+interface ApiErrorWithMessage {
+  response?: {
+    data?: string | { message?: string };
+  };
+}
 
 export default function SellerCreateProductPage() {
   const navigate = useNavigate();
@@ -102,8 +109,13 @@ export default function SellerCreateProductPage() {
       await api.post(API_ENDPOINTS.SELLER.PRODUCTS, dto);
       toast.success('Sản phẩm đã được đăng thành công!');
       navigate('/seller/products');
-    } catch (err: any) {
-      toast.error(err?.response?.data || 'Lỗi khi đăng sản phẩm');
+    } catch (err: unknown) {
+      const error = err as ApiErrorWithMessage;
+      const detail =
+        typeof error.response?.data === 'string'
+          ? error.response.data
+          : error.response?.data?.message;
+      toast.error(detail || 'Lỗi khi đăng sản phẩm');
     } finally {
       setIsSubmitting(false);
     }
@@ -224,7 +236,7 @@ export default function SellerCreateProductPage() {
             />
 
             {form.imageUrl && (
-              <img
+              <ImageFallback
                 src={form.imageUrl}
                 alt="Preview"
                 style={{

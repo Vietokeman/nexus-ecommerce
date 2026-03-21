@@ -25,6 +25,12 @@ interface ProductReviewsSectionProps {
   productId: number;
 }
 
+interface ApiErrorWithMessage {
+  response?: {
+    data?: string | { message?: string };
+  };
+}
+
 export default function ProductReviewsSection({ productId }: ProductReviewsSectionProps) {
   const user = useAuthStore((s) => s.user);
   const queryClient = useQueryClient();
@@ -61,8 +67,13 @@ export default function ProductReviewsSection({ productId }: ProductReviewsSecti
       setRating(5);
       setComment('');
     },
-    onError: (err: any) => {
-      toast.error(err?.response?.data || 'Lỗi khi gửi đánh giá');
+    onError: (err: unknown) => {
+      const error = err as ApiErrorWithMessage;
+      const detail =
+        typeof error.response?.data === 'string'
+          ? error.response.data
+          : error.response?.data?.message;
+      toast.error(detail || 'Lỗi khi gửi đánh giá');
     },
   });
 
