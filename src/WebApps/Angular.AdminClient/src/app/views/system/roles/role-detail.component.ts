@@ -36,7 +36,7 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
     public config: DynamicDialogConfig,
     private roleService: AdminApiRoleApiClient,
     private utilService: UtilityService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {}
 
   ngOnDestroy(): void {
@@ -120,11 +120,11 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
           Validators.required,
           Validators.maxLength(255),
           Validators.minLength(3),
-        ])
+        ]),
       ),
       displayName: new FormControl(
         this.selectedEntity.displayName || null,
-        Validators.required
+        Validators.required,
       ),
     });
   }

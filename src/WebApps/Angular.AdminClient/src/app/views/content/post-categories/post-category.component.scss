@@ -1,106 +1,106 @@
 .nx-category-page {
-	.nx-content-panel {
-		border: 1px solid #dbe3ef;
-		border-radius: 18px;
-		background: linear-gradient(180deg, #fdfefe 0%, #f5f8fc 100%);
-		box-shadow: 0 22px 42px -34px rgba(20, 38, 72, 0.55);
-	}
+  .nx-content-panel {
+    border: 1px solid #dbe3ef;
+    border-radius: 18px;
+    background: linear-gradient(180deg, #fdfefe 0%, #f5f8fc 100%);
+    box-shadow: 0 22px 42px -34px rgba(20, 38, 72, 0.55);
+  }
 
-	.nx-panel-head {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 12px;
-	}
+  .nx-panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
 
-	.nx-head-overline {
-		display: block;
-		font-size: 10px;
-		text-transform: uppercase;
-		letter-spacing: 0.14em;
-		color: #6f7f9f;
-		margin-bottom: 4px;
-	}
+  .nx-head-overline {
+    display: block;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #6f7f9f;
+    margin-bottom: 4px;
+  }
 
-	.nx-head-title {
-		margin: 0;
-		color: #1a2741;
-		font-weight: 700;
-		font-size: 18px;
-	}
+  .nx-head-title {
+    margin: 0;
+    color: #1a2741;
+    font-weight: 700;
+    font-size: 18px;
+  }
 
-	.nx-toolbar {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 12px;
-		flex-wrap: wrap;
-		padding: 14px 0 8px;
-	}
+  .nx-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 14px 0 8px;
+  }
 
-	.nx-toolbar-actions {
-		display: flex;
-		gap: 8px;
-		flex-wrap: wrap;
-	}
+  .nx-toolbar-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
 
-	.nx-toolbar-filters {
-		display: flex;
-		align-items: center;
-		gap: 8px;
-		width: min(100%, 540px);
-	}
+  .nx-toolbar-filters {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: min(100%, 540px);
+  }
 
-	.nx-toolbar-filters input {
-		width: 100%;
-		border-radius: 12px;
-		border: 1px solid #ced8e9;
-		background: #fff;
-	}
+  .nx-toolbar-filters input {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid #ced8e9;
+    background: #fff;
+  }
 
-	.nx-table-wrap {
-		border: 1px solid #d9e2ef;
-		border-radius: 14px;
-		overflow: hidden;
-		background: #fff;
-	}
+  .nx-table-wrap {
+    border: 1px solid #d9e2ef;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #fff;
+  }
 
-	.nx-summary {
-		text-align: left;
-		color: #4f5f7f;
-		font-weight: 600;
-	}
+  .nx-summary {
+    text-align: left;
+    color: #4f5f7f;
+    font-weight: 600;
+  }
 
-	:host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
-		background: #eef3fb;
-		color: #1f3056;
-		font-weight: 700;
-		border: none;
-		border-bottom: 1px solid #d4dfef;
-	}
+  :host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
+    background: #eef3fb;
+    color: #1f3056;
+    font-weight: 700;
+    border: none;
+    border-bottom: 1px solid #d4dfef;
+  }
 
-	:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
-		border: none;
-		border-top: 1px solid #ecf1f8;
-		color: #2e3b56;
-	}
+  :host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+    border: none;
+    border-top: 1px solid #ecf1f8;
+    color: #2e3b56;
+  }
 
-	:host ::ng-deep .p-paginator {
-		margin-top: 14px;
-		border-radius: 12px;
-		border: 1px solid #d8e1ef;
-	}
+  :host ::ng-deep .p-paginator {
+    margin-top: 14px;
+    border-radius: 12px;
+    border: 1px solid #d8e1ef;
+  }
 }
 
 @media (max-width: 768px) {
-	.nx-category-page {
-		.nx-toolbar-filters {
-			width: 100%;
-		}
+  .nx-category-page {
+    .nx-toolbar-filters {
+      width: 100%;
+    }
 
-		.nx-toolbar-filters .p-button {
-			width: 100%;
-		}
-	}
+    .nx-toolbar-filters .p-button {
+      width: 100%;
+    }
+  }
 }
 /* Styles for the home component */

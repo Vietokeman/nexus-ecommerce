@@ -36,7 +36,7 @@ export class PostCategoryDetailComponent implements OnInit, OnDestroy {
     public config: DynamicDialogConfig,
     private postCategoryService: AdminApiPostCategoryApiClient,
     private utilService: UtilityService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {}
 
   ngOnDestroy(): void {
@@ -126,19 +126,19 @@ export class PostCategoryDetailComponent implements OnInit, OnDestroy {
           Validators.required,
           Validators.maxLength(255),
           Validators.minLength(3),
-        ])
+        ]),
       ),
       slug: new FormControl(
         this.selectedEntity.slug || null,
-        Validators.required
+        Validators.required,
       ),
       sortOrder: new FormControl(
         this.selectedEntity.sortOrder || 0,
-        Validators.required
+        Validators.required,
       ),
       isActive: new FormControl(this.selectedEntity.isActive || true),
       seoDescription: new FormControl(
-        this.selectedEntity.seoDescription || null
+        this.selectedEntity.seoDescription || null,
       ),
     });
   }

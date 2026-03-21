@@ -4,10 +4,19 @@
   [formGroup]="form"
   (ngSubmit)="saveChange()"
 >
-  <p-panel #pnlDetail header="Thông tin" [toggleable]="true" [collapsed]="false" class="nx-dialog-panel">
+  <p-panel
+    #pnlDetail
+    header="Thông tin"
+    [toggleable]="true"
+    [collapsed]="false"
+    class="nx-dialog-panel"
+  >
     <div class="nx-form-head">
       <h4>Gán bài viết vào loạt bài</h4>
-      <p>Chọn series, đặt thứ tự hiển thị và quản lý liên kết hiện có của bài viết.</p>
+      <p>
+        Chọn series, đặt thứ tự hiển thị và quản lý liên kết hiện có của bài
+        viết.
+      </p>
     </div>
 
     <div class="nx-inline-form">
@@ -24,10 +33,20 @@
       </div>
       <div class="field nx-field-order">
         <label for="sortOrder">Thứ tự <span class="required">*</span></label>
-        <p-inputNumber id="sortOrder" formControlName="sortOrder" [style]="{ width: '100%' }"></p-inputNumber>
+        <p-inputNumber
+          id="sortOrder"
+          formControlName="sortOrder"
+          [style]="{ width: '100%' }"
+        ></p-inputNumber>
       </div>
       <div class="field nx-field-submit">
-        <button type="submit" class="btn btn-primary" [disabled]="!form.valid || btnDisabled">Lưu lại</button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="!form.valid || btnDisabled"
+        >
+          Lưu lại
+        </button>
       </div>
     </div>
 
@@ -75,7 +94,13 @@
 
     <p-blockUI [target]="pnlDetail" [blocked]="blockedPanelDetail">
       <p-progressSpinner
-        [style]="{ width: '100px', height: '100px', position: 'absolute', top: '25%', left: '50%' }"
+        [style]="{
+          width: '100px',
+          height: '100px',
+          position: 'absolute',
+          top: '25%',
+          left: '50%',
+        }"
         strokeWidth="2"
         animationDuration=".5s"
       ></p-progressSpinner>

@@ -29,7 +29,7 @@ export class PostReturnReasonComponent implements OnInit, OnDestroy {
     public ref: DynamicDialogRef,
     public config: DynamicDialogConfig,
     private fb: FormBuilder,
-    private postApiClient: AdminApiPostApiClient
+    private postApiClient: AdminApiPostApiClient,
   ) {}
 
   ngOnDestroy(): void {

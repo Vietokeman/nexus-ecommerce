@@ -36,7 +36,7 @@ export class PostActivityLogsComponent implements OnInit, OnDestroy {
     public ref: DynamicDialogRef,
     public config: DynamicDialogConfig,
     private utilService: UtilityService,
-    private postApiClient: AdminApiPostApiClient
+    private postApiClient: AdminApiPostApiClient,
   ) {}
 
   ngOnDestroy(): void {

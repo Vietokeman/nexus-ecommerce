@@ -5,7 +5,10 @@
         <div>
           <div class="nx-page-eyebrow">System management</div>
           <h1>Quản lý người dùng</h1>
-          <p>Quản trị tài khoản, thông tin liên hệ, phân quyền và trạng thái hoạt động.</p>
+          <p>
+            Quản trị tài khoản, thông tin liên hệ, phân quyền và trạng thái hoạt
+            động.
+          </p>
         </div>
       </div>
     </p-header>
@@ -95,11 +98,19 @@
             <td>{{ row.userName }}</td>
             <td>{{ row.email }}</td>
             <td>{{ row.phoneNumber }}</td>
-            <td>{{ row.dateCreated | date: 'dd-MM-yyyy hh:mm' }}</td>
+            <td>{{ row.dateCreated | date: "dd-MM-yyyy hh:mm" }}</td>
             <td>{{ row.balance | number }}</td>
             <td style="width: 150px">
-              <p-badge *ngIf="row.isActive == 1" value="Kích hoạt" severity="success"></p-badge>
-              <p-badge *ngIf="row.isActive == 0" value="Khoá" severity="danger"></p-badge>
+              <p-badge
+                *ngIf="row.isActive == 1"
+                value="Kích hoạt"
+                severity="success"
+              ></p-badge>
+              <p-badge
+                *ngIf="row.isActive == 0"
+                value="Khoá"
+                severity="danger"
+              ></p-badge>
             </td>
             <td>
               <div class="nx-row-actions">
@@ -153,7 +164,13 @@
 
     <p-blockUI [target]="pnl" [blocked]="blockedPanel">
       <p-progressSpinner
-        [style]="{ width: '100px', height: '100px', position: 'absolute', top: '25%', left: '50%' }"
+        [style]="{
+          width: '100px',
+          height: '100px',
+          position: 'absolute',
+          top: '25%',
+          left: '50%',
+        }"
         strokeWidth="2"
         animationDuration=".5s"
       ></p-progressSpinner>

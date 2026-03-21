@@ -1,5 +1,11 @@
 <div class="nx-series-posts-form">
-  <p-panel #pnlDetail header="Thông tin" [toggleable]="true" [collapsed]="false" class="nx-dialog-panel">
+  <p-panel
+    #pnlDetail
+    header="Thông tin"
+    [toggleable]="true"
+    [collapsed]="false"
+    class="nx-dialog-panel"
+  >
     <div class="nx-form-head">
       <h4>Danh sách bài viết trong series</h4>
       <p>Quản lý thứ tự và loại bỏ bài viết không còn thuộc chuỗi nội dung.</p>
@@ -51,7 +57,13 @@
 
     <p-blockUI [target]="pnlDetail" [blocked]="blockedPanel">
       <p-progressSpinner
-        [style]="{ width: '100px', height: '100px', position: 'absolute', top: '25%', left: '50%' }"
+        [style]="{
+          width: '100px',
+          height: '100px',
+          position: 'absolute',
+          top: '25%',
+          left: '50%',
+        }"
         strokeWidth="2"
         animationDuration=".5s"
       ></p-progressSpinner>

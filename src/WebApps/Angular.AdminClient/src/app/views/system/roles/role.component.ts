@@ -33,7 +33,7 @@ export class RoleComponent implements OnInit, OnDestroy {
     private roleService: AdminApiRoleApiClient,
     public dialogService: DialogService,
     private alertService: AlertService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
   ) {}
 
   ngOnDestroy(): void {

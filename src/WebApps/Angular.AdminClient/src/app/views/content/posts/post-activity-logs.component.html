@@ -1,8 +1,17 @@
 <div class="nx-post-logs-form">
-  <p-panel #pnlDetail header="Thông tin" [toggleable]="true" [collapsed]="false" class="nx-dialog-panel">
+  <p-panel
+    #pnlDetail
+    header="Thông tin"
+    [toggleable]="true"
+    [collapsed]="false"
+    class="nx-dialog-panel"
+  >
     <div class="nx-form-head">
       <h4>Lịch sử thay đổi bài viết</h4>
-      <p>Theo dõi trạng thái duyệt, người thực hiện và ghi chú của từng lần cập nhật.</p>
+      <p>
+        Theo dõi trạng thái duyệt, người thực hiện và ghi chú của từng lần cập
+        nhật.
+      </p>
     </div>
 
     <div class="nx-table-wrap">
@@ -33,19 +42,51 @@
               <p-tableCheckbox [value]="row"></p-tableCheckbox>
             </td>
             <td>
-              <p-badge *ngIf="row.fromStatus == 0" value="Nháp" severity="info"></p-badge>
-              <p-badge *ngIf="row.fromStatus == 1" value="Đợi duyệt" severity="warn"></p-badge>
-              <p-badge *ngIf="row.fromStatus == 2" value="Từ chối" severity="danger"></p-badge>
-              <p-badge *ngIf="row.fromStatus == 3" value="Đã đăng" severity="success"></p-badge>
+              <p-badge
+                *ngIf="row.fromStatus == 0"
+                value="Nháp"
+                severity="info"
+              ></p-badge>
+              <p-badge
+                *ngIf="row.fromStatus == 1"
+                value="Đợi duyệt"
+                severity="warn"
+              ></p-badge>
+              <p-badge
+                *ngIf="row.fromStatus == 2"
+                value="Từ chối"
+                severity="danger"
+              ></p-badge>
+              <p-badge
+                *ngIf="row.fromStatus == 3"
+                value="Đã đăng"
+                severity="success"
+              ></p-badge>
             </td>
             <td>
-              <p-badge *ngIf="row.toStatus == 0" value="Nháp" severity="info"></p-badge>
-              <p-badge *ngIf="row.toStatus == 1" value="Đợi duyệt" severity="warn"></p-badge>
-              <p-badge *ngIf="row.toStatus == 2" value="Từ chối" severity="danger"></p-badge>
-              <p-badge *ngIf="row.toStatus == 3" value="Đã đăng" severity="success"></p-badge>
+              <p-badge
+                *ngIf="row.toStatus == 0"
+                value="Nháp"
+                severity="info"
+              ></p-badge>
+              <p-badge
+                *ngIf="row.toStatus == 1"
+                value="Đợi duyệt"
+                severity="warn"
+              ></p-badge>
+              <p-badge
+                *ngIf="row.toStatus == 2"
+                value="Từ chối"
+                severity="danger"
+              ></p-badge>
+              <p-badge
+                *ngIf="row.toStatus == 3"
+                value="Đã đăng"
+                severity="success"
+              ></p-badge>
             </td>
             <td>{{ row.userName }}</td>
-            <td>{{ row.dateCreated | date: 'dd-MM-yyyy hh:mm' }}</td>
+            <td>{{ row.dateCreated | date: "dd-MM-yyyy hh:mm" }}</td>
             <td>{{ row.note }}</td>
           </tr>
         </ng-template>
@@ -59,7 +100,7 @@
           height: '100px',
           position: 'absolute',
           top: '25%',
-          left: '50%'
+          left: '50%',
         }"
         strokeWidth="2"
         animationDuration=".5s"

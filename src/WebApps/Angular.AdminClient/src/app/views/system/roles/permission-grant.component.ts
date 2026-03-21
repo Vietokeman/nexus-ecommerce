@@ -32,7 +32,7 @@ export class PermissionGrantComponent implements OnInit, OnDestroy {
     public ref: DynamicDialogRef,
     public config: DynamicDialogConfig,
     private roleService: AdminApiRoleApiClient,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {}
 
   ngOnDestroy(): void {
@@ -76,7 +76,7 @@ export class PermissionGrantComponent implements OnInit, OnDestroy {
     for (let index = 0; index < this.permissions.length; index++) {
       const isGranted =
         this.selectedPermissions.filter(
-          (x) => x.value == this.permissions[index].value
+          (x) => x.value == this.permissions[index].value,
         ).length > 0;
 
       roleClaims.push(
@@ -84,7 +84,7 @@ export class PermissionGrantComponent implements OnInit, OnDestroy {
           type: this.permissions[index].type,
           selected: isGranted,
           value: this.permissions[index].value,
-        })
+        }),
       );
     }
     var updateValues = new PermissionDto({
@@ -112,7 +112,7 @@ export class PermissionGrantComponent implements OnInit, OnDestroy {
             displayName: permission.displayName,
             type: permission.type,
             value: permission.value,
-          })
+          }),
         );
       }
     }

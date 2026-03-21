@@ -59,7 +59,7 @@ export class PostDetailComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private postApiClient: AdminApiPostApiClient,
     private postCategoryApiClient: AdminApiPostCategoryApiClient,
-    private uploadService: UploadService
+    private uploadService: UploadService,
   ) {}
   ngOnDestroy(): void {
     if (this.ref) {
@@ -209,22 +209,22 @@ export class PostDetailComponent implements OnInit, OnDestroy {
           Validators.required,
           Validators.maxLength(255),
           Validators.minLength(3),
-        ])
+        ]),
       ),
       slug: new FormControl(
         this.selectedEntity.slug || null,
-        Validators.required
+        Validators.required,
       ),
       categoryId: new FormControl(
         this.selectedEntity.categoryId || null,
-        Validators.required
+        Validators.required,
       ),
       description: new FormControl(
         this.selectedEntity.description || null,
-        Validators.required
+        Validators.required,
       ),
       seoDescription: new FormControl(
-        this.selectedEntity.seoDescription || null
+        this.selectedEntity.seoDescription || null,
       ),
       content: new FormControl(this.selectedEntity.content || null),
       thumbnail: new FormControl(this.selectedEntity.thumbnail || null),

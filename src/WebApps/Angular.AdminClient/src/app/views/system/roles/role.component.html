@@ -5,7 +5,10 @@
         <div>
           <div class="nx-page-eyebrow">Access governance</div>
           <h1>Quản lý quyền</h1>
-          <p>Thiết lập vai trò, mô tả quyền hạn và phân quyền chi tiết theo chính sách hệ thống.</p>
+          <p>
+            Thiết lập vai trò, mô tả quyền hạn và phân quyền chi tiết theo chính
+            sách hệ thống.
+          </p>
         </div>
       </div>
     </p-header>
@@ -114,7 +117,13 @@
 
     <p-blockUI [target]="pnl" [blocked]="blockedPanel">
       <p-progressSpinner
-        [style]="{ width: '100px', height: '100px', position: 'absolute', top: '25%', left: '50%' }"
+        [style]="{
+          width: '100px',
+          height: '100px',
+          position: 'absolute',
+          top: '25%',
+          left: '50%',
+        }"
         strokeWidth="2"
         animationDuration=".5s"
       ></p-progressSpinner>

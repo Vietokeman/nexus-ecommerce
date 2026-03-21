@@ -1,8 +1,16 @@
 <div class="nx-role-assign-form">
-  <p-panel #pnlDetail header="Thông tin" [toggleable]="true" [collapsed]="false" class="nx-dialog-panel">
+  <p-panel
+    #pnlDetail
+    header="Thông tin"
+    [toggleable]="true"
+    [collapsed]="false"
+    class="nx-dialog-panel"
+  >
     <div class="nx-form-head">
       <h4>Gán quyền theo vai trò</h4>
-      <p>Kéo thả role từ danh sách có sẵn sang danh sách đã chọn cho người dùng.</p>
+      <p>
+        Kéo thả role từ danh sách có sẵn sang danh sách đã chọn cho người dùng.
+      </p>
     </div>
 
     <p-pickList
@@ -18,14 +26,25 @@
     </p-pickList>
 
     <ng-template pTemplate="footer">
-      <button type="button" (click)="saveChange()" pButton [disabled]="btnDisabled">
+      <button
+        type="button"
+        (click)="saveChange()"
+        pButton
+        [disabled]="btnDisabled"
+      >
         {{ saveBtnName }}
       </button>
     </ng-template>
 
     <p-blockUI [target]="pnlDetail" [blocked]="blockedPanelDetail">
       <p-progressSpinner
-        [style]="{ width: '100px', height: '100px', position: 'absolute', top: '25%', left: '50%' }"
+        [style]="{
+          width: '100px',
+          height: '100px',
+          position: 'absolute',
+          top: '25%',
+          left: '50%',
+        }"
         strokeWidth="2"
         animationDuration=".5s"
       ></p-progressSpinner>

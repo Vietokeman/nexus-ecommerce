@@ -15,9 +15,24 @@
     </div>
 
     <c-header-nav class="nx-header-nav d-none d-lg-flex">
-      <a class="nx-header-link" routerLink="/dashboard" routerLinkActive="active">Tổng quan</a>
-      <a class="nx-header-link" routerLink="/system/users" routerLinkActive="active">Người dùng</a>
-      <a class="nx-header-link" routerLink="/content/posts" routerLinkActive="active">Bài viết</a>
+      <a
+        class="nx-header-link"
+        routerLink="/dashboard"
+        routerLinkActive="active"
+        >Tổng quan</a
+      >
+      <a
+        class="nx-header-link"
+        routerLink="/system/users"
+        routerLinkActive="active"
+        >Người dùng</a
+      >
+      <a
+        class="nx-header-link"
+        routerLink="/content/posts"
+        routerLinkActive="active"
+        >Bài viết</a
+      >
     </c-header-nav>
 
     <div class="nx-header-actions d-none d-lg-flex" aria-label="Quick stats">
@@ -26,7 +41,14 @@
     </div>
 
     <c-dropdown alignment="end" variant="nav-item">
-      <button cButton color="" [caret]="false" cDropdownToggle class="nx-profile-trigger" type="button">
+      <button
+        cButton
+        color=""
+        [caret]="false"
+        cDropdownToggle
+        class="nx-profile-trigger"
+        type="button"
+      >
         <span class="nx-profile-avatar">VA</span>
         <span class="nx-profile-meta d-none d-md-inline-flex">
           <span class="nx-profile-name">Viet Admin</span>
@@ -37,8 +59,12 @@
       <ul cDropdownMenu class="nx-profile-menu pt-0">
         <li><span class="nx-profile-header">Tài khoản</span></li>
         <li><a cDropdownItem routerLink="/dashboard">Bảng điều khiển</a></li>
-        <li><a cDropdownItem routerLink="/system/users">Quản trị người dùng</a></li>
-        <li><a cDropdownItem routerLink="/content/posts">Kiểm duyệt nội dung</a></li>
+        <li>
+          <a cDropdownItem routerLink="/system/users">Quản trị người dùng</a>
+        </li>
+        <li>
+          <a cDropdownItem routerLink="/content/posts">Kiểm duyệt nội dung</a>
+        </li>
       </ul>
     </c-dropdown>
   </c-container>

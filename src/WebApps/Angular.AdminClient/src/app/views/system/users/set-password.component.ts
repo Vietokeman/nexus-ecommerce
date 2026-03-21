@@ -38,7 +38,7 @@ export class SetPasswordComponent implements OnInit, OnDestroy {
     public ref: DynamicDialogRef,
     public config: DynamicDialogConfig,
     private userService: AdminApiUserApiClient,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {}
 
   ngOnDestroy(): void {
@@ -94,13 +94,13 @@ export class SetPasswordComponent implements OnInit, OnDestroy {
           Validators.compose([
             Validators.required,
             Validators.pattern(
-              '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&].{8,}$'
+              '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&].{8,}$',
             ),
-          ])
+          ]),
         ),
         confirmNewPassword: new FormControl(null),
       },
-      passwordMatchingValidatior
+      passwordMatchingValidatior,
     );
   }
 
@@ -117,7 +117,7 @@ export class SetPasswordComponent implements OnInit, OnDestroy {
   }
 }
 export const passwordMatchingValidatior: ValidatorFn = (
-  control: AbstractControl
+  control: AbstractControl,
 ): ValidationErrors | null => {
   const password = control.get('newPassword');
   const confirmPassword = control.get('confirmNewPassword');

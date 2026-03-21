@@ -33,7 +33,7 @@ export class ChangeEmailComponent implements OnInit, OnDestroy {
     public ref: DynamicDialogRef,
     public config: DynamicDialogConfig,
     private userService: AdminApiUserApiClient,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {}
 
   ngOnDestroy(): void {
@@ -96,7 +96,7 @@ export class ChangeEmailComponent implements OnInit, OnDestroy {
     this.form = this.fb.group({
       email: new FormControl(
         this.email || null,
-        Validators.compose([Validators.required, Validators.email])
+        Validators.compose([Validators.required, Validators.email]),
       ),
     });
   }

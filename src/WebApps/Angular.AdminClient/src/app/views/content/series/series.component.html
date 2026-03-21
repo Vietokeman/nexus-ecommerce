@@ -1,5 +1,5 @@
 <div class="nx-content-page nx-series-page">
-  <p-panel #pnl [style]="{'margin-bottom':'10px'}" class="nx-content-panel">
+  <p-panel #pnl [style]="{ 'margin-bottom': '10px' }" class="nx-content-panel">
     <p-header>
       <div class="nx-panel-head">
         <div>
@@ -65,7 +65,14 @@
           placeholder="Nhập từ khóa..."
           type="text"
         />
-        <button type="button" pButton (click)="loadData()" class="p-button-outlined">Tìm</button>
+        <button
+          type="button"
+          pButton
+          (click)="loadData()"
+          class="p-button-outlined"
+        >
+          Tìm
+        </button>
       </div>
     </div>
 
@@ -95,17 +102,25 @@
               <span class="ui-column-title"></span>
               <p-tableCheckbox [value]="row"></p-tableCheckbox>
             </td>
-            <td>{{row.name}}</td>
-            <td>{{row.slug}}</td>
-            <td>{{row.displayOrder | number}}</td>
+            <td>{{ row.name }}</td>
+            <td>{{ row.slug }}</td>
+            <td>{{ row.displayOrder | number }}</td>
             <td style="width: 150px">
-              <p-badge *ngIf="row.isActive == 1" value="Kích hoạt" severity="success"></p-badge>
-              <p-badge *ngIf="row.isActive == 0" value="Khoá" severity="danger"></p-badge>
+              <p-badge
+                *ngIf="row.isActive == 1"
+                value="Kích hoạt"
+                severity="success"
+              ></p-badge>
+              <p-badge
+                *ngIf="row.isActive == 0"
+                value="Khoá"
+                severity="danger"
+              ></p-badge>
             </td>
           </tr>
         </ng-template>
         <ng-template pTemplate="summary">
-          <div class="nx-summary">Tổng số: {{totalCount | number}}</div>
+          <div class="nx-summary">Tổng số: {{ totalCount | number }}</div>
         </ng-template>
       </p-table>
     </div>
@@ -119,7 +134,13 @@
 
     <p-blockUI [target]="pnl" [blocked]="blockedPanel">
       <p-progressSpinner
-        [style]="{width: '100px', height: '100px', position:'absolute', top:'25%', left:'50%'}"
+        [style]="{
+          width: '100px',
+          height: '100px',
+          position: 'absolute',
+          top: '25%',
+          left: '50%',
+        }"
         strokeWidth="2"
         animationDuration=".5s"
       ></p-progressSpinner>

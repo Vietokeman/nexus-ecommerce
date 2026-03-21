@@ -29,7 +29,7 @@ export class RoleAssignComponent implements OnInit, OnDestroy {
     public ref: DynamicDialogRef,
     public config: DynamicDialogConfig,
     private userApiClient: AdminApiUserApiClient,
-    private roleApiclient: AdminApiRoleApiClient
+    private roleApiclient: AdminApiRoleApiClient,
   ) {}
 
   ngOnDestroy(): void {
@@ -89,7 +89,7 @@ export class RoleAssignComponent implements OnInit, OnDestroy {
         next: (response: UserDto) => {
           this.seletedRoles = response.roles;
           this.availableRoles = this.availableRoles.filter(
-            (x) => !this.seletedRoles.includes(x)
+            (x) => !this.seletedRoles.includes(x),
           );
           this.toggleBlockUI(false);
         },

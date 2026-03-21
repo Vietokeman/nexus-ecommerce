@@ -43,7 +43,7 @@ export class SeriesDetailComponent implements OnInit, OnDestroy {
     private utilService: UtilityService,
     private fb: FormBuilder,
     private seriesApiClient: AdminApiSeriesApiClient,
-    private uploadService: UploadService
+    private uploadService: UploadService,
   ) {}
   ngOnDestroy(): void {
     if (this.ref) {
@@ -163,18 +163,18 @@ export class SeriesDetailComponent implements OnInit, OnDestroy {
           Validators.required,
           Validators.maxLength(255),
           Validators.minLength(3),
-        ])
+        ]),
       ),
       slug: new FormControl(
         this.selectedEntity.slug || null,
-        Validators.required
+        Validators.required,
       ),
       description: new FormControl(
         this.selectedEntity.description || null,
-        Validators.required
+        Validators.required,
       ),
       seoDescription: new FormControl(
-        this.selectedEntity.seoDescription || null
+        this.selectedEntity.seoDescription || null,
       ),
       content: new FormControl(this.selectedEntity.content || null),
       isActive: new FormControl(this.selectedEntity.isActive || null),

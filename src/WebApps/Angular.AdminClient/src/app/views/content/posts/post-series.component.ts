@@ -41,7 +41,7 @@ export class PostSeriesComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private postApiClient: AdminApiPostApiClient,
     private seriesApiClient: AdminApiSeriesApiClient,
-    private alertService: AlertService
+    private alertService: AlertService,
   ) {}
 
   ngOnDestroy(): void {

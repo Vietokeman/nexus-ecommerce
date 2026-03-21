@@ -10,14 +10,20 @@
 
 .nx-footer-shell {
   border: 1px solid #e2d4c9;
-  background: linear-gradient(145deg, rgba(255, 252, 248, 0.96) 0%, rgba(244, 236, 229, 0.94) 100%);
+  background: linear-gradient(
+    145deg,
+    rgba(255, 252, 248, 0.96) 0%,
+    rgba(244, 236, 229, 0.94) 100%
+  );
   border-radius: 22px;
   padding: 1rem 1.1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  box-shadow: 0 22px 45px -34px rgba(72, 53, 45, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  box-shadow:
+    0 22px 45px -34px rgba(72, 53, 45, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
 .nx-footer-brand {

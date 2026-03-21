@@ -38,7 +38,7 @@ export class UserComponent implements OnInit, OnDestroy {
     private userService: AdminApiUserApiClient,
     public dialogService: DialogService,
     private alertService: AlertService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
   ) {}
 
   ngOnDestroy(): void {
@@ -147,7 +147,7 @@ export class UserComponent implements OnInit, OnDestroy {
     ref.onClose.subscribe((result: boolean) => {
       if (result) {
         this.alertService.showSuccess(
-          MessageConstants.CHANGE_PASSWORD_SUCCCESS_MSG
+          MessageConstants.CHANGE_PASSWORD_SUCCCESS_MSG,
         );
         this.selectedItems = [];
         this.loadData();
@@ -164,7 +164,7 @@ export class UserComponent implements OnInit, OnDestroy {
     ref.onClose.subscribe((result: boolean) => {
       if (result) {
         this.alertService.showSuccess(
-          MessageConstants.CHANGE_EMAIL_SUCCCESS_MSG
+          MessageConstants.CHANGE_EMAIL_SUCCCESS_MSG,
         );
         this.selectedItems = [];
         this.loadData();

@@ -4,7 +4,13 @@
   [formGroup]="form"
   (ngSubmit)="saveChange()"
 >
-  <p-panel #pnlDetail header="Thông tin" [toggleable]="true" [collapsed]="false" class="nx-dialog-panel">
+  <p-panel
+    #pnlDetail
+    header="Thông tin"
+    [toggleable]="true"
+    [collapsed]="false"
+    class="nx-dialog-panel"
+  >
     <div class="nx-form-head">
       <h4>Biên tập series</h4>
       <p>Tạo và quản lý thông tin tổng quan cho chuỗi bài viết.</p>
@@ -12,7 +18,9 @@
 
     <div class="formgrid grid">
       <div class="field col-12 md:col-6">
-        <label for="title" class="block">Tiêu đề <span class="required">*</span></label>
+        <label for="title" class="block"
+          >Tiêu đề <span class="required">*</span></label
+        >
         <input
           id="title"
           type="text"
@@ -45,7 +53,9 @@
         ></app-validation-message>
       </div>
       <div class="field col-12">
-        <label for="description" class="block">Mô tả ngắn <span class="required">*</span></label>
+        <label for="description" class="block"
+          >Mô tả ngắn <span class="required">*</span></label
+        >
         <textarea
           id="description"
           type="text"
@@ -61,17 +71,30 @@
         ></app-validation-message>
       </div>
       <div class="field col-12 md:col-6">
-        <label for="thumbnailFileContent">Hình ảnh <span class="required">*</span></label>
+        <label for="thumbnailFileContent"
+          >Hình ảnh <span class="required">*</span></label
+        >
         <input type="hidden" formControlName="thumbnail" />
         <input (change)="onFileChange($event)" type="file" class="w-full" />
       </div>
-      <div *ngIf="thumbnailImage" class="field col-12 md:col-6 nx-thumb-preview">
-        <p-image [src]="thumbnailImage" [preview]="true" [alt]="selectedEntity.name" width="250"></p-image>
+      <div
+        *ngIf="thumbnailImage"
+        class="field col-12 md:col-6 nx-thumb-preview"
+      >
+        <p-image
+          [src]="thumbnailImage"
+          [preview]="true"
+          [alt]="selectedEntity.name"
+          width="250"
+        ></p-image>
       </div>
 
       <div class="field col-12">
         <label for="content">Nội dung</label>
-        <p-editor formControlName="content" [style]="{ height: '320px' }"></p-editor>
+        <p-editor
+          formControlName="content"
+          [style]="{ height: '320px' }"
+        ></p-editor>
       </div>
       <div class="field col-12">
         <label for="seoDescription">Mô tả SEO</label>
@@ -86,18 +109,34 @@
         ></textarea>
       </div>
       <div class="field-checkbox col-12 md:col-3 nx-active-toggle">
-        <p-checkbox formControlName="isActive" [binary]="true" id="isActive"></p-checkbox>
+        <p-checkbox
+          formControlName="isActive"
+          [binary]="true"
+          id="isActive"
+        ></p-checkbox>
         <label for="isActive">Kích hoạt</label>
       </div>
     </div>
 
     <ng-template pTemplate="footer">
-      <button type="submit" class="btn btn-primary" [disabled]="!form.valid || btnDisabled">Lưu</button>
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="!form.valid || btnDisabled"
+      >
+        Lưu
+      </button>
     </ng-template>
 
     <p-blockUI [target]="pnlDetail" [blocked]="blockedPanelDetail">
       <p-progressSpinner
-        [style]="{ width: '100px', height: '100px', position: 'absolute', top: '25%', left: '50%' }"
+        [style]="{
+          width: '100px',
+          height: '100px',
+          position: 'absolute',
+          top: '25%',
+          left: '50%',
+        }"
         strokeWidth="2"
         animationDuration=".5s"
       ></p-progressSpinner>

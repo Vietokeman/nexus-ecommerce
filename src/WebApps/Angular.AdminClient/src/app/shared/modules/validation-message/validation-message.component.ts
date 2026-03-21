@@ -10,10 +10,7 @@ export class ValidationMessageComponent implements OnInit {
   @Input() entityForm: FormGroup;
   @Input() fieldName: string;
   @Input() validationMessages: any;
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
-
-  }
-
+  ngOnInit(): void {}
 }

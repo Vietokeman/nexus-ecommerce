@@ -34,7 +34,7 @@ export class SeriesComponent implements OnInit, OnDestroy {
     private seriesApiClient: AdminApiSeriesApiClient,
     public dialogService: DialogService,
     private notificationService: AlertService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
   ) {}
 
   ngOnDestroy(): void {
@@ -87,7 +87,7 @@ export class SeriesComponent implements OnInit, OnDestroy {
   showEditModal() {
     if (this.selectedItems.length === 0) {
       this.notificationService.showError(
-        MessageConstants.NOT_CHOOSE_ANY_RECORD
+        MessageConstants.NOT_CHOOSE_ANY_RECORD,
       );
       return;
     }
@@ -109,7 +109,7 @@ export class SeriesComponent implements OnInit, OnDestroy {
   showPosts() {
     if (this.selectedItems.length === 0) {
       this.notificationService.showError(
-        MessageConstants.NOT_CHOOSE_ANY_RECORD
+        MessageConstants.NOT_CHOOSE_ANY_RECORD,
       );
       return;
     }
@@ -131,7 +131,7 @@ export class SeriesComponent implements OnInit, OnDestroy {
   deleteItems() {
     if (this.selectedItems.length === 0) {
       this.notificationService.showError(
-        MessageConstants.NOT_CHOOSE_ANY_RECORD
+        MessageConstants.NOT_CHOOSE_ANY_RECORD,
       );
       return;
     }

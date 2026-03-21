@@ -25,7 +25,7 @@ export class SeriesPostsComponent implements OnInit {
     public ref: DynamicDialogRef,
     public config: DynamicDialogConfig,
     private seriesApiClient: AdminApiSeriesApiClient,
-    private alertService: AlertService
+    private alertService: AlertService,
   ) {}
 
   ngOnInit() {
