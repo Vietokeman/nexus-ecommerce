@@ -17,6 +17,16 @@ import { PostSeriesComponent } from '../../../views/content/posts/post-series.co
 import { PostReturnReasonComponent } from '../../../views/content/posts/post-return-reason.component';
 import { PostActivityLogsComponent } from '../../../views/content/posts/post-activity-logs.component';
 
+interface SelectOption {
+  value: string;
+  label: string;
+}
+
+interface PagedEvent {
+  page?: number;
+  rows?: number;
+}
+
 @Component({
   selector: 'app-post',
   templateUrl: './post.component.html',
@@ -35,7 +45,7 @@ export class PostComponent implements OnInit, OnDestroy {
   public keyword: string = '';
 
   public categoryId: string;
-  public postCategories: any[] = [];
+  public postCategories: SelectOption[] = [];
 
   constructor(
     private postCategoryApiClient: AdminApiPostCategoryApiClient,
@@ -104,9 +114,9 @@ export class PostComponent implements OnInit, OnDestroy {
     });
   }
 
-  pageChanged(event: any): void {
-    this.pageIndex = event.page + 1;
-    this.pageSize = event.rows;
+  pageChanged(event: PagedEvent): void {
+    this.pageIndex = (event.page ?? 0) + 1;
+    this.pageSize = event.rows ?? this.pageSize;
     this.loadData();
   }
 
@@ -144,7 +154,7 @@ export class PostComponent implements OnInit, OnDestroy {
     });
   }
 
-  deleteItemsConfirm(ids: any[]) {
+  deleteItemsConfirm(ids: string[]) {
     this.toggleBlockUI(true);
     this.postApiClient.deletePosts(ids).subscribe({
       next: () => {

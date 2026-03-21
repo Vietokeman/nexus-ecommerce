@@ -18,6 +18,11 @@ import { MessageConstants } from '../../../shared/constants/messages.constant';
 import { AlertService } from '../../../shared/services/alert.service';
 import { UtilityService } from '../../../shared/services/utility.service';
 
+interface SelectOption {
+  value: string;
+  label: string;
+}
+
 @Component({
   templateUrl: 'post-series.component.html',
   styleUrls: ['post-series.component.scss'],
@@ -31,8 +36,8 @@ export class PostSeriesComponent implements OnInit, OnDestroy {
   public title: string;
   public btnDisabled = false;
   public saveBtnName: string;
-  public allSeries: any[] = [];
-  public postSeries: any[];
+  public allSeries: SelectOption[] = [];
+  public postSeries: SeriesInListDto[] = [];
   public selectedEntity: PostDto;
   constructor(
     public ref: DynamicDialogRef,
@@ -70,7 +75,7 @@ export class PostSeriesComponent implements OnInit, OnDestroy {
     })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (repsonse: any) => {
+        next: (repsonse: { series: SeriesInListDto[] }) => {
           //Push categories to dropdown list
           var series = repsonse.series as SeriesInListDto[];
           series.forEach((element) => {

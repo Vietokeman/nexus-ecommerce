@@ -31,7 +31,7 @@ export class PostActivityLogsComponent implements OnInit, OnDestroy {
   public title: string;
   public btnDisabled = false;
   public saveBtnName: string;
-  public items: any[] = [];
+  public items: PostActivityLogDto[] = [];
   constructor(
     public ref: DynamicDialogRef,
     public config: DynamicDialogConfig,

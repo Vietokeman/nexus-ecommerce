@@ -29,7 +29,7 @@ export class PostCategoryDetailComponent implements OnInit, OnDestroy {
   public closeBtnName: string;
   selectedEntity = {} as PostCategoryDto;
 
-  formSavedEventEmitter: EventEmitter<any> = new EventEmitter();
+  formSavedEventEmitter: EventEmitter<unknown> = new EventEmitter();
 
   constructor(
     public ref: DynamicDialogRef,
@@ -76,7 +76,7 @@ export class PostCategoryDetailComponent implements OnInit, OnDestroy {
     sortOrder: [{ type: 'required', message: 'Bạn phải nhập thứ tự' }],
   };
 
-  loadDetail(id: any) {
+  loadDetail(id: string) {
     this.toggleBlockUI(true);
     this.postCategoryService
       .getPostCategoryById(id)

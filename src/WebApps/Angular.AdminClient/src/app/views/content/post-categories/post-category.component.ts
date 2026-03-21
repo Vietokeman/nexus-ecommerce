@@ -11,6 +11,11 @@ import {
 } from '../../../api/admin-api.service.generated';
 import { AlertService } from '../../../shared/services/alert.service';
 
+interface PagedEvent {
+  page?: number;
+  rows?: number;
+}
+
 @Component({
   selector: 'app-post-category',
   templateUrl: './post-category.component.html',
@@ -79,9 +84,9 @@ export class PostCategoryComponent implements OnInit, OnDestroy {
     });
   }
 
-  pageChanged(event: any): void {
-    this.pageIndex = event.page + 1;
-    this.pageSize = event.rows;
+  pageChanged(event: PagedEvent): void {
+    this.pageIndex = (event.page ?? 0) + 1;
+    this.pageSize = event.rows ?? this.pageSize;
     this.loadData();
   }
 
@@ -126,7 +131,7 @@ export class PostCategoryComponent implements OnInit, OnDestroy {
     });
   }
 
-  deleteItemsConfirm(ids: any[]) {
+  deleteItemsConfirm(ids: string[]) {
     this.toggleBlockUI(true);
     this.postCategoryService.deletePostCategory(ids).subscribe({
       next: () => {
