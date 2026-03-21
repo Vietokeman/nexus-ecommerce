@@ -1,6 +1,7 @@
 :host {
   display: block;
-  min-height: 100dvh;
+  height: 100dvh;
+  overflow: hidden;
   background:
     radial-gradient(
       circle at 9% 14%,
@@ -22,6 +23,7 @@
 }
 
 .sidebar {
+  width: 260px;
   background: rgba(255, 252, 248, 0.95);
   border-right: 1px solid #d8cec4;
   box-shadow:
@@ -122,7 +124,15 @@
 .wrapper {
   position: relative;
   isolation: isolate;
-  background: transparent;
+}
+
+.nx-layout-shell {
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.nx-header-shell {
+  flex: 0 0 64px;
 }
 
 .nx-atmosphere {
@@ -144,7 +154,9 @@
 }
 
 .nx-body-shell {
-  padding-bottom: 1.15rem;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
   position: relative;
 
   &::before {
@@ -164,7 +176,7 @@
 }
 
 .nx-page-wrap {
-  min-height: calc(100dvh - 11.5rem);
+  min-height: 100%;
   padding: clamp(1rem, 2.5vw, 1.9rem) clamp(0.9rem, 2vw, 1.65rem)
     clamp(1.2rem, 2.2vw, 1.8rem);
 }
@@ -255,7 +267,7 @@
   }
 
   .nx-page-wrap {
-    min-height: calc(100dvh - 10.5rem);
+    min-height: 100%;
     padding: 0.95rem 0.75rem 1rem;
   }
 
