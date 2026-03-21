@@ -17,6 +17,13 @@ PHASE_FILES=(
   "$SQL_DIR/phase-05-interactions.sql"
 )
 
+AUDIT_FILES=(
+  "$SQL_DIR/audit-row-counts.sql"
+  "$SQL_DIR/audit-cross-service-consistency.sql"
+)
+
+RUN_AUDIT="${RUN_AUDIT:-true}"
+
 if ! command -v docker >/dev/null 2>&1; then
   echo "[ERROR] docker command is not available." >&2
   exit 1
@@ -55,4 +62,11 @@ for phase in "${PHASE_FILES[@]}"; do
   run_phase "$phase"
 done
 
-echo "== All phases completed successfully =="
+if [[ "$RUN_AUDIT" == "true" ]]; then
+  echo "== Running audit scripts =="
+  for audit in "${AUDIT_FILES[@]}"; do
+    run_phase "$audit"
+  done
+fi
+
+echo "== DB initialization completed successfully =="
