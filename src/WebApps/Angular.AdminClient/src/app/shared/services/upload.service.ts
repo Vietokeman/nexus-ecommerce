@@ -7,7 +7,7 @@ import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class UploadService {
-  public responseData: any;
+  public responseData: unknown;
 
   constructor(private _http: HttpClient) { }
 

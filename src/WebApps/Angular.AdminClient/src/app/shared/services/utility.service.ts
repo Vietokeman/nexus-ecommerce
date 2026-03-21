@@ -1,5 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+
+interface TreeNode {
+  id: string | number;
+  parentId: string | number | null;
+  children?: TreeNode[];
+  [key: string]: unknown;
+}
+
 @Injectable()
 export class UtilityService {
   private _router: Router;
@@ -8,7 +16,7 @@ export class UtilityService {
     this._router = router;
   }
 
-  isEmpty(input) {
+  isEmpty(input: unknown) {
     if (input == undefined || input == null || input == '') {
       return true;
     }
@@ -23,16 +31,19 @@ export class UtilityService {
   navigate(path: string) {
     this._router.navigate([path]);
   }
-  unflattern = (arr: any[]): any[] => {
-    let map = {};
-    let roots: any[] = [];
+  unflattern = (arr: TreeNode[]): TreeNode[] => {
+    const map: Record<string, number> = {};
+    const roots: TreeNode[] = [];
     for (let i = 0; i < arr.length; i += 1) {
-      let node = arr[i];
+      const node = arr[i];
       node.children = [];
-      map[node.id] = i; // use map to look-up the parents
+      map[String(node.id)] = i; // use map to look-up the parents
       if (node.parentId !== null) {
         delete node['children'];
-        arr[map[node.parentId]].children.push(node);
+        const parentIndex = map[String(node.parentId)];
+        if (parentIndex !== undefined) {
+          arr[parentIndex].children?.push(node);
+        }
       } else {
         roots.push(node);
       }
@@ -74,7 +85,7 @@ export class UtilityService {
 
     return slug;
   }
-  getDateFormatyyyymmdd(x) {
+  getDateFormatyyyymmdd(x: Date) {
     let y = x.getFullYear().toString();
     let m = (x.getMonth() + 1).toString();
     let d = x.getDate().toString();
@@ -84,11 +95,11 @@ export class UtilityService {
     return yyyymmdd;
   }
 
-  getAllProperties = (obj: object) => {
-    const data = {};
+  getAllProperties = (obj: Record<string, unknown>) => {
+    const data: Record<string, unknown> = {};
 
     for (const [key, val] of Object.entries(obj)) {
-      if (obj.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
         if (typeof val !== 'object') {
           data[key] = val;
         }

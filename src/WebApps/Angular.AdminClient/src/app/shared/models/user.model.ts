@@ -3,5 +3,5 @@ export interface UserModel {
     email: string;
     firstName: string;  
     roles: string[];
-    permissions: any;
+    permissions: string[];
 }

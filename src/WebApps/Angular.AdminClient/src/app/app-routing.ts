@@ -1,10 +1,12 @@
 import { Routes } from '@angular/router';
-import { DefaultLayoutComponent } from './containers';
 
 export const routes: Routes = [
   {
     path: '',
-    component: DefaultLayoutComponent,
+    loadComponent: () =>
+      import('./containers/default-layout/default-layout.component').then(
+        (m) => m.DefaultLayoutComponent,
+      ),
     data: {
       title: 'Home',
     },

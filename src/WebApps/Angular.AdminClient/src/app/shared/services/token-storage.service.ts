@@ -69,7 +69,7 @@ export class TokenStorageService {
     return window.localStorage.getItem(REFRESHTOKEN_KEY);
   }
 
-  public saveUser(user: any): void {
+  public saveUser(user: UserModel | Record<string, unknown>): void {
     window.localStorage.removeItem(USER_KEY);
     window.localStorage.setItem(USER_KEY, JSON.stringify(user));
   }
