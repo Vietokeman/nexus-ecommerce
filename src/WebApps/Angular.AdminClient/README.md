@@ -14,6 +14,10 @@ Dedicated admin web application for Nexus Commerce. This project was migrated fr
   - posts
   - series
   - media upload
+	- audit logs
+	- payments
+	- products
+	- sellers
 
 Out of scope for this app:
 
@@ -64,6 +68,7 @@ Validated result:
 Generated client file:
 
 - `src/app/api/admin-api.service.generated.ts`
+- `src/app/api/gateway-api.service.generated.ts` (optional, generated from gateway swagger)
 
 The app points to the gateway by default:
 
@@ -82,6 +87,13 @@ cd src/WebApps/Angular.AdminClient
 npm run nswag-admin
 ```
 
+Generate cross-service clients from API Gateway swagger:
+
+```powershell
+cd src/WebApps/Angular.AdminClient
+npm run nswag-gateway
+```
+
 Expected backend Swagger URL:
 
 - `http://localhost:6014/swagger/v1/swagger.json`
@@ -98,6 +110,10 @@ src/app/
 		dashboard/         Nexus admin overview page
 		system/            users, roles, permissions
 		content/           categories, posts, series
+		audit-logs/        system activity monitoring
+		payments/          payment operation checks
+		products/          product catalog operations
+		sellers/           seller product operations
 ```
 
 ## What is the “core UI” here?

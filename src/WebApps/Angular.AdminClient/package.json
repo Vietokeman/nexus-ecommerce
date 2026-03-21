@@ -16,7 +16,8 @@
     "build-uat": "ng build --c uat",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "nswag-admin": "node node_modules/nswag/bin/nswag.js run nswag-admin.json"
+    "nswag-admin": "node node_modules/nswag/bin/nswag.js run nswag-admin.json",
+    "nswag-gateway": "node node_modules/nswag/bin/nswag.js run nswag-gateway.json"
   },
   "private": true,
   "dependencies": {

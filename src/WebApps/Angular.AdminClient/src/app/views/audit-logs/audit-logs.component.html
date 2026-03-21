@@ -1,0 +1,58 @@
+<section class="nx-feature-page animated fadeIn">
+  <p-panel #pnl [style]="{ 'margin-bottom': '10px' }" class="nx-feature-panel">
+    <p-header>
+      <div class="nx-page-header">
+        <h1>Audit Logs</h1>
+        <p>Theo doi hoat dong he thong qua API Gateway /api/admin/audit-logs.</p>
+      </div>
+    </p-header>
+
+    <div class="nx-toolbar-search">
+      <input
+        pInputText
+        [(ngModel)]="keyword"
+        (keyup.enter)="loadData()"
+        placeholder="Keyword, username, action..."
+        type="text"
+      />
+      <input pInputText [(ngModel)]="fromDate" type="date" />
+      <input pInputText [(ngModel)]="toDate" type="date" />
+      <button pButton type="button" label="Tai lai" (click)="loadData()"></button>
+    </div>
+
+    <p-table [value]="items" dataKey="id" class="nx-feature-table" [paginator]="false">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>User</th>
+          <th>Action</th>
+          <th>Entity</th>
+          <th>IP</th>
+          <th>Created</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row>
+        <tr>
+          <td>{{ row.userName || '-' }}</td>
+          <td>{{ row.actionName || '-' }}</td>
+          <td>{{ row.entityName || '-' }}</td>
+          <td>{{ row.ipAddress || '-' }}</td>
+          <td>{{ row.createdDate || '-' }}</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="nx-table-summary">Tong ban ghi: {{ totalCount }}</div>
+      </ng-template>
+    </p-table>
+
+    <p-paginator
+      [rows]="pageSize"
+      [totalRecords]="totalCount"
+      (onPageChange)="pageChanged($event)"
+      [rowsPerPageOptions]="[10, 20, 50]"
+    ></p-paginator>
+
+    <p-blockUI [target]="pnl" [blocked]="blockedPanel">
+      <p-progressSpinner [style]="{ width: '70px', height: '70px' }" strokeWidth="2"></p-progressSpinner>
+    </p-blockUI>
+  </p-panel>
+</section>

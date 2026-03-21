@@ -1,0 +1,63 @@
+<section class="nx-feature-page animated fadeIn">
+  <p-panel #pnl [style]="{ 'margin-bottom': '10px' }" class="nx-feature-panel">
+    <p-header>
+      <div class="nx-page-header">
+        <h1>Products Management</h1>
+        <p>Quan ly san pham qua API Gateway /api/products.</p>
+      </div>
+    </p-header>
+
+    <div class="nx-toolbar-search">
+      <input
+        pInputText
+        [(ngModel)]="keyword"
+        (keyup.enter)="loadProducts()"
+        placeholder="Keyword products..."
+        type="text"
+      />
+      <button pButton type="button" label="Tai danh sach" (click)="loadProducts()"></button>
+    </div>
+
+    <div class="nx-toolbar-search">
+      <input
+        pInputText
+        [(ngModel)]="productNo"
+        (keyup.enter)="findByProductNo()"
+        placeholder="Product No"
+        type="text"
+      />
+      <button pButton type="button" label="Tim theo ma" (click)="findByProductNo()"></button>
+    </div>
+
+    <div class="nx-status-box" *ngIf="selectedProduct">
+      <strong>Chi tiet theo product no:</strong>
+      <pre>{{ selectedProduct | json }}</pre>
+    </div>
+
+    <p-table [value]="items" class="nx-feature-table">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Product No</th>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Category</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row>
+        <tr>
+          <td>{{ row.productNo || row.itemNo || '-' }}</td>
+          <td>{{ row.name || row.productName || '-' }}</td>
+          <td>{{ row.price || row.unitPrice || '-' }}</td>
+          <td>{{ row.category || row.categoryName || '-' }}</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="nx-table-summary">Tong san pham: {{ items.length }}</div>
+      </ng-template>
+    </p-table>
+
+    <p-blockUI [target]="pnl" [blocked]="blockedPanel">
+      <p-progressSpinner [style]="{ width: '70px', height: '70px' }" strokeWidth="2"></p-progressSpinner>
+    </p-blockUI>
+  </p-panel>
+</section>

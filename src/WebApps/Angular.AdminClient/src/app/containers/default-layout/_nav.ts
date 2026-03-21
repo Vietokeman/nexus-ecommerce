@@ -58,4 +58,27 @@ export const navItems: INavData[] = [
       },
     ],
   },
+  {
+    name: 'Vận hành',
+    url: '/operations',
+    iconComponent: { name: 'cil-notes' },
+    children: [
+      {
+        name: 'Audit logs',
+        url: '/audit-logs',
+      },
+      {
+        name: 'Payments',
+        url: '/payments',
+      },
+      {
+        name: 'Products',
+        url: '/products',
+      },
+      {
+        name: 'Sellers',
+        url: '/sellers',
+      },
+    ],
+  },
 ];

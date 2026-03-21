@@ -1,0 +1,52 @@
+<section class="nx-feature-page animated fadeIn">
+  <p-panel #pnl [style]="{ 'margin-bottom': '10px' }" class="nx-feature-panel">
+    <p-header>
+      <div class="nx-page-header">
+        <h1>Payment Operations</h1>
+        <p>Quan tri cac flow thanh toan qua API Gateway /api/payment.</p>
+      </div>
+    </p-header>
+
+    <div class="nx-toolbar-search">
+      <input pInputText [(ngModel)]="userId" placeholder="User ID" type="text" />
+      <button pButton type="button" label="Tai lich su" (click)="loadUserHistory()"></button>
+    </div>
+
+    <div class="nx-toolbar-search">
+      <input pInputText [(ngModel)]="orderNo" placeholder="Order No" type="text" />
+      <button pButton type="button" label="Kiem tra trang thai" (click)="checkOrderStatus()"></button>
+      <button pButton type="button" severity="danger" label="Huy thanh toan" (click)="cancelOrder()"></button>
+    </div>
+
+    <div class="nx-status-box" *ngIf="status">
+      <strong>Order status:</strong>
+      <pre>{{ status | json }}</pre>
+    </div>
+
+    <p-table [value]="items" class="nx-feature-table">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Order</th>
+          <th>Status</th>
+          <th>Amount</th>
+          <th>Created</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row>
+        <tr>
+          <td>{{ row.orderNo || row.orderId || '-' }}</td>
+          <td>{{ row.status || '-' }}</td>
+          <td>{{ row.amount || row.totalAmount || '-' }}</td>
+          <td>{{ row.createdDate || row.createdAt || '-' }}</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="nx-table-summary">Tong giao dich: {{ items.length }}</div>
+      </ng-template>
+    </p-table>
+
+    <p-blockUI [target]="pnl" [blocked]="blockedPanel">
+      <p-progressSpinner [style]="{ width: '70px', height: '70px' }" strokeWidth="2"></p-progressSpinner>
+    </p-blockUI>
+  </p-panel>
+</section>

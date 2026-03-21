@@ -1,0 +1,28 @@
+.nx-feature-page {
+  .nx-page-header {
+    h1 {
+      margin: 0;
+      font-size: 1.25rem;
+    }
+
+    p {
+      margin: 6px 0 0;
+      color: #5f6c7b;
+    }
+  }
+
+  .nx-toolbar-search {
+    display: flex;
+    gap: 10px;
+    margin: 14px 0;
+    flex-wrap: wrap;
+  }
+
+  .nx-status-box {
+    margin: 12px 0;
+    padding: 10px;
+    border: 1px solid #dfe5ed;
+    border-radius: 8px;
+    background: #fafcfe;
+  }
+}
