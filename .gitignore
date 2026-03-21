@@ -398,6 +398,18 @@ FodyWeavers.xsd
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# ==============================================================================
+# SECURITY: Environment Variables & Secrets
+# ==============================================================================
+# CRITICAL: These files contain real credentials and MUST be in .gitignore
+# If accidentally committed, use: git rm --cached .env && git commit --amend
+.env
+.env.local
+.env.*.local
+.env.development.local
+.env.staging.local
+.env.production.local
 *.code-workspace
 
 # Local History for Visual Studio Code
