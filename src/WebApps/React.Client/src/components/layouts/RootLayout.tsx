@@ -68,6 +68,8 @@ export default function RootLayout() {
     { name: 'Home', to: '/' },
     { name: 'Profile', to: '/profile' },
     { name: 'My orders', to: '/orders' },
+    { name: 'Payment history', to: '/payment/history' },
+    { name: 'AI assistant', to: '/ai-assistant' },
   ];
 
   const displayName = user?.firstName || user?.userName || 'User';

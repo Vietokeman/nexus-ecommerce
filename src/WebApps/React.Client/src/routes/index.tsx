@@ -26,6 +26,7 @@ const UserOrdersPage = lazy(() => import('@/pages/orders/UserOrdersPage'));
 const UserProfilePage = lazy(() => import('@/pages/user/UserProfilePage'));
 const WishlistPage = lazy(() => import('@/pages/user/WishlistPage'));
 const NotificationsPage = lazy(() => import('@/pages/notifications/NotificationsPage'));
+const AIAssistantPage = lazy(() => import('@/pages/ai/AIAssistantPage'));
 
 /* ─── Lazy Pages: GroupBuy ─── */
 const GroupBuyListPage = lazy(() => import('@/pages/group-buy/GroupBuyListPage'));
@@ -216,6 +217,14 @@ export const router = createBrowserRouter([
         element: (
           <P>
             <NotificationsPage />
+          </P>
+        ),
+      },
+      {
+        path: 'ai-assistant',
+        element: (
+          <P>
+            <AIAssistantPage />
           </P>
         ),
       },
