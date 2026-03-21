@@ -23,9 +23,24 @@ const routes: Routes = [
           import('./views/system/system.module').then((m) => m.SystemModule),
       },
       {
-        path: 'content',
+        path: 'audit-logs',
         loadChildren: () =>
-          import('./views/content/content.module').then((m) => m.ContentModule),
+          import('./views/audit-logs/audit-logs.module').then((m) => m.AuditLogsModule),
+      },
+      {
+        path: 'payments',
+        loadChildren: () =>
+          import('./views/payments/payments.module').then((m) => m.PaymentsModule),
+      },
+      {
+        path: 'products',
+        loadChildren: () =>
+          import('./views/products/products.module').then((m) => m.ProductsModule),
+      },
+      {
+        path: 'sellers',
+        loadChildren: () =>
+          import('./views/sellers/sellers.module').then((m) => m.SellersModule),
       },
     ],
   },

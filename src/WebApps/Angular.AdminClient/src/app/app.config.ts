@@ -19,10 +19,7 @@ import { BroadcastService } from './shared/services/boardcast.service';
 // API Clients
 import {
   AdminApiMediaApiClient,
-  AdminApiPostApiClient,
-  AdminApiPostCategoryApiClient,
   AdminApiRoleApiClient,
-  AdminApiSeriesApiClient,
   AdminApiUserApiClient,
 } from './api/admin-api.service.generated';
 
@@ -52,8 +49,5 @@ export const appConfig: ApplicationConfig = {
     AdminApiMediaApiClient,
     AdminApiRoleApiClient,
     AdminApiUserApiClient,
-    AdminApiPostCategoryApiClient,
-    AdminApiPostApiClient,
-    AdminApiSeriesApiClient,
   ],
 };

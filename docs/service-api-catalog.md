@@ -44,54 +44,10 @@ Base route: /api/admin
 - GET /api/admin/role/all
   - Lay tat ca role.
 
-### PostController (route: /api/admin/post)
+### Scope note (2026-03-22 update)
 
-- POST /api/admin/post
-  - Tao bai viet.
-- PUT /api/admin/post
-  - Cap nhat bai viet.
-- DELETE /api/admin/post
-  - Xoa nhieu bai viet.
-- GET /api/admin/post/{id:guid}
-  - Lay chi tiet bai viet.
-- GET /api/admin/post/paging
-  - Lay danh sach bai viet phan trang, filter.
-- GET /api/admin/post/series-belong/{postId:guid}
-  - Lay cac series co chua bai viet.
-
-### PostCategoryController (route: /api/admin/post-category)
-
-- GET /api/admin/post-category
-  - Lay tat ca danh muc bai viet.
-- GET /api/admin/post-category/paging
-  - Lay danh muc phan trang.
-- PUT /api/admin/post-category/{id:guid}
-  - Cap nhat danh muc.
-- POST /api/admin/post-category
-  - Tao danh muc moi.
-- DELETE /api/admin/post-category/{ids}
-  - Xoa danh muc theo danh sach id.
-
-### SeriesController (route: /api/admin/series)
-
-- POST /api/admin/series
-  - Tao series.
-- PUT /api/admin/series
-  - Cap nhat series.
-- PUT /api/admin/series/post-series
-  - Them bai viet vao series.
-- DELETE /api/admin/series/post-series
-  - Xoa bai viet khoi series.
-- GET /api/admin/series/post-series/{seriesId:guid}
-  - Lay danh sach bai trong series.
-- DELETE /api/admin/series
-  - Xoa series theo batch.
-- GET /api/admin/series/{id:guid}
-  - Lay chi tiet series.
-- GET /api/admin/series/paging
-  - Lay danh sach series phan trang.
-- GET /api/admin/series
-  - Lay tat ca series.
+- Admin.API da loai bo toan bo domain content editor (post, post-category, series).
+- Admin shell hien chi tap trung cho domain van hanh: user, role, notification, media, audit logs.
 
 ### NotificationController (route: /api/admin/notifications)
 
