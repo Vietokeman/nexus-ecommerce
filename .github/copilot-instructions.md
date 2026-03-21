@@ -171,24 +171,20 @@ Reference these architectural guides when working with the codebase:
 
 ### Backend Skills
 
-📚 **[Microservices Architecture](../.ai/backend-skills/microservices-architecture.md)**
-
-- Service design patterns
-- API Gateway configuration
-- Event-driven communication
-- Data management strategies
-- Resilience patterns
-- Observability & monitoring
+- Service design patterns (CQRS, Clean Architecture)
+- API Gateway configuration (Ocelot)
+- Event-driven communication (RabbitMQ)
+- Data management strategies (Database per Service)
+- Resilience patterns (Retry, Circuit Breaker)
+- Observability & monitoring (Serilog, Elasticsearch)
 
 ### Frontend Skills
 
-📚 **[React Performance Optimization](../.ai/frontend-skills/react-performance-optimization.md)**
-
-- Bundle size optimization
-- Data fetching strategies
-- Re-render optimization
-- Component performance
-- Vite configuration
+- Bundle size optimization (Code splitting, lazy loading)
+- Data fetching strategies (React Query)
+- Re-render optimization (React.memo, useMemo)
+- Component performance (Profiling, Performance tabs)
+- Vite configuration (HMR, Build optimization)
 
 ---
 
@@ -338,13 +334,13 @@ docker compose -f docker-compose.yml build
 
 ---
 
-## References
+## Key Documentation Files
 
-- [Microservices Architecture Guide](../.ai/backend-skills/microservices-architecture.md)
-- [React Performance Guide](../.ai/frontend-skills/react-performance-optimization.md)
-- [Docker Optimization Guide](../DOCKER_OPTIMIZATION.md)
-- [Quick Start Guide](../QUICK_START_GUIDE.md)
-- [Team Development Guide](../TEAM_DEVELOPMENT_GUIDE.md)
+- **SECURITY_REMEDIATION_REPORT.md** - Environment variable and secrets management
+- **SECURITY_IMPLEMENTATION_GUIDE.md** - Deployment workflows and CI/CD integration
+- **SECURITY_GIT_CLEANUP.sh** - Git history cleanup for accidental secret exposure
+- **src/.env.example** - Environment variables template for development
+- **docker-compose.override.yml** - Development environment configuration
 
 ---
 
