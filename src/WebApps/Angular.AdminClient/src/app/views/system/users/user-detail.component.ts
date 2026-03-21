@@ -22,6 +22,12 @@ import {
   RoleDto,
   UserDto,
 } from '../../../api/admin-api.service.generated';
+
+interface SelectOption {
+  value: string;
+  label: string;
+}
+
 @Component({
   templateUrl: 'user-detail.component.html',
   styleUrls: ['user-detail.component.scss'],
@@ -35,11 +41,11 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   public title: string;
   public btnDisabled = false;
   public saveBtnName: string;
-  public roles: any[] = [];
+  public roles: SelectOption[] = [];
   selectedEntity = {} as UserDto;
   public avatarImage;
 
-  formSavedEventEmitter: EventEmitter<any> = new EventEmitter();
+  formSavedEventEmitter: EventEmitter<unknown> = new EventEmitter();
 
   constructor(
     public ref: DynamicDialogRef,
@@ -85,7 +91,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (repsonse: any) => {
+        next: (repsonse: { roles: RoleDto[] }) => {
           //Push categories to dropdown list
           var roles = repsonse.roles as RoleDto[];
           roles.forEach((element) => {
@@ -125,11 +131,12 @@ export class UserDetailComponent implements OnInit, OnDestroy {
       });
   }
 
-  onFileChange(event) {
+  onFileChange(event: Event) {
     const reader = new FileReader();
+    const target = event.target as HTMLInputElement | null;
 
-    if (event.target.files && event.target.files.length) {
-      const [file] = event.target.files;
+    if (target?.files && target.files.length) {
+      const [file] = Array.from(target.files);
       reader.readAsDataURL(file);
       reader.onload = () => {
         this.form.patchValue({

@@ -27,7 +27,7 @@ export class ChangeEmailComponent implements OnInit, OnDestroy {
   public saveBtnName: string;
   public closeBtnName: string;
   public email?: string;
-  formSavedEventEmitter: EventEmitter<any> = new EventEmitter();
+  formSavedEventEmitter: EventEmitter<unknown> = new EventEmitter();
 
   constructor(
     public ref: DynamicDialogRef,
@@ -60,7 +60,7 @@ export class ChangeEmailComponent implements OnInit, OnDestroy {
     ],
   };
 
-  loadDetail(id: any) {
+  loadDetail(id: string) {
     this.toggleBlockUI(true);
     this.userService
       .getUserById(id)

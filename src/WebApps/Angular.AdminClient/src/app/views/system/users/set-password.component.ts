@@ -32,7 +32,7 @@ export class SetPasswordComponent implements OnInit, OnDestroy {
   public closeBtnName: string;
   selectedEntity = {} as RoleDto;
 
-  formSavedEventEmitter: EventEmitter<any> = new EventEmitter();
+  formSavedEventEmitter: EventEmitter<unknown> = new EventEmitter();
 
   constructor(
     public ref: DynamicDialogRef,

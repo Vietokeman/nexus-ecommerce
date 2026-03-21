@@ -29,7 +29,7 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
   public closeBtnName: string;
   selectedEntity = {} as RoleDto;
 
-  formSavedEventEmitter: EventEmitter<any> = new EventEmitter();
+  formSavedEventEmitter: EventEmitter<unknown> = new EventEmitter();
 
   constructor(
     public ref: DynamicDialogRef,
@@ -70,7 +70,7 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
     displayName: [{ type: 'required', message: 'Bạn phải tên hiển thị' }],
   };
 
-  loadDetail(id: any) {
+  loadDetail(id: string) {
     this.toggleBlockUI(true);
     this.roleService
       .getRoleById(id)

@@ -14,6 +14,11 @@ import {
 import { AlertService } from '../../../shared/services/alert.service';
 import { MessageConstants } from '../../../shared/constants/messages.constant';
 
+interface PagedEvent {
+  page?: number;
+  rows?: number;
+}
+
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
@@ -83,9 +88,9 @@ export class UserComponent implements OnInit, OnDestroy {
     });
   }
 
-  pageChanged(event: any): void {
-    this.pageIndex = event.page + 1;
-    this.pageSize = event.rows;
+  pageChanged(event: PagedEvent): void {
+    this.pageIndex = (event.page ?? 0) + 1;
+    this.pageSize = event.rows ?? this.pageSize;
     this.loadData();
   }
 
@@ -123,7 +128,7 @@ export class UserComponent implements OnInit, OnDestroy {
     });
   }
 
-  deleteItemsConfirm(ids: any[]) {
+  deleteItemsConfirm(ids: string[]) {
     this.toggleBlockUI(true);
     this.userService.deleteUsers(ids).subscribe({
       next: () => {

@@ -26,7 +26,7 @@ export class PermissionGrantComponent implements OnInit, OnDestroy {
   public permissions: RoleClaimsDto[] = [];
   public selectedPermissions: RoleClaimsDto[] = [];
   public id: string;
-  formSavedEventEmitter: EventEmitter<any> = new EventEmitter();
+  formSavedEventEmitter: EventEmitter<unknown> = new EventEmitter();
 
   constructor(
     public ref: DynamicDialogRef,

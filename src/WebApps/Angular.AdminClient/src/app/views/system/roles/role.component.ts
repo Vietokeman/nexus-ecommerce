@@ -12,6 +12,11 @@ import { RoleDetailComponent } from './role-detail.component';
 import { MessageConstants } from '../../../shared/constants/messages.constant';
 import { PermissionGrantComponent } from './permission-grant.component';
 
+interface PagedEvent {
+  page?: number;
+  rows?: number;
+}
+
 @Component({
   selector: 'app-role',
   templateUrl: './role.component.html',
@@ -63,9 +68,9 @@ export class RoleComponent implements OnInit, OnDestroy {
       });
   }
 
-  pageChanged(event: any): void {
-    this.pageIndex = event.page + 1;
-    this.pageSize = event.rows;
+  pageChanged(event: PagedEvent): void {
+    this.pageIndex = (event.page ?? 0) + 1;
+    this.pageSize = event.rows ?? this.pageSize;
     this.loadData();
   }
 
@@ -142,7 +147,7 @@ export class RoleComponent implements OnInit, OnDestroy {
     });
   }
 
-  deleteItemsConfirm(ids: any[]) {
+  deleteItemsConfirm(ids: string[]) {
     this.toggleBlockUI(true);
     this.roleService.deleteRoles(ids).subscribe({
       next: () => {
