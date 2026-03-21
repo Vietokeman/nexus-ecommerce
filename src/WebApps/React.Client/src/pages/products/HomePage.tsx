@@ -4,6 +4,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Backdrop,
   Box,
   Chip,
   FormControl,
@@ -231,6 +232,7 @@ export default function HomePage() {
   const { isInWishlist, toggleItem } = useWishlistStore();
   const isFilterOpen = useUIStore((s) => s.isFilterOpen);
   const toggleFilter = useUIStore((s) => s.toggleFilter);
+  const closeFilter = useUIStore((s) => s.closeFilter);
   const user = useAuthStore((s) => s.user);
   const navigate = useNavigate();
 
@@ -242,6 +244,14 @@ export default function HomePage() {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
   }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = isFilterOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+      closeFilter();
+    };
+  }, [isFilterOpen, closeFilter]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -324,6 +334,12 @@ export default function HomePage() {
 
   return (
     <>
+      <Backdrop
+        open={isFilterOpen}
+        onClick={closeFilter}
+        sx={{ zIndex: LAYERS.base + 1, backgroundColor: 'rgba(16, 11, 9, 0.3)' }}
+      />
+
       {/* Sliding Filter Sidebar */}
       <motion.div
         style={{
@@ -349,7 +365,7 @@ export default function HomePage() {
             New Arrivals
           </Typography>
 
-          <IconButton onClick={toggleFilter} style={{ position: 'absolute', top: 15, right: 15 }}>
+          <IconButton onClick={closeFilter} style={{ position: 'absolute', top: 15, right: 15 }}>
             <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
               <ClearIcon fontSize="medium" />
             </motion.div>
