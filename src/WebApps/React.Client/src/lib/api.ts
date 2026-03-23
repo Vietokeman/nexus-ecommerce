@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { API_ENDPOINTS } from '@/lib/endpoints';
 
 type RefreshResponse = {
   accessToken?: string;
@@ -115,7 +116,7 @@ api.interceptors.response.use(
       originalRequest._retry = true;
       try {
         const { data } = await axios.post<RefreshResponse>(
-          `${import.meta.env.VITE_API_BASE_URL || ''}/api/auth/refresh-token`,
+          `${import.meta.env.VITE_API_BASE_URL || ''}${API_ENDPOINTS.AUTH.REFRESH_TOKEN}`,
           { refreshToken },
           { headers: { 'Content-Type': 'application/json' } },
         );

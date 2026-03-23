@@ -15,48 +15,28 @@ export const API_ENDPOINTS = {
   PRODUCTS: {
     LIST: '/api/products',
     DETAIL: (id: string | number) => `/api/products/${id}`,
-    BY_NO: (productNo: string) => `/api/products/search/${productNo}`,
-    CREATE: '/api/products',
-    UPDATE: (id: string | number) => `/api/products/${id}`,
-    DELETE: (id: string | number) => `/api/products/${id}`,
-  },
-  CUSTOMERS: {
-    LIST: '/api/customers',
-    DETAIL: (username: string) => `/api/customer/${username}`,
-    CREATE: '/api/customer',
-    DELETE: '/api/customer',
   },
   BASKETS: {
-    GET: (username: string) => `/api/baskets/${username}`,
     UPDATE: '/api/baskets',
-    DELETE: (username: string) => `/api/baskets/${username}`,
     STOCK: (itemNo: string) => `/api/baskets/stock/${itemNo}`,
     CHECKOUT: '/api/baskets/checkout',
   },
   ORDERS: {
-    LIST: '/api/v1/orders',
     BY_USER: (username: string) => `/api/v1/orders/${username}`,
     CREATE: '/api/v1/orders',
-    UPDATE: (id: string | number) => `/api/v1/orders/${id}`,
-    DELETE: (id: string | number) => `/api/v1/orders/${id}`,
   },
   INVENTORY: {
     STOCK: (itemNo: string) => `/api/inventory/stock/${itemNo}`,
   },
   PAYMENT: {
     CREATE: '/api/payment/create',
-    STATUS: (orderNo: string) => `/api/payment/${orderNo}/status`,
     STATUS_BY_CODE: (orderCode: number) => `/api/payment/code/${orderCode}/status`,
     CANCEL: (orderNo: string) => `/api/payment/cancel/${orderNo}`,
     USER: (userId: string) => `/api/payment/user/${userId}`,
-    CALLBACK: '/api/payment/payos-callback',
   },
   FLASH_SALE: {
-    SESSIONS: '/api/flashsales/sessions',
     ACTIVE_SESSIONS: '/api/flashsales/sessions/active',
     SESSION_DETAIL: (id: number) => `/api/flashsales/sessions/${id}`,
-    ACTIVATE_SESSION: (id: number) => `/api/flashsales/sessions/${id}/activate`,
-    END_SESSION: (id: number) => `/api/flashsales/sessions/${id}/end`,
     PURCHASE: '/api/flashsales/purchase',
     ITEM_STOCK: (itemId: number) => `/api/flashsales/items/${itemId}/stock`,
     USER_ORDERS: (userName: string) => `/api/flashsales/orders/${userName}`,
@@ -80,7 +60,6 @@ export const API_ENDPOINTS = {
   REVIEWS: {
     BY_PRODUCT: (productId: number) => `/api/reviews/product/${productId}`,
     SUMMARY: (productId: number) => `/api/reviews/product/${productId}/summary`,
-    BY_USER: (userName: string) => `/api/reviews/user/${userName}`,
     CREATE: '/api/reviews',
     REPLY: (reviewId: number) => `/api/reviews/${reviewId}/reply`,
   },
@@ -96,6 +75,5 @@ export const API_ENDPOINTS = {
   AI: {
     CHAT_SESSIONS: '/api/ai/chat/sessions',
     SESSION_DETAIL: (sessionId: string) => `/api/ai/chat/sessions/${sessionId}`,
-    ADMIN_SEARCH: '/api/ai/admin/search',
   },
 } as const;

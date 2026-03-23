@@ -19,9 +19,7 @@ export function useAIChatSessionDetail(sessionId: string) {
   return useQuery({
     queryKey: ['ai-chat-session', sessionId],
     queryFn: () =>
-      api
-        .get(API_ENDPOINTS.AI.SESSION_DETAIL(sessionId))
-        .then((r) => r.data?.result || r.data),
+      api.get(API_ENDPOINTS.AI.SESSION_DETAIL(sessionId)).then((r) => r.data?.result || r.data),
     enabled: !!sessionId,
   });
 }

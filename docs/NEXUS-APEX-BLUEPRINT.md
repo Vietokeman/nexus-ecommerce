@@ -6,12 +6,15 @@ Scope: React Web, Angular Admin, API Gateway, 14-service ecosystem
 Constraint: This document is planning-only. No UI code changes in this phase.
 
 ## 0) Executive Mandate
+
 This blueprint solves three critical fronts at once:
+
 1. UI/UX Purge and Layout Mathematics reset.
 2. Deep logic mapping to use 100% API surface from Service API Catalog.
 3. Strict 15-commit execution roadmap for implementation phase.
 
 Success condition for phase implementation later:
+
 - No overlapping layout in React and Angular.
 - OAuth Google/GitHub login callback stable and deterministic.
 - Every API endpoint has an explicit consumer flow or operational purpose.
@@ -21,19 +24,23 @@ Success condition for phase implementation later:
 ## 1) Mission 1 - UI/UX Purge, Layout Mathematics, Deep Stability
 
 ### 1.1 The Purge - Production clean-up doctrine
+
 A. Remove all non-production visual garbage:
+
 - Floating debug buttons.
 - Debug state overlays.
 - Temporary QA helper cards.
 - Test-only banners.
 
 B. Forbidden layout anti-patterns:
+
 - Random position absolute for primary layout blocks.
 - Negative margin hacks for structural alignment.
 - Arbitrary z-index numbers.
 - Nested fixed layers without scroll ownership definition.
 
 C. Definition of done:
+
 - Zero debug artifacts visible in production mode.
 - No text clipping from overlay div stacks.
 - No primary flow block depends on absolute positioning for desktop/mobile shell.
@@ -41,12 +48,14 @@ C. Definition of done:
 ### 1.2 Layout Mathematics - mandatory geometry system
 
 #### Angular Admin shell formula
+
 - Sidebar width fixed: 260px.
 - Header height fixed: 64px.
 - Main content: flex-1, independent scroll.
 - Layout objective: content never overlays header/sidebar, on all breakpoints.
 
 Canonical shell math:
+
 - Root = full height flex row.
 - Sidebar = fixed 260 width, full height.
 - Right panel = flex column, min width 0.
@@ -54,18 +63,22 @@ Canonical shell math:
 - Main = remaining vertical space with overflow auto.
 
 #### React Web shell formula
+
 - Container max width: 1280px.
 - Product listing grid: 12 columns, gap 1.5rem.
 - Bento layout split: 2/3 and 1/3.
 - Touch target min: 44x44.
 
 Grid math doctrine:
+
 - Desktop hero+featured: col-span 8 and col-span 4.
 - Product cards: balanced spans that preserve scan rhythm.
 - No card may violate minimum interactive hit area.
 
 ### 1.3 Z-index hierarchy contract (hard rule)
+
 Only these layers are valid:
+
 - Base: 10
 - Header and Sidebar: 30
 - Dropdown and Popover: 40
@@ -74,39 +87,49 @@ Only these layers are valid:
 No other z-index values are allowed.
 
 ### 1.4 React UI Rescue strategy
+
 A. ImageFallback strategy to stop 404 visual breaks:
+
 - Detect load error event once.
 - Swap to deterministic fallback source.
 - Preserve aspect ratio box to avoid layout shift.
 - Avoid infinite fallback loop.
 
 B. PremiumInput redesign:
+
 - Compact vertical rhythm (smaller than current oversized input).
 - Built-in password reveal toggle.
 - Validation text spacing reserved to avoid jump.
 - Keyboard and screen-reader accessibility intact.
 
 C. ToastProvider redesign:
+
 - Centralized severity map: success, info, warning, error.
 - Fixed presentation layer at z-index 50 only.
 - Dedupe repeated messages by operation key.
 - Multi-line text-safe container to avoid clipping.
 
 ### 1.5 OAuth failure analysis and fix strategy
+
 Problem statement:
+
 - Google/GitHub login callback not closing auth loop correctly.
 - UI can get stuck in loading or miss token handoff.
 
 Fix architecture:
+
 1. Entry from UI:
+
 - UI must call /api/auth/external-login with provider and optional returnUrl.
 
 2. Callback processing:
+
 - Backend endpoint /api/auth/external-login-callback creates or links account.
 - Backend generates access token and refresh token.
 - Backend redirects to frontend callback route with token payload.
 
 3. Frontend callback handling:
+
 - Dedicated callback page parses query params once.
 - Validate token presence.
 - Persist auth state atomically.
@@ -114,11 +137,13 @@ Fix architecture:
 - Route user to intended returnUrl or default dashboard.
 
 4. Failure handling:
+
 - Missing token, provider error, malformed callback all mapped to explicit UI error states.
 - No infinite spinner.
 - Retry action and fallback login action always visible.
 
 5. Security and UX safeguards:
+
 - Clear one-time transient callback params after processing.
 - Never render raw sensitive tokens on visible UI.
 - Ensure callback page is responsive and not blocked by shell overlays.
@@ -129,6 +154,7 @@ Fix architecture:
 
 Principle:
 Every endpoint in Service API Catalog must map to either:
+
 - Customer, Seller, Admin UX flow.
 - System orchestration and operations.
 - Health, diagnostics, or realtime infra.
@@ -136,6 +162,7 @@ Every endpoint in Service API Catalog must map to either:
 ## 2.1 Flow 1 - Customer Journey (React Web)
 
 ### Stage A - Auth and identity resolution
+
 - POST /api/auth/register
   - Account creation.
 - POST /api/auth/login
@@ -158,6 +185,7 @@ Every endpoint in Service API Catalog must map to either:
   - Account verification link.
 
 ### Stage B - Discovery and content
+
 - GET /api/products
   - Product list.
 - GET /api/products/{id}
@@ -186,7 +214,9 @@ Every endpoint in Service API Catalog must map to either:
   - Resume conversation thread.
 
 ### Stage C - Mega campaigns
+
 Flash sale endpoints:
+
 - GET /api/flashsales/sessions
 - GET /api/flashsales/sessions/active
 - GET /api/flashsales/sessions/{id:long}
@@ -195,6 +225,7 @@ Flash sale endpoints:
 - GET /api/flashsales/orders/{userName}
 
 Group buy endpoints:
+
 - GET /api/groupbuys/campaigns
 - GET /api/groupbuys/campaigns/active
 - GET /api/groupbuys/campaigns/{id:long}
@@ -203,11 +234,14 @@ Group buy endpoints:
 - GET /api/groupbuys/sessions/invite/{inviteCode}
 
 UI anti-jitter requirement:
+
 - Countdown and progress update via stable interval ownership.
 - Reconcile server truth on each critical action.
 
 ### Stage D - Cart, stock lock, checkout, payment
+
 Basket and stock:
+
 - GET /api/baskets/{username}
 - POST /api/baskets
 - DELETE /api/baskets/{username}
@@ -215,14 +249,17 @@ Basket and stock:
 - POST /api/baskets/checkout
 
 Inventory support:
+
 - GET /api/inventory/stock/{itemNo}
 - POST /api/inventory/stock/batch
 
 Required temporary lock behavior:
+
 - UI starts 15-minute reserve timer when checkout session begins.
 - Auto-release flow is orchestrated by background jobs when timer expires.
 
 Ordering and payment:
+
 - POST /api/v1/orders
 - GET /api/v1/orders/{userName}
 - GET /api/v1/orders
@@ -234,12 +271,14 @@ Ordering and payment:
 - GET /api/payment/user/{userId}
 
 Post-order engagement:
+
 - POST /api/reviews
 - GET /api/reviews/user/{userName}
 
 ## 2.2 Flow 2 - Seller Workspace (React Web)
 
 Product management and AI assist:
+
 - GET /api/sellerproducts/by-seller/{sellerUserName}
 - GET /api/sellerproducts/dashboard/{sellerUserName}
 - POST /api/sellerproducts/preview-ai
@@ -248,17 +287,21 @@ Product management and AI assist:
 - DELETE /api/sellerproducts/{id:long}
 
 Review operations:
+
 - GET /api/reviews/product/{productId:long}
 - POST /api/reviews/{reviewId:long}/reply
 
 Optional inventory visibility for seller ops panels:
+
 - GET /api/inventory/items/{itemNo}
 - GET /api/inventory/documents/{documentNo}
 
 ## 2.3 Flow 3 - Admin Control Plane (Angular Admin)
 
 ### Identity and access governance
+
 Identity service admin endpoints:
+
 - GET /api/user
 - GET /api/user/{id}
 - DELETE /api/user/{id}
@@ -268,6 +311,7 @@ Identity service admin endpoints:
 - DELETE /api/permission/{id:int}
 
 Admin service user and role command plane:
+
 - GET /api/admin/user/{id:guid}
 - GET /api/admin/user/paging
 - POST /api/admin/user
@@ -285,9 +329,11 @@ Admin service user and role command plane:
 - GET /api/admin/role/all
 
 Audit and observability:
+
 - GET /api/admin/audit-logs
 
 ### Content orchestration
+
 - POST /api/admin/post
 - PUT /api/admin/post
 - DELETE /api/admin/post
@@ -311,6 +357,7 @@ Audit and observability:
 - POST /api/admin/media
 
 ### Notification and realtime
+
 - GET /api/admin/notifications
 - GET /api/admin/notifications/unread-count
 - POST /api/admin/notifications/{id:guid}/mark-as-read
@@ -319,16 +366,20 @@ Audit and observability:
 - WS /hubs/notifications
 
 ### Campaign and inventory command center
+
 Flash sale admin actions:
+
 - POST /api/flashsales/sessions
 - POST /api/flashsales/sessions/{id:long}/activate
 - POST /api/flashsales/sessions/{id:long}/end
 
 Group buy admin actions:
+
 - POST /api/groupbuys/campaigns
 - POST /api/groupbuys/sessions/process-expired
 
 Inventory command endpoints:
+
 - GET /api/inventory
 - GET /api/inventory/{id}
 - GET /api/inventory/items/{itemNo}
@@ -341,66 +392,84 @@ Inventory command endpoints:
 - DELETE /api/inventory/{id}
 
 ### AI operational endpoints in admin
+
 - POST /api/ai/admin/sync/products
 - GET /api/ai/admin/search
 
 ## 2.4 Flow 4 - Background jobs and orchestration
 
 Hangfire operational endpoints:
+
 - GET /hangfire
 - GET /health
 
 Background logic contracts:
+
 1. Release stock lock after 15-minute basket timeout.
 2. Process expired group-buy sessions.
 3. Send payment success email and operational reminders.
 
 Supporting callbacks and health surfaces:
+
 - POST /api/payment/payos-callback
 - GET /health on all services
 
 ## 2.5 Full API utilization ledger by service
 
 Admin.API:
+
 - All user, role, post, category, series, media, notification, audit endpoints are mapped to Admin Control Plane or Customer content discovery.
 
 Identity.API:
+
 - All auth, OAuth, user-admin, permission endpoints are mapped to Customer auth flow and Admin identity governance.
 
 Product.API:
+
 - All product endpoints mapped to Customer discovery and search detail.
 
 Seller.API:
+
 - All seller product and review endpoints mapped to Seller workspace and Customer post-order review journey.
 
 Basket.API:
+
 - All basket endpoints mapped to cart, stock validation, and checkout pipeline.
 
 Customer.API:
+
 - All minimal endpoints mapped to profile provisioning and customer lookup.
 
 Ordering.API:
+
 - All business endpoints mapped to checkout/order timeline; test endpoints reserved for staging diagnostics.
 
 Payment.API:
+
 - All payment lifecycle endpoints mapped to checkout and callback reconciliation.
 
 Inventory.Product.API:
+
 - All inventory, stock, PO, SO, create/delete endpoints mapped to Admin inventory command center and checkout safety.
 
 FlashSale.API:
+
 - All session, activation, purchase, stock, user-order endpoints mapped to campaign flow and admin orchestration.
 
 GroupBuy.API:
+
 - All campaign/session endpoints mapped to customer social purchase and admin process-expired orchestration.
 
 Nexus.AI.Service:
+
 - All chat and admin AI endpoints mapped to customer assistant and admin semantic search/sync.
 
 Hangfire.API:
+
 - Operational endpoints mapped to orchestrator monitoring and recurring automation.
 
 Gateway note:
+
 - Ocelot route layer is mandatory traffic contract for FE consumption in integrated mode.
 
 ---
@@ -457,17 +526,20 @@ chore: system-wide integration, real-time notification hub, Hangfire sync
 ## 4) Implementation governance checklist
 
 Before coding each commit:
+
 1. Confirm API contract and payload assumptions.
 2. Confirm z-index and shell math invariants are not violated.
 3. Confirm responsive behavior and minimum touch target.
 4. Confirm no debug artifact remains in production build.
 
 After each commit:
+
 1. Run unit or integration checks relevant to changed surface.
 2. Run FE build and smoke test critical flows.
 3. Update progress ledger and blockers.
 
 Blocker policy:
+
 - No bypass for OAuth callback errors.
 - No merge if shell overlap still exists.
 - No merge if API utilization matrix regresses.
@@ -475,7 +547,9 @@ Blocker policy:
 ---
 
 ## 5) Final outcome target
+
 When all 15 commits are complete:
+
 - React and Angular shells are deterministic, clean, and overlap-free.
 - OAuth social and normal auth are stable and measurable.
 - All API endpoints are operationally or functionally integrated.

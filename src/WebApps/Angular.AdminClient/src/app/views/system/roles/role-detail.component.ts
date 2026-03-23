@@ -9,7 +9,7 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
 import {
   AdminApiRoleApiClient,
-  RoleDto,
+  RoleModel,
 } from '../../../api/admin-api.service.generated';
 import { UtilityService } from '../../../shared/services/utility.service';
 
@@ -27,7 +27,7 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
   public btnDisabled = false;
   public saveBtnName: string;
   public closeBtnName: string;
-  selectedEntity = {} as RoleDto;
+  selectedEntity = {} as RoleModel;
 
   formSavedEventEmitter: EventEmitter<unknown> = new EventEmitter();
 
@@ -73,10 +73,10 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
   loadDetail(id: string) {
     this.toggleBlockUI(true);
     this.roleService
-      .getRoleById(id)
+      .roleGET(id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (response: RoleDto) => {
+        next: (response: RoleModel) => {
           this.selectedEntity = response;
           this.buildForm();
           this.toggleBlockUI(false);
@@ -95,7 +95,7 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
   private saveData() {
     if (this.utilService.isEmpty(this.config.data?.id)) {
       this.roleService
-        .createRole(this.form.value)
+        .rolePOST(this.form.value)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(() => {
           this.ref.close(this.form.value);
@@ -103,7 +103,7 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
         });
     } else {
       this.roleService
-        .updateRole(this.config.data.id, this.form.value)
+        .rolePUT(this.config.data.id, this.form.value)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(() => {
           this.toggleBlockUI(false);

@@ -15,7 +15,12 @@
         placeholder="Keyword products..."
         type="text"
       />
-      <button pButton type="button" label="Tai danh sach" (click)="loadProducts()"></button>
+      <button
+        pButton
+        type="button"
+        label="Tai danh sach"
+        (click)="loadProducts()"
+      ></button>
     </div>
 
     <div class="nx-toolbar-search">
@@ -26,7 +31,12 @@
         placeholder="Product No"
         type="text"
       />
-      <button pButton type="button" label="Tim theo ma" (click)="findByProductNo()"></button>
+      <button
+        pButton
+        type="button"
+        label="Tim theo ma"
+        (click)="findByProductNo()"
+      ></button>
     </div>
 
     <div class="nx-status-box" *ngIf="selectedProduct">
@@ -45,10 +55,10 @@
       </ng-template>
       <ng-template pTemplate="body" let-row>
         <tr>
-          <td>{{ row.productNo || row.itemNo || '-' }}</td>
-          <td>{{ row.name || row.productName || '-' }}</td>
-          <td>{{ row.price || row.unitPrice || '-' }}</td>
-          <td>{{ row.category || row.categoryName || '-' }}</td>
+          <td>{{ row.productNo || row.itemNo || "-" }}</td>
+          <td>{{ row.name || row.productName || "-" }}</td>
+          <td>{{ row.price || row.unitPrice || "-" }}</td>
+          <td>{{ row.category || row.categoryName || "-" }}</td>
         </tr>
       </ng-template>
       <ng-template pTemplate="summary">
@@ -57,7 +67,10 @@
     </p-table>
 
     <p-blockUI [target]="pnl" [blocked]="blockedPanel">
-      <p-progressSpinner [style]="{ width: '70px', height: '70px' }" strokeWidth="2"></p-progressSpinner>
+      <p-progressSpinner
+        [style]="{ width: '70px', height: '70px' }"
+        strokeWidth="2"
+      ></p-progressSpinner>
     </p-blockUI>
   </p-panel>
 </section>

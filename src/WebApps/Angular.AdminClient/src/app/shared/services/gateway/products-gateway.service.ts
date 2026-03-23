@@ -15,10 +15,14 @@ export class ProductsGatewayService {
       params = params.set('keyword', keyword);
     }
 
-    return this.http.get<any[]>(`${environment.API_URL}/api/products`, { params });
+    return this.http.get<any[]>(`${environment.API_URL}/api/products`, {
+      params,
+    });
   }
 
   getByProductNo(productNo: string): Observable<any> {
-    return this.http.get<any>(`${environment.API_URL}/api/products/search/${productNo}`);
+    return this.http.get<any>(
+      `${environment.API_URL}/api/products/search/${productNo}`,
+    );
   }
 }

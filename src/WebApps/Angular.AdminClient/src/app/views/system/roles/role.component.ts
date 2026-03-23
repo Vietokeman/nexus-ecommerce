@@ -2,8 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import {
   AdminApiRoleApiClient,
-  RoleDto,
-  RoleDtoPagedResult,
+  RoleModel,
+  RoleModelPageResult,
 } from '../../../api/admin-api.service.generated';
 import { DialogService } from 'primeng/dynamicdialog';
 import { AlertService } from '../../../shared/services/alert.service';
@@ -30,8 +30,8 @@ export class RoleComponent implements OnInit, OnDestroy {
   public pageSize: number = 10;
   public totalCount?: number;
 
-  public items?: RoleDto[];
-  public selectedItems: RoleDto[] = [];
+  public items?: RoleModel[];
+  public selectedItems: RoleModel[] = [];
   public keyword: string = '';
 
   constructor(
@@ -54,10 +54,10 @@ export class RoleComponent implements OnInit, OnDestroy {
     this.toggleBlockUI(true);
 
     this.roleService
-      .getRolesAllPaging(this.keyword, this.pageIndex, this.pageSize)
+      .paging(this.keyword, this.pageIndex, this.pageSize)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (response: RoleDtoPagedResult) => {
+        next: (response: RoleModelPageResult) => {
           this.items = response.results;
           this.totalCount = response.rowCount;
           this.toggleBlockUI(false);
@@ -90,7 +90,7 @@ export class RoleComponent implements OnInit, OnDestroy {
       header: name,
       width: '70%',
     });
-    ref.onClose.subscribe((data: RoleDto) => {
+    ref.onClose.subscribe((data: RoleModel) => {
       if (data) {
         this.alertService.showSuccess(MessageConstants.UPDATED_OK_MSG);
         this.selectedItems = [];
@@ -110,7 +110,7 @@ export class RoleComponent implements OnInit, OnDestroy {
       header: 'Cập nhật quyền',
       width: '70%',
     });
-    ref.onClose.subscribe((data: RoleDto) => {
+    ref.onClose.subscribe((data: RoleModel) => {
       if (data) {
         this.alertService.showSuccess(MessageConstants.UPDATED_OK_MSG);
         this.selectedItems = [];
@@ -124,7 +124,7 @@ export class RoleComponent implements OnInit, OnDestroy {
       header: 'Thêm mới quyền',
       width: '70%',
     });
-    ref.onClose.subscribe((data: RoleDto) => {
+    ref.onClose.subscribe((data: RoleModel) => {
       if (data) {
         this.alertService.showSuccess(MessageConstants.CREATED_OK_MSG);
         this.selectedItems = [];
@@ -149,7 +149,7 @@ export class RoleComponent implements OnInit, OnDestroy {
 
   deleteItemsConfirm(ids: string[]) {
     this.toggleBlockUI(true);
-    this.roleService.deleteRoles(ids).subscribe({
+    this.roleService.roleDELETE(ids).subscribe({
       next: () => {
         this.alertService.showSuccess(MessageConstants.DELETED_OK_MSG);
         this.loadData();

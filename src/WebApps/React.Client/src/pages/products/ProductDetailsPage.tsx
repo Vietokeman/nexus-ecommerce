@@ -106,7 +106,6 @@ export default function ProductDetailsPage() {
     toast.success(e.target.checked ? 'Product added to wishlist' : 'Product removed from wishlist');
   };
 
-  // Mock images (since our API may not have images array)
   const images = [
     product?.imageUrl || `https://via.placeholder.com/500?text=${product?.name?.[0] || 'P'}`,
   ];

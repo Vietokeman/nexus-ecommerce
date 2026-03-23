@@ -47,15 +47,13 @@ export default function LoginPage() {
     const fetchProviders = async () => {
       try {
         const { data } = await api.get(API_ENDPOINTS.AUTH.EXTERNAL_PROVIDERS);
-        const list: ExternalProvider[] = Array.isArray(data) ? data : data?.result ?? [];
+        const list: ExternalProvider[] = Array.isArray(data) ? data : (data?.result ?? []);
         if (!Array.isArray(list) || list.length === 0) {
           return;
         }
 
         const providerNames = new Set(
-          list
-            .map((p) => p?.name?.toLowerCase())
-            .filter((name): name is string => Boolean(name)),
+          list.map((p) => p?.name?.toLowerCase()).filter((name): name is string => Boolean(name)),
         );
 
         setProviders({
@@ -199,7 +197,7 @@ export default function LoginPage() {
                   magnetic={false}
                   startIcon={<GoogleIcon />}
                   onClick={() => {
-                    window.location.href = `${API_BASE_URL}/api/auth/external-login?provider=Google`;
+                    window.location.href = `${API_BASE_URL}${API_ENDPOINTS.AUTH.EXTERNAL_LOGIN}?provider=Google`;
                   }}
                   sx={{
                     height: '2.95rem',
@@ -226,7 +224,7 @@ export default function LoginPage() {
                   magnetic={false}
                   startIcon={<GitHubIcon />}
                   onClick={() => {
-                    window.location.href = `${API_BASE_URL}/api/auth/external-login?provider=GitHub`;
+                    window.location.href = `${API_BASE_URL}${API_ENDPOINTS.AUTH.EXTERNAL_LOGIN}?provider=GitHub`;
                   }}
                   sx={{
                     height: '2.95rem',

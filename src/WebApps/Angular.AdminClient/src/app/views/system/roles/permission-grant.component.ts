@@ -6,7 +6,7 @@ import { Subject, takeUntil } from 'rxjs';
 import {
   AdminApiRoleApiClient,
   PermissionDto,
-  RoleClaimsDto,
+  RoleClaimModel,
 } from '../../../api/admin-api.service.generated';
 
 @Component({
@@ -23,8 +23,8 @@ export class PermissionGrantComponent implements OnInit, OnDestroy {
   public btnDisabled = false;
   public saveBtnName: string;
   public closeBtnName: string;
-  public permissions: RoleClaimsDto[] = [];
-  public selectedPermissions: RoleClaimsDto[] = [];
+  public permissions: RoleClaimModel[] = [];
+  public selectedPermissions: RoleClaimModel[] = [];
   public id: string;
   formSavedEventEmitter: EventEmitter<unknown> = new EventEmitter();
 
@@ -53,7 +53,7 @@ export class PermissionGrantComponent implements OnInit, OnDestroy {
   loadDetail(roleId: string) {
     this.toggleBlockUI(true);
     this.roleService
-      .getAllRolePermissions(roleId)
+      .permissionsGET(roleId)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (response: PermissionDto) => {
@@ -72,7 +72,7 @@ export class PermissionGrantComponent implements OnInit, OnDestroy {
   }
 
   private saveData() {
-    var roleClaims: RoleClaimsDto[] = [];
+    var roleClaims: RoleClaimModel[] = [];
     for (let index = 0; index < this.permissions.length; index++) {
       const isGranted =
         this.selectedPermissions.filter(
@@ -80,7 +80,7 @@ export class PermissionGrantComponent implements OnInit, OnDestroy {
         ).length > 0;
 
       roleClaims.push(
-        new RoleClaimsDto({
+        new RoleClaimModel({
           type: this.permissions[index].type,
           selected: isGranted,
           value: this.permissions[index].value,
@@ -92,7 +92,7 @@ export class PermissionGrantComponent implements OnInit, OnDestroy {
       roleClaims: roleClaims,
     });
     this.roleService
-      .savePermission(updateValues)
+      .permissionsPUT(updateValues)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(() => {
         this.toggleBlockUI(false);
@@ -107,15 +107,23 @@ export class PermissionGrantComponent implements OnInit, OnDestroy {
       const permission = this.permissions[index];
       if (permission.selected) {
         this.selectedPermissions.push(
-          new RoleClaimsDto({
+          new RoleClaimModel({
             selected: true,
-            displayName: permission.displayName,
             type: permission.type,
             value: permission.value,
           }),
         );
       }
     }
+  }
+
+  getPermissionLabel(permission: RoleClaimModel) {
+    if (!permission.value) {
+      return 'Permission';
+    }
+
+    const parts = permission.value.split('.');
+    return parts[parts.length - 1] || permission.value;
   }
 
   private toggleBlockUI(enabled: boolean) {

@@ -14,10 +14,14 @@ export class SellersGatewayService {
   }
 
   getBySeller(userName: string): Observable<any[]> {
-    return this.http.get<any[]>(`${environment.API_URL}/api/sellerproducts/by-seller/${userName}`);
+    return this.http.get<any[]>(
+      `${environment.API_URL}/api/sellerproducts/by-seller/${userName}`,
+    );
   }
 
   getDashboard(userName: string): Observable<any> {
-    return this.http.get<any>(`${environment.API_URL}/api/sellerproducts/dashboard/${userName}`);
+    return this.http.get<any>(
+      `${environment.API_URL}/api/sellerproducts/dashboard/${userName}`,
+    );
   }
 }

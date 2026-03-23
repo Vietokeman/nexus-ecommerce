@@ -25,17 +25,23 @@ const routes: Routes = [
       {
         path: 'audit-logs',
         loadChildren: () =>
-          import('./views/audit-logs/audit-logs.module').then((m) => m.AuditLogsModule),
+          import('./views/audit-logs/audit-logs.module').then(
+            (m) => m.AuditLogsModule,
+          ),
       },
       {
         path: 'payments',
         loadChildren: () =>
-          import('./views/payments/payments.module').then((m) => m.PaymentsModule),
+          import('./views/payments/payments.module').then(
+            (m) => m.PaymentsModule,
+          ),
       },
       {
         path: 'products',
         loadChildren: () =>
-          import('./views/products/products.module').then((m) => m.ProductsModule),
+          import('./views/products/products.module').then(
+            (m) => m.ProductsModule,
+          ),
       },
       {
         path: 'sellers',

@@ -8,6 +8,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint .",
+    "audit:endpoints": "node scripts/audit-endpoint-coverage.mjs",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write \"src/**/*.{ts,tsx,json,css,md}\"",
     "prepare": "husky"

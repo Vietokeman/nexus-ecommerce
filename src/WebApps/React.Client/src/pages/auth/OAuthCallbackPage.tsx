@@ -70,9 +70,7 @@ export default function OAuthCallbackPage() {
     processedRef.current = true;
 
     const token =
-      searchParams.get('token') ??
-      searchParams.get('accessToken') ??
-      searchParams.get('jwt');
+      searchParams.get('token') ?? searchParams.get('accessToken') ?? searchParams.get('jwt');
     const errorParam = searchParams.get('error');
 
     if (errorParam) {

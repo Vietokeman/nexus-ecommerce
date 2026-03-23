@@ -57,24 +57,6 @@ const sortOptions = [
   { name: 'Price: high to low', sort: 'price', order: 'desc' },
 ];
 
-// Mock brand/category data - these would come from API
-const brands = [
-  { id: '1', name: 'Apple' },
-  { id: '2', name: 'Samsung' },
-  { id: '3', name: 'Sony' },
-  { id: '4', name: 'Nike' },
-  { id: '5', name: 'Adidas' },
-];
-
-const categories = [
-  { id: '1', name: 'Smartphones' },
-  { id: '2', name: 'Laptops' },
-  { id: '3', name: 'Fashion' },
-  { id: '4', name: 'Footwear' },
-  { id: '5', name: 'Groceries' },
-  { id: '6', name: 'Home Decoration' },
-];
-
 const normalizeProduct = (raw: any): Product => ({
   id: Number(raw.id ?? raw.productId ?? Date.now()),
   no: String(raw.no ?? raw.productNo ?? raw.itemNo ?? raw.id ?? ''),
@@ -83,9 +65,32 @@ const normalizeProduct = (raw: any): Product => ({
   description: String(raw.description ?? raw.summary ?? ''),
   price: Number(raw.price ?? raw.unitPrice ?? 0),
   category: raw.category ?? raw.categoryName,
+  brand: raw.brand ?? raw.attributes?.brand ?? raw.attributes?.manufacturer,
   attributes: raw.attributes,
   imageUrl: raw.imageUrl ?? raw.thumbnailUrl ?? raw.image,
 });
+
+const buildFacetOptions = (items: Product[]) => {
+  const categorySet = new Set<string>();
+  const brandSet = new Set<string>();
+
+  for (const item of items) {
+    const category = item.category?.toString().trim();
+    if (category) {
+      categorySet.add(category);
+    }
+
+    const brand = item.brand?.toString().trim();
+    if (brand) {
+      brandSet.add(brand);
+    }
+  }
+
+  return {
+    categories: Array.from(categorySet).sort((a, b) => a.localeCompare(b)),
+    brands: Array.from(brandSet).sort((a, b) => a.localeCompare(b)),
+  };
+};
 
 // Product Card component
 function ProductCard({
@@ -195,7 +200,9 @@ function ProductCard({
               </motion.div>
             )}
           </Stack>
-          <Typography color="text.secondary">{product.summary || 'Brand'}</Typography>
+          <Typography color="text.secondary">
+            {product.brand || product.summary || 'Product'}
+          </Typography>
         </Stack>
 
         <Stack sx={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -231,6 +238,10 @@ function ProductCard({
 
 export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [facetOptions, setFacetOptions] = useState<{ categories: string[]; brands: string[] }>({
+    categories: [],
+    brands: [],
+  });
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [sort, setSortValue] = useState<string>('');
@@ -279,7 +290,9 @@ export default function HomePage() {
         if (selectedCategories.length === 0) {
           const { data } = await api.get(API_ENDPOINTS.PRODUCTS.LIST);
           const list = Array.isArray(data) ? data : (data.result ?? []);
-          setProducts(list.map((item: any) => normalizeProduct(item)));
+          const normalized = list.map((item: any) => normalizeProduct(item));
+          setProducts(normalized);
+          setFacetOptions(buildFacetOptions(normalized));
           return;
         }
 
@@ -294,10 +307,14 @@ export default function HomePage() {
         });
 
         const deduped = Array.from(
-          new Map(merged.map((item: any) => [String(item.id ?? item.itemNo ?? item.productNo), item])).values(),
+          new Map(
+            merged.map((item: any) => [String(item.id ?? item.itemNo ?? item.productNo), item]),
+          ).values(),
         );
 
-        setProducts(deduped.map((item) => normalizeProduct(item)));
+        const normalized = deduped.map((item) => normalizeProduct(item));
+        setProducts(normalized);
+        setFacetOptions(buildFacetOptions(normalized));
       } catch {
         toast.error('Error fetching products, please try again later');
       } finally {
@@ -311,9 +328,8 @@ export default function HomePage() {
   const filtered = products
     .filter((p) => {
       if (brandFilters.size > 0) {
-        const match = Array.from(brandFilters).some((b) =>
-          p.summary?.toLowerCase().includes(b.toLowerCase()),
-        );
+        const source = (p.brand || p.summary || '').toLowerCase();
+        const match = Array.from(brandFilters).some((b) => source.includes(b.toLowerCase()));
         if (!match) return false;
       }
       return true;
@@ -404,25 +420,25 @@ export default function HomePage() {
           </IconButton>
 
           <Stack rowGap={2} mt={4}>
-            {categories.map((cat) => (
+            {facetOptions.categories.map((category) => (
               <Typography
-                key={cat.id}
+                key={category}
                 sx={{
                   cursor: 'pointer',
-                  fontWeight: categoryFilters.has(cat.name) ? 600 : 400,
-                  color: categoryFilters.has(cat.name) ? nexus.orange[700] : 'text.secondary',
+                  fontWeight: categoryFilters.has(category) ? 600 : 400,
+                  color: categoryFilters.has(category) ? nexus.orange[700] : 'text.secondary',
                   '&:hover': { color: nexus.orange[700] },
                 }}
                 variant="body2"
                 onClick={() => {
                   const newSet = new Set(categoryFilters);
-                  if (newSet.has(cat.name)) newSet.delete(cat.name);
-                  else newSet.add(cat.name);
+                  if (newSet.has(category)) newSet.delete(category);
+                  else newSet.add(category);
                   setCategoryFilters(newSet);
                   setPage(1);
                 }}
               >
-                {cat.name}
+                {category}
               </Typography>
             ))}
           </Stack>
@@ -437,9 +453,9 @@ export default function HomePage() {
                 <FormGroup
                   onChange={(e) => handleBrandFilter(e as React.ChangeEvent<HTMLInputElement>)}
                 >
-                  {brands.map((brand) => (
+                  {facetOptions.brands.map((brand) => (
                     <motion.div
-                      key={brand.id}
+                      key={brand}
                       style={{ width: 'fit-content' }}
                       whileHover={{ x: 5 }}
                       whileTap={{ scale: 0.9 }}
@@ -447,8 +463,8 @@ export default function HomePage() {
                       <FormControlLabel
                         sx={{ ml: 1 }}
                         control={<PremiumCheckbox />}
-                        label={brand.name}
-                        value={brand.name}
+                        label={brand}
+                        value={brand}
                       />
                     </motion.div>
                   ))}
@@ -467,9 +483,9 @@ export default function HomePage() {
                 <FormGroup
                   onChange={(e) => handleCategoryFilter(e as React.ChangeEvent<HTMLInputElement>)}
                 >
-                  {categories.map((cat) => (
+                  {facetOptions.categories.map((category) => (
                     <motion.div
-                      key={cat.id}
+                      key={category}
                       style={{ width: 'fit-content' }}
                       whileHover={{ x: 5 }}
                       whileTap={{ scale: 0.9 }}
@@ -477,8 +493,8 @@ export default function HomePage() {
                       <FormControlLabel
                         sx={{ ml: 1 }}
                         control={<PremiumCheckbox />}
-                        label={cat.name}
-                        value={cat.name}
+                        label={category}
+                        value={category}
                       />
                     </motion.div>
                   ))}

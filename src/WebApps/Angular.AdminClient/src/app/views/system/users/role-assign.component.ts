@@ -4,8 +4,8 @@ import { forkJoin, Subject, takeUntil } from 'rxjs';
 import {
   AdminApiRoleApiClient,
   AdminApiUserApiClient,
-  RoleDto,
-  UserDto,
+  RoleModel,
+  UserModel,
 } from '../../../api/admin-api.service.generated';
 
 @Component({
@@ -41,15 +41,15 @@ export class RoleAssignComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    var roles = this.roleApiclient.getAllRoles();
+    var roles = this.roleApiclient.all();
 
     forkJoin({
       roles,
     })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (repsonse: { roles: RoleDto[] }) => {
-          var roles = repsonse.roles as RoleDto[];
+        next: (repsonse: { roles: RoleModel[] }) => {
+          var roles = repsonse.roles as RoleModel[];
           roles.forEach((element) => {
             this.availableRoles.push(element.name);
           });
@@ -66,10 +66,10 @@ export class RoleAssignComponent implements OnInit, OnDestroy {
   loadRoles() {
     this.toggleBlockUI(true);
     this.roleApiclient
-      .getAllRoles()
+      .all()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (response: RoleDto[]) => {
+        next: (response: RoleModel[]) => {
           response.forEach((element) => {
             this.availableRoles.push(element.name);
           });
@@ -83,10 +83,10 @@ export class RoleAssignComponent implements OnInit, OnDestroy {
   loadDetail(id: string) {
     this.toggleBlockUI(true);
     this.userApiClient
-      .getUserById(id)
+      .userGET(id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (response: UserDto) => {
+        next: (response: UserModel) => {
           this.seletedRoles = response.roles;
           this.availableRoles = this.availableRoles.filter(
             (x) => !this.seletedRoles.includes(x),
@@ -106,7 +106,7 @@ export class RoleAssignComponent implements OnInit, OnDestroy {
 
   private saveData() {
     this.userApiClient
-      .assignRolesToUser(this.config.data.id, this.seletedRoles)
+      .assignUsers(this.config.data.id, this.seletedRoles)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(() => {
         this.toggleBlockUI(false);

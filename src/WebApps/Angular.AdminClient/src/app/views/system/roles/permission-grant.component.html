@@ -32,7 +32,9 @@
           [inputId]="permission.value"
           [ngModelOptions]="{ standalone: true }"
         ></p-checkbox>
-        <label [for]="permission.value">{{ permission.displayName }}</label>
+        <label [for]="permission.value">{{
+          getPermissionLabel(permission)
+        }}</label>
       </div>
     </div>
 

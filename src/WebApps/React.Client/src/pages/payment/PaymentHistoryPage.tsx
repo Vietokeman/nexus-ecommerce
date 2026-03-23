@@ -1,15 +1,7 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import {
-  Button,
-  Chip,
-  Paper,
-  Stack,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from '@mui/material';
+import { Button, Chip, Paper, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { toast } from 'react-toastify';
 import { api } from '@/lib/api';
@@ -44,7 +36,8 @@ export default function PaymentHistoryPage() {
     isLoading,
   } = useQuery<PaymentItem[]>({
     queryKey: ['payment-history', userId],
-    queryFn: () => api.get(API_ENDPOINTS.PAYMENT.USER(userId)).then((r) => r.data?.result || r.data || []),
+    queryFn: () =>
+      api.get(API_ENDPOINTS.PAYMENT.USER(userId)).then((r) => r.data?.result || r.data || []),
     enabled: !!userId,
   });
 
@@ -57,7 +50,13 @@ export default function PaymentHistoryPage() {
   return (
     <Stack alignItems="center" mb="5rem" mt={3} px={2}>
       <Stack width="100%" maxWidth="64rem" rowGap={2.5}>
-        <Stack direction="row" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={1}>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          flexWrap="wrap"
+          gap={1}
+        >
           <Typography variant="h4" fontWeight={800}>
             Payment History
           </Typography>
@@ -93,7 +92,10 @@ export default function PaymentHistoryPage() {
                     Transaction: {payment.transactionId || '-'}
                   </Typography>
                   <Typography color="text.secondary" variant="body2">
-                    Created: {payment.createdDate ? new Date(payment.createdDate).toLocaleString('vi-VN') : '-'}
+                    Created:{' '}
+                    {payment.createdDate
+                      ? new Date(payment.createdDate).toLocaleString('vi-VN')
+                      : '-'}
                   </Typography>
                 </Stack>
                 <Stack alignItems={is700 ? 'flex-start' : 'flex-end'}>

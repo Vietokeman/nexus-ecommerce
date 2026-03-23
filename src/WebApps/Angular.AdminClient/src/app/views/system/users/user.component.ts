@@ -8,8 +8,8 @@ import { SetPasswordComponent } from './set-password.component';
 import { UserDetailComponent } from './user-detail.component';
 import {
   AdminApiUserApiClient,
-  UserDto,
-  UserDtoPagedResult,
+  UserModel,
+  UserModelPageResult,
 } from '../../../api/admin-api.service.generated';
 import { AlertService } from '../../../shared/services/alert.service';
 import { MessageConstants } from '../../../shared/constants/messages.constant';
@@ -35,8 +35,8 @@ export class UserComponent implements OnInit, OnDestroy {
   public totalCount?: number;
 
   // Business variables
-  public items?: UserDto[];
-  public selectedItems: UserDto[] = [];
+  public items?: UserModel[];
+  public selectedItems: UserModel[] = [];
   public keyword: string = '';
 
   constructor(
@@ -58,10 +58,10 @@ export class UserComponent implements OnInit, OnDestroy {
   loadData(selectionId = null) {
     this.toggleBlockUI(true);
     this.userService
-      .getAllUsersPaging(this.keyword, this.pageIndex, this.pageSize)
+      .paging2(this.keyword, this.pageIndex, this.pageSize)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (response: UserDtoPagedResult) => {
+        next: (response: UserModelPageResult) => {
           this.items = response.results;
           this.totalCount = response.rowCount;
           if (selectionId != null && this.items && this.items.length > 0) {
@@ -79,7 +79,7 @@ export class UserComponent implements OnInit, OnDestroy {
       header: 'Thêm mới người dùng',
       width: '70%',
     });
-    ref.onClose.subscribe((data: UserDto) => {
+    ref.onClose.subscribe((data: UserModel) => {
       if (data) {
         this.alertService.showSuccess(MessageConstants.CREATED_OK_MSG);
         this.selectedItems = [];
@@ -105,7 +105,7 @@ export class UserComponent implements OnInit, OnDestroy {
       header: 'Cập nhật người dùng',
       width: '70%',
     });
-    ref.onClose.subscribe((data: UserDto) => {
+    ref.onClose.subscribe((data: UserModel) => {
       if (data) {
         this.alertService.showSuccess(MessageConstants.UPDATED_OK_MSG);
         this.selectedItems = [];
@@ -130,7 +130,7 @@ export class UserComponent implements OnInit, OnDestroy {
 
   deleteItemsConfirm(ids: string[]) {
     this.toggleBlockUI(true);
-    this.userService.deleteUsers(ids).subscribe({
+    this.userService.userDELETE(ids).subscribe({
       next: () => {
         this.alertService.showSuccess(MessageConstants.DELETED_OK_MSG);
         this.loadData();

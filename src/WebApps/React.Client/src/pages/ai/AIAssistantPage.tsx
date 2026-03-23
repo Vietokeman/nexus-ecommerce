@@ -1,12 +1,5 @@
 import { useMemo, useState } from 'react';
-import {
-  Button,
-  Chip,
-  Paper,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Button, Chip, Paper, Stack, TextField, Typography } from '@mui/material';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { toast } from 'react-toastify';
 import { useAuthStore } from '@/store/auth-store';
@@ -94,21 +87,12 @@ export default function AIAssistantPage() {
 
             <Stack direction="row" flexWrap="wrap" gap={1}>
               {prompts.map((item) => (
-                <Chip
-                  key={item}
-                  label={item}
-                  onClick={() => setPrompt(item)}
-                  variant="outlined"
-                />
+                <Chip key={item} label={item} onClick={() => setPrompt(item)} variant="outlined" />
               ))}
             </Stack>
 
             <Stack direction="row" justifyContent="flex-end">
-              <Button
-                variant="contained"
-                onClick={handleSubmit}
-                disabled={createSession.isPending}
-              >
+              <Button variant="contained" onClick={handleSubmit} disabled={createSession.isPending}>
                 {createSession.isPending ? 'Dang tao session...' : 'Ask AI'}
               </Button>
             </Stack>

@@ -9,7 +9,7 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
 import {
   AdminApiUserApiClient,
-  UserDto,
+  UserModel,
 } from '../../../api/admin-api.service.generated';
 
 @Component({
@@ -63,10 +63,10 @@ export class ChangeEmailComponent implements OnInit, OnDestroy {
   loadDetail(id: string) {
     this.toggleBlockUI(true);
     this.userService
-      .getUserById(id)
+      .userGET(id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (response: UserDto) => {
+        next: (response: UserModel) => {
           this.email = response.email;
           this.buildForm();
           this.toggleBlockUI(false);

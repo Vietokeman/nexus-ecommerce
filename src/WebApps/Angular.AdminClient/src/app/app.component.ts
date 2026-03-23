@@ -24,7 +24,7 @@ export class AppComponent {
 
   constructor(
     private titleService: Title,
-    private iconSetService: IconSetService
+    private iconSetService: IconSetService,
   ) {
     titleService.setTitle(this.title);
     // iconSet singleton

@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AuditLogItem, AuditLogsGatewayService } from '../../shared/services/gateway/audit-logs-gateway.service';
+import {
+  AuditLogItem,
+  AuditLogsGatewayService,
+} from '../../shared/services/gateway/audit-logs-gateway.service';
 
 interface PagedEvent {
   page?: number;
@@ -30,7 +33,13 @@ export class AuditLogsComponent implements OnInit {
   loadData(): void {
     this.toggleBlockUI(true);
     this.auditLogsService
-      .getAuditLogs(this.keyword, this.pageIndex, this.pageSize, this.fromDate, this.toDate)
+      .getAuditLogs(
+        this.keyword,
+        this.pageIndex,
+        this.pageSize,
+        this.fromDate,
+        this.toDate,
+      )
       .subscribe({
         next: (response) => {
           this.items = response.results;

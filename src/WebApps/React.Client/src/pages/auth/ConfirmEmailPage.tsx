@@ -28,7 +28,11 @@ export default function ConfirmEmailPage() {
     if (!userId || !token) {
       setStatus('error');
       setMessage('Invalid confirmation link. Please request a new verification email.');
-      appToast.errorAction('Email confirmation failed', 'Invalid confirmation link', 'auth-confirm-email-invalid-link');
+      appToast.errorAction(
+        'Email confirmation failed',
+        'Invalid confirmation link',
+        'auth-confirm-email-invalid-link',
+      );
       return;
     }
 
@@ -41,7 +45,11 @@ export default function ConfirmEmailPage() {
       } catch {
         setStatus('error');
         setMessage('Email confirmation failed or link has expired.');
-        appToast.errorAction('Email confirmation failed', 'Link expired or invalid', 'auth-confirm-email-failed');
+        appToast.errorAction(
+          'Email confirmation failed',
+          'Link expired or invalid',
+          'auth-confirm-email-failed',
+        );
       }
     };
 
@@ -56,7 +64,8 @@ export default function ConfirmEmailPage() {
           p: 2.5,
           borderRadius: 3,
           border: '1px solid #EADCC8',
-          background: 'linear-gradient(145deg, rgba(255,248,236,0.9), rgba(240,251,248,0.9) 62%, rgba(255,255,255,0.96))',
+          background:
+            'linear-gradient(145deg, rgba(255,248,236,0.9), rgba(240,251,248,0.9) 62%, rgba(255,255,255,0.96))',
         }}
       >
         <Stack spacing={1.25}>

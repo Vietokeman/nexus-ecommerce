@@ -8,14 +8,40 @@
     </p-header>
 
     <div class="nx-toolbar-search">
-      <input pInputText [(ngModel)]="userId" placeholder="User ID" type="text" />
-      <button pButton type="button" label="Tai lich su" (click)="loadUserHistory()"></button>
+      <input
+        pInputText
+        [(ngModel)]="userId"
+        placeholder="User ID"
+        type="text"
+      />
+      <button
+        pButton
+        type="button"
+        label="Tai lich su"
+        (click)="loadUserHistory()"
+      ></button>
     </div>
 
     <div class="nx-toolbar-search">
-      <input pInputText [(ngModel)]="orderNo" placeholder="Order No" type="text" />
-      <button pButton type="button" label="Kiem tra trang thai" (click)="checkOrderStatus()"></button>
-      <button pButton type="button" severity="danger" label="Huy thanh toan" (click)="cancelOrder()"></button>
+      <input
+        pInputText
+        [(ngModel)]="orderNo"
+        placeholder="Order No"
+        type="text"
+      />
+      <button
+        pButton
+        type="button"
+        label="Kiem tra trang thai"
+        (click)="checkOrderStatus()"
+      ></button>
+      <button
+        pButton
+        type="button"
+        severity="danger"
+        label="Huy thanh toan"
+        (click)="cancelOrder()"
+      ></button>
     </div>
 
     <div class="nx-status-box" *ngIf="status">
@@ -34,10 +60,10 @@
       </ng-template>
       <ng-template pTemplate="body" let-row>
         <tr>
-          <td>{{ row.orderNo || row.orderId || '-' }}</td>
-          <td>{{ row.status || '-' }}</td>
-          <td>{{ row.amount || row.totalAmount || '-' }}</td>
-          <td>{{ row.createdDate || row.createdAt || '-' }}</td>
+          <td>{{ row.orderNo || row.orderId || "-" }}</td>
+          <td>{{ row.status || "-" }}</td>
+          <td>{{ row.amount || row.totalAmount || "-" }}</td>
+          <td>{{ row.createdDate || row.createdAt || "-" }}</td>
         </tr>
       </ng-template>
       <ng-template pTemplate="summary">
@@ -46,7 +72,10 @@
     </p-table>
 
     <p-blockUI [target]="pnl" [blocked]="blockedPanel">
-      <p-progressSpinner [style]="{ width: '70px', height: '70px' }" strokeWidth="2"></p-progressSpinner>
+      <p-progressSpinner
+        [style]="{ width: '70px', height: '70px' }"
+        strokeWidth="2"
+      ></p-progressSpinner>
     </p-blockUI>
   </p-panel>
 </section>

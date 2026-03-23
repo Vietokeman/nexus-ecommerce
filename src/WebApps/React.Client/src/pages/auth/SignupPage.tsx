@@ -50,15 +50,13 @@ export default function SignupPage() {
     const fetchProviders = async () => {
       try {
         const { data } = await api.get(API_ENDPOINTS.AUTH.EXTERNAL_PROVIDERS);
-        const list: ExternalProvider[] = Array.isArray(data) ? data : data?.result ?? [];
+        const list: ExternalProvider[] = Array.isArray(data) ? data : (data?.result ?? []);
         if (!Array.isArray(list) || list.length === 0) {
           return;
         }
 
         const providerNames = new Set(
-          list
-            .map((p) => p?.name?.toLowerCase())
-            .filter((name): name is string => Boolean(name)),
+          list.map((p) => p?.name?.toLowerCase()).filter((name): name is string => Boolean(name)),
         );
 
         setProviders({
@@ -77,7 +75,10 @@ export default function SignupPage() {
     setLoading(true);
     try {
       await signup(data);
-      appToast.successAction('Welcome! Verify your email to start shopping.', 'auth-signup-success');
+      appToast.successAction(
+        'Welcome! Verify your email to start shopping.',
+        'auth-signup-success',
+      );
       reset();
     } catch (err: unknown) {
       const error = err as { response?: { data?: { message?: string } } };
@@ -232,7 +233,7 @@ export default function SignupPage() {
                   magnetic={false}
                   startIcon={<GoogleIcon />}
                   onClick={() => {
-                    window.location.href = `${API_BASE_URL}/api/auth/external-login?provider=Google`;
+                    window.location.href = `${API_BASE_URL}${API_ENDPOINTS.AUTH.EXTERNAL_LOGIN}?provider=Google`;
                   }}
                   sx={{
                     height: '2.95rem',
@@ -259,7 +260,7 @@ export default function SignupPage() {
                   magnetic={false}
                   startIcon={<GitHubIcon />}
                   onClick={() => {
-                    window.location.href = `${API_BASE_URL}/api/auth/external-login?provider=GitHub`;
+                    window.location.href = `${API_BASE_URL}${API_ENDPOINTS.AUTH.EXTERNAL_LOGIN}?provider=GitHub`;
                   }}
                   sx={{
                     height: '2.95rem',

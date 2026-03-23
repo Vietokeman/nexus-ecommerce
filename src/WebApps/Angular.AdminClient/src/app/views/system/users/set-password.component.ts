@@ -13,7 +13,6 @@ import { Subject, takeUntil } from 'rxjs';
 import {
   AdminApiUserApiClient,
   ChangeMyPasswordRequest,
-  RoleDto,
 } from '../../../api/admin-api.service.generated';
 
 @Component({
@@ -30,7 +29,7 @@ export class SetPasswordComponent implements OnInit, OnDestroy {
   public btnDisabled = false;
   public saveBtnName: string;
   public closeBtnName: string;
-  selectedEntity = {} as RoleDto;
+  selectedEntity = {} as ChangeMyPasswordRequest;
 
   formSavedEventEmitter: EventEmitter<unknown> = new EventEmitter();
 

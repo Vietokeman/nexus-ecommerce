@@ -19,8 +19,8 @@ import { formatDate } from '@angular/common';
 import {
   AdminApiRoleApiClient,
   AdminApiUserApiClient,
-  RoleDto,
-  UserDto,
+  RoleModel,
+  UserModel,
 } from '../../../api/admin-api.service.generated';
 
 interface SelectOption {
@@ -42,7 +42,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   public btnDisabled = false;
   public saveBtnName: string;
   public roles: SelectOption[] = [];
-  selectedEntity = {} as UserDto;
+  selectedEntity: any = {};
   public avatarImage;
 
   formSavedEventEmitter: EventEmitter<unknown> = new EventEmitter();
@@ -84,16 +84,16 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     //Init form
     this.buildForm();
     //Load data to form
-    var roles = this.roleService.getAllRoles();
+    var roles = this.roleService.all();
     this.toggleBlockUI(true);
     forkJoin({
       roles,
     })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (repsonse: { roles: RoleDto[] }) => {
+        next: (repsonse: { roles: RoleModel[] }) => {
           //Push categories to dropdown list
-          var roles = repsonse.roles as RoleDto[];
+          var roles = repsonse.roles as RoleModel[];
           roles.forEach((element) => {
             this.roles.push({
               value: element.id,
@@ -115,10 +115,10 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   }
   loadFormDetails(id: string) {
     this.userService
-      .getUserById(id)
+      .userGET(id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (response: UserDto) => {
+        next: (response: UserModel) => {
           this.selectedEntity = response;
           this.buildForm();
           this.setMode('update');
@@ -160,7 +160,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     console.log(this.form.value);
     if (this.utilService.isEmpty(this.config.data?.id)) {
       this.userService
-        .createUser(this.form.value)
+        .userPOST(this.form.value)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe({
           next: () => {
@@ -173,7 +173,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
         });
     } else {
       this.userService
-        .updateUser(this.config.data?.id, this.form.value)
+        .userPUT(this.config.data?.id, this.form.value)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe({
           next: () => {

@@ -154,15 +154,17 @@ export class PostDetailComponent implements OnInit, OnDestroy {
   onFileChange(event: Event) {
     const target = event.target as HTMLInputElement | null;
     if (target?.files && target.files.length) {
-      this.uploadService.uploadImage('posts', Array.from(target.files)).subscribe({
-        next: (response: UploadResponse) => {
-          this.form.controls['thumbnail'].setValue(response.path);
-          this.thumbnailImage = environment.API_URL + response.path;
-        },
-        error: (err: unknown) => {
-          console.log(err);
-        },
-      });
+      this.uploadService
+        .uploadImage('posts', Array.from(target.files))
+        .subscribe({
+          next: (response: UploadResponse) => {
+            this.form.controls['thumbnail'].setValue(response.path);
+            this.thumbnailImage = environment.API_URL + response.path;
+          },
+          error: (err: unknown) => {
+            console.log(err);
+          },
+        });
     }
   }
   saveChange() {

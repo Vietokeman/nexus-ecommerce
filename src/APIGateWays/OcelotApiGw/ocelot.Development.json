@@ -53,7 +53,7 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/products/get-product-by-no/{productNo}",
+      "DownstreamPathTemplate": "/api/products/search/{productNo}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -61,7 +61,7 @@
           "Port": 6002
         }
       ],
-      "UpstreamPathTemplate": "/api/products/get-product-by-no/{productNo}",
+      "UpstreamPathTemplate": "/api/products/search/{productNo}",
       "UpstreamHttpMethod": ["GET"],
       "FileCacheOptions": {
         "TtlSeconds": 60,

@@ -127,20 +127,56 @@ export class DashboardComponent {
   ];
 
   public readonly catalogBoard: IBoardItem[] = [
-    { title: 'Premium Gift Hampers', amount: '30 SKUs', hint: '8 categories with complete media and attributes' },
-    { title: 'Out-of-stock Risk', amount: '4 SKUs', hint: 'Recommend immediate restock in HCM warehouse' },
-    { title: 'Bulk Edit Ready', amount: '11 SKUs', hint: 'Prices and SEO copy pending final review' },
+    {
+      title: 'Premium Gift Hampers',
+      amount: '30 SKUs',
+      hint: '8 categories with complete media and attributes',
+    },
+    {
+      title: 'Out-of-stock Risk',
+      amount: '4 SKUs',
+      hint: 'Recommend immediate restock in HCM warehouse',
+    },
+    {
+      title: 'Bulk Edit Ready',
+      amount: '11 SKUs',
+      hint: 'Prices and SEO copy pending final review',
+    },
   ];
 
   public readonly orderBoard: IBoardItem[] = [
-    { title: 'Awaiting Payment', amount: '18', hint: 'Follow-up in 2-hour cadence' },
-    { title: 'Ready to Ship', amount: '21', hint: 'Warehouse split routing available' },
-    { title: 'Refund / Dispute', amount: '7', hint: 'Escalated cases monitored by finance ops' },
+    {
+      title: 'Awaiting Payment',
+      amount: '18',
+      hint: 'Follow-up in 2-hour cadence',
+    },
+    {
+      title: 'Ready to Ship',
+      amount: '21',
+      hint: 'Warehouse split routing available',
+    },
+    {
+      title: 'Refund / Dispute',
+      amount: '7',
+      hint: 'Escalated cases monitored by finance ops',
+    },
   ];
 
   public readonly campaignBoard: IBoardItem[] = [
-    { title: 'Flash Sale Hot Slots', amount: '3 slots', hint: 'Peak traffic expected in evening window' },
-    { title: 'GroupBuy Near Success', amount: '5 sessions', hint: 'Within 1-2 participants from target' },
-    { title: 'CRM Nudges Today', amount: '24 sends', hint: 'Automated notifications to revive abandoned joins' },
+    {
+      title: 'Flash Sale Hot Slots',
+      amount: '3 slots',
+      hint: 'Peak traffic expected in evening window',
+    },
+    {
+      title: 'GroupBuy Near Success',
+      amount: '5 sessions',
+      hint: 'Within 1-2 participants from target',
+    },
+    {
+      title: 'CRM Nudges Today',
+      amount: '24 sends',
+      hint: 'Automated notifications to revive abandoned joins',
+    },
   ];
 }

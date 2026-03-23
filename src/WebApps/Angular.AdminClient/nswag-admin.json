@@ -1,10 +1,10 @@
 {
   "runtime": "Net80",
-  "defaultVariables": null,
+  "defaultVariables": "AdminApiUrl=http://localhost:7001",
   "documentGenerator": {
     "fromDocument": {
       "json": "",
-      "url": "http://localhost:6014/swagger/v1/swagger.json",
+      "url": "$(AdminApiUrl)/swagger/v1/swagger.json",
       "output": null,
       "newLineBehavior": "Auto"
     }

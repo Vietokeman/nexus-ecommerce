@@ -10,6 +10,7 @@ export interface Product {
   description: string;
   price: number;
   category?: string;
+  brand?: string;
   attributes?: Record<string, string | number | boolean>;
   imageUrl?: string;
 }

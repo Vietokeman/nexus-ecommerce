@@ -29,7 +29,7 @@ export class AuditLogsGatewayService {
     pageIndex: number,
     pageSize: number,
     fromDate?: string,
-    toDate?: string
+    toDate?: string,
   ): Observable<AuditLogPagedResult> {
     let params = new HttpParams()
       .set('keyword', keyword || '')
@@ -53,9 +53,10 @@ export class AuditLogsGatewayService {
             response?.rowCount ||
             response?.totalCount ||
             response?.total ||
-            (response?.results || response?.items || response?.data || []).length ||
+            (response?.results || response?.items || response?.data || [])
+              .length ||
             0,
-        }))
+        })),
       );
   }
 }

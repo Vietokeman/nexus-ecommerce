@@ -14,10 +14,10 @@ Dedicated admin web application for Nexus Commerce. This project was migrated fr
   - posts
   - series
   - media upload
-	- audit logs
-	- payments
-	- products
-	- sellers
+  - audit logs
+  - payments
+  - products
+  - sellers
 
 Out of scope for this app:
 
