@@ -97,8 +97,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=ProductDb;Username=admin;Password=${POSTGRES_PASSWORD:-change_me_with_postgres_password};"
-      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
+    volumes:
+      - ./Services/Product.API/appsettings.json:/app/appsettings.json:ro
+      - ./Services/Product.API/appsettings.Development.json:/app/appsettings.Development.json:ro
     depends_on:
       nexusdb:
         condition: service_healthy
@@ -113,7 +114,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=CustomerDb;Username=admin;Password=${POSTGRES_PASSWORD:-change_me_with_postgres_password};"
+    volumes:
+      - ./Services/Customer.API/appsettings.json:/app/appsettings.json:ro
+      - ./Services/Customer.API/appsettings.Development.json:/app/appsettings.Development.json:ro
     depends_on:
       nexusdb:
         condition: service_healthy
@@ -128,8 +131,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - "CacheSettings:ConnectionString=basketdb:6379"
-      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
+    volumes:
+      - ./Services/Basket.API/appsettings.json:/app/appsettings.json:ro
+      - ./Services/Basket.API/appsettings.Development.json:/app/appsettings.Development.json:ro
     depends_on:
       basketdb:
         condition: service_healthy
@@ -146,8 +150,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=OrderDb;Username=admin;Password=${POSTGRES_PASSWORD:-change_me_with_postgres_password};"
-      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
+    volumes:
+      - ./Services/Ordering/Ordering.API/appsettings.json:/app/appsettings.json:ro
+      - ./Services/Ordering/Ordering.API/appsettings.Development.json:/app/appsettings.Development.json:ro
     depends_on:
       nexusdb:
         condition: service_healthy
@@ -164,7 +169,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=InventoryDb;Username=admin;Password=${POSTGRES_PASSWORD:-change_me_with_postgres_password};"
+    volumes:
+      - ./Services/Inventory.Product.API/appsettings.json:/app/appsettings.json:ro
+      - ./Services/Inventory.Product.API/appsettings.Development.json:/app/appsettings.Development.json:ro
     depends_on:
       nexusdb:
         condition: service_healthy
@@ -179,18 +186,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=PaymentDb;Username=admin;Password=${POSTGRES_PASSWORD:-change_me_with_postgres_password};"
-      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
-      - "PayOSSettings:ClientId=change_me_with_payos_client_id"
-      - "PayOSSettings:ApiKey=change_me_with_payos_api_key"
-      - "PayOSSettings:ChecksumKey=change_me_with_payos_checksum_key"
-      - "PayOSSettings:WebReturnUrl=http://localhost:3000/payment/success"
-      - "PayOSSettings:WebCancelUrl=http://localhost:3000/payment/cancel"
-      - "SmtpSettings:Host=smtp.gmail.com"
-      - "SmtpSettings:Port=587"
-      - "SmtpSettings:UserName=vietbmt19@gmail.com"
-      - "SmtpSettings:Password=change_me_with_smtp_password"
-      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
+    volumes:
+      - ./Services/Payment.API/appsettings.json:/app/appsettings.json:ro
+      - ./Services/Payment.API/appsettings.Development.json:/app/appsettings.Development.json:ro
     depends_on:
       nexusdb:
         condition: service_healthy
@@ -209,13 +207,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - "ConnectionStrings:HangfireConnection=Host=nexusdb;Port=5432;Database=HangfireDb;Username=admin;Password=${POSTGRES_PASSWORD:-change_me_with_postgres_password};"
-      - "SmtpSettings:Host=smtp.gmail.com"
-      - "SmtpSettings:Port=587"
-      - "SmtpSettings:UserName=vietbmt19@gmail.com"
-      - "SmtpSettings:Password=change_me_with_smtp_password"
-      - "GatewayUrl=http://ocelot.apigw:80"
-      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
+    volumes:
+      - ./Services/Hangfire.API/appsettings.json:/app/appsettings.json:ro
+      - ./Services/Hangfire.API/appsettings.Development.json:/app/appsettings.Development.json:ro
     depends_on:
       nexusdb:
         condition: service_healthy
@@ -232,20 +226,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=IdentityDb;Username=admin;Password=${POSTGRES_PASSWORD:-change_me_with_postgres_password};"
-      - "JwtSettings:Secret=${JWT_SECRET:-YourSuperSecretKeyHere_MustBeAtLeast32Characters!}"
-      - "JwtSettings:Issuer=distributed-ecommerce-platform"
-      - "JwtSettings:Audience=distributed-ecommerce-client"
-      - "SmtpSettings:Host=smtp.gmail.com"
-      - "SmtpSettings:Port=587"
-      - "SmtpSettings:UserName=vietbmt19@gmail.com"
-      - "SmtpSettings:Password=change_me_with_smtp_password"
-      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
-      - "OAuthSettings:Google:ClientId=change_me_with_google_client_id"
-      - "OAuthSettings:Google:ClientSecret=change_me_with_google_client_secret"
-      - "OAuthSettings:GitHub:ClientId=change_me_with_github_client_id"
-      - "OAuthSettings:GitHub:ClientSecret=change_me_with_github_client_secret"
-      - "FrontendUrl=http://localhost:3000"
+    volumes:
+      - ./Services/Identity.API/appsettings.json:/app/appsettings.json:ro
+      - ./Services/Identity.API/appsettings.Development.json:/app/appsettings.Development.json:ro
     depends_on:
       nexusdb:
         condition: service_healthy
@@ -262,9 +245,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=FlashSaleDb;Username=admin;Password=${POSTGRES_PASSWORD:-change_me_with_postgres_password};"
-      - "ConnectionStrings:Redis=basketdb:6379"
-      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
+    volumes:
+      - ./Services/FlashSale.API/appsettings.json:/app/appsettings.json:ro
+      - ./Services/FlashSale.API/appsettings.Development.json:/app/appsettings.Development.json:ro
     depends_on:
       nexusdb:
         condition: service_healthy
@@ -281,9 +264,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=GroupBuyDb;Username=admin;Password=${POSTGRES_PASSWORD:-change_me_with_postgres_password};"
-      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
-      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
+    volumes:
+      - ./Services/GroupBuy.API/appsettings.json:/app/appsettings.json:ro
+      - ./Services/GroupBuy.API/appsettings.Development.json:/app/appsettings.Development.json:ro
     depends_on:
       nexusdb:
         condition: service_healthy

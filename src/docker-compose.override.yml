@@ -174,7 +174,6 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - DOTNET_USE_POLLING_FILE_WATCHER=1
       - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=ProductDb;Username=${POSTGRES_USER:-admin};Password=${POSTGRES_PASSWORD:-your_secure_password_here};"
     volumes:
       - .:/src
     working_dir: /src/Services/Product.API
@@ -196,7 +195,6 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - DOTNET_USE_POLLING_FILE_WATCHER=1
       - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=CustomerDb;Username=${POSTGRES_USER:-admin};Password=${POSTGRES_PASSWORD:-your_secure_password_here};"
     volumes:
       - .:/src
     working_dir: /src/Services/Customer.API
@@ -218,8 +216,6 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - DOTNET_USE_POLLING_FILE_WATCHER=1
       - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
-      - "CacheSettings:ConnectionString=basketdb:6379"
-      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
     volumes:
       - .:/src
     working_dir: /src/Services/Basket.API
@@ -241,8 +237,6 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - DOTNET_USE_POLLING_FILE_WATCHER=1
       - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=OrderDb;Username=${POSTGRES_USER:-admin};Password=${POSTGRES_PASSWORD:-your_secure_password_here};"
-      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
     volumes:
       - .:/src
     working_dir: /src/Services/Ordering/Ordering.API
@@ -265,7 +259,6 @@ services:
       - ASPNETCORE_HTTPS_PORTS=443
       - DOTNET_USE_POLLING_FILE_WATCHER=1
       - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=InventoryDb;Username=${POSTGRES_USER:-admin};Password=${POSTGRES_PASSWORD:-your_secure_password_here};"
     volumes:
       - .:/src
     working_dir: /src/Services/Inventory.Product.API
@@ -287,21 +280,6 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - DOTNET_USE_POLLING_FILE_WATCHER=1
       - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=PaymentDb;Username=${POSTGRES_USER:-admin};Password=${POSTGRES_PASSWORD:-your_secure_password_here};"
-      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
-      - "PayOS:ClientId=${PAYOS_CLIENT_ID:-your_payos_client_id_here}"
-      - "PayOS:ApiKey=${PAYOS_API_KEY:-your_payos_api_key_here}"
-      - "PayOS:ChecksumKey=${PAYOS_CHECKSUM_KEY:-your_payos_checksum_key_here}"
-      - "PayOS:WebReturnUrl=${WEB_RETURN_URL:-http://localhost:3000/payment/success}"
-      - "PayOS:WebCancelUrl=${WEB_CANCEL_URL:-http://localhost:3000/payment/cancel}"
-      - "Smtp:Host=${SMTP_HOST:-smtp.gmail.com}"
-      - "Smtp:Port=${SMTP_PORT:-587}"
-      - "Smtp:User=${SMTP_USERNAME:-your_email@gmail.com}"
-      - "Smtp:Pass=${SMTP_PASSWORD:-your_gmail_app_password_here}"
-      - "Smtp:FromName=${SMTP_FROM_NAME:-Nexus E-Commerce}"
-      - "Smtp:FromEmail=${SMTP_FROM_EMAIL:-vietbmt19@gmail.com}"
-      - "Serilog:Using:0=Serilog.Sinks.Elasticsearch"
-      - "Serilog:WriteTo:0:Args:nodeUris=http://elasticsearch:9200"
     volumes:
       - .:/src
     working_dir: /src/Services/Payment.API
@@ -327,13 +305,6 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - DOTNET_USE_POLLING_FILE_WATCHER=1
       - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
-      - "ConnectionStrings:HangfireConnection=Host=nexusdb;Port=5432;Database=HangfireDb;Username=${POSTGRES_USER:-admin};Password=${POSTGRES_PASSWORD:-your_secure_password_here};"
-      - "SmtpSettings:Host=${SMTP_HOST:-smtp.gmail.com}"
-      - "SmtpSettings:Port=${SMTP_PORT:-587}"
-      - "SmtpSettings:UserName=${SMTP_USERNAME:-your_email@gmail.com}"
-      - "SmtpSettings:Password=${SMTP_PASSWORD:-your_gmail_app_password_here}"
-      - "GatewayUrl=${HANGFIRE_GATEWAY_URL:-http://ocelot.apigw:80}"
-      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
     volumes:
       - .:/src
     working_dir: /src/Services/Hangfire.API
@@ -357,15 +328,6 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - DOTNET_USE_POLLING_FILE_WATCHER=1
       - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=IdentityDb;Username=${POSTGRES_USER:-admin};Password=${POSTGRES_PASSWORD:-your_secure_password_here};"
-      - "JwtSettings:Secret=${JWT_SECRET:-your_jwt_secret_at_least_32_characters_minimum}"
-      - "JwtSettings:Issuer=${JWT_ISSUER:-nexus-ecommerce-platform}"
-      - "JwtSettings:Audience=${JWT_AUDIENCE:-nexus-ecommerce-client}"
-      - "SmtpSettings:Host=${SMTP_HOST:-smtp.gmail.com}"
-      - "SmtpSettings:Port=${SMTP_PORT:-587}"
-      - "SmtpSettings:UserName=${SMTP_USERNAME:-your_email@gmail.com}"
-      - "SmtpSettings:Password=${SMTP_PASSWORD:-your_gmail_app_password_here}"
-      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
     volumes:
       - .:/src
     working_dir: /src/Services/Identity.API
@@ -389,9 +351,6 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - DOTNET_USE_POLLING_FILE_WATCHER=1
       - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=FlashSaleDb;Username=${POSTGRES_USER:-admin};Password=${POSTGRES_PASSWORD:-your_secure_password_here};"
-      - "ConnectionStrings:Redis=basketdb:6379"
-      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
     volumes:
       - .:/src
     working_dir: /src/Services/FlashSale.API
@@ -417,9 +376,6 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - DOTNET_USE_POLLING_FILE_WATCHER=1
       - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=GroupBuyDb;Username=${POSTGRES_USER:-admin};Password=${POSTGRES_PASSWORD:-your_secure_password_here};"
-      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
-      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
     volumes:
       - .:/src
     working_dir: /src/Services/GroupBuy.API
@@ -445,9 +401,6 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - DOTNET_USE_POLLING_FILE_WATCHER=1
       - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
-      - "ConnectionStrings:DefaultConnectionString=Host=nexusdb;Port=5432;Database=SellerDb;Username=${POSTGRES_USER:-admin};Password=${POSTGRES_PASSWORD:-your_secure_password_here};"
-      - "OpenAI:ApiKey=${OPENAI_API_KEY:-your-api-key-here}"
-      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
     volumes:
       - .:/src
     working_dir: /src/Services/Seller.API
@@ -469,10 +422,6 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - DOTNET_USE_POLLING_FILE_WATCHER=1
       - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
-      - "ConnectionStrings:Database=Host=nexusaidb;Port=5432;Database=NexusAiDb;Username=${POSTGRES_USER:-admin};Password=${POSTGRES_PASSWORD:-your_secure_password_here};"
-      - "Ai:ProductCatalog:BaseUrl=http://product.api"
-      - "Ai:Google:ApiKey=${GOOGLE_AI_API_KEY:-change-me}"
-      - "Ai:Security:ApiKey=${NEXUS_AI_ADMIN_KEY:-change-me}"
     volumes:
       - .:/src
     working_dir: /src/Services/Nexus.AI.Service

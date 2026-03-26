@@ -412,6 +412,12 @@ FodyWeavers.xsd
 .env.production.local
 *.code-workspace
 
+# Ignore all appsettings to keep service configs local-only
+**/appsettings.json
+**/appsettings.*.json
+!**/appsettings*.example.json
+!**/appsettings*.template.json
+
 # Local History for Visual Studio Code
 .history/
 
@@ -436,3 +442,4 @@ FodyWeavers.xsd
 
 # React build output
 src/WebApps/React.Client/dist/
+.idea/
