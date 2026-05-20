@@ -102,23 +102,23 @@ export default function UserOrdersPage() {
           width={is1200 ? 'auto' : '60rem'}
           p={is480 ? 2 : 4}
           mb="5rem"
+          className="nx-liquid-glass"
           sx={{
-            borderRadius: is480 ? 0 : 4,
-            border: is480 ? 'none' : '1px solid #ECE2D4',
-            background: is480 ? 'transparent' : 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF6 100%)',
-            boxShadow: is480 ? 'none' : '0 20px 38px rgba(120, 94, 52, 0.08)',
+            borderRadius: is480 ? 0 : '28px',
+            border: is480 ? 'none' : '1px solid rgba(255, 255, 255, 0.15)',
+            boxShadow: is480 ? 'none' : '0 24px 48px -20px rgba(0, 0, 0, 0.08)',
           }}
         >
           {/* heading and navigation */}
           <Stack
             flexDirection="row"
             columnGap={2}
+            className="nx-liquid-glass"
             sx={{
-              p: { xs: 0, sm: 1.5 },
-              borderRadius: 3,
-              background:
-                'linear-gradient(130deg, rgba(255,247,232,0.9), rgba(241,251,249,0.9) 58%, rgba(255,255,255,1))',
-              border: '1px solid #EFE1CB',
+              p: { xs: 2, sm: 3 },
+              borderRadius: '24px',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              boxShadow: '0 16px 30px rgba(0, 0, 0, 0.05)',
             }}
           >
             {!is480 && (
@@ -141,7 +141,24 @@ export default function UserOrdersPage() {
                 Check the status of recent orders, manage returns, and discover similar products.
               </Typography>
               <Stack direction="row" mt={0.5}>
-                <Button component={Link} to="/payment/history" variant="outlined" size="small">
+                <Button
+                  component={Link}
+                  to="/payment/history"
+                  variant="outlined"
+                  size="small"
+                  sx={{
+                    borderRadius: 999,
+                    borderColor: '#1C1917',
+                    color: '#1C1917',
+                    fontWeight: 600,
+                    px: 2,
+                    py: 0.5,
+                    '&:hover': {
+                      borderColor: '#0A0A0A',
+                      background: 'rgba(28,25,23,0.05)',
+                    }
+                  }}
+                >
                   View payment history
                 </Button>
               </Stack>
@@ -153,15 +170,23 @@ export default function UserOrdersPage() {
             {orders.map((order) => (
               <Stack
                 key={order.id}
-                p={is480 ? 0 : 2.25}
+                p={is480 ? 2 : 3}
                 component={is480 ? 'div' : Paper}
                 elevation={0}
                 rowGap={2}
                 sx={{
-                  borderRadius: 3,
-                  border: is480 ? 'none' : '1px solid #E7DCCD',
-                  background: is480 ? 'transparent' : 'linear-gradient(180deg, #FFFFFF, #FFFCF8)',
-                  boxShadow: is480 ? 'none' : '0 16px 30px rgba(130, 95, 53, 0.07)',
+                  borderRadius: '24px',
+                  border: is480 ? 'none' : '1px solid rgba(255, 255, 255, 0.12)',
+                  background: is480 ? 'transparent' : 'rgba(255, 255, 255, 0.08)',
+                  backdropFilter: is480 ? 'none' : 'blur(20px)',
+                  WebkitBackdropFilter: is480 ? 'none' : 'blur(20px)',
+                  boxShadow: is480 ? 'none' : '0 16px 32px -16px rgba(0, 0, 0, 0.08)',
+                  transition: 'transform 300ms cubic-bezier(0.22, 1, 0.36, 1), border-color 300ms, box-shadow 300ms',
+                  '&:hover': {
+                    borderColor: '#D4AF37',
+                    boxShadow: '0 24px 48px -18px rgba(212, 175, 55, 0.15)',
+                    transform: 'translateY(-4px)',
+                  }
                 }}
               >
                 {/* upper */}
@@ -184,7 +209,7 @@ export default function UserOrdersPage() {
                     </Stack>
                     <Stack>
                       <Typography>Total Amount</Typography>
-                      <Typography fontWeight={700} color="primary.main">
+                      <Typography fontWeight={800} sx={{ color: '#D4AF37' }}>
                         ${order.totalPrice}
                       </Typography>
                     </Stack>
@@ -205,10 +230,11 @@ export default function UserOrdersPage() {
                       columnGap={4}
                       flexWrap={is768 ? 'wrap' : 'nowrap'}
                       sx={{
-                        p: { xs: 1.5, sm: 1.75 },
-                        borderRadius: 2.5,
-                        border: '1px solid #EEE4D7',
-                        background: '#FFFFFF',
+                        p: { xs: 2, sm: 2.5 },
+                        borderRadius: '20px',
+                        border: '1px solid rgba(255, 255, 255, 0.12)',
+                        background: 'rgba(255, 255, 255, 0.4)',
+                        backdropFilter: 'blur(10px)',
                       }}
                     >
                       <Stack>
@@ -237,7 +263,7 @@ export default function UserOrdersPage() {
                               Qty: {product.quantity}
                             </Typography>
                           </Stack>
-                          <Typography>${product.price}</Typography>
+                          <Typography fontWeight={700}>${product.price}</Typography>
                         </Stack>
 
                         <Stack
@@ -251,7 +277,16 @@ export default function UserOrdersPage() {
                             component={Link}
                             to={`/product-details/${product.itemNo}`}
                             variant="outlined"
-                            sx={{ borderRadius: 999, px: 1.6 }}
+                            sx={{
+                              borderRadius: 999,
+                              px: 2,
+                              borderColor: '#1C1917',
+                              color: '#1C1917',
+                              '&:hover': {
+                                borderColor: '#0A0A0A',
+                                background: 'rgba(28,25,23,0.05)',
+                              }
+                            }}
                           >
                             View Product
                           </Button>
@@ -261,7 +296,16 @@ export default function UserOrdersPage() {
                               variant="contained"
                               component={Link}
                               to="/cart"
-                              sx={{ borderRadius: 999, px: 1.6 }}
+                              sx={{
+                                borderRadius: 999,
+                                px: 2,
+                                background: 'linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)',
+                                color: '#FAF9F6',
+                                '&:hover': {
+                                  background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+                                  color: '#0C0A09',
+                                }
+                              }}
                             >
                               Already in Cart
                             </Button>
@@ -270,7 +314,16 @@ export default function UserOrdersPage() {
                               size="small"
                               variant="contained"
                               onClick={() => handleAddToCart(product)}
-                              sx={{ borderRadius: 999, px: 1.6 }}
+                              sx={{
+                                borderRadius: 999,
+                                px: 2,
+                                background: 'linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)',
+                                color: '#FAF9F6',
+                                '&:hover': {
+                                  background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+                                  color: '#0C0A09',
+                                }
+                              }}
                             >
                               Buy Again
                             </Button>
@@ -302,7 +355,21 @@ export default function UserOrdersPage() {
                     variant="outlined"
                     component={Link}
                     to={`/orders/${order.documentNo}/tracking`}
-                    sx={{ mb: 2, fontWeight: 700, borderRadius: 999, px: 1.8 }}
+                    sx={{
+                      mb: 2,
+                      fontWeight: 700,
+                      borderRadius: 999,
+                      px: 2.2,
+                      py: 0.75,
+                      background: 'linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)',
+                      color: '#FAF9F6',
+                      borderColor: 'transparent',
+                      '&:hover': {
+                        background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+                        color: '#0C0A09',
+                        borderColor: 'transparent',
+                      }
+                    }}
                   >
                     Track Order
                   </Button>
@@ -323,9 +390,19 @@ export default function UserOrdersPage() {
                   component={Link}
                   to="/"
                   variant="contained"
-                  sx={{ borderRadius: 999, px: 2.2 }}
+                  sx={{
+                    borderRadius: 999,
+                    px: 3,
+                    py: 1,
+                    background: 'linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)',
+                    color: '#FAF9F6',
+                    '&:hover': {
+                      background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+                      color: '#0C0A09',
+                    }
+                  }}
                 >
-                  Explore Tet Collection
+                  Explore Collection
                 </Button>
               </Stack>
             )}

@@ -3,7 +3,6 @@ import { Box, Typography, Paper } from '@mui/material';
 import { motion } from 'framer-motion';
 import Lottie from 'lottie-react';
 import orderSuccessAnimation from '@/assets/animations/orderSuccess.json';
-import { nexus } from '@/theme/theme';
 import { PremiumButton } from '@/components/ui/primitives';
 
 export default function OrderSuccessPage() {
@@ -18,15 +17,14 @@ export default function OrderSuccessPage() {
         transition={{ delay: 0.3 }}
       >
         <Paper
+          className="nx-liquid-glass"
           sx={{
             p: { xs: 4, md: 6 },
             textAlign: 'center',
-            borderRadius: nexus.radius.xl,
+            borderRadius: '28px',
             maxWidth: 520,
-            border: '1px solid #E9DCC7',
-            boxShadow: '0 20px 40px rgba(127, 94, 53, 0.12)',
-            background:
-              'linear-gradient(145deg, rgba(255,248,236,0.92), rgba(239,251,248,0.9) 62%, rgba(255,255,255,0.96))',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            boxShadow: '0 32px 64px -24px rgba(0, 0, 0, 0.15)',
           }}
           elevation={0}
         >
@@ -45,12 +43,14 @@ export default function OrderSuccessPage() {
               sx={{
                 my: 2,
                 fontFamily: 'monospace',
-                border: '1px dashed #D9C2A1',
-                borderRadius: 2,
-                px: 1.5,
-                py: 0.75,
+                border: '1px dashed rgba(212, 175, 55, 0.4)',
+                borderRadius: '12px',
+                px: 2,
+                py: 1,
                 display: 'inline-block',
-                bgcolor: '#FFFDF7',
+                bgcolor: 'rgba(212, 175, 55, 0.05)',
+                color: '#CA8A04',
+                fontWeight: 700,
               }}
             >
               {orderNo}
@@ -60,10 +60,40 @@ export default function OrderSuccessPage() {
             Check order status in my orders
           </Typography>
           <Box sx={{ display: 'flex', gap: 1.5, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <PremiumButton variant="contained" magnetic={false} onClick={() => navigate('/orders')}>
+            <PremiumButton
+              variant="contained"
+              magnetic={false}
+              onClick={() => navigate('/orders')}
+              sx={{
+                background: 'linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)',
+                color: '#FAF9F6',
+                borderRadius: 999,
+                fontWeight: 700,
+                px: 3.5,
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+                  color: '#0C0A09',
+                }
+              }}
+            >
               Track Order
             </PremiumButton>
-            <PremiumButton variant="outlined" magnetic={false} onClick={() => navigate('/')}>
+            <PremiumButton
+              variant="outlined"
+              magnetic={false}
+              onClick={() => navigate('/')}
+              sx={{
+                borderColor: '#1C1917',
+                color: '#1C1917',
+                borderRadius: 999,
+                fontWeight: 700,
+                px: 3.5,
+                '&:hover': {
+                  borderColor: '#0A0A0A',
+                  background: 'rgba(28,25,23,0.05)',
+                }
+              }}
+            >
               Continue Shopping
             </PremiumButton>
           </Box>

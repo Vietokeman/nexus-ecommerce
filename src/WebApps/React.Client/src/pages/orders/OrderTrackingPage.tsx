@@ -60,18 +60,18 @@ const ColorConnector = styled(StepConnector)(() => ({
   },
   [`&.${stepConnectorClasses.active}`]: {
     [`& .${stepConnectorClasses.line}`]: {
-      background: 'linear-gradient(90deg, #f59e0b 0%, #0f766e 100%)',
+      background: 'linear-gradient(90deg, #FEF08A 0%, #D4AF37 100%)',
     },
   },
   [`&.${stepConnectorClasses.completed}`]: {
     [`& .${stepConnectorClasses.line}`]: {
-      background: 'linear-gradient(90deg, #0f766e 0%, #065f46 100%)',
+      background: 'linear-gradient(90deg, #D4AF37 0%, #CA8A04 100%)',
     },
   },
   [`& .${stepConnectorClasses.line}`]: {
     height: 3,
     border: 0,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
     borderRadius: 1,
   },
 }));
@@ -86,10 +86,10 @@ interface StepIconOwnProps {
 function ColorStepIcon({ active, completed, icon, stepIndex }: StepIconOwnProps) {
   const step = ORDER_STEPS[stepIndex];
   const bg = completed
-    ? 'linear-gradient(135deg, #0f766e, #065f46)'
+    ? 'linear-gradient(135deg, #D4AF37, #CA8A04)'
     : active
-      ? `linear-gradient(135deg, ${step?.color || '#f59e0b'}, #0f766e)`
-      : '#e0e0e0';
+      ? `linear-gradient(135deg, ${step?.color || '#D4AF37'}, #1C1917)`
+      : 'rgba(255, 255, 255, 0.1)';
 
   return (
     <Stack
@@ -100,8 +100,9 @@ function ColorStepIcon({ active, completed, icon, stepIndex }: StepIconOwnProps)
         background: bg,
         justifyContent: 'center',
         alignItems: 'center',
-        color: completed || active ? '#fff' : '#9e9e9e',
-        boxShadow: active ? '0 6px 16px rgba(15, 118, 110, 0.35)' : 'none',
+        color: completed || active ? '#0C0A09' : '#8A8576',
+        border: completed || active ? 'none' : '1px solid rgba(255, 255, 255, 0.1)',
+        boxShadow: active ? '0 6px 16px rgba(212, 175, 55, 0.35)' : 'none',
         transition: 'all 0.3s',
       }}
     >
@@ -134,8 +135,8 @@ export default function OrderTrackingPage() {
   const is768 = useMediaQuery(theme.breakpoints.down(768));
   const is480 = useMediaQuery(theme.breakpoints.down(480));
 
-  const userName =
-    useAuthStore((s) => s.user)?.userName || useAuthStore((s) => s.user)?.email || '';
+  const user = useAuthStore((s) => s.user);
+  const userName = user?.userName || user?.email || '';
 
   const {
     data: order,
@@ -197,26 +198,25 @@ export default function OrderTrackingPage() {
           alignItems="center"
           gap={1}
           mb={4}
+          className="nx-liquid-glass"
           sx={{
             p: { xs: 1.5, sm: 2 },
-            borderRadius: 3,
-            border: '1px solid #EFE3D1',
-            background:
-              'linear-gradient(135deg, rgba(255,247,233,0.9), rgba(241,250,248,0.9) 65%, rgba(255,255,255,1))',
-            boxShadow: '0 14px 28px rgba(132, 96, 54, 0.1)',
+            borderRadius: '24px',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            boxShadow: '0 16px 30px rgba(0, 0, 0, 0.05)',
           }}
         >
           <motion.div whileHover={{ x: -5 }}>
             <IconButton
               component={Link}
               to="/orders"
-              sx={{ bgcolor: '#FFFFFF', border: '1px solid #E8DAC3' }}
+              sx={{ bgcolor: 'rgba(255,255,255,0.4)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.2)' }}
             >
               <ArrowBackIcon />
             </IconButton>
           </motion.div>
           <div>
-            <Typography variant="h4" fontWeight={800} sx={{ letterSpacing: '-0.02em' }}>
+            <Typography variant="h4" fontWeight={800} sx={{ background: 'linear-gradient(135deg, #1C1917 0%, #0D0C0B 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-0.02em' }}>
               📦 Theo dõi đơn hàng
             </Typography>
             <Typography variant="body2" color="text.secondary">
@@ -230,18 +230,19 @@ export default function OrderTrackingPage() {
           sx={{
             p: 3,
             mb: 4,
-            borderRadius: 3,
+            borderRadius: '24px',
             background: isCancelled
               ? 'linear-gradient(135deg, #fef2f2, #fde8e8)'
               : currentStep >= 5
                 ? 'linear-gradient(135deg, #ecfdf5, #d7f5eb)'
-                : 'linear-gradient(135deg, #fffbf1, #e8f7f4)',
+                : 'linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)',
             border: isCancelled
               ? '1px solid #fca5a5'
               : currentStep >= 5
                 ? '1px solid #6ee7b7'
-                : '1px solid #EBCFA5',
-            boxShadow: '0 16px 30px rgba(111, 84, 46, 0.1)',
+                : '1px solid rgba(212, 175, 55, 0.25)',
+            color: isCancelled ? '#ef4444' : (currentStep >= 5 ? '#065f46' : '#FAF9F6'),
+            boxShadow: '0 24px 48px -16px rgba(0, 0, 0, 0.2)',
           }}
         >
           <Stack direction="row" alignItems="center" gap={2} flexWrap="wrap">
@@ -253,14 +254,14 @@ export default function OrderTrackingPage() {
               ORDER_STEPS[currentStep]?.icon
             )}
             <Stack>
-              <Typography variant="h5" fontWeight={700}>
+              <Typography variant="h5" fontWeight={700} sx={{ color: isCancelled ? '#ef4444' : (currentStep >= 5 ? '#065f46' : '#D4AF37') }}>
                 {isCancelled
                   ? 'Đơn hàng đã bị hủy'
                   : currentStep >= 5
                     ? 'Đơn hàng hoàn thành!'
                     : ORDER_STEPS[currentStep]?.label || order.status}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" sx={{ color: isCancelled ? 'rgba(239,68,68,0.7)' : (currentStep >= 5 ? 'rgba(6,95,70,0.7)' : 'rgba(250,249,246,0.7)') }}>
                 Ngày đặt:{' '}
                 {new Date(order.createdDate).toLocaleDateString('vi-VN', {
                   day: '2-digit',
@@ -282,13 +283,13 @@ export default function OrderTrackingPage() {
         {/* Timeline Stepper */}
         {!isCancelled && (
           <Paper
+            className="nx-liquid-glass"
             sx={{
-              p: is480 ? 2 : 4,
+              p: is480 ? 2.5 : 4,
               mb: 4,
-              borderRadius: 3,
-              border: '1px solid #ECE1D1',
-              background: 'linear-gradient(180deg, #FFFFFF, #FFFCF7)',
-              boxShadow: '0 14px 28px rgba(125, 95, 54, 0.08)',
+              borderRadius: '24px',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              boxShadow: '0 16px 30px rgba(0, 0, 0, 0.05)',
             }}
           >
             <Typography variant="h6" fontWeight={600} mb={3}>
@@ -323,12 +324,13 @@ export default function OrderTrackingPage() {
 
         {/* Order Info */}
         <Paper
+          className="nx-liquid-glass"
           sx={{
             p: 3,
             mb: 4,
-            borderRadius: 3,
-            border: '1px solid #ECE1D2',
-            background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF7 100%)',
+            borderRadius: '24px',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            boxShadow: '0 16px 30px rgba(0, 0, 0, 0.05)',
           }}
         >
           <Typography variant="h6" fontWeight={600} mb={2}>
@@ -352,7 +354,7 @@ export default function OrderTrackingPage() {
             )}
             <Stack direction="row" justifyContent="space-between">
               <Typography color="text.secondary">Tổng tiền</Typography>
-              <Typography fontWeight={700} color="primary" fontSize="1.2rem">
+              <Typography fontWeight={800} sx={{ color: '#D4AF37', fontSize: '1.3rem' }}>
                 ${order.totalPrice}
               </Typography>
             </Stack>
@@ -362,11 +364,12 @@ export default function OrderTrackingPage() {
         {/* Order Items */}
         {order.orderItems && order.orderItems.length > 0 && (
           <Paper
+            className="nx-liquid-glass"
             sx={{
               p: 3,
-              borderRadius: 3,
-              border: '1px solid #ECE1D2',
-              background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF7 100%)',
+              borderRadius: '24px',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              boxShadow: '0 16px 30px rgba(0, 0, 0, 0.05)',
             }}
           >
             <Typography variant="h6" fontWeight={600} mb={2}>
@@ -381,10 +384,11 @@ export default function OrderTrackingPage() {
                   alignItems="center"
                   gap={2}
                   sx={{
-                    p: 1.5,
-                    borderRadius: 2,
-                    border: '1px solid #EEE3D4',
-                    '&:hover': { bgcolor: '#FFFBF4' },
+                    p: 2,
+                    borderRadius: '16px',
+                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    '&:hover': { background: 'rgba(212, 175, 55, 0.05)', borderColor: '#D4AF37' },
                   }}
                 >
                   <ImageFallback
