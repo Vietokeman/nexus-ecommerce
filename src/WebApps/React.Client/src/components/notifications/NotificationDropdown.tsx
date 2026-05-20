@@ -4,7 +4,6 @@ import NotificationsNoneRoundedIcon from '@mui/icons-material/NotificationsNoneR
 import {
   Badge,
   Box,
-  Button,
   IconButton,
   List,
   ListItemButton,
@@ -19,7 +18,7 @@ import {
   useNotifications,
   useUnreadNotificationCount,
 } from '@/hooks/useNotifications';
-import { nexus } from '@/theme/theme';
+import { PremiumButton } from '@/components/ui/primitives';
 import type { NotificationItem } from '@/types/notification';
 
 function formatTime(value: string): string {
@@ -74,8 +73,18 @@ export default function NotificationDropdown() {
   return (
     <>
       <IconButton size="small" onClick={handleOpen}>
-        <Badge color="secondary" badgeContent={unreadCount} max={99}>
-          <NotificationsNoneRoundedIcon sx={{ color: nexus.neutral[800] }} />
+        <Badge
+          badgeContent={unreadCount}
+          max={99}
+          sx={{
+            '& .MuiBadge-badge': {
+              background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 100%)',
+              color: '#0C0A09',
+              fontWeight: 800,
+            }
+          }}
+        >
+          <NotificationsNoneRoundedIcon sx={{ color: '#FAF9F6' }} />
         </Badge>
       </IconButton>
 
@@ -90,11 +99,14 @@ export default function NotificationDropdown() {
             sx: {
               width: 360,
               maxWidth: '95vw',
-              borderRadius: 4,
-              border: '1px solid #E9DDCC',
+              borderRadius: '24px',
+              border: '1px solid rgba(255, 255, 255, 0.12)',
               overflow: 'hidden',
-              boxShadow: '0 18px 34px rgba(120, 94, 52, 0.18)',
-              background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF6 100%)',
+              boxShadow: '0 32px 64px -24px rgba(0, 0, 0, 0.3)',
+              background: 'rgba(28, 25, 23, 0.92)',
+              backdropFilter: 'blur(30px)',
+              WebkitBackdropFilter: 'blur(30px)',
+              color: '#FAF9F6',
             },
           },
         }}
@@ -103,26 +115,25 @@ export default function NotificationDropdown() {
           direction="row"
           alignItems="center"
           justifyContent="space-between"
-          px={2}
-          py={1.75}
+          px={2.5}
+          py={2}
           sx={{
-            borderBottom: '1px solid #EFE4D4',
-            background:
-              'linear-gradient(135deg, rgba(255,247,232,0.8), rgba(245,252,251,0.9) 60%, rgba(255,255,255,1))',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+            background: 'rgba(255, 255, 255, 0.02)',
           }}
         >
-          <Typography variant="subtitle1" fontWeight={700}>
-            Notifications
+          <Typography variant="subtitle1" fontWeight={800} sx={{ color: '#FAF9F6' }}>
+            Thông báo
           </Typography>
-          <Typography variant="caption" color="text.secondary" fontWeight={600}>
-            {unreadCount} unread
+          <Typography variant="caption" sx={{ color: '#D4AF37' }} fontWeight={700}>
+            {unreadCount} chưa đọc
           </Typography>
         </Stack>
 
         {latest.length === 0 ? (
           <Box px={2} py={3}>
-            <Typography variant="body2" color="text.secondary" textAlign="center">
-              No notifications yet.
+            <Typography variant="body2" color="rgba(255, 255, 255, 0.6)" textAlign="center">
+              Không có thông báo mới.
             </Typography>
           </Box>
         ) : (
@@ -132,20 +143,20 @@ export default function NotificationDropdown() {
                 key={item.id}
                 onClick={() => void handleItemClick(item)}
                 sx={{
-                  py: 1.4,
-                  px: 2,
+                  py: 1.5,
+                  px: 2.5,
                   alignItems: 'flex-start',
-                  borderBottom: '1px solid #F1E7D8',
-                  bgcolor: item.isRead ? '#FFFFFF' : '#FFF8EB',
+                  borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
+                  bgcolor: item.isRead ? 'transparent' : 'rgba(212, 175, 55, 0.06)',
                   transition: 'background-color 160ms ease',
                   '&:hover': {
-                    bgcolor: item.isRead ? '#FFFBF4' : '#FFF3DE',
+                    bgcolor: 'rgba(255, 255, 255, 0.08)',
                   },
                 }}
               >
                 <ListItemText
                   primary={
-                    <Typography variant="body2" fontWeight={item.isRead ? 600 : 800}>
+                    <Typography variant="body2" fontWeight={item.isRead ? 600 : 800} sx={{ color: '#FAF9F6' }}>
                       {item.title}
                     </Typography>
                   }
@@ -153,12 +164,11 @@ export default function NotificationDropdown() {
                     <>
                       <Typography
                         variant="caption"
-                        color="text.secondary"
-                        sx={{ display: 'block' }}
+                        sx={{ display: 'block', color: 'rgba(255, 255, 255, 0.6)', mt: 0.5 }}
                       >
                         {item.message}
                       </Typography>
-                      <Typography variant="caption" color="text.disabled">
+                      <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.35)', display: 'block', mt: 0.25 }}>
                         {formatTime(item.createdAt)}
                       </Typography>
                     </>
@@ -169,8 +179,8 @@ export default function NotificationDropdown() {
           </List>
         )}
 
-        <Box p={1.5}>
-          <Button
+        <Box p={2}>
+          <PremiumButton
             fullWidth
             variant="contained"
             onClick={() => {
@@ -178,14 +188,11 @@ export default function NotificationDropdown() {
               navigate('/notifications');
             }}
             sx={{
-              borderRadius: 999,
-              fontWeight: 700,
-              py: 0.9,
-              boxShadow: '0 10px 22px rgba(15, 118, 110, 0.2)',
+              height: '2.5rem',
             }}
           >
-            View all notifications
-          </Button>
+            Xem tất cả thông báo
+          </PremiumButton>
         </Box>
       </Menu>
     </>

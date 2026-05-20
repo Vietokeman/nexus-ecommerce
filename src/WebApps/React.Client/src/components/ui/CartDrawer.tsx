@@ -7,7 +7,6 @@ import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useCartStore } from '@/store/cart-store';
-import { nexus } from '@/theme/theme';
 import ImageFallback from '@/components/ui/ImageFallback';
 import { PremiumBadge, PremiumButton } from '@/components/ui/primitives';
 
@@ -37,11 +36,11 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
       PaperProps={{
         sx: {
           width: { xs: '100%', sm: 400 },
-          background:
-            'linear-gradient(160deg, rgba(255,252,246,0.96), rgba(245,253,251,0.95) 60%, rgba(255,255,255,0.98))',
-          backdropFilter: nexus.glass.blurHeavy,
-          WebkitBackdropFilter: nexus.glass.blurHeavy,
-          borderLeft: '1px solid #EADCC8',
+          background: 'rgba(28, 25, 23, 0.85)',
+          backdropFilter: 'blur(30px)',
+          WebkitBackdropFilter: 'blur(30px)',
+          borderLeft: '1px solid rgba(255, 255, 255, 0.12)',
+          color: '#FAF9F6',
         },
       }}
     >
@@ -51,19 +50,23 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
           direction="row"
           alignItems="center"
           justifyContent="space-between"
-          sx={{ px: 2.5, py: 2, borderBottom: '1px solid #E8DCCB' }}
+          sx={{ px: 2.5, py: 2.5, borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}
         >
-          <Stack direction="row" alignItems="center" spacing={1}>
-            <ShoppingCartOutlinedIcon sx={{ color: nexus.orange[600] }} />
-            <Typography variant="h6" fontWeight={700} sx={{ color: nexus.neutral[900] }}>
-              Cart
+          <Stack direction="row" alignItems="center" spacing={1.5}>
+            <ShoppingCartOutlinedIcon sx={{ color: '#D4AF37' }} />
+            <Typography variant="h6" fontWeight={800} sx={{ color: '#FAF9F6', letterSpacing: '-0.01em' }}>
+              Giỏ hàng
             </Typography>
             <PremiumBadge
               label={items.length}
-              sx={{ background: nexus.gradient.button, color: '#fff' }}
+              sx={{
+                background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+                color: '#0C0A09',
+                fontWeight: 800,
+              }}
             />
           </Stack>
-          <IconButton onClick={onClose} size="small">
+          <IconButton onClick={onClose} size="small" sx={{ color: '#FAF9F6', '&:hover': { background: 'rgba(255,255,255,0.08)' } }}>
             <CloseIcon />
           </IconButton>
         </Stack>
@@ -72,9 +75,9 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
         <Box sx={{ flex: 1, overflowY: 'auto', px: 2.5, py: 2 }}>
           {items.length === 0 ? (
             <Stack alignItems="center" justifyContent="center" sx={{ height: '100%' }} spacing={2}>
-              <ShoppingCartOutlinedIcon sx={{ fontSize: 64, color: nexus.neutral[300] }} />
-              <Typography variant="body1" sx={{ color: nexus.neutral[500] }}>
-                Your cart is empty
+              <ShoppingCartOutlinedIcon sx={{ fontSize: 64, color: 'rgba(255, 255, 255, 0.15)' }} />
+              <Typography variant="body1" sx={{ color: 'rgba(255, 255, 255, 0.6)' }}>
+                Giỏ hàng của bạn đang trống
               </Typography>
               <PremiumButton
                 variant="outlined"
@@ -83,8 +86,16 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                   onClose();
                   navigate('/');
                 }}
+                sx={{
+                  borderColor: '#D4AF37',
+                  color: '#D4AF37',
+                  '&:hover': {
+                    background: 'rgba(212, 175, 55, 0.08)',
+                    borderColor: '#D4AF37',
+                  }
+                }}
               >
-                Start Shopping
+                Mua sắm ngay
               </PremiumButton>
             </Stack>
           ) : (
@@ -101,8 +112,8 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                     direction="row"
                     spacing={1.5}
                     sx={{
-                      py: 1.5,
-                      borderBottom: '1px solid #F0E6D8',
+                      py: 2,
+                      borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
                     }}
                   >
                     {/* Image */}
@@ -110,11 +121,11 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                       sx={{
                         width: 64,
                         height: 64,
-                        borderRadius: nexus.radius.md,
-                        backgroundColor: '#FFFDF8',
+                        borderRadius: '12px',
+                        backgroundColor: 'rgba(255, 255, 255, 0.04)',
                         overflow: 'hidden',
                         flexShrink: 0,
-                        border: '1px solid #EDE2D2',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
                       }}
                     >
                       {item.imageUrl ? (
@@ -130,69 +141,69 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                           sx={{ width: '100%', height: '100%' }}
                         >
                           <ShoppingCartOutlinedIcon
-                            sx={{ color: nexus.neutral[300], fontSize: 20 }}
+                            sx={{ color: 'rgba(255, 255, 255, 0.3)', fontSize: 20 }}
                           />
                         </Stack>
                       )}
                     </Box>
 
                     {/* Details */}
-                    <Stack flex={1} justifyContent="center" spacing={0.25}>
-                      <Typography variant="body2" fontWeight={600} noWrap>
+                    <Stack flex={1} justifyContent="center" spacing={0.5}>
+                      <Typography variant="body2" fontWeight={600} noWrap sx={{ color: '#FAF9F6' }}>
                         {item.productName}
                       </Typography>
                       <Typography
                         variant="body2"
-                        fontWeight={700}
+                        fontWeight={800}
                         sx={{
-                          background: nexus.gradient.primary,
+                          background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 100%)',
                           WebkitBackgroundClip: 'text',
                           WebkitTextFillColor: 'transparent',
                           backgroundClip: 'text',
                         }}
                       >
-                        ${(item.price * item.quantity).toFixed(2)}
+                        {item.price?.toLocaleString('vi-VN')}₫
                       </Typography>
                     </Stack>
 
                     {/* Quantity controls */}
-                    <Stack alignItems="center" justifyContent="center" spacing={0.5}>
+                    <Stack alignItems="center" justifyContent="center" spacing={1}>
                       <Stack
                         direction="row"
                         alignItems="center"
                         sx={{
-                          border: '1px solid #E8DCC9',
-                          borderRadius: nexus.radius.sm,
+                          border: '1px solid rgba(255, 255, 255, 0.15)',
+                          borderRadius: '8px',
                           overflow: 'hidden',
-                          background: '#FFFFFF',
+                          background: 'rgba(255, 255, 255, 0.05)',
                         }}
                       >
                         <IconButton
                           size="small"
                           onClick={() => updateQuantity(item.itemNo, item.quantity - 1)}
-                          sx={{ borderRadius: 0, p: 0.5 }}
+                          sx={{ borderRadius: 0, p: 0.5, color: '#FAF9F6' }}
                         >
-                          <RemoveIcon sx={{ fontSize: 16 }} />
+                          <RemoveIcon sx={{ fontSize: 14 }} />
                         </IconButton>
                         <Typography
                           variant="body2"
-                          fontWeight={600}
-                          sx={{ px: 1, minWidth: 24, textAlign: 'center' }}
+                          fontWeight={700}
+                          sx={{ px: 1, minWidth: 20, textAlign: 'center', color: '#FAF9F6' }}
                         >
                           {item.quantity}
                         </Typography>
                         <IconButton
                           size="small"
                           onClick={() => updateQuantity(item.itemNo, item.quantity + 1)}
-                          sx={{ borderRadius: 0, p: 0.5 }}
+                          sx={{ borderRadius: 0, p: 0.5, color: '#FAF9F6' }}
                         >
-                          <AddIcon sx={{ fontSize: 16 }} />
+                          <AddIcon sx={{ fontSize: 14 }} />
                         </IconButton>
                       </Stack>
                       <IconButton
                         size="small"
                         onClick={() => removeItem(item.itemNo)}
-                        sx={{ color: '#EF4444' }}
+                        sx={{ color: '#EF4444', p: 0.25, '&:hover': { background: 'rgba(239, 68, 68, 0.08)' } }}
                       >
                         <DeleteOutlineIcon sx={{ fontSize: 18 }} />
                       </IconButton>
@@ -206,31 +217,32 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
 
         {/* Footer Summary */}
         {items.length > 0 && (
-          <Stack sx={{ px: 2.5, pb: 2.5, pt: 1.5, borderTop: `1px solid ${nexus.neutral[200]}` }}>
-            <Stack direction="row" justifyContent="space-between" mb={0.5}>
-              <Typography variant="body2" sx={{ color: nexus.neutral[500] }}>
-                Subtotal
+          <Stack sx={{ px: 2.5, pb: 3, pt: 2, borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
+            <Stack direction="row" justifyContent="space-between" mb={1}>
+              <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.6)' }}>
+                Tạm tính
               </Typography>
-              <Typography variant="body2" fontWeight={600}>
-                ${subtotal().toFixed(2)}
+              <Typography variant="body2" fontWeight={600} sx={{ color: '#FAF9F6' }}>
+                {subtotal().toLocaleString('vi-VN')}₫
               </Typography>
             </Stack>
-            <Divider sx={{ my: 1 }} />
-            <Stack direction="row" justifyContent="space-between" mb={2}>
-              <Typography variant="body1" fontWeight={700}>
-                Total
+            <Divider sx={{ my: 1.5, borderColor: 'rgba(255, 255, 255, 0.08)' }} />
+            <Stack direction="row" justifyContent="space-between" mb={2.5}>
+              <Typography variant="body1" fontWeight={800} sx={{ color: '#FAF9F6' }}>
+                Tổng cộng
               </Typography>
               <Typography
                 variant="body1"
-                fontWeight={700}
+                fontWeight={800}
                 sx={{
-                  background: nexus.gradient.primary,
+                  background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   backgroundClip: 'text',
+                  fontSize: '1.2rem',
                 }}
               >
-                ${total().toFixed(2)}
+                {total().toLocaleString('vi-VN')}₫
               </Typography>
             </Stack>
             <motion.div whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.99 }}>
@@ -238,9 +250,9 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                 fullWidth
                 variant="contained"
                 onClick={handleCheckout}
-                sx={{ height: '3rem', fontSize: '1rem', fontWeight: 700 }}
+                sx={{ height: '3.2rem', fontSize: '1rem', fontWeight: 700 }}
               >
-                Proceed to Checkout
+                Tiến hành thanh toán
               </PremiumButton>
             </motion.div>
           </Stack>

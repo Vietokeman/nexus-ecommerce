@@ -4,7 +4,6 @@ import {
   Typography,
   Paper,
   Rating,
-  Button,
   TextField,
   Chip,
   Divider,
@@ -19,7 +18,7 @@ import { api } from '@/lib/api';
 import { API_ENDPOINTS } from '@/lib/endpoints';
 import { useAuthStore } from '@/store/auth-store';
 import type { ProductReview, ReviewSummary, CreateReviewDto } from '@/types/seller';
-import { nexus } from '@/theme/theme';
+import { PremiumButton } from '@/components/ui/primitives';
 
 interface ProductReviewsSectionProps {
   productId: number;
@@ -143,12 +142,12 @@ export default function ProductReviewsSection({ productId }: ProductReviewsSecti
       {/* Summary */}
       {summary && (
         <Paper
+          className="nx-liquid-glass"
           sx={{
             p: 3,
-            borderRadius: 3,
-            border: '1px solid #E9DCC9',
-            background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF7 100%)',
-            boxShadow: '0 12px 24px rgba(124, 92, 52, 0.08)',
+            borderRadius: '24px',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            boxShadow: '0 16px 32px rgba(0, 0, 0, 0.05)',
           }}
         >
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={4} alignItems="center">
@@ -196,13 +195,13 @@ export default function ProductReviewsSection({ productId }: ProductReviewsSecti
 
       {/* Write Review Button */}
       {user && !showForm && (
-        <Button
+        <PremiumButton
           variant="contained"
           onClick={() => setShowForm(true)}
-          sx={{ alignSelf: 'flex-start', borderRadius: 999, fontWeight: 700 }}
+          sx={{ alignSelf: 'flex-start' }}
         >
           ✍️ Viết đánh giá
-        </Button>
+        </PremiumButton>
       )}
 
       {/* Review Form */}
@@ -214,11 +213,12 @@ export default function ProductReviewsSection({ productId }: ProductReviewsSecti
             exit={{ opacity: 0, height: 0 }}
           >
             <Paper
+              className="nx-liquid-glass"
               sx={{
                 p: 3,
-                borderRadius: 3,
-                border: '1px solid #E4C48F',
-                background: 'linear-gradient(180deg, #FFFFFF, #FFFAF1)',
+                borderRadius: '24px',
+                border: '1px solid rgba(212, 175, 55, 0.25)',
+                boxShadow: '0 16px 32px rgba(212, 175, 55, 0.08)',
               }}
             >
               <Typography variant="h6" fontWeight={600} gutterBottom>
@@ -238,7 +238,7 @@ export default function ProductReviewsSection({ productId }: ProductReviewsSecti
                   fullWidth
                 />
                 <Stack direction="row" spacing={2}>
-                  <Button
+                  <PremiumButton
                     variant="contained"
                     onClick={handleSubmitReview}
                     disabled={submitReview.isPending}
@@ -247,13 +247,12 @@ export default function ProductReviewsSection({ productId }: ProductReviewsSecti
                         <CircularProgress size={18} color="inherit" />
                       ) : undefined
                     }
-                    sx={{ fontWeight: 600 }}
                   >
                     {submitReview.isPending ? 'Đang gửi...' : 'Gửi đánh giá'}
-                  </Button>
-                  <Button variant="text" onClick={() => setShowForm(false)}>
+                  </PremiumButton>
+                  <PremiumButton variant="text" onClick={() => setShowForm(false)}>
                     Hủy
-                  </Button>
+                  </PremiumButton>
                 </Stack>
               </Stack>
             </Paper>
@@ -276,11 +275,12 @@ export default function ProductReviewsSection({ productId }: ProductReviewsSecti
               transition={{ delay: index * 0.05 }}
             >
               <Paper
+                className="nx-liquid-glass"
                 sx={{
                   p: 2.5,
-                  borderRadius: 2.5,
-                  border: '1px solid #E9DCCB',
-                  background: 'linear-gradient(180deg, #FFFFFF, #FFFCF8)',
+                  borderRadius: '20px',
+                  border: '1px solid rgba(255, 255, 255, 0.12)',
+                  boxShadow: '0 8px 24px rgba(0, 0, 0, 0.02)',
                 }}
               >
                 <Stack spacing={1.5}>
@@ -333,8 +333,8 @@ export default function ProductReviewsSection({ productId }: ProductReviewsSecti
                     <Paper
                       sx={{
                         p: 2,
-                        bgcolor: '#FFF6E8',
-                        borderLeft: `3px solid ${nexus.orange[500]}`,
+                        bgcolor: 'rgba(212, 175, 55, 0.05)',
+                        borderLeft: '3px solid #D4AF37',
                         borderRadius: 1,
                       }}
                     >
@@ -362,14 +362,14 @@ export default function ProductReviewsSection({ productId }: ProductReviewsSecti
                         fullWidth
                       />
                       <Stack direction="row" justifyContent="flex-end">
-                        <Button
+                        <PremiumButton
                           variant="outlined"
                           size="small"
                           disabled={submitReply.isPending}
                           onClick={() => handleSubmitReply(review.id)}
                         >
-                          Gui phan hoi
-                        </Button>
+                          Gửi phản hồi
+                        </PremiumButton>
                       </Stack>
                     </Stack>
                   )}
@@ -380,12 +380,12 @@ export default function ProductReviewsSection({ productId }: ProductReviewsSecti
         </Stack>
       ) : (
         <Paper
+          className="nx-liquid-glass"
           sx={{
             p: 4,
             textAlign: 'center',
-            borderRadius: 3,
-            bgcolor: '#FFFDF8',
-            border: '1px dashed #E5D2B5',
+            borderRadius: '24px',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
           }}
         >
           <Typography variant="h6" color="text.secondary">
