@@ -20,7 +20,6 @@ import { toast } from 'react-toastify';
 import { useWishlistStore } from '@/store/wishlist-store';
 import { useCartStore } from '@/store/cart-store';
 import emptyWishlistAnimation from '@/assets/animations/emptyWishlist.json';
-import { nexus } from '@/theme/theme';
 
 export default function WishlistPage() {
   const wishlistItems = useWishlistStore((s) => s.items);
@@ -58,12 +57,12 @@ export default function WishlistPage() {
           columnGap={1}
           justifyContent="center"
           alignItems="center"
+          className="nx-liquid-glass"
           sx={{
-            p: { xs: 1, sm: 1.5 },
-            borderRadius: 3,
-            border: '1px solid #EEDFCB',
-            background:
-              'linear-gradient(145deg, rgba(255,248,236,0.9), rgba(240,251,248,0.88) 60%, rgba(255,255,255,0.96))',
+            p: { xs: 1.5, sm: 2.5 },
+            borderRadius: '24px',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            boxShadow: '0 16px 30px rgba(0, 0, 0, 0.05)',
           }}
         >
           <motion.div whileHover={{ x: -5 }}>
@@ -95,15 +94,24 @@ export default function WishlistPage() {
           ) : (
             <Grid container gap={1} justifyContent="center" alignContent="center">
               {wishlistItems.map((item) => (
-                <Stack key={item.id} component={is480 ? 'div' : Paper} elevation={1}>
+                <Stack key={item.id} component={is480 ? 'div' : Paper} elevation={0} sx={{ background: 'transparent' }}>
                   {/* product card */}
                   <Stack
-                    p={2}
+                    p={2.5}
                     width={is480 ? '100%' : '18rem'}
                     sx={{
-                      borderRadius: 2.5,
-                      border: '1px solid #E9DCCB',
-                      background: 'linear-gradient(180deg, #FFFFFF, #FFFCF7)',
+                      borderRadius: '24px',
+                      border: '1px solid rgba(255, 255, 255, 0.12)',
+                      background: 'rgba(255, 255, 255, 0.08)',
+                      backdropFilter: 'blur(20px)',
+                      WebkitBackdropFilter: 'blur(20px)',
+                      boxShadow: '0 12px 32px -16px rgba(0, 0, 0, 0.08)',
+                      transition: 'transform 350ms cubic-bezier(0.22, 1, 0.36, 1), border-color 350ms, box-shadow 350ms',
+                      '&:hover': {
+                        transform: 'translateY(-6px)',
+                        borderColor: '#D4AF37',
+                        boxShadow: '0 20px 40px -15px rgba(212, 175, 55, 0.18)',
+                      },
                     }}
                   >
                     <Stack flexDirection="row" justifyContent="flex-end">
@@ -120,25 +128,32 @@ export default function WishlistPage() {
                       sx={{ textDecoration: 'none', color: 'inherit' }}
                       alignItems="center"
                     >
-                      <Typography variant="h6" fontWeight={700} noWrap>
+                      <Typography variant="subtitle1" fontWeight={700} sx={{ color: '#1C1917' }} noWrap>
                         {item.name}
                       </Typography>
-                      <Typography variant="h6" fontWeight={600}>
+                      <Typography variant="h6" fontWeight={800} sx={{ color: '#D4AF37', mt: 0.5 }}>
                         ${item.price}
                       </Typography>
                     </Stack>
                   </Stack>
 
                   {/* actions */}
-                  <Stack paddingLeft={2} paddingRight={2} paddingBottom={2}>
+                  <Stack paddingLeft={2.5} paddingRight={2.5} paddingBottom={2.5}>
                     {cartItems.some((cartItem) => cartItem.itemNo === item.id) ? (
                       <Button
-                        sx={{ mt: 2 }}
+                        sx={{
+                          mt: 2,
+                          borderRadius: 999,
+                          fontWeight: 700,
+                          py: 1,
+                          border: '1px solid rgba(212, 175, 55, 0.3)',
+                          color: '#CA8A04',
+                          bgcolor: 'rgba(212,175,55,0.05)',
+                        }}
                         size="small"
                         variant="outlined"
                         component={Link}
                         to="/cart"
-                        color="warning"
                       >
                         Already in cart
                       </Button>
@@ -151,7 +166,15 @@ export default function WishlistPage() {
                           mt: 2,
                           borderRadius: 999,
                           fontWeight: 700,
-                          background: nexus.gradient.button,
+                          py: 1,
+                          background: 'linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)',
+                          color: '#FAF9F6',
+                          boxShadow: '0 8px 16px -6px rgba(28, 25, 23, 0.4)',
+                          '&:hover': {
+                            background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+                            color: '#0C0A09',
+                            boxShadow: '0 12px 20px -8px rgba(212, 175, 55, 0.4)',
+                          },
                         }}
                       >
                         Add To Cart

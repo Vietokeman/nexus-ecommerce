@@ -31,8 +31,8 @@ function DiscountBadge({ original, group }: { original: number; group: number })
         px: 1.5,
         py: 0.5,
         borderRadius: nexus.radius.pill,
-        background: nexus.gradient.button,
-        color: '#fff',
+        background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+        color: '#0C0A09',
         fontWeight: 700,
         fontSize: '0.75rem',
         zIndex: LAYERS.base,
@@ -57,16 +57,18 @@ function CampaignCard({ campaign }: { campaign: GroupBuyCampaign }) {
         sx={{
           display: 'block',
           textDecoration: 'none',
-          borderRadius: nexus.radius.xl,
+          borderRadius: '24px',
           overflow: 'hidden',
-          border: '1px solid',
-          borderColor: '#E7DAC5',
-          background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF6 100%)',
-          transition: nexus.transition.base,
+          border: '1px solid rgba(255, 255, 255, 0.12)',
+          background: 'rgba(255, 255, 255, 0.08)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          boxShadow: '0 12px 32px -16px rgba(0, 0, 0, 0.08)',
+          transition: 'transform 350ms cubic-bezier(0.22, 1, 0.36, 1), border-color 350ms, box-shadow 350ms',
           '&:hover': {
-            borderColor: '#D9BA89',
-            boxShadow: '0 14px 30px rgba(124, 92, 52, 0.14)',
-            transform: 'translateY(-4px)',
+            transform: 'translateY(-6px)',
+            borderColor: '#D4AF37',
+            boxShadow: '0 24px 48px -18px rgba(212, 175, 55, 0.25)',
           },
         }}
       >
@@ -110,7 +112,7 @@ function CampaignCard({ campaign }: { campaign: GroupBuyCampaign }) {
               variant="h6"
               fontWeight={700}
               sx={{
-                background: nexus.gradient.primary,
+                background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
               }}
@@ -119,7 +121,7 @@ function CampaignCard({ campaign }: { campaign: GroupBuyCampaign }) {
             </Typography>
             <Typography
               variant="body2"
-              sx={{ textDecoration: 'line-through', color: nexus.neutral[400] }}
+              sx={{ textDecoration: 'line-through', color: '#8A8576' }}
             >
               ${campaign.originalPrice.toFixed(2)}
             </Typography>
@@ -132,10 +134,11 @@ function CampaignCard({ campaign }: { campaign: GroupBuyCampaign }) {
               icon={<GroupsOutlinedIcon sx={{ fontSize: 16 }} />}
               label={`Min ${campaign.minParticipants} people`}
               sx={{
-                bgcolor: '#FFF5E8',
-                color: nexus.orange[700],
-                fontWeight: 500,
-                '& .MuiChip-icon': { color: nexus.orange[500] },
+                bgcolor: 'rgba(212,175,55,0.08)',
+                color: '#CA8A04',
+                fontWeight: 600,
+                border: '1px solid rgba(212,175,55,0.2)',
+                '& .MuiChip-icon': { color: '#D4AF37' },
               }}
             />
             {daysLeft !== null && (
@@ -144,10 +147,11 @@ function CampaignCard({ campaign }: { campaign: GroupBuyCampaign }) {
                 icon={<TimerOutlinedIcon sx={{ fontSize: 16 }} />}
                 label={daysLeft > 0 ? `${daysLeft}d left` : 'Ending today'}
                 sx={{
-                  bgcolor: daysLeft <= 1 ? '#FEF2F2' : nexus.orange[50],
-                  color: daysLeft <= 1 ? '#DC2626' : nexus.orange[700],
-                  fontWeight: 500,
-                  '& .MuiChip-icon': { color: daysLeft <= 1 ? '#DC2626' : nexus.orange[500] },
+                  bgcolor: daysLeft <= 1 ? 'rgba(239,68,68,0.08)' : 'rgba(28,25,23,0.05)',
+                  color: daysLeft <= 1 ? '#DC2626' : '#1C1917',
+                  fontWeight: 600,
+                  border: daysLeft <= 1 ? '1px solid rgba(239,68,68,0.2)' : '1px solid rgba(28,25,23,0.1)',
+                  '& .MuiChip-icon': { color: daysLeft <= 1 ? '#DC2626' : '#1C1917' },
                 }}
               />
             )}
@@ -158,9 +162,9 @@ function CampaignCard({ campaign }: { campaign: GroupBuyCampaign }) {
             direction="row"
             alignItems="center"
             spacing={0.5}
-            sx={{ color: nexus.orange[700], fontWeight: 700, fontSize: '0.875rem', mt: 1 }}
+            sx={{ color: '#D4AF37', fontWeight: 700, fontSize: '0.875rem', mt: 1, '&:hover': { color: '#CA8A04' } }}
           >
-            <Typography variant="body2" fontWeight={600}>
+            <Typography variant="body2" fontWeight={700}>
               View & Start Group
             </Typography>
             <ArrowForwardIcon sx={{ fontSize: 16 }} />
@@ -188,28 +192,27 @@ export default function GroupBuyListPage() {
       {/* Header */}
       <Stack
         spacing={1}
+        className="nx-liquid-glass"
         sx={{
-          p: { xs: 2, md: 2.5 },
-          borderRadius: 3,
-          border: '1px solid #EEDFCB',
-          background:
-            'linear-gradient(145deg, rgba(255,248,236,0.9), rgba(240,251,248,0.88) 60%, rgba(255,255,255,0.96))',
-          boxShadow: '0 16px 30px rgba(126, 93, 53, 0.1)',
+          p: { xs: 3, md: 4 },
+          borderRadius: '24px',
+          border: '1px solid rgba(255, 255, 255, 0.15)',
+          boxShadow: '0 24px 48px -20px rgba(0, 0, 0, 0.1)',
         }}
       >
         <Typography
           variant="h4"
           fontWeight={800}
           sx={{
-            background: nexus.gradient.primary,
+            background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             letterSpacing: '-0.02em',
           }}
         >
-          Group Buy
+          Group Buy Campaigns
         </Typography>
-        <Typography variant="body1" color={nexus.neutral[500]}>
+        <Typography variant="body1" color="#5C584E">
           Team up with others. Save together. The more people join, the lower the price.
         </Typography>
       </Stack>
@@ -222,10 +225,11 @@ export default function GroupBuyListPage() {
             label={t === 'active' ? 'Active Campaigns' : 'All Campaigns'}
             onClick={() => setTab(t)}
             sx={{
-              fontWeight: 600,
-              bgcolor: tab === t ? nexus.orange[700] : nexus.neutral[100],
-              color: tab === t ? '#fff' : nexus.neutral[600],
-              '&:hover': { bgcolor: tab === t ? nexus.orange[700] : nexus.neutral[200] },
+              fontWeight: 700,
+              bgcolor: tab === t ? '#1C1917' : 'rgba(255, 255, 255, 0.6)',
+              color: tab === t ? '#FAF9F6' : '#1C1917',
+              border: '1px solid rgba(28,25,23,0.1)',
+              '&:hover': { bgcolor: tab === t ? '#0A0A0A' : 'rgba(255, 255, 255, 0.8)' },
             }}
           />
         ))}

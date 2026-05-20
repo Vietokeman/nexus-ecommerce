@@ -42,9 +42,9 @@ function TimeBox({ value, label }: { value: number; label: string }) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          borderRadius: nexus.radius.md,
-          background: nexus.gradient.button,
-          color: '#fff',
+          borderRadius: '8px',
+          background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+          color: '#0C0A09',
           fontWeight: 800,
           fontSize: '1.4rem',
           fontFamily: 'monospace',
@@ -94,16 +94,17 @@ function FlashItemCard({ item }: { item: FlashSaleItem }) {
     <motion.div variants={itemVariants}>
       <Box
         sx={{
-          borderRadius: nexus.radius.xl,
-          border: '1px solid',
-          borderColor: '#E8DBCA',
-          background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF7 100%)',
+          borderRadius: '24px',
+          border: '1px solid rgba(255, 255, 255, 0.12)',
+          background: 'rgba(255, 255, 255, 0.08)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
           overflow: 'hidden',
-          transition: nexus.transition.base,
+          transition: 'transform 350ms cubic-bezier(0.22, 1, 0.36, 1), border-color 350ms, box-shadow 350ms',
           '&:hover': {
-            borderColor: '#DAB98B',
-            boxShadow: '0 14px 30px rgba(124, 92, 52, 0.14)',
-            transform: 'translateY(-4px)',
+            borderColor: '#D4AF37',
+            boxShadow: '0 24px 48px -18px rgba(212, 175, 55, 0.25)',
+            transform: 'translateY(-6px)',
           },
           opacity: soldOut ? 0.6 : 1,
         }}
@@ -176,7 +177,7 @@ function FlashItemCard({ item }: { item: FlashSaleItem }) {
               variant="h5"
               fontWeight={800}
               sx={{
-                background: nexus.gradient.primary,
+                background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
               }}
@@ -185,7 +186,7 @@ function FlashItemCard({ item }: { item: FlashSaleItem }) {
             </Typography>
             <Typography
               variant="body2"
-              sx={{ textDecoration: 'line-through', color: nexus.neutral[400] }}
+              sx={{ textDecoration: 'line-through', color: '#8A8576' }}
             >
               ${item.originalPrice.toFixed(2)}
             </Typography>
@@ -205,7 +206,7 @@ function FlashItemCard({ item }: { item: FlashSaleItem }) {
                 sx={{
                   height: '100%',
                   width: `${Math.min(100, soldPct)}%`,
-                  background: soldPct >= 80 ? '#EF4444' : nexus.gradient.button,
+                  background: soldPct >= 80 ? '#EF4444' : 'linear-gradient(90deg, #FEF08A 0%, #D4AF37 100%)',
                   borderRadius: 5,
                   transition: 'width 0.5s ease',
                 }}
@@ -232,10 +233,15 @@ function FlashItemCard({ item }: { item: FlashSaleItem }) {
             onClick={handleBuy}
             startIcon={<ShoppingCartOutlinedIcon />}
             sx={{
-              background: soldOut ? nexus.neutral[300] : nexus.gradient.button,
+              background: soldOut ? 'rgba(0,0,0,0.12)' : 'linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)',
+              color: soldOut ? 'rgba(0,0,0,0.26)' : '#FAF9F6',
               fontWeight: 700,
               borderRadius: 999,
-              '&:hover': { opacity: 0.9 },
+              py: 1,
+              '&:hover': {
+                background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+                color: '#0C0A09',
+              },
             }}
           >
             {soldOut ? 'Sold Out' : purchase.isPending ? 'Buying...' : 'Buy Now'}
@@ -279,13 +285,14 @@ export default function FlashSaleDetailPage() {
           <Box
             sx={{
               p: { xs: 3, md: 4 },
-              borderRadius: nexus.radius.xl,
+              borderRadius: '28px',
               background:
-                'linear-gradient(145deg, rgba(39,31,26,1) 0%, rgba(72,52,42,0.98) 60%, rgba(102,70,55,0.98) 100%)',
-              color: '#fff',
+                'linear-gradient(145deg, #1C1917 0%, #0D0C0B 100%)',
+              border: '1px solid rgba(212, 175, 55, 0.25)',
+              color: '#FAF9F6',
               position: 'relative',
               overflow: 'hidden',
-              boxShadow: '0 20px 38px rgba(53, 35, 28, 0.35)',
+              boxShadow: '0 24px 48px -16px rgba(0, 0, 0, 0.5)',
             }}
           >
             <Stack
@@ -297,12 +304,12 @@ export default function FlashSaleDetailPage() {
               <Stack spacing={1}>
                 <Stack direction="row" alignItems="center" spacing={1}>
                   <BoltIcon sx={{ color: nexus.orange[400], fontSize: 32 }} />
-                  <Typography variant="h4" fontWeight={800}>
+                  <Typography variant="h4" fontWeight={800} sx={{ background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                     {session.name}
                   </Typography>
                 </Stack>
                 {session.description && (
-                  <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.6)' }}>
+                  <Typography variant="body1" sx={{ color: 'rgba(250,249,246,0.7)' }}>
                     {session.description}
                   </Typography>
                 )}
