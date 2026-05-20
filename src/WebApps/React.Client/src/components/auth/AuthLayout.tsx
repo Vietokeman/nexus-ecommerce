@@ -1,7 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { Box, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { motion } from 'framer-motion';
-import { nexus } from '@/theme/theme';
 import { containerVariants, itemVariants } from '@/lib/motion';
 
 const LazyLottie = lazy(() => import('lottie-react'));
@@ -106,10 +105,11 @@ export default function AuthLayout({ children, title, subtitle }: AuthLayoutProp
         alignItems="center"
         sx={{
           background:
-            'radial-gradient(circle at 0% 0%, rgba(212,175,55,0.06), transparent 50%), #FAF9F6',
+            'radial-gradient(circle at 0% 0%, rgba(212, 175, 55, 0.12), transparent 50%), #0C0A09',
           px: { xs: 2, sm: 5 },
           py: { xs: 5, md: 7 },
           overflowY: 'auto',
+          borderLeft: '1px solid rgba(255, 255, 255, 0.05)',
         }}
       >
         <motion.div
@@ -146,8 +146,10 @@ export default function AuthLayout({ children, title, subtitle }: AuthLayoutProp
                 variant="h4"
                 fontWeight={700}
                 sx={{
-                  mb: 0.5,
-                  color: nexus.neutral[900],
+                  mb: 1.5,
+                  color: '#FAF9F6',
+                  fontFamily: '"Cormorant", "Fraunces", serif',
+                  fontSize: '2.4rem',
                   letterSpacing: '-0.02em',
                   textWrap: 'balance',
                 }}
@@ -162,7 +164,7 @@ export default function AuthLayout({ children, title, subtitle }: AuthLayoutProp
             <motion.div variants={itemVariants}>
               <Typography
                 variant="body2"
-                sx={{ mb: 3, color: nexus.neutral[600], maxWidth: '34ch' }}
+                sx={{ mb: 4, color: 'rgba(255, 255, 255, 0.65)', maxWidth: '34ch' }}
               >
                 {subtitle}
               </Typography>
