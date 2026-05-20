@@ -127,23 +127,22 @@ export default function SellerProductsPage() {
           alignItems="center"
           flexWrap="wrap"
           gap={2}
+          className="nx-liquid-glass"
           sx={{
-            p: { xs: 2, md: 2.5 },
-            borderRadius: 3,
-            border: '1px solid #EEDFCB',
-            background:
-              'linear-gradient(145deg, rgba(255,248,236,0.9), rgba(240,251,248,0.88) 60%, rgba(255,255,255,0.96))',
-            boxShadow: '0 16px 30px rgba(126, 93, 53, 0.1)',
+            p: { xs: 2.5, md: 3 },
+            borderRadius: '24px',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            boxShadow: '0 24px 48px -20px rgba(0, 0, 0, 0.08)',
           }}
         >
           <Stack direction="row" alignItems="center" gap={1}>
             <motion.div whileHover={{ x: -5 }}>
-              <IconButton component={Link} to="/seller/dashboard">
+              <IconButton component={Link} to="/seller/dashboard" sx={{ bgcolor: 'rgba(255,255,255,0.4)', border: '1px solid rgba(255,255,255,0.2)' }}>
                 <ArrowBackIcon />
               </IconButton>
             </motion.div>
             <div>
-              <Typography variant="h4" fontWeight={800} sx={{ letterSpacing: '-0.02em' }}>
+              <Typography variant="h4" fontWeight={800} sx={{ background: 'linear-gradient(135deg, #1C1917 0%, #0D0C0B 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-0.02em' }}>
                 Sản phẩm của tôi
               </Typography>
               <Typography variant="body2" color="text.secondary">
@@ -156,9 +155,15 @@ export default function SellerProductsPage() {
             startIcon={<AddIcon />}
             onClick={() => navigate('/seller/create-product')}
             sx={{
-              background: 'linear-gradient(135deg, #7c3aed, #2563eb)',
-              fontWeight: 600,
-              borderRadius: 2,
+              background: 'linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)',
+              color: '#FAF9F6',
+              fontWeight: 700,
+              borderRadius: 999,
+              px: 3,
+              '&:hover': {
+                background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+                color: '#0C0A09',
+              }
             }}
           >
             Đăng sản phẩm mới
@@ -176,9 +181,9 @@ export default function SellerProductsPage() {
             mb: 2,
             maxWidth: 420,
             '& .MuiOutlinedInput-root': {
-              borderRadius: 2.5,
+              borderRadius: 999,
               background: '#FFFFFF',
-              boxShadow: '0 8px 18px rgba(126, 93, 53, 0.08)',
+              boxShadow: '0 8px 18px rgba(0, 0, 0, 0.05)',
             },
           }}
           InputProps={{
@@ -200,16 +205,21 @@ export default function SellerProductsPage() {
               transition={{ delay: index * 0.05 }}
             >
               <Paper
+                className="nx-liquid-glass"
                 sx={{
                   p: 2,
                   display: 'flex',
                   flexDirection: is768 ? 'column' : 'row',
                   gap: 2,
                   alignItems: is768 ? 'stretch' : 'center',
-                  border: '1px solid #E9DCCB',
-                  background: 'linear-gradient(180deg, #FFFFFF, #FFFCF7)',
-                  transition: 'box-shadow 0.2s',
-                  '&:hover': { boxShadow: '0 16px 30px rgba(126, 93, 53, 0.14)' },
+                  borderRadius: '24px',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  transition: 'transform 0.2s, box-shadow 0.2s',
+                  '&:hover': {
+                    borderColor: '#D4AF37',
+                    boxShadow: '0 16px 30px rgba(126, 93, 53, 0.14)',
+                    transform: 'translateY(-2px)',
+                  },
                 }}
               >
                 {/* Image */}
@@ -240,7 +250,7 @@ export default function SellerProductsPage() {
                     Mã: {product.no} | Danh mục: {product.category || 'Chưa phân loại'}
                   </Typography>
                   <Stack direction="row" alignItems="center" gap={1}>
-                    <Typography fontWeight={600} color="primary">
+                    <Typography fontWeight={800} sx={{ color: '#D4AF37' }}>
                       {product.price?.toLocaleString('vi-VN')}₫
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
@@ -293,6 +303,17 @@ export default function SellerProductsPage() {
                   variant="contained"
                   startIcon={<AddIcon />}
                   onClick={() => navigate('/seller/create-product')}
+                  sx={{
+                    background: 'linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)',
+                    color: '#FAF9F6',
+                    fontWeight: 700,
+                    borderRadius: 999,
+                    px: 3,
+                    '&:hover': {
+                      background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+                      color: '#0C0A09',
+                    }
+                  }}
                 >
                   Đăng sản phẩm đầu tiên
                 </Button>

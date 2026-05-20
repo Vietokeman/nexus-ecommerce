@@ -28,7 +28,6 @@ import { useAuthStore } from '@/store/auth-store';
 import type { SellerDashboard } from '@/types/seller';
 import loadingAnimation from '@/assets/animations/loading.json';
 import { PremiumButton } from '@/components/ui/primitives';
-import { nexus } from '@/theme/theme';
 import ImageFallback from '@/components/ui/ImageFallback';
 
 interface StatCardProps {
@@ -39,19 +38,19 @@ interface StatCardProps {
   subtitle?: string;
 }
 
-function StatCard({ title, value, icon, color, subtitle }: StatCardProps) {
+function StatCard({ title, value, icon, color: _, subtitle }: StatCardProps) {
   return (
-    <motion.div whileHover={{ y: -4 }} style={{ borderRadius: 16 }}>
+    <motion.div whileHover={{ y: -6 }} style={{ borderRadius: 16 }}>
       <Paper
+        className="nx-liquid-glass"
         sx={{
           p: 3,
-          borderRadius: 4,
+          borderRadius: '24px',
           height: '100%',
           position: 'relative',
           overflow: 'hidden',
-          border: '1px solid #E9DCC9',
-          background: 'linear-gradient(180deg, #FFFFFF, #FFFCF7)',
-          boxShadow: '0 14px 26px rgba(124, 92, 52, 0.08)',
+          border: '1px solid rgba(255, 255, 255, 0.15)',
+          boxShadow: '0 16px 32px -16px rgba(0, 0, 0, 0.08)',
         }}
       >
         <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
@@ -59,7 +58,7 @@ function StatCard({ title, value, icon, color, subtitle }: StatCardProps) {
             <Typography variant="body2" color="text.secondary" fontWeight={500}>
               {title}
             </Typography>
-            <Typography variant="h4" fontWeight={700}>
+            <Typography variant="h4" fontWeight={800} sx={{ color: '#1C1917' }}>
               {value}
             </Typography>
             {subtitle && (
@@ -72,8 +71,8 @@ function StatCard({ title, value, icon, color, subtitle }: StatCardProps) {
             sx={{
               width: 48,
               height: 48,
-              borderRadius: 3,
-              background: `${color}15`,
+              borderRadius: '12px',
+              background: `rgba(212, 175, 55, 0.1)`,
               justifyContent: 'center',
               alignItems: 'center',
             }}
@@ -88,7 +87,7 @@ function StatCard({ title, value, icon, color, subtitle }: StatCardProps) {
             left: 0,
             right: 0,
             height: 4,
-            background: `linear-gradient(90deg, ${color}, ${color}40)`,
+            background: `linear-gradient(90deg, #FEF08A, #D4AF37)`,
           }}
         />
       </Paper>
@@ -141,29 +140,29 @@ export default function SellerDashboardPage() {
     {
       title: 'Tổng sản phẩm',
       value: dashboard?.totalProducts ?? 0,
-      icon: <InventoryIcon sx={{ color: '#2563eb' }} />,
-      color: '#2563eb',
+      icon: <InventoryIcon sx={{ color: '#D4AF37' }} />,
+      color: '#D4AF37',
       subtitle: `${dashboard?.activeProducts ?? 0} đang bán`,
     },
     {
       title: 'Đánh giá trung bình',
       value: (dashboard?.averageRating ?? 0).toFixed(1),
-      icon: <StarIcon sx={{ color: '#f59e0b' }} />,
-      color: '#f59e0b',
+      icon: <StarIcon sx={{ color: '#D4AF37' }} />,
+      color: '#D4AF37',
       subtitle: `${dashboard?.totalReviews ?? 0} đánh giá`,
     },
     {
       title: 'Tổng doanh thu',
       value: `${((dashboard?.totalRevenue ?? 0) / 1000000).toFixed(1)}M`,
-      icon: <TrendingUpIcon sx={{ color: '#10b981' }} />,
-      color: '#10b981',
+      icon: <TrendingUpIcon sx={{ color: '#D4AF37' }} />,
+      color: '#D4AF37',
       subtitle: 'VNĐ',
     },
     {
       title: 'Chờ xử lý',
       value: dashboard?.pendingProducts ?? 0,
-      icon: <ShoppingCartIcon sx={{ color: '#8b5cf6' }} />,
-      color: '#8b5cf6',
+      icon: <ShoppingCartIcon sx={{ color: '#D4AF37' }} />,
+      color: '#D4AF37',
       subtitle: 'Sản phẩm chờ duyệt',
     },
   ];
@@ -179,23 +178,22 @@ export default function SellerDashboardPage() {
           flexWrap="wrap"
           gap={2}
           mb={4}
+          className="nx-liquid-glass"
           sx={{
-            p: { xs: 2, md: 2.5 },
-            borderRadius: 3,
-            border: '1px solid #EEDFCB',
-            background:
-              'linear-gradient(145deg, rgba(255,248,236,0.9), rgba(240,251,248,0.88) 60%, rgba(255,255,255,0.96))',
-            boxShadow: '0 16px 30px rgba(126, 93, 53, 0.1)',
+            p: { xs: 2.5, md: 3 },
+            borderRadius: '24px',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            boxShadow: '0 24px 48px -20px rgba(0, 0, 0, 0.08)',
           }}
         >
           <Stack direction="row" alignItems="center" gap={1}>
             <motion.div whileHover={{ x: -5 }}>
-              <IconButton component={Link} to="/">
+              <IconButton component={Link} to="/" sx={{ bgcolor: 'rgba(255,255,255,0.4)', border: '1px solid rgba(255,255,255,0.2)' }}>
                 <ArrowBackIcon />
               </IconButton>
             </motion.div>
             <div>
-              <Typography variant="h4" fontWeight={800} sx={{ letterSpacing: '-0.02em' }}>
+              <Typography variant="h4" fontWeight={800} sx={{ background: 'linear-gradient(135deg, #1C1917 0%, #0D0C0B 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-0.02em' }}>
                 Seller Dashboard
               </Typography>
               <Typography variant="body2" color="text.secondary">
@@ -209,9 +207,15 @@ export default function SellerDashboardPage() {
             magnetic={false}
             onClick={() => navigate('/seller/create-product')}
             sx={{
-              background: nexus.gradient.button,
-              fontWeight: 600,
+              background: 'linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)',
+              color: '#FAF9F6',
+              fontWeight: 700,
+              borderRadius: 999,
               px: 3,
+              '&:hover': {
+                background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+                color: '#0C0A09',
+              }
             }}
           >
             Đăng sản phẩm mới
@@ -229,12 +233,13 @@ export default function SellerDashboardPage() {
 
         {/* Quick Actions */}
         <Paper
+          className="nx-liquid-glass"
           sx={{
             p: 3,
             mb: 4,
-            borderRadius: 3,
-            border: '1px solid #EADCCA',
-            background: 'linear-gradient(180deg, #FFFFFF, #FFFCF7)',
+            borderRadius: '24px',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            boxShadow: '0 16px 30px rgba(0, 0, 0, 0.05)',
           }}
         >
           <Typography variant="h6" fontWeight={600} gutterBottom>
@@ -245,6 +250,15 @@ export default function SellerDashboardPage() {
               variant="outlined"
               magnetic={false}
               onClick={() => navigate('/seller/products')}
+              sx={{
+                borderRadius: 999,
+                borderColor: '#1C1917',
+                color: '#1C1917',
+                '&:hover': {
+                  borderColor: '#0A0A0A',
+                  background: 'rgba(28,25,23,0.05)',
+                }
+              }}
             >
               Quản lý sản phẩm
             </PremiumButton>
@@ -252,10 +266,32 @@ export default function SellerDashboardPage() {
               variant="outlined"
               magnetic={false}
               onClick={() => navigate('/seller/create-product')}
+              sx={{
+                borderRadius: 999,
+                borderColor: '#1C1917',
+                color: '#1C1917',
+                '&:hover': {
+                  borderColor: '#0A0A0A',
+                  background: 'rgba(28,25,23,0.05)',
+                }
+              }}
             >
               Đăng sản phẩm
             </PremiumButton>
-            <PremiumButton variant="outlined" magnetic={false} onClick={() => navigate('/orders')}>
+            <PremiumButton
+              variant="outlined"
+              magnetic={false}
+              onClick={() => navigate('/orders')}
+              sx={{
+                borderRadius: 999,
+                borderColor: '#1C1917',
+                color: '#1C1917',
+                '&:hover': {
+                  borderColor: '#0A0A0A',
+                  background: 'rgba(28,25,23,0.05)',
+                }
+              }}
+            >
               Xem đơn hàng
             </PremiumButton>
           </Stack>
@@ -263,12 +299,13 @@ export default function SellerDashboardPage() {
 
         {/* Recent Products */}
         <Paper
+          className="nx-liquid-glass"
           sx={{
             p: 3,
-            borderRadius: 3,
+            borderRadius: '24px',
             mb: 4,
-            border: '1px solid #EADCCA',
-            background: 'linear-gradient(180deg, #FFFFFF, #FFFCF7)',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            boxShadow: '0 16px 30px rgba(0, 0, 0, 0.05)',
           }}
         >
           <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
@@ -280,6 +317,13 @@ export default function SellerDashboardPage() {
               variant="text"
               magnetic={false}
               onClick={() => navigate('/seller/products')}
+              sx={{
+                color: '#CA8A04',
+                fontWeight: 700,
+                '&:hover': {
+                  color: '#D4AF37',
+                }
+              }}
             >
               Xem tất cả →
             </PremiumButton>
@@ -296,9 +340,12 @@ export default function SellerDashboardPage() {
                   gap={2}
                   sx={{
                     p: 1.5,
-                    borderRadius: 2,
+                    borderRadius: '16px',
                     cursor: 'pointer',
-                    '&:hover': { bgcolor: 'action.hover' },
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    background: 'rgba(255, 255, 255, 0.3)',
+                    transition: 'border-color 300ms, background 300ms',
+                    '&:hover': { background: 'rgba(212, 175, 55, 0.05)', borderColor: '#D4AF37' },
                   }}
                   onClick={() => navigate(`/product-details/${p.no}`)}
                 >
@@ -339,11 +386,12 @@ export default function SellerDashboardPage() {
 
         {/* Recent Reviews */}
         <Paper
+          className="nx-liquid-glass"
           sx={{
             p: 3,
-            borderRadius: 3,
-            border: '1px solid #EADCCA',
-            background: 'linear-gradient(180deg, #FFFFFF, #FFFCF7)',
+            borderRadius: '24px',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            boxShadow: '0 16px 30px rgba(0, 0, 0, 0.05)',
           }}
         >
           <Typography variant="h6" fontWeight={600} mb={2}>
@@ -356,7 +404,12 @@ export default function SellerDashboardPage() {
               {dashboard.recentReviews.map((r) => (
                 <Stack
                   key={r.id}
-                  sx={{ p: 2, borderRadius: 2, bgcolor: 'action.hover' }}
+                  sx={{
+                    p: 2,
+                    borderRadius: '16px',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    background: 'rgba(255, 255, 255, 0.3)',
+                  }}
                   spacing={1}
                 >
                   <Stack direction="row" justifyContent="space-between" alignItems="center">

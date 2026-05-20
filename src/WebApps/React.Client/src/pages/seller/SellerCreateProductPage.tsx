@@ -22,7 +22,6 @@ import { api } from '@/lib/api';
 import { API_ENDPOINTS } from '@/lib/endpoints';
 import { useAuthStore } from '@/store/auth-store';
 import type { AIContentResponse, CreateSellerProductDto } from '@/types/seller';
-import { nexus } from '@/theme/theme';
 import ImageFallback from '@/components/ui/ImageFallback';
 
 const categories = [
@@ -128,7 +127,7 @@ export default function SellerCreateProductPage() {
       transition={{ duration: 0.5 }}
     >
       <Stack spacing={3} sx={{ maxWidth: 900, mx: 'auto', py: 4 }}>
-        <Typography variant="h4" fontWeight={800} sx={{ letterSpacing: '-0.02em' }}>
+        <Typography variant="h4" fontWeight={800} sx={{ background: 'linear-gradient(135deg, #1C1917 0%, #0D0C0B 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-0.02em' }}>
           📦 Đăng Sản Phẩm Mới
         </Typography>
         <Typography variant="body2" color="text.secondary">
@@ -137,13 +136,12 @@ export default function SellerCreateProductPage() {
 
         {/* Basic Info */}
         <Paper
+          className="nx-liquid-glass"
           sx={{
             p: 3,
-            borderRadius: 3,
-            border: '1px solid #EBDDC9',
-            background:
-              'linear-gradient(145deg, rgba(255,248,236,0.9), rgba(240,251,248,0.88) 60%, rgba(255,255,255,0.96))',
-            boxShadow: '0 16px 30px rgba(126, 93, 53, 0.1)',
+            borderRadius: '24px',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            boxShadow: '0 24px 48px -20px rgba(0, 0, 0, 0.08)',
           }}
         >
           <Typography variant="h6" fontWeight={600} gutterBottom>
@@ -258,11 +256,16 @@ export default function SellerCreateProductPage() {
           onClick={handleGenerateAI}
           disabled={!form.name || isGenerating}
           sx={{
-            background: nexus.gradient.button,
+            background: 'linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)',
+            color: '#FAF9F6',
             py: 1.5,
             fontWeight: 700,
             fontSize: '1rem',
             borderRadius: 999,
+            '&:hover': {
+              background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+              color: '#0C0A09',
+            }
           }}
           startIcon={isGenerating ? <CircularProgress size={20} color="inherit" /> : undefined}
         >
@@ -272,11 +275,12 @@ export default function SellerCreateProductPage() {
         {/* AI Generated Content Preview */}
         {aiContent && (
           <Paper
+            className="nx-liquid-glass"
             sx={{
               p: 3,
-              borderRadius: 3,
-              background: 'linear-gradient(145deg, rgba(255,248,236,0.9), rgba(240,251,248,0.9))',
-              border: '1px solid #E4C48F',
+              borderRadius: '24px',
+              border: '1px solid rgba(212, 175, 55, 0.3)',
+              boxShadow: '0 24px 48px -20px rgba(212, 175, 55, 0.05)',
             }}
           >
             <Stack spacing={2}>
@@ -293,7 +297,7 @@ export default function SellerCreateProductPage() {
                 <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                   Mô tả sản phẩm
                 </Typography>
-                <Paper sx={{ p: 2, whiteSpace: 'pre-wrap', fontSize: '0.9rem' }}>
+                <Paper sx={{ p: 2, whiteSpace: 'pre-wrap', fontSize: '0.9rem', background: 'rgba(255, 255, 255, 0.3)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '12px' }}>
                   {aiContent.description}
                 </Paper>
               </div>
@@ -303,13 +307,13 @@ export default function SellerCreateProductPage() {
                   <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                     SEO Title
                   </Typography>
-                  <Paper sx={{ p: 1.5, fontSize: '0.85rem' }}>{aiContent.seoTitle}</Paper>
+                  <Paper sx={{ p: 1.5, fontSize: '0.85rem', background: 'rgba(255, 255, 255, 0.3)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '12px' }}>{aiContent.seoTitle}</Paper>
                 </div>
                 <div style={{ flex: 1 }}>
                   <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                     SEO Description
                   </Typography>
-                  <Paper sx={{ p: 1.5, fontSize: '0.85rem' }}>{aiContent.seoDescription}</Paper>
+                  <Paper sx={{ p: 1.5, fontSize: '0.85rem', background: 'rgba(255, 255, 255, 0.3)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '12px' }}>{aiContent.seoDescription}</Paper>
                 </div>
               </Stack>
 
@@ -324,7 +328,11 @@ export default function SellerCreateProductPage() {
                       label={`#${kw.trim()}`}
                       size="small"
                       variant="outlined"
-                      color="primary"
+                      sx={{
+                        borderColor: 'rgba(212, 175, 55, 0.3)',
+                        color: '#CA8A04',
+                        background: 'rgba(212, 175, 55, 0.05)',
+                      }}
                     />
                   ))}
                 </Stack>
@@ -348,6 +356,16 @@ export default function SellerCreateProductPage() {
                 onClick={handleGenerateAI}
                 disabled={isGenerating}
                 size="small"
+                sx={{
+                  borderRadius: 999,
+                  borderColor: '#1C1917',
+                  color: '#1C1917',
+                  alignSelf: 'flex-start',
+                  '&:hover': {
+                    borderColor: '#0A0A0A',
+                    background: 'rgba(28,25,23,0.05)',
+                  }
+                }}
               >
                 🔄 Viết lại
               </Button>
@@ -359,15 +377,38 @@ export default function SellerCreateProductPage() {
         <Stack direction="row" spacing={2}>
           <Button
             variant="contained"
-            color="success"
             onClick={handleSubmit}
             disabled={isSubmitting || !form.no || !form.name}
-            sx={{ flex: 1, py: 1.5, fontWeight: 600 }}
+            sx={{
+              flex: 1,
+              py: 1.5,
+              fontWeight: 600,
+              borderRadius: 999,
+              background: 'linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)',
+              color: '#FAF9F6',
+              '&:hover': {
+                background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+                color: '#0C0A09',
+              }
+            }}
             startIcon={isSubmitting ? <CircularProgress size={20} color="inherit" /> : undefined}
           >
             {isSubmitting ? 'Đang đăng...' : '🚀 Đăng Sản Phẩm'}
           </Button>
-          <Button variant="outlined" onClick={() => navigate('/seller/products')} sx={{ px: 4 }}>
+          <Button
+            variant="outlined"
+            onClick={() => navigate('/seller/products')}
+            sx={{
+              px: 4,
+              borderRadius: 999,
+              borderColor: '#1C1917',
+              color: '#1C1917',
+              '&:hover': {
+                borderColor: '#0A0A0A',
+                background: 'rgba(28,25,23,0.05)',
+              }
+            }}
+          >
             Hủy
           </Button>
         </Stack>
