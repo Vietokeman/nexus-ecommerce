@@ -61,20 +61,34 @@ export default function ConfirmEmailPage() {
       <Paper
         elevation={0}
         sx={{
-          p: 3,
+          p: 4,
           borderRadius: '20px',
-          border: '1px solid rgba(212, 175, 55, 0.2)',
-          background: 'rgba(255, 255, 255, 0.4)',
-          backdropFilter: 'blur(8px)',
+          border: '1px solid rgba(212, 175, 55, 0.15)',
+          background: 'rgba(255, 255, 255, 0.02)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
         }}
       >
-        <Stack spacing={1.25}>
-          <Typography variant="body1" fontWeight={600}>
+        <Stack spacing={2}>
+          <Typography variant="body1" fontWeight={600} sx={{ color: '#FAF9F6', textAlign: 'center', mb: 1 }}>
             {message}
           </Typography>
 
           {status === 'loading' && (
-            <LoadingButton loading fullWidth variant="contained" disabled>
+            <LoadingButton
+              loading
+              fullWidth
+              variant="contained"
+              disabled
+              sx={{
+                borderRadius: 999,
+                py: 1.2,
+                '&.MuiLoadingButton-loading': {
+                  background: 'rgba(255, 255, 255, 0.08)',
+                  color: 'rgba(255, 255, 255, 0.3)',
+                }
+              }}
+            >
               Confirming
             </LoadingButton>
           )}
@@ -87,12 +101,14 @@ export default function ConfirmEmailPage() {
               sx={{
                 borderRadius: 999,
                 fontWeight: 700,
-                background: 'linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)',
-                color: '#FAF9F6',
+                background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+                color: '#0C0A09',
                 py: 1.2,
+                boxShadow: '0 12px 24px rgba(212, 175, 55, 0.25)',
+                transition: 'all 280ms cubic-bezier(0.22, 1, 0.36, 1)',
                 '&:hover': {
-                  background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
-                  color: '#0C0A09',
+                  background: 'linear-gradient(135deg, #FFFDF0 0%, #FEF08A 50%, #D4AF37 100%)',
+                  boxShadow: '0 16px 32px rgba(212, 175, 55, 0.35)',
                 }
               }}
             >
@@ -109,12 +125,14 @@ export default function ConfirmEmailPage() {
               sx={{
                 borderRadius: 999,
                 fontWeight: 700,
-                borderColor: '#1C1917',
-                color: '#1C1917',
+                borderColor: 'rgba(255, 255, 255, 0.15)',
+                color: '#FAF9F6',
                 py: 1.2,
+                transition: 'all 200ms ease',
                 '&:hover': {
-                  borderColor: '#0A0A0A',
-                  background: 'rgba(28,25,23,0.05)',
+                  borderColor: '#D4AF37',
+                  background: 'rgba(255, 255, 255, 0.08)',
+                  color: '#FAF9F6',
                 }
               }}
             >
