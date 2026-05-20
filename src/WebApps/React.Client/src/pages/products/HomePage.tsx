@@ -146,21 +146,22 @@ function ProductCard({
     <Stack
       component={is408 ? 'div' : Paper}
       mt={is408 ? 2 : 0}
-      elevation={1}
+      elevation={0}
       p={2}
       width={cardWidth}
       sx={{
         cursor: 'pointer',
-        borderRadius: '20px',
-        border: `1px solid ${nexus.neutral[200]}`,
-        background:
-          'linear-gradient(150deg, rgba(255,253,250,0.92) 0%, rgba(247,243,238,0.92) 65%, rgba(242,237,231,0.96) 100%)',
-        boxShadow: '0 18px 30px -26px rgba(79,67,62,0.65)',
-        transition:
-          'transform 260ms cubic-bezier(0.22,1,0.36,1), box-shadow 260ms cubic-bezier(0.22,1,0.36,1)',
+        borderRadius: '24px',
+        border: '1px solid rgba(255, 255, 255, 0.12)',
+        background: 'rgba(255, 255, 255, 0.08)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        boxShadow: '0 12px 32px -16px rgba(0, 0, 0, 0.08)',
+        transition: 'transform 350ms cubic-bezier(0.22, 1, 0.36, 1), border-color 350ms, box-shadow 350ms',
         '&:hover': {
-          transform: 'translateY(-4px)',
-          boxShadow: '0 26px 42px -26px rgba(79,67,62,0.72)',
+          transform: 'translateY(-6px)',
+          borderColor: '#D4AF37',
+          boxShadow: '0 24px 48px -18px rgba(212, 175, 55, 0.25)',
         },
       }}
       onClick={() => navigate(`/product-details/${product.id}`)}
@@ -505,52 +506,310 @@ export default function HomePage() {
         </Stack>
       </motion.div>
 
-      <Stack mb="3rem">
-        {/* Banner section */}
-        {!is600 && (
-          <Stack
+      {/* Floating Glass Blobs Background */}
+      <Box sx={{ position: 'relative', overflow: 'hidden', width: '100%', mb: 6 }}>
+        <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
+          <Box
+            className="nx-blob-1"
             sx={{
-              width: '100%',
-              height: is800 ? '300px' : is1200 ? '400px' : '500px',
-              borderRadius: 5,
-              mb: 3,
-              display: 'flex',
-              alignItems: 'flex-start',
-              justifyContent: 'flex-end',
-              p: { xs: 2, md: 4.5 },
-              background:
-                'radial-gradient(circle at 20% 10%, rgba(213,171,163,0.42), transparent 46%), radial-gradient(circle at 85% 0%, rgba(181,108,99,0.24), transparent 40%), linear-gradient(140deg, #1F1916 0%, #2B211D 55%, #4F433E 100%)',
+              position: 'absolute',
+              top: '5%',
+              left: '10%',
+              width: '300px',
+              height: '300px',
+              borderRadius: '50%',
+              background: 'rgba(212, 175, 55, 0.08)',
+              filter: 'blur(70px)',
             }}
-          >
-            <Stack rowGap={1.5} maxWidth="42rem">
-              <Typography
-                variant="overline"
-                sx={{ color: 'rgba(255,255,255,0.78)', letterSpacing: '.16em' }}
+          />
+          <Box
+            className="nx-blob-2"
+            sx={{
+              position: 'absolute',
+              bottom: '10%',
+              right: '5%',
+              width: '350px',
+              height: '350px',
+              borderRadius: '50%',
+              background: 'rgba(28, 25, 23, 0.05)',
+              filter: 'blur(90px)',
+            }}
+          />
+        </Box>
+
+        {/* Hero Section */}
+        <Stack
+          className="nx-liquid-glass"
+          sx={{
+            position: 'relative',
+            width: '100%',
+            borderRadius: '24px',
+            p: { xs: 4, md: 8 },
+            mb: 8,
+            overflow: 'hidden',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            zIndex: 1,
+          }}
+        >
+          <Stack spacing={3} maxWidth="42rem">
+            <Typography
+              variant="overline"
+              sx={{
+                color: '#D4AF37',
+                letterSpacing: '.25em',
+                fontWeight: 650,
+                fontSize: '0.85rem',
+              }}
+            >
+              ESTD 2026 • THE APOGEE OF LUXURY
+            </Typography>
+            <Typography
+              variant="h1"
+              sx={{
+                fontWeight: 400,
+                color: '#0C0A09',
+                lineHeight: 1.1,
+              }}
+            >
+              The New Standard <br />
+              Of <span className="nx-luxury-gradient-text" style={{ fontWeight: 600 }}>Refined Living</span>
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                color: '#5C584E',
+                maxWidth: '36rem',
+                fontSize: '1.08rem',
+                lineHeight: 1.7,
+              }}
+            >
+              Indulge in our collection of meticulously curated masterpieces, crafted with passion and designed for those who appreciate the finer details of life.
+            </Typography>
+            <Stack direction="row" gap={2} flexWrap="wrap" pt={2}>
+              <PremiumButton
+                magnetic={false}
+                variant="contained"
+                onClick={toggleFilter}
+                sx={{
+                  py: 1.5,
+                  px: 4,
+                }}
               >
-                TET 2026 CURATION
-              </Typography>
-              <Typography variant="h2" color="white" fontWeight={700}>
-                {APP_NAME} Premium Tet Collection
-              </Typography>
-              <Typography sx={{ color: 'rgba(255,255,255,0.72)', maxWidth: '34rem' }}>
-                Curated gift sets, flash promotions, and group-buy bundles for enterprise and family
-                celebrations.
-              </Typography>
-              <Stack direction="row" gap={1.2} flexWrap="wrap" pt={0.8}>
-                <PremiumButton magnetic={false} variant="contained" onClick={toggleFilter}>
-                  Open Smart Filters
-                </PremiumButton>
-                <PremiumButton
-                  magnetic={false}
-                  variant="outlined"
-                  onClick={() => navigate('/group-buy')}
-                >
-                  Explore Group Buy
-                </PremiumButton>
-              </Stack>
+                Discover Collection
+              </PremiumButton>
+              <PremiumButton
+                magnetic={false}
+                variant="outlined"
+                onClick={() => navigate('/group-buy')}
+                sx={{
+                  py: 1.5,
+                  px: 4,
+                }}
+              >
+                Exclusive Group Deals
+              </PremiumButton>
             </Stack>
           </Stack>
-        )}
+        </Stack>
+
+        {/* Storytelling Section */}
+        <Grid container spacing={6} alignItems="center" sx={{ mb: 10, px: { xs: 2, md: 4 }, zIndex: 1, position: 'relative' }}>
+          <Grid item xs={12} md={6}>
+            <Box sx={{ position: 'relative', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 48px -20px rgba(0,0,0,0.15)' }}>
+              <img
+                src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?q=80&w=1200&auto=format&fit=crop"
+                alt="Artisan Craftsmanship"
+                style={{ width: '100%', height: '440px', objectFit: 'cover' }}
+              />
+              <Box sx={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'linear-gradient(to top, rgba(28,25,23,0.85) 0%, transparent 60%)'
+              }} />
+              <Box sx={{ position: 'absolute', bottom: 30, left: 30, color: '#FAF9F6' }}>
+                <Typography variant="caption" sx={{ letterSpacing: '0.15em', textTransform: 'uppercase', opacity: 0.8 }}>
+                  Handcrafted Excellence
+                </Typography>
+                <Typography variant="h4" sx={{ mt: 1, fontWeight: 500 }}>
+                  Attention to every stitch and seam
+                </Typography>
+              </Box>
+            </Box>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Stack spacing={3.5}>
+              <Typography variant="overline" sx={{ color: '#D4AF37', letterSpacing: '.2em', fontWeight: 650 }}>
+                OUR HERITAGE
+              </Typography>
+              <Typography variant="h2" sx={{ fontWeight: 400, color: '#1C1917' }}>
+                The Alchemy of <br />
+                <span style={{ fontStyle: 'italic', fontWeight: 300 }}>Art &amp; Precision</span>
+              </Typography>
+              <Typography variant="body1" sx={{ color: '#5C584E', lineHeight: 1.8 }}>
+                Every product in the {APP_NAME} collection is a testimony to age-old artisan methods combined with contemporary elegance. We partner with the world's most renowned manufacturers to ensure each acquisition is not merely a purchase, but a timeless investment.
+              </Typography>
+              <Typography variant="body2" sx={{ color: '#7A7568', fontStyle: 'italic', borderLeft: '3px solid #D4AF37', pl: 2 }}>
+                "Simplicity is the ultimate sophistication. We strip away the unnecessary to reveal the breathtaking essence of pure form."
+              </Typography>
+              <Stack direction="row" spacing={6} sx={{ pt: 2 }}>
+                <Box>
+                  <Typography variant="h3" sx={{ color: '#D4AF37', fontWeight: 600 }}>100%</Typography>
+                  <Typography variant="body2" sx={{ color: '#5C584E', mt: 0.5 }}>Authentic Curation</Typography>
+                </Box>
+                <Box>
+                  <Typography variant="h3" sx={{ color: '#D4AF37', fontWeight: 600 }}>24/7</Typography>
+                  <Typography variant="body2" sx={{ color: '#5C584E', mt: 0.5 }}>White-glove Service</Typography>
+                </Box>
+              </Stack>
+            </Stack>
+          </Grid>
+        </Grid>
+
+        {/* Bento Grid - Brand Values */}
+        <Box sx={{ mb: 10, px: { xs: 2, md: 4 }, zIndex: 1, position: 'relative' }}>
+          <Typography
+            variant="h2"
+            textAlign="center"
+            sx={{ mb: 1.5, fontWeight: 400 }}
+          >
+            Pillars of <span style={{ fontStyle: 'italic', fontWeight: 300 }}>Exclusivity</span>
+          </Typography>
+          <Typography
+            variant="body2"
+            textAlign="center"
+            sx={{ color: '#5C584E', mb: 7 }}
+          >
+            Our commitment to you spans across four essential foundations of modern luxury.
+          </Typography>
+          <Grid container spacing={3.5}>
+            <Grid item xs={12} md={7}>
+              <Paper
+                className="nx-liquid-glass"
+                sx={{
+                  p: 4.5,
+                  height: '240px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  transition: 'all 350ms ease',
+                  '&:hover': {
+                    transform: 'translateY(-5px)',
+                    borderColor: '#D4AF37',
+                    boxShadow: '0 20px 40px -15px rgba(212, 175, 55, 0.15)',
+                  }
+                }}
+              >
+                <Box>
+                  <Typography variant="h4" sx={{ color: '#1C1917', mb: 1.5 }}>
+                    Heritage &amp; Legacy
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: '#5C584E', maxWidth: '85%', lineHeight: 1.6 }}>
+                    Tracing roots of traditional production techniques and timeless aesthetics, bringing generations of mastery directly to your doorstep.
+                  </Typography>
+                </Box>
+                <Typography variant="caption" sx={{ color: '#D4AF37', fontWeight: 650, letterSpacing: '0.1em', cursor: 'pointer' }}>
+                  READ STORY →
+                </Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} md={5}>
+              <Paper
+                className="nx-liquid-glass"
+                sx={{
+                  p: 4.5,
+                  height: '240px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  transition: 'all 350ms ease',
+                  '&:hover': {
+                    transform: 'translateY(-5px)',
+                    borderColor: '#D4AF37',
+                    boxShadow: '0 20px 40px -15px rgba(212, 175, 55, 0.15)',
+                  }
+                }}
+              >
+                <Box>
+                  <Typography variant="h4" sx={{ color: '#1C1917', mb: 1.5 }}>
+                    Bespoke Curation
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: '#5C584E', lineHeight: 1.6 }}>
+                    Every product is handpicked by luxury specialists to guarantee relevance, prestige, and unmatched aesthetic value.
+                  </Typography>
+                </Box>
+                <Typography variant="caption" sx={{ color: '#D4AF37', fontWeight: 650, letterSpacing: '0.1em', cursor: 'pointer' }}>
+                  LEARN MORE →
+                </Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} md={5}>
+              <Paper
+                className="nx-liquid-glass"
+                sx={{
+                  p: 4.5,
+                  height: '240px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  transition: 'all 350ms ease',
+                  '&:hover': {
+                    transform: 'translateY(-5px)',
+                    borderColor: '#D4AF37',
+                    boxShadow: '0 20px 40px -15px rgba(212, 175, 55, 0.15)',
+                  }
+                }}
+              >
+                <Box>
+                  <Typography variant="h4" sx={{ color: '#1C1917', mb: 1.5 }}>
+                    Uncompromising Quality
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: '#5C584E', lineHeight: 1.6 }}>
+                    Subjected to rigorous verification protocols, ensuring only flawless craftsmanship enters your collection.
+                  </Typography>
+                </Box>
+                <Typography variant="caption" sx={{ color: '#D4AF37', fontWeight: 650, letterSpacing: '0.1em', cursor: 'pointer' }}>
+                  OUR LAB →
+                </Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} md={7}>
+              <Paper
+                className="nx-liquid-glass"
+                sx={{
+                  p: 4.5,
+                  height: '240px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  transition: 'all 350ms ease',
+                  '&:hover': {
+                    transform: 'translateY(-5px)',
+                    borderColor: '#D4AF37',
+                    boxShadow: '0 20px 40px -15px rgba(212, 175, 55, 0.15)',
+                  }
+                }}
+              >
+                <Box>
+                  <Typography variant="h4" sx={{ color: '#1C1917', mb: 1.5 }}>
+                    Sustainable Luxury
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: '#5C584E', maxWidth: '85%', lineHeight: 1.6 }}>
+                    Aligning eco-responsible materials, ethical manufacturing practices, and carbon-neutral distribution without compromising elegance.
+                  </Typography>
+                </Box>
+                <Typography variant="caption" sx={{ color: '#D4AF37', fontWeight: 650, letterSpacing: '0.1em', cursor: 'pointer' }}>
+                  GREEN CHARTER →
+                </Typography>
+              </Paper>
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
+
+      <Stack mb="3rem">
 
         {/* Products section */}
         <Stack rowGap={5} mt={is600 ? 2 : 0}>
@@ -730,6 +989,71 @@ export default function HomePage() {
               {filtered.length} results
             </Typography>
           </Stack>
+
+          {/* Exclusive Membership CTA */}
+          <Box
+            className="nx-liquid-glass-dark"
+            sx={{
+              mt: 12,
+              p: { xs: 5, md: 8 },
+              borderRadius: '24px',
+              position: 'relative',
+              overflow: 'hidden',
+              border: '1px solid rgba(212, 175, 55, 0.2)',
+              boxShadow: '0 32px 72px -14px rgba(212, 175, 55, 0.15)',
+            }}
+          >
+            {/* Fine Gold Accents */}
+            <Box
+              sx={{
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                width: '200px',
+                height: '200px',
+                background: 'radial-gradient(circle, rgba(212,175,55,0.15) 0%, transparent 70%)',
+                pointerEvents: 'none',
+              }}
+            />
+
+            <Grid container spacing={4} alignItems="center">
+              <Grid item xs={12} md={8}>
+                <Stack spacing={2}>
+                  <Typography variant="overline" sx={{ color: '#D4AF37', letterSpacing: '0.3em', fontWeight: 600 }}>
+                    MEMBERSHIP CLUB
+                  </Typography>
+                  <Typography variant="h2" sx={{ color: '#FAF9F6', fontFamily: '"Cormorant", serif', fontWeight: 400 }}>
+                    Join <span className="nx-luxury-gradient-text" style={{ fontWeight: 600 }}>The Nexus Circle</span>
+                  </Typography>
+                  <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.7)', maxWidth: '38rem', lineHeight: 1.7 }}>
+                    Unlock the inner sanctum of luxury commerce. Members gain exclusive first-access to limited capsule collections, invitation-only group campaigns, bespoke personal shopping services, and complimentary white-glove shipping globally.
+                  </Typography>
+                </Stack>
+              </Grid>
+              <Grid item xs={12} md={4} sx={{ textAlign: { xs: 'left', md: 'right' } }}>
+                <PremiumButton
+                  magnetic={false}
+                  variant="contained"
+                  sx={{
+                    py: 2,
+                    px: 5,
+                    fontSize: '1rem',
+                    fontWeight: 700,
+                    background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+                    color: '#0C0A09',
+                    boxShadow: '0 20px 40px -15px rgba(212, 175, 55, 0.4)',
+                    '&:hover': {
+                      filter: 'brightness(1.1) saturate(1.1)',
+                      transform: 'translateY(-2px)',
+                    },
+                  }}
+                >
+                  Request Invitation
+                </PremiumButton>
+              </Grid>
+            </Grid>
+          </Box>
+
         </Stack>
       </Stack>
     </>
