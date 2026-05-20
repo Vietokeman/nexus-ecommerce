@@ -1,66 +1,92 @@
 <section class="nx-feature-page animated fadeIn">
-  <p-panel #pnl [style]="{ 'margin-bottom': '10px' }" class="nx-feature-panel">
+  <p-panel #pnl class="nx-feature-panel">
     <p-header>
       <div class="nx-page-header">
-        <h1>Audit Logs</h1>
-        <p>
-          Theo doi hoat dong he thong qua API Gateway /api/admin/audit-logs.
-        </p>
+        <h1 class="nx-page-title">Audit Ledger</h1>
+        <p class="nx-page-subtitle">Inspect historical activity and administrative events across system services.</p>
       </div>
     </p-header>
 
-    <div class="nx-toolbar-search">
-      <input
-        pInputText
-        [(ngModel)]="keyword"
-        (keyup.enter)="loadData()"
-        placeholder="Keyword, username, action..."
-        type="text"
-      />
-      <input pInputText [(ngModel)]="fromDate" type="date" />
-      <input pInputText [(ngModel)]="toDate" type="date" />
-      <button
-        pButton
-        type="button"
-        label="Tai lai"
-        (click)="loadData()"
-      ></button>
+    <div class="nx-toolbar-container">
+      <div class="nx-search-grid">
+        <!-- Search Keyword -->
+        <div class="nx-search-field">
+          <label class="nx-field-label">Search Query</label>
+          <div class="nx-input-group">
+            <input
+              pInputText
+              [(ngModel)]="keyword"
+              (keyup.enter)="loadData()"
+              placeholder="Keyword, username, or action..."
+              type="text"
+            />
+          </div>
+        </div>
+
+        <!-- Date Filters -->
+        <div class="nx-search-field">
+          <label class="nx-field-label">Timeframe Filter</label>
+          <div class="nx-input-group">
+            <input pInputText [(ngModel)]="fromDate" type="date" class="nx-date-input" />
+            <span class="nx-date-separator">to</span>
+            <input pInputText [(ngModel)]="toDate" type="date" class="nx-date-input" />
+            <button
+              pButton
+              type="button"
+              label="Reload"
+              icon="pi pi-refresh"
+              (click)="loadData()"
+            ></button>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <p-table
-      [value]="items"
-      dataKey="id"
-      class="nx-feature-table"
-      [paginator]="false"
-    >
-      <ng-template pTemplate="header">
-        <tr>
-          <th>User</th>
-          <th>Action</th>
-          <th>Entity</th>
-          <th>IP</th>
-          <th>Created</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-row>
-        <tr>
-          <td>{{ row.userName || "-" }}</td>
-          <td>{{ row.actionName || "-" }}</td>
-          <td>{{ row.entityName || "-" }}</td>
-          <td>{{ row.ipAddress || "-" }}</td>
-          <td>{{ row.createdDate || "-" }}</td>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="summary">
-        <div class="nx-table-summary">Tong ban ghi: {{ totalCount }}</div>
-      </ng-template>
-    </p-table>
+    <div class="nx-table-card">
+      <p-table
+        [value]="items"
+        dataKey="id"
+        class="nx-feature-table"
+        [paginator]="false"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>User</th>
+            <th>Action</th>
+            <th>Entity</th>
+            <th>IP Address</th>
+            <th>Timestamp</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+          <tr class="nx-table-row">
+            <td>
+              <div class="nx-user-cell">
+                <span class="nx-user-name">{{ row.userName || "-" }}</span>
+              </div>
+            </td>
+            <td>
+              <span class="badge" [class.badge-success]="row.actionName === 'Create' || row.actionName === 'Update'" [class.badge-warning]="row.actionName === 'Delete'" [class.badge-danger]="row.actionName === 'LoginFailed'">
+                {{ row.actionName || "-" }}
+              </span>
+            </td>
+            <td><code class="nx-entity-code">{{ row.entityName || "-" }}</code></td>
+            <td><code class="nx-ip-code">{{ row.ipAddress || "-" }}</code></td>
+            <td><span class="nx-date-label">{{ row.createdDate || "-" }}</span></td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+          <div class="nx-table-summary">Total Audit Entries: <strong>{{ totalCount }}</strong></div>
+        </ng-template>
+      </p-table>
+    </div>
 
     <p-paginator
       [rows]="pageSize"
       [totalRecords]="totalCount"
       (onPageChange)="pageChanged($event)"
       [rowsPerPageOptions]="[10, 20, 50]"
+      class="nx-paginator"
     ></p-paginator>
 
     <p-blockUI [target]="pnl" [blocked]="blockedPanel">
@@ -71,3 +97,4 @@
     </p-blockUI>
   </p-panel>
 </section>
+

@@ -1,9 +1,12 @@
 import { useMemo, useState } from 'react';
-import { Button, Chip, Paper, Stack, TextField, Typography } from '@mui/material';
+import { Chip, Paper, Stack, TextField, Typography } from '@mui/material';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { toast } from 'react-toastify';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '@/store/auth-store';
 import { useCreateAIChatSession, useAIChatSessionDetail } from '@/hooks/useAIChat';
+import { containerVariants, itemVariants } from '@/lib/motion';
+import { PremiumButton } from '@/components/ui/primitives';
 
 interface ChatMessage {
   role?: string;
@@ -13,9 +16,9 @@ interface ChatMessage {
 }
 
 const prompts = [
-  'Toi can set qua Tet gia duoi 500k',
-  'Goi y qua tang cho sep nu theo phong cach premium',
-  'Toi can san pham giao nhanh trong ngay',
+  'Tôi cần set quà Tết giá dưới 500k',
+  'Gợi ý quà tặng cho sếp nữ theo phong cách premium',
+  'Tôi cần sản phẩm giao nhanh trong ngày',
 ];
 
 export default function AIAssistantPage() {
@@ -37,7 +40,7 @@ export default function AIAssistantPage() {
 
   const handleSubmit = async () => {
     if (!prompt.trim()) {
-      toast.error('Nhap prompt de tro chuyen voi AI assistant');
+      toast.error('Nhập prompt để trò chuyện với AI assistant');
       return;
     }
 
@@ -49,137 +52,232 @@ export default function AIAssistantPage() {
 
       const nextSessionId = result?.sessionId || result?.id;
       if (!nextSessionId) {
-        toast.error('AI response khong co session id');
+        toast.error('AI response không có session id');
         return;
       }
 
       setSessionId(String(nextSessionId));
-      toast.success('AI session da duoc tao');
+      toast.success('AI session đã được tạo');
     } catch {
-      toast.error('Khong the tao AI session luc nay');
+      toast.error('Không thể tạo AI session lúc này');
     }
   };
 
   return (
     <Stack alignItems="center" mt={2} mb="5rem" px={2}>
-      <Stack width="100%" maxWidth="72rem" spacing={2.5}>
-        <Stack direction="row" spacing={1} alignItems="center">
-          <AutoAwesomeIcon sx={{ color: '#D4AF37' }} />
-          <Typography variant="h4" fontWeight={800} sx={{ background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-            AI Shopping Assistant
-          </Typography>
-        </Stack>
-
-        <Paper
-          className="nx-liquid-glass"
-          sx={{
-            p: 3,
-            borderRadius: '24px',
-            border: '1px solid rgba(255, 255, 255, 0.15)',
-            boxShadow: '0 24px 48px -20px rgba(0, 0, 0, 0.1)',
-          }}
-        >
-          <Stack spacing={1.25}>
-            <Typography color="text.secondary">
-              Mo ta nhu cau theo phong cach Shopee/TikTok Shop: ngan gon, theo budget, theo nganh.
-            </Typography>
-
-            <TextField
-              multiline
-              rows={3}
-              fullWidth
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              placeholder="Vi du: Toi can 5 san pham Tet tang doi tac, tong budget 2 trieu"
-            />
-
-            <Stack direction="row" flexWrap="wrap" gap={1}>
-              {prompts.map((item) => (
-                <Chip
-                  key={item}
-                  label={item}
-                  onClick={() => setPrompt(item)}
-                  variant="outlined"
-                  sx={{
-                    borderColor: 'rgba(212,175,55,0.3)',
-                    color: '#CA8A04',
-                    background: 'rgba(212,175,55,0.05)',
-                    '&:hover': {
-                      background: 'rgba(212,175,55,0.1)',
-                      borderColor: '#D4AF37',
-                    }
-                  }}
-                />
-              ))}
-            </Stack>
-
-            <Stack direction="row" justifyContent="flex-end">
-              <Button
-                variant="contained"
-                onClick={handleSubmit}
-                disabled={createSession.isPending}
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        style={{ width: '100%', maxWidth: '72rem' }}
+      >
+        <Stack spacing={3}>
+          {/* Header */}
+          <motion.div variants={itemVariants}>
+            <Stack direction="row" spacing={1.5} alignItems="center">
+              <AutoAwesomeIcon sx={{ color: '#D4AF37', fontSize: 32, filter: 'drop-shadow(0 0 8px rgba(212,175,55,0.4))' }} />
+              <Typography
+                variant="h4"
+                fontWeight={800}
                 sx={{
-                  borderRadius: 999,
-                  fontWeight: 700,
-                  px: 3,
-                  background: 'linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)',
-                  color: '#FAF9F6',
-                  '&:hover': {
-                    background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
-                    color: '#0C0A09',
-                  }
+                  background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                  letterSpacing: '-0.02em',
                 }}
               >
-                {createSession.isPending ? 'Asking AI...' : 'Ask AI'}
-              </Button>
+                AI Shopping Assistant
+              </Typography>
             </Stack>
-          </Stack>
-        </Paper>
+          </motion.div>
 
-        {sessionId && (
-          <Paper
-            className="nx-liquid-glass"
-            sx={{
-              p: 3,
-              borderRadius: '24px',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
-              boxShadow: '0 24px 48px -20px rgba(0, 0, 0, 0.1)',
-            }}
-          >
-            <Typography fontWeight={700}>Session: {sessionId}</Typography>
-            {isFetching && <Typography color="text.secondary">Dang tai hoi thoai...</Typography>}
+          {/* Prompt card */}
+          <motion.div variants={itemVariants}>
+            <Paper
+              className="nx-liquid-glass"
+              sx={{
+                p: { xs: 3, md: 4 },
+                borderRadius: '24px',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                boxShadow: '0 24px 48px -20px rgba(0, 0, 0, 0.1)',
+                background: 'rgba(255, 255, 255, 0.4)',
+                backdropFilter: 'blur(20px)',
+              }}
+            >
+              <Stack spacing={2.5}>
+                <Typography variant="body1" sx={{ color: '#5C584E', fontWeight: 500 }}>
+                  Mô tả nhu cầu theo phong cách Shopee/TikTok Shop: ngắn gọn, theo budget, theo ngành.
+                </Typography>
 
-            {!isFetching && messages.length === 0 && (
-              <Typography color="text.secondary">Chua co message trong session.</Typography>
-            )}
-
-            <Stack mt={1.5} spacing={1.2}>
-              {messages.map((msg: ChatMessage, idx: number) => (
-                <Paper
-                  key={`${idx}-${msg.role || 'item'}`}
+                <TextField
+                  multiline
+                  rows={3}
+                  fullWidth
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  placeholder="Ví dụ: Tôi cần 5 sản phẩm Tết tặng đối tác, tổng budget 2 triệu..."
                   sx={{
-                    p: 2,
-                    borderRadius: '16px',
-                    border: msg.role === 'assistant' ? '1px solid rgba(212, 175, 55, 0.25)' : '1px solid rgba(255, 255, 255, 0.15)',
-                    background:
-                      msg.role === 'assistant'
-                        ? 'rgba(212, 175, 55, 0.05)'
-                        : 'rgba(255, 255, 255, 0.4)',
-                    backdropFilter: 'blur(10px)',
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: '16px',
+                      backgroundColor: 'rgba(255, 255, 255, 0.65)',
+                      backdropFilter: 'blur(10px)',
+                      '& fieldset': {
+                        borderColor: 'rgba(212, 175, 55, 0.15)',
+                      },
+                      '&:hover fieldset': {
+                        borderColor: '#D4AF37',
+                      },
+                      '&.Mui-focused fieldset': {
+                        borderColor: '#CA8A04',
+                        boxShadow: '0 0 0 3px rgba(212, 175, 55, 0.15)',
+                      },
+                    },
+                  }}
+                />
+
+                <Stack direction="row" flexWrap="wrap" gap={1.25}>
+                  {prompts.map((item) => (
+                    <Chip
+                      key={item}
+                      label={item}
+                      onClick={() => setPrompt(item)}
+                      variant="outlined"
+                      sx={{
+                        borderRadius: '999px',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                        borderColor: 'rgba(212,175,55,0.3)',
+                        color: '#CA8A04',
+                        background: 'rgba(212,175,55,0.05)',
+                        transition: 'all 200ms ease',
+                        '&:hover': {
+                          background: 'rgba(212,175,55,0.12)',
+                          borderColor: '#D4AF37',
+                          transform: 'translateY(-1px)',
+                        }
+                      }}
+                    />
+                  ))}
+                </Stack>
+
+                <Stack direction="row" justifyContent="flex-end" pt={1}>
+                  <PremiumButton
+                    variant="contained"
+                    onClick={handleSubmit}
+                    disabled={createSession.isPending}
+                    magnetic={true}
+                    sx={{
+                      px: 4.5,
+                      py: 1.25,
+                      borderRadius: '999px',
+                    }}
+                  >
+                    {createSession.isPending ? 'Asking AI...' : 'Ask AI'}
+                  </PremiumButton>
+                </Stack>
+              </Stack>
+            </Paper>
+          </motion.div>
+
+          {/* Session details */}
+          <AnimatePresence mode="wait">
+            {sessionId && (
+              <motion.div
+                key={sessionId}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.35, ease: 'easeOut' }}
+              >
+                <Paper
+                  className="nx-liquid-glass"
+                  sx={{
+                    p: { xs: 3, md: 4 },
+                    borderRadius: '24px',
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    boxShadow: '0 24px 48px -20px rgba(0, 0, 0, 0.1)',
+                    background: 'rgba(255, 255, 255, 0.4)',
+                    backdropFilter: 'blur(20px)',
                   }}
                 >
-                  <Typography variant="caption" color="text.secondary">
-                    {(msg.role || 'message').toUpperCase()}
-                  </Typography>
-                  <Typography whiteSpace="pre-wrap">
-                    {msg.content || msg.message || JSON.stringify(msg)}
-                  </Typography>
+                  <Stack spacing={2}>
+                    <Stack direction="row" justifyContent="space-between" alignItems="center">
+                      <Typography variant="h6" fontWeight={700} color="#2b211d">
+                        Session: {sessionId}
+                      </Typography>
+                      {isFetching && (
+                        <Typography variant="body2" sx={{ color: '#CA8A04', fontWeight: 600 }}>
+                          Đang tải hội thoại...
+                        </Typography>
+                      )}
+                    </Stack>
+
+                    {!isFetching && messages.length === 0 && (
+                      <Typography color="text.secondary" textAlign="center" py={2}>
+                        Chưa có tin nhắn trong phiên làm việc này.
+                      </Typography>
+                    )}
+
+                    <Stack spacing={2} mt={1}>
+                      {messages.map((msg: ChatMessage, idx: number) => {
+                        const isAssistant = msg.role === 'assistant';
+                        return (
+                          <motion.div
+                            key={`${idx}-${msg.role || 'item'}`}
+                            initial={{ opacity: 0, x: isAssistant ? -10 : 10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.3, delay: Math.min(idx * 0.05, 0.5) }}
+                          >
+                            <Paper
+                              elevation={0}
+                              sx={{
+                                p: 2.5,
+                                borderRadius: '16px',
+                                border: isAssistant
+                                  ? '1px solid rgba(212, 175, 55, 0.25)'
+                                  : '1px solid rgba(255, 255, 255, 0.15)',
+                                background: isAssistant
+                                  ? 'rgba(212, 175, 55, 0.05)'
+                                  : 'rgba(255, 255, 255, 0.55)',
+                                backdropFilter: 'blur(10px)',
+                                boxShadow: isAssistant
+                                  ? '0 8px 24px -12px rgba(212,175,55,0.2)'
+                                  : '0 8px 24px -12px rgba(0,0,0,0.05)',
+                              }}
+                            >
+                              <Typography
+                                variant="caption"
+                                sx={{
+                                  fontWeight: 700,
+                                  letterSpacing: '0.05em',
+                                  color: isAssistant ? '#CA8A04' : '#5C584E',
+                                  display: 'block',
+                                  mb: 0.75,
+                                }}
+                              >
+                                {isAssistant ? 'AI ASSISTANT' : 'YOU'}
+                              </Typography>
+                              <Typography
+                                variant="body1"
+                                whiteSpace="pre-wrap"
+                                sx={{ color: '#2b211d', lineHeight: 1.6 }}
+                              >
+                                {msg.content || msg.message || JSON.stringify(msg)}
+                              </Typography>
+                            </Paper>
+                          </motion.div>
+                        );
+                      })}
+                    </Stack>
+                  </Stack>
                 </Paper>
-              ))}
-            </Stack>
-          </Paper>
-        )}
-      </Stack>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </Stack>
+      </motion.div>
     </Stack>
   );
 }
+

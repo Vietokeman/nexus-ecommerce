@@ -1,70 +1,97 @@
 <section class="nx-feature-page animated fadeIn">
-  <p-panel #pnl [style]="{ 'margin-bottom': '10px' }" class="nx-feature-panel">
+  <p-panel #pnl class="nx-feature-panel">
     <p-header>
       <div class="nx-page-header">
-        <h1>Products Management</h1>
-        <p>Quan ly san pham qua API Gateway /api/products.</p>
+        <h1 class="nx-page-title">Products Directory</h1>
+        <p class="nx-page-subtitle">Inspect catalog inventory and find individual SKU properties via API Gateway.</p>
       </div>
     </p-header>
 
-    <div class="nx-toolbar-search">
-      <input
-        pInputText
-        [(ngModel)]="keyword"
-        (keyup.enter)="loadProducts()"
-        placeholder="Keyword products..."
-        type="text"
-      />
-      <button
-        pButton
-        type="button"
-        label="Tai danh sach"
-        (click)="loadProducts()"
-      ></button>
+    <div class="nx-toolbar-container">
+      <div class="nx-search-grid">
+        <!-- Search Keyword -->
+        <div class="nx-search-field">
+          <label class="nx-field-label">Search Products</label>
+          <div class="nx-input-group">
+            <input
+              pInputText
+              [(ngModel)]="keyword"
+              (keyup.enter)="loadProducts()"
+              placeholder="Search by keyword..."
+              type="text"
+            />
+            <button
+              pButton
+              type="button"
+              label="Reload List"
+              icon="pi pi-refresh"
+              (click)="loadProducts()"
+            ></button>
+          </div>
+        </div>
+
+        <!-- Search SKU/ProductNo -->
+        <div class="nx-search-field">
+          <label class="nx-field-label">Find by SKU/Product Code</label>
+          <div class="nx-input-group">
+            <input
+              pInputText
+              [(ngModel)]="productNo"
+              (keyup.enter)="findByProductNo()"
+              placeholder="Product code (e.g. SKU...)"
+              type="text"
+            />
+            <button
+              pButton
+              type="button"
+              class="p-button-outlined"
+              label="Lookup SKU"
+              icon="pi pi-search"
+              (click)="findByProductNo()"
+            ></button>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="nx-toolbar-search">
-      <input
-        pInputText
-        [(ngModel)]="productNo"
-        (keyup.enter)="findByProductNo()"
-        placeholder="Product No"
-        type="text"
-      />
-      <button
-        pButton
-        type="button"
-        label="Tim theo ma"
-        (click)="findByProductNo()"
-      ></button>
-    </div>
-
+    <!-- selectedProduct display -->
     <div class="nx-status-box" *ngIf="selectedProduct">
-      <strong>Chi tiet theo product no:</strong>
-      <pre>{{ selectedProduct | json }}</pre>
+      <div class="nx-status-header">
+        <span class="nx-status-title">Lookup Results for: <code>{{ productNo }}</code></span>
+        <button
+          pButton
+          type="button"
+          class="p-button-text p-button-sm"
+          label="Clear"
+          (click)="selectedProduct = null"
+        ></button>
+      </div>
+      <pre class="nx-json-viewer">{{ selectedProduct | json }}</pre>
     </div>
 
-    <p-table [value]="items" class="nx-feature-table">
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Product No</th>
-          <th>Name</th>
-          <th>Price</th>
-          <th>Category</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-row>
-        <tr>
-          <td>{{ row.productNo || row.itemNo || "-" }}</td>
-          <td>{{ row.name || row.productName || "-" }}</td>
-          <td>{{ row.price || row.unitPrice || "-" }}</td>
-          <td>{{ row.category || row.categoryName || "-" }}</td>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="summary">
-        <div class="nx-table-summary">Tong san pham: {{ items.length }}</div>
-      </ng-template>
-    </p-table>
+    <div class="nx-table-card">
+      <p-table [value]="items" class="nx-feature-table" [responsive]="true">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Product Code</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Category</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+          <tr class="nx-table-row">
+            <td><code class="nx-code-badge">{{ row.productNo || row.itemNo || "-" }}</code></td>
+            <td><span class="nx-product-name">{{ row.name || row.productName || "-" }}</span></td>
+            <td><strong class="nx-product-price">${{ row.price || row.unitPrice || "-" }}</strong></td>
+            <td><span class="nx-category-badge">{{ row.category || row.categoryName || "-" }}</span></td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+          <div class="nx-table-summary">Total Catalog Items: <strong>{{ items.length }}</strong></div>
+        </ng-template>
+      </p-table>
+    </div>
 
     <p-blockUI [target]="pnl" [blocked]="blockedPanel">
       <p-progressSpinner
@@ -74,3 +101,4 @@
     </p-blockUI>
   </p-panel>
 </section>
+

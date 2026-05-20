@@ -10,27 +10,39 @@
 
 .nx-dashboard-hero {
   padding: 1.9rem 2rem 2.1rem;
-  border: 1px solid #e3d8cf;
+  border: 1px solid var(--nx-border);
   border-radius: 28px;
-  background: linear-gradient(
-    145deg,
-    rgba(255, 253, 250, 0.96),
-    rgba(249, 241, 234, 0.93)
-  );
-  box-shadow: 0 24px 52px -30px rgba(58, 40, 35, 0.28);
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(25px) saturate(140%);
+  -webkit-backdrop-filter: blur(25px) saturate(140%);
+  box-shadow: var(--nx-shadow-md);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--nx-accent-300), var(--nx-accent-500));
+  }
 }
 
 .nx-dashboard-eyebrow {
   display: inline-flex;
   align-items: center;
   padding: 0.24rem 0.7rem;
-  border: 1px solid #e3d8cf;
+  border: 1px solid var(--nx-border-solid);
   border-radius: 999px;
   font-size: 0.72rem;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: #6b5e57;
+  color: var(--nx-ink-600);
+  background: rgba(255, 255, 255, 0.5);
   margin-bottom: 1rem;
+  font-weight: 600;
 }
 
 .nx-dashboard-title {
@@ -39,12 +51,13 @@
   font-size: clamp(2rem, 2.9vw, 3rem);
   line-height: 1.04;
   letter-spacing: -0.03em;
+  color: var(--nx-ink-900);
 }
 
 .nx-dashboard-subtitle {
   margin: 1rem 0 0;
   max-width: 76ch;
-  color: #5d4d47;
+  color: var(--nx-ink-600);
   line-height: 1.72;
 }
 
@@ -56,18 +69,22 @@
 
 .nx-metric-card {
   grid-column: span 3;
-  border: 1px solid #e3d8cf;
+  border: 1px solid var(--nx-border);
   border-radius: 22px;
-  background: rgba(255, 253, 250, 0.95);
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(20px) saturate(130%);
+  -webkit-backdrop-filter: blur(20px) saturate(130%);
   padding: 1.2rem 1.15rem;
-  box-shadow: 0 18px 36px -24px rgba(58, 40, 35, 0.27);
+  box-shadow: var(--nx-shadow-sm);
   transition:
-    transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 220ms cubic-bezier(0.22, 1, 0.36, 1);
+    transform 300ms var(--nx-ease),
+    border-color 300ms var(--nx-ease),
+    box-shadow 300ms var(--nx-ease);
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 24px 44px -26px rgba(58, 40, 35, 0.32);
+    transform: translateY(-3px);
+    border-color: var(--nx-accent-500);
+    box-shadow: 0 20px 40px -15px rgba(212, 175, 55, 0.18);
   }
 }
 
@@ -82,19 +99,20 @@
   font-size: 0.76rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #6b5e57;
+  color: var(--nx-ink-600);
+  font-weight: 600;
 }
 
 .nx-metric-value {
   margin-top: 0.7rem;
   font-size: clamp(1.45rem, 2vw, 2rem);
-  font-weight: 700;
-  color: #2b211d;
+  font-weight: 800;
+  color: var(--nx-ink-900);
 }
 
 .nx-metric-description {
   margin: 0.5rem 0 0;
-  color: #6b5e57;
+  color: var(--nx-ink-600);
   font-size: 0.9rem;
   line-height: 1.58;
 }
@@ -106,27 +124,36 @@
 }
 
 .nx-dashboard-surface {
-  border: 1px solid #e3d8cf;
+  border: 1px solid var(--nx-border);
   border-radius: 24px;
-  background: rgba(255, 253, 250, 0.95);
-  box-shadow: 0 18px 38px -24px rgba(58, 40, 35, 0.24);
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(25px) saturate(140%);
+  -webkit-backdrop-filter: blur(25px) saturate(140%);
+  box-shadow: var(--nx-shadow-md);
   overflow: hidden;
+  transition: border-color 300ms var(--nx-ease), box-shadow 300ms var(--nx-ease);
+
+  &:hover {
+    border-color: var(--nx-accent-500);
+    box-shadow: 0 24px 48px -18px rgba(212, 175, 55, 0.15);
+  }
 }
 
 .nx-surface-header {
   padding: 1.25rem 1.35rem 1rem;
-  border-bottom: 1px solid #ebe1d8;
+  border-bottom: 1px solid var(--nx-border-solid);
 
   h2 {
     margin: 0;
     font-family: "Fraunces", "Times New Roman", serif;
     font-size: 1.4rem;
     letter-spacing: -0.02em;
+    color: var(--nx-ink-900);
   }
 
   p {
     margin: 0.5rem 0 0;
-    color: #6b5e57;
+    color: var(--nx-ink-600);
     font-size: 0.9rem;
   }
 }
@@ -140,10 +167,11 @@
   align-items: center;
   padding: 0.14rem 0.5rem;
   border-radius: 999px;
-  background: #f6efe8;
-  color: #7a4d47;
-  border: 1px solid #eadbd1;
+  background: rgba(212, 175, 55, 0.08);
+  color: var(--nx-accent-700);
+  border: 1px solid rgba(212, 175, 55, 0.2);
   font-size: 0.78rem;
+  font-weight: 600;
 }
 
 .nx-dashboard-surface-side {
@@ -158,7 +186,7 @@
     font-size: 0.85rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #6b5e57;
+    color: var(--nx-ink-600);
   }
 }
 
@@ -169,15 +197,21 @@
 }
 
 .nx-pulse-item {
-  border: 1px solid #eadfd5;
+  border: 1px solid var(--nx-border);
   border-radius: 14px;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.5);
   padding: 0.8rem 0.9rem;
+  transition: transform 250ms var(--nx-ease), border-color 250ms var(--nx-ease);
+
+  &:hover {
+    transform: translateX(3px);
+    border-color: var(--nx-accent-500);
+  }
 
   p {
     margin: 0.35rem 0 0;
     font-size: 0.86rem;
-    color: #6b5e57;
+    color: var(--nx-ink-600);
     line-height: 1.5;
   }
 }
@@ -191,7 +225,8 @@
     margin: 0;
     font-size: 0.83rem;
     text-transform: uppercase;
-    color: #5b4b45;
+    color: var(--nx-ink-900);
+    font-weight: 700;
   }
 }
 
@@ -213,28 +248,35 @@
 
 .nx-board-item {
   border-radius: 14px;
-  border: 1px solid #eadfd5;
-  background: linear-gradient(180deg, #fffdfa 0%, #fdf8f2 100%);
+  border: 1px solid var(--nx-border);
+  background: rgba(255, 255, 255, 0.55);
   padding: 0.8rem 0.9rem;
+  transition: border-color 250ms var(--nx-ease), transform 250ms var(--nx-ease);
+
+  &:hover {
+    border-color: var(--nx-accent-500);
+    transform: translateY(-2px);
+  }
 
   h3 {
     margin: 0;
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: #6b5e57;
+    color: var(--nx-ink-600);
+    font-weight: 600;
   }
 
   strong {
     display: block;
     margin-top: 0.45rem;
     font-size: 1.18rem;
-    color: #2b211d;
+    color: var(--nx-ink-900);
   }
 
   p {
     margin: 0.35rem 0 0;
-    color: #6b5e57;
+    color: var(--nx-ink-600);
     font-size: 0.88rem;
     line-height: 1.52;
   }
@@ -250,8 +292,8 @@
 .nx-note-footnote {
   margin: 1rem 1.3rem 0;
   padding-top: 0.9rem;
-  border-top: 1px dashed #e4d9cf;
-  color: #6b5e57;
+  border-top: 1px dashed var(--nx-border-solid);
+  color: var(--nx-ink-600);
   font-size: 0.9rem;
   line-height: 1.62;
 }
@@ -299,3 +341,4 @@
     grid-column: span 12;
   }
 }
+
