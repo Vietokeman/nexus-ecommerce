@@ -10,9 +10,9 @@ interface PremiumInputProps extends Omit<TextFieldProps, 'label'> {
   reserveHelperSpace?: boolean;
 }
 
-const densityConfig: Record<PremiumInputDensity, { minHeight: number; py: number }> = {
-  compact: { minHeight: 44, py: 10 },
-  normal: { minHeight: 48, py: 11.5 },
+const densityConfig: Record<PremiumInputDensity, { minHeight: number; py: string }> = {
+  compact: { minHeight: 44, py: '10px' },
+  normal: { minHeight: 48, py: '12px' },
 };
 
 export default function PremiumInput({
@@ -35,7 +35,7 @@ export default function PremiumInput({
           variant="body2"
           sx={{
             fontWeight: 700,
-            color: 'text.primary',
+            color: '#FAF9F6',
             letterSpacing: '0.01em',
           }}
         >
@@ -49,30 +49,43 @@ export default function PremiumInput({
           '& .MuiInputBase-root': {
             minHeight: metrics.minHeight,
             borderRadius: '12px',
-            background: 'rgba(255, 255, 255, 0.8)',
+            background: 'rgba(12, 10, 9, 0.45)',
             backdropFilter: 'blur(20px)',
-            boxShadow: '0 6px 16px rgba(0, 0, 0, 0.02)',
+            WebkitBackdropFilter: 'blur(20px)',
+            boxShadow: '0 6px 20px rgba(0, 0, 0, 0.15)',
             transition: 'all 200ms ease',
+            color: '#FAF9F6',
             '&:hover': {
-              boxShadow: '0 8px 20px rgba(212, 175, 55, 0.08)',
+              boxShadow: '0 8px 24px rgba(212, 175, 55, 0.08)',
+              background: 'rgba(12, 10, 9, 0.55)',
             },
             '&.Mui-focused': {
-              boxShadow: '0 0 0 3px rgba(212, 175, 55, 0.25), 0 10px 22px rgba(212, 175, 55, 0.12)',
+              boxShadow: '0 0 0 3px rgba(212, 175, 55, 0.18), 0 10px 22px rgba(0, 0, 0, 0.2)',
+              background: 'rgba(12, 10, 9, 0.6)',
             },
           },
           '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: hasError ? undefined : 'rgba(212, 175, 55, 0.3)',
+            borderColor: hasError ? 'rgba(239, 68, 68, 0.5)' : 'rgba(255, 255, 255, 0.1)',
             transition: 'border-color 200ms ease',
           },
           '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: hasError ? undefined : '#D4AF37',
+            borderColor: hasError ? 'rgba(239, 68, 68, 0.8)' : 'rgba(212, 175, 55, 0.4)',
           },
           '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-            borderColor: hasError ? undefined : '#D4AF37',
+            borderColor: hasError ? '#ef4444' : '#D4AF37',
+            borderWidth: '1.5px',
           },
           '& .MuiOutlinedInput-input': {
             paddingTop: metrics.py,
             paddingBottom: metrics.py,
+            color: '#FAF9F6',
+            '&::placeholder': {
+              color: 'rgba(255, 255, 255, 0.4)',
+              opacity: 1,
+            },
+          },
+          '& .MuiInputBase-input': {
+            color: '#FAF9F6',
           },
           ...sx,
         }}
@@ -80,7 +93,7 @@ export default function PremiumInput({
       {(helperMessage || reserveHelperSpace) && (
         <Typography
           variant="caption"
-          color={errorText ? 'error.main' : 'text.secondary'}
+          color={errorText ? 'error.main' : 'rgba(255, 255, 255, 0.45)'}
           sx={{ ml: 0.5, fontWeight: 500, minHeight: '1.1rem' }}
         >
           {helperMessage || ' '}

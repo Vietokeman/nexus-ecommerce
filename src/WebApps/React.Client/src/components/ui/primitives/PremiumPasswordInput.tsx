@@ -36,6 +36,13 @@ export default function PremiumPasswordInput({
               onMouseDown={(event) => event.preventDefault()}
               edge="end"
               size="small"
+              sx={{
+                color: 'rgba(255, 255, 255, 0.45)',
+                transition: 'color 200ms ease',
+                '&:hover': {
+                  color: '#D4AF37',
+                },
+              }}
             >
               {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
             </IconButton>
