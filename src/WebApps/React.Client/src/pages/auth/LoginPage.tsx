@@ -89,15 +89,15 @@ export default function LoginPage() {
           <Stack
             sx={{
               p: 1.5,
-              borderRadius: 2,
-              border: '1px solid #F0DEC4',
-              background:
-                'linear-gradient(140deg, rgba(255,247,234,0.82), rgba(241,252,248,0.88) 65%, rgba(255,255,255,0.94))',
+              borderRadius: '12px',
+              border: '1px solid rgba(212, 175, 55, 0.2)',
+              background: 'rgba(255, 255, 255, 0.4)',
+              backdropFilter: 'blur(8px)',
             }}
           >
             <Typography
               variant="caption"
-              sx={{ color: nexus.neutral[600], letterSpacing: '0.01em' }}
+              sx={{ color: nexus.neutral[700], letterSpacing: '0.01em', fontWeight: 500 }}
             >
               Secure login with real-time order and checkout sync.
             </Typography>
@@ -143,10 +143,10 @@ export default function LoginPage() {
               to="/forgot-password"
               sx={{
                 textDecoration: 'none',
-                color: nexus.orange[700],
+                color: '#D4AF37',
                 fontWeight: 700,
                 letterSpacing: '0.01em',
-                '&:hover': { color: nexus.orange[700] },
+                '&:hover': { color: '#CA8A04' },
               }}
             >
               Forgot password?
@@ -166,7 +166,14 @@ export default function LoginPage() {
               fontSize: '1rem',
               borderRadius: 999,
               fontWeight: 700,
-              boxShadow: '0 16px 30px -14px rgba(154, 88, 82, 0.75)',
+              background: 'linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)',
+              color: '#FAF9F6',
+              boxShadow: '0 16px 30px -14px rgba(28, 25, 23, 0.4)',
+              '&:hover': {
+                background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+                color: '#0C0A09',
+                boxShadow: '0 20px 40px -15px rgba(212, 175, 55, 0.4)',
+              }
             }}
             loading={loading}
             type="submit"
@@ -262,8 +269,8 @@ export default function LoginPage() {
               sx={{
                 textDecoration: 'none',
                 fontWeight: 700,
-                color: nexus.orange[700],
-                '&:hover': { color: nexus.orange[700] },
+                color: '#D4AF37',
+                '&:hover': { color: '#CA8A04' },
               }}
             >
               Create account

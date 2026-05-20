@@ -44,17 +44,23 @@ function CartItem({ itemNo, productName, price, quantity, imageUrl }: CartItemPr
     <Stack
       bgcolor="white"
       component={is900 ? 'div' : Paper}
-      p={is900 ? 0 : 2}
-      elevation={1}
+      p={is900 ? 0 : 2.5}
+      elevation={0}
       flexDirection="row"
       justifyContent="space-between"
       alignItems="center"
       sx={{
-        borderRadius: '20px',
-        border: '1px solid rgba(118,102,95,0.22)',
-        background:
-          'linear-gradient(150deg, rgba(255,253,250,0.92) 0%, rgba(247,243,238,0.9) 60%, rgba(242,237,231,0.95) 100%)',
-        boxShadow: '0 20px 32px -28px rgba(79,67,62,0.65)',
+        borderRadius: '24px',
+        border: '1px solid rgba(255, 255, 255, 0.12)',
+        background: 'rgba(255, 255, 255, 0.08)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        boxShadow: '0 12px 32px -16px rgba(0, 0, 0, 0.08)',
+        transition: 'border-color 350ms, box-shadow 350ms',
+        '&:hover': {
+          borderColor: '#D4AF37',
+          boxShadow: '0 16px 36px -12px rgba(212, 175, 55, 0.15)',
+        },
       }}
     >
       {/* image and details */}
@@ -112,7 +118,7 @@ function CartItem({ itemNo, productName, price, quantity, imageUrl }: CartItemPr
         rowGap="1rem"
         alignItems="flex-end"
       >
-        <Typography variant="body2">${price}</Typography>
+        <Typography variant="subtitle1" fontWeight={700} sx={{ color: '#1C1917' }}>${price}</Typography>
         <PremiumButton
           size={is480 ? 'small' : undefined}
           onClick={handleProductRemove}
@@ -157,14 +163,12 @@ export function CartContent({ checkout }: CartProps) {
         paddingLeft={checkout ? 0 : 2}
         paddingRight={checkout ? 0 : 2}
         rowGap={4}
+        className={checkout ? '' : 'nx-liquid-glass'}
         sx={{
-          borderRadius: checkout ? '0px' : '24px',
-          background: checkout
-            ? 'transparent'
-            : 'linear-gradient(160deg, rgba(255,253,250,0.86) 0%, rgba(247,243,238,0.86) 58%, rgba(242,237,231,0.92) 100%)',
-          border: checkout ? 'none' : '1px solid rgba(118,102,95,0.2)',
-          boxShadow: checkout ? 'none' : '0 24px 44px -34px rgba(79,67,62,0.75)',
-          p: checkout ? 0 : { xs: 2, md: 3 },
+          borderRadius: checkout ? '0px' : '28px',
+          border: checkout ? 'none' : '1px solid rgba(255, 255, 255, 0.15)',
+          boxShadow: checkout ? 'none' : '0 32px 64px -24px rgba(0, 0, 0, 0.15)',
+          p: checkout ? 0 : { xs: 2, md: 4 },
         }}
       >
         {/* cart items */}
@@ -232,7 +236,16 @@ export function CartContent({ checkout }: CartProps) {
               variant="contained"
               magnetic={false}
               onClick={() => navigate('/checkout')}
-              sx={{ boxShadow: '0 14px 24px -16px rgba(154,88,82,0.75)' }}
+              sx={{
+                background: 'linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)',
+                color: '#FAF9F6',
+                boxShadow: '0 16px 30px -14px rgba(28, 25, 23, 0.4)',
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+                  color: '#0C0A09',
+                  boxShadow: '0 20px 40px -15px rgba(212, 175, 55, 0.4)',
+                }
+              }}
             >
               Checkout
             </PremiumButton>

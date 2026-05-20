@@ -55,7 +55,7 @@ export default function AuthLayout({ children, title, subtitle }: AuthLayoutProp
             position: 'relative',
             px: 6,
             background:
-              'radial-gradient(120% 120% at 20% 10%, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0) 55%), linear-gradient(150deg, #3E2A25 0%, #5C4038 55%, #7B5748 100%)',
+              'radial-gradient(circle at 10% 20%, rgba(212,175,55,0.15), transparent 40%), linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)',
           }}
         >
           <motion.div
@@ -106,7 +106,7 @@ export default function AuthLayout({ children, title, subtitle }: AuthLayoutProp
         alignItems="center"
         sx={{
           background:
-            'radial-gradient(120% 120% at 0% 0%, rgba(213,171,163,0.2) 0%, rgba(247,243,238,0.72) 40%, rgba(247,243,238,0.95) 100%)',
+            'radial-gradient(circle at 0% 0%, rgba(212,175,55,0.06), transparent 50%), #FAF9F6',
           px: { xs: 2, sm: 5 },
           py: { xs: 5, md: 7 },
           overflowY: 'auto',
@@ -125,7 +125,7 @@ export default function AuthLayout({ children, title, subtitle }: AuthLayoutProp
                 <Typography
                   variant="h4"
                   sx={{
-                    background: nexus.gradient.primary,
+                    background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     backgroundClip: 'text',

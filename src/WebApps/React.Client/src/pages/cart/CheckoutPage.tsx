@@ -269,12 +269,13 @@ export default function CheckoutPage() {
             width="100%"
             maxWidth="56rem"
             sx={{
-              p: 2,
-              borderRadius: 2.5,
-              border: reserveExpired ? '1px solid #F0B3A8' : '1px solid #E5D9C5',
+              p: 2.5,
+              borderRadius: '20px',
+              border: reserveExpired ? '1px solid rgba(239, 68, 68, 0.3)' : '1px solid rgba(212, 175, 55, 0.2)',
               background: reserveExpired
-                ? 'linear-gradient(145deg, rgba(255,244,241,0.92), rgba(255,255,255,0.98))'
-                : 'linear-gradient(145deg, rgba(255,248,236,0.9), rgba(240,251,248,0.88) 62%, rgba(255,255,255,0.96))',
+                ? 'rgba(254, 242, 242, 0.6)'
+                : 'rgba(255, 255, 255, 0.4)',
+              backdropFilter: 'blur(8px)',
             }}
           >
             <Stack
@@ -308,13 +309,12 @@ export default function CheckoutPage() {
           {/* left box */}
           <Stack
             rowGap={4}
+            className="nx-liquid-glass"
             sx={{
-              p: { xs: 1.25, md: 2.25 },
-              borderRadius: 3,
-              border: '1px solid #EEDFCB',
-              background:
-                'linear-gradient(145deg, rgba(255,248,236,0.9), rgba(240,251,248,0.9) 62%, rgba(255,255,255,0.96))',
-              boxShadow: '0 18px 34px rgba(126, 93, 53, 0.1)',
+              p: { xs: 2.5, md: 4 },
+              borderRadius: '28px',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              boxShadow: '0 32px 64px -24px rgba(0, 0, 0, 0.15)',
             }}
           >
             {/* heading */}
@@ -340,10 +340,11 @@ export default function CheckoutPage() {
               rowGap={2}
               onSubmit={handleSubmit(handleAddAddress)}
               sx={{
-                p: { xs: 1, sm: 1.75 },
-                borderRadius: 2.5,
-                border: '1px solid #EBDCC7',
-                background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF6 100%)',
+                p: { xs: 2, sm: 3 },
+                borderRadius: '20px',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
+                background: 'rgba(255, 255, 255, 0.25)',
+                backdropFilter: 'blur(8px)',
               }}
             >
               <PremiumInput
@@ -377,9 +378,18 @@ export default function CheckoutPage() {
                 <LoadingButton
                   type="submit"
                   variant="contained"
-                  sx={{ borderRadius: '9999px', px: 2.5, fontWeight: 700 }}
+                  sx={{
+                    borderRadius: '9999px',
+                    px: 3,
+                    fontWeight: 700,
+                    background: '#1C1917',
+                    color: '#FAF9F6',
+                    '&:hover': {
+                      background: '#0A0A0A',
+                    }
+                  }}
                 >
-                  add
+                  Add Address
                 </LoadingButton>
                 <PremiumButton
                   color="error"
@@ -417,16 +427,17 @@ export default function CheckoutPage() {
                       component={Paper}
                       elevation={0}
                       sx={{
-                        borderRadius: 2.5,
+                        borderRadius: '20px',
                         border:
                           selectedAddress?._id === address._id
-                            ? '1px solid #DCB47A'
-                            : '1px solid #E9DFD1',
-                        background: selectedAddress?._id === address._id ? '#FFF8ED' : '#FFFFFF',
+                            ? '1px solid #D4AF37'
+                            : '1px solid rgba(255,255,255,0.12)',
+                        background: selectedAddress?._id === address._id ? 'rgba(212, 175, 55, 0.05)' : 'rgba(255, 255, 255, 0.4)',
                         boxShadow:
                           selectedAddress?._id === address._id
-                            ? '0 12px 24px rgba(126, 93, 53, 0.13)'
-                            : '0 8px 18px rgba(126, 93, 53, 0.07)',
+                            ? '0 12px 24px rgba(212, 175, 55, 0.12)'
+                            : '0 8px 18px rgba(0, 0, 0, 0.04)',
+                        backdropFilter: 'blur(10px)',
                       }}
                     >
                       <Stack flexDirection="row" alignItems="center">
@@ -499,12 +510,12 @@ export default function CheckoutPage() {
           <Stack
             width={is900 ? '100%' : 'auto'}
             alignItems={is900 ? 'flex-start' : undefined}
+            className="nx-liquid-glass"
             sx={{
-              p: { xs: 1.25, md: 2 },
-              borderRadius: 3,
-              border: '1px solid #EADCC8',
-              background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF6 100%)',
-              boxShadow: '0 16px 30px rgba(126, 93, 53, 0.08)',
+              p: { xs: 2.5, md: 4 },
+              borderRadius: '28px',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              boxShadow: '0 32px 64px -24px rgba(0, 0, 0, 0.15)',
             }}
           >
             <Typography variant="h4" fontWeight={800} sx={{ letterSpacing: '-0.02em' }}>
@@ -539,7 +550,23 @@ export default function CheckoutPage() {
               onClick={handleCreateOrder}
               size="large"
               disabled={!selectedAddress || items.length === 0 || reserveExpired}
-              sx={{ borderRadius: 999, fontWeight: 700 }}
+              sx={{
+                borderRadius: 999,
+                fontWeight: 700,
+                background: 'linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)',
+                color: '#FAF9F6',
+                py: 1.5,
+                boxShadow: '0 16px 30px -14px rgba(28, 25, 23, 0.4)',
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+                  color: '#0C0A09',
+                  boxShadow: '0 20px 40px -15px rgba(212, 175, 55, 0.4)',
+                },
+                '&:disabled': {
+                  background: 'rgba(0,0,0,0.12)',
+                  color: 'rgba(0,0,0,0.26)',
+                }
+              }}
             >
               Pay and order
             </LoadingButton>
