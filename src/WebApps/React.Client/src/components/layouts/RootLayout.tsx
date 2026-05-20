@@ -80,13 +80,12 @@ export default function RootLayout() {
       <AppBar
         position="sticky"
         sx={{
-          background:
-            'linear-gradient(145deg, rgba(255,253,250,0.92) 0%, rgba(247,241,236,0.86) 58%, rgba(242,237,231,0.9) 100%)',
-          backdropFilter: nexus.glass.blur,
-          WebkitBackdropFilter: nexus.glass.blur,
-          borderBottom: `1px solid ${nexus.neutral[200]}`,
-          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.62), 0 10px 24px -20px rgba(79,67,62,0.65)',
-          color: nexus.neutral[900],
+          background: 'rgba(10, 10, 10, 0.85)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05), 0 10px 24px -20px rgba(0,0,0,0.8)',
+          color: '#FAF9F6',
           zIndex: LAYERS.shell,
         }}
       >
@@ -108,7 +107,7 @@ export default function RootLayout() {
                 fontWeight: 700,
                 letterSpacing: '-0.01em',
                 display: { xs: 'none', sm: 'block' },
-                background: nexus.gradient.primary,
+                background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
@@ -130,6 +129,7 @@ export default function RootLayout() {
                     width: 36,
                     height: 36,
                     background: nexus.gradient.button,
+                    color: '#0C0A09',
                     fontSize: '0.875rem',
                     fontWeight: 600,
                   }}
@@ -192,7 +192,7 @@ export default function RootLayout() {
               fontWeight={500}
               sx={{
                 display: { xs: 'none', sm: 'block' },
-                color: nexus.neutral[600],
+                color: 'rgba(255,255,255,0.7)',
               }}
             >
               Hey, {displayName}
@@ -205,7 +205,7 @@ export default function RootLayout() {
                   size="small"
                   sx={{ display: { xs: 'none', sm: 'inline-flex' } }}
                 >
-                  <StorefrontIcon sx={{ color: nexus.neutral[700] }} />
+                  <StorefrontIcon sx={{ color: 'rgba(255,255,255,0.85)', '&:hover': { color: '#D4AF37' } }} />
                 </IconButton>
               </PremiumTooltip>
             )}
@@ -213,7 +213,7 @@ export default function RootLayout() {
             {cartItems.length > 0 && (
               <Badge badgeContent={totalItems()} color="secondary">
                 <IconButton onClick={() => navigate('/cart')} size="small">
-                  <ShoppingCartOutlinedIcon sx={{ color: nexus.neutral[700] }} />
+                  <ShoppingCartOutlinedIcon sx={{ color: 'rgba(255,255,255,0.85)', '&:hover': { color: '#D4AF37' } }} />
                 </IconButton>
               </Badge>
             )}
@@ -221,14 +221,14 @@ export default function RootLayout() {
             {!user?.isAdmin && (
               <Badge badgeContent={wishlistItems.length} color="secondary">
                 <IconButton component={Link} to="/wishlist" size="small">
-                  <FavoriteBorderIcon sx={{ color: nexus.neutral[700] }} />
+                  <FavoriteBorderIcon sx={{ color: 'rgba(255,255,255,0.85)', '&:hover': { color: '#D4AF37' } }} />
                 </IconButton>
               </Badge>
             )}
 
             {isProductList && (
               <IconButton onClick={toggleFilter} size="small">
-                <TuneIcon sx={{ color: isFilterOpen ? nexus.orange[700] : nexus.neutral[500] }} />
+                <TuneIcon sx={{ color: isFilterOpen ? '#D4AF37' : 'rgba(255,255,255,0.6)' }} />
               </IconButton>
             )}
           </Stack>
@@ -269,7 +269,7 @@ export default function RootLayout() {
                 variant="h6"
                 fontWeight={700}
                 sx={{
-                  background: nexus.gradient.primary,
+                  background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   backgroundClip: 'text',
@@ -296,7 +296,7 @@ export default function RootLayout() {
                 color: 'rgba(255,255,255,0.5)',
                 cursor: 'pointer',
                 textDecoration: 'none',
-                '&:hover': { color: nexus.orange[300] },
+                '&:hover': { color: '#D4AF37' },
               }}
             >
               support@nexus.com
@@ -309,7 +309,7 @@ export default function RootLayout() {
                 color: 'rgba(255,255,255,0.5)',
                 cursor: 'pointer',
                 textDecoration: 'none',
-                '&:hover': { color: nexus.orange[300] },
+                '&:hover': { color: '#D4AF37' },
               }}
             >
               +84 888-888-999
@@ -341,7 +341,7 @@ export default function RootLayout() {
                 sx={{
                   color: 'rgba(255,255,255,0.5)',
                   cursor: 'pointer',
-                  '&:hover': { color: nexus.orange[300] },
+                  '&:hover': { color: '#D4AF37' },
                 }}
                 onClick={() => navigate(item.to)}
               >
@@ -362,7 +362,7 @@ export default function RootLayout() {
                 sx={{
                   color: 'rgba(255,255,255,0.5)',
                   cursor: 'pointer',
-                  '&:hover': { color: nexus.orange[300] },
+                  '&:hover': { color: '#D4AF37' },
                 }}
               >
                 {t}
