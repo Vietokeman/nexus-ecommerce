@@ -75,51 +75,43 @@ export default function UserProfilePage() {
         component={is480 ? 'div' : Paper}
         elevation={0}
         width={is900 ? '100%' : '56rem'}
-        p={{ xs: 2, md: 3 }}
+        p={{ xs: 2, md: 4 }}
         mt={is480 ? 0 : 1}
         rowGap={2.5}
+        className="nx-liquid-glass"
         sx={{
-          borderRadius: is480 ? 0 : 4,
-          border: is480 ? 'none' : '1px solid #EDE2D2',
-          background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF7 100%)',
-          boxShadow: is480 ? 'none' : '0 20px 40px rgba(130, 95, 53, 0.08)',
+          borderRadius: is480 ? 0 : '24px',
+          border: is480 ? 'none' : '1px solid rgba(255, 255, 255, 0.15)',
+          boxShadow: is480 ? 'none' : '0 32px 64px -24px rgba(0, 0, 0, 0.12)',
         }}
       >
         {/* user details */}
         <Stack
-          bgcolor="#FFF8EE"
+          className="nx-liquid-glass"
           color="text.primary"
-          p={{ xs: 2.25, md: 2.5 }}
+          p={{ xs: 2.5, md: 3 }}
           rowGap={1}
-          borderRadius={3}
-          border="1px solid #EFD9B7"
+          borderRadius="20px"
+          border="1px solid rgba(212, 175, 55, 0.2)"
           justifyContent="center"
           alignItems="center"
           sx={{
             position: 'relative',
             overflow: 'hidden',
-            '&::after': {
-              content: '""',
-              position: 'absolute',
-              right: -60,
-              top: -80,
-              width: 180,
-              height: 180,
-              borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(15,118,110,0.18), rgba(15,118,110,0))',
-            },
           }}
         >
           <Avatar
             src="none"
             alt={displayName}
             sx={{
-              width: 78,
-              height: 78,
-              bgcolor: theme.palette.primary.main,
-              color: '#fff',
-              fontWeight: 700,
-              fontSize: '1.4rem',
+              width: 80,
+              height: 80,
+              background: 'linear-gradient(135deg, #feefc3 0%, #D4AF37 50%, #CA8A04 100%)',
+              color: '#1C1917',
+              fontWeight: 800,
+              fontSize: '1.5rem',
+              boxShadow: '0 8px 24px rgba(212, 175, 55, 0.25)',
+              border: '2px solid rgba(255, 255, 255, 0.6)',
             }}
           >
             {displayName.charAt(0).toUpperCase()}
@@ -139,7 +131,7 @@ export default function UserProfilePage() {
             justifyContent="space-between"
             columnGap={1}
           >
-            <Typography variant="h6" fontWeight={700}>
+             <Typography variant="h6" fontWeight={800} sx={{ background: 'linear-gradient(135deg, #1C1917 0%, #0D0C0B 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-0.01em' }}>
               Manage addresses
             </Typography>
             <Button
@@ -148,8 +140,14 @@ export default function UserProfilePage() {
               variant="contained"
               sx={{
                 borderRadius: 999,
-                px: 2.25,
+                px: 3,
                 fontWeight: 700,
+                background: 'linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)',
+                color: '#FAF9F6',
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+                  color: '#0C0A09',
+                }
               }}
             >
               Add
@@ -164,11 +162,12 @@ export default function UserProfilePage() {
               noValidate
               onSubmit={handleSubmit(handleAddAddress)}
               rowGap={2}
+              className="nx-liquid-glass"
               sx={{
-                p: { xs: 2, md: 2.5 },
-                borderRadius: 3,
-                border: '1px solid #ECDCC8',
-                background: 'linear-gradient(180deg, #FFFFFF, #FFF9F0)',
+                p: { xs: 2.5, md: 3 },
+                borderRadius: '20px',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                boxShadow: '0 16px 32px rgba(0, 0, 0, 0.05)',
               }}
             >
               <Stack>
@@ -208,18 +207,37 @@ export default function UserProfilePage() {
                   type="submit"
                   size={is480 ? 'small' : undefined}
                   variant="contained"
-                  sx={{ borderRadius: 999, fontWeight: 700, px: 2.5 }}
+                  sx={{
+                    borderRadius: 999,
+                    fontWeight: 700,
+                    px: 3,
+                    background: 'linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)',
+                    color: '#FAF9F6',
+                    '&:hover': {
+                      background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+                      color: '#0C0A09',
+                    }
+                  }}
                 >
-                  add
+                  Add
                 </LoadingButton>
                 <Button
                   color="error"
                   onClick={() => setAddAddress(false)}
-                  variant={is480 ? 'outlined' : 'text'}
+                  variant="outlined"
                   size={is480 ? 'small' : undefined}
-                  sx={{ borderRadius: 999, px: 2 }}
+                  sx={{
+                    borderRadius: 999,
+                    px: 3,
+                    borderColor: '#ef4444',
+                    color: '#ef4444',
+                    '&:hover': {
+                      borderColor: '#dc2626',
+                      background: 'rgba(239, 68, 68, 0.05)',
+                    }
+                  }}
                 >
-                  cancel
+                  Cancel
                 </Button>
               </Stack>
             </Stack>
@@ -233,12 +251,13 @@ export default function UserProfilePage() {
                   key={address._id}
                   component={Paper}
                   elevation={0}
-                  p={{ xs: 2, md: 2.25 }}
+                  p={{ xs: 2, md: 2.5 }}
                   rowGap={1}
+                  className="nx-liquid-glass"
                   sx={{
-                    borderRadius: 3,
-                    border: '1px solid #E9DECF',
-                    background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFDF8 100%)',
+                    borderRadius: '16px',
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.02)',
                   }}
                 >
                   <Stack flexDirection="row" justifyContent="space-between" alignItems="center">
@@ -249,7 +268,15 @@ export default function UserProfilePage() {
                       color="error"
                       size="small"
                       onClick={() => handleDeleteAddress(address._id)}
-                      sx={{ borderRadius: 999 }}
+                      sx={{
+                        borderRadius: 999,
+                        px: 2,
+                        fontWeight: 700,
+                        borderColor: '#ef4444',
+                        '&:hover': {
+                          background: 'rgba(239, 68, 68, 0.05)',
+                        }
+                      }}
                     >
                       Delete
                     </Button>

@@ -22,17 +22,16 @@ export default function NotFoundPage() {
         transition={{ duration: 0.5 }}
       >
         <Stack
+          className="nx-liquid-glass"
           spacing={2}
           justifyContent="center"
           alignItems="center"
           sx={{
             px: { xs: 3, md: 5 },
             py: { xs: 4, md: 6 },
-            borderRadius: nexus.radius.xl,
-            background:
-              'radial-gradient(120% 120% at 0% 0%, rgba(203,148,139,0.2) 0%, rgba(255,253,250,0.85) 42%, rgba(247,243,238,0.92) 100%)',
-            border: `1px solid ${nexus.neutral[200]}`,
-            boxShadow: nexus.glass.shadow,
+            borderRadius: '28px',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            boxShadow: '0 32px 64px -24px rgba(0, 0, 0, 0.15)',
             maxWidth: 640,
           }}
         >
@@ -42,12 +41,13 @@ export default function NotFoundPage() {
 
           <Typography
             variant="h4"
-            fontWeight={700}
+            fontWeight={800}
             sx={{
-              background: nexus.gradient.primary,
+              background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
+              letterSpacing: '-0.02em',
             }}
           >
             404 — Page Not Found
@@ -61,7 +61,14 @@ export default function NotFoundPage() {
               mt: 2.5,
               height: '3rem',
               px: 4,
-              boxShadow: '0 14px 24px -16px rgba(154, 88, 82, 0.75)',
+              borderRadius: 999,
+              background: 'linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)',
+              color: '#FAF9F6',
+              fontWeight: 700,
+              '&:hover': {
+                background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+                color: '#0C0A09',
+              }
             }}
             size="large"
             onClick={() => navigate('/')}
