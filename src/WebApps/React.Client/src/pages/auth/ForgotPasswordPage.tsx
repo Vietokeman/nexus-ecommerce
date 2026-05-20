@@ -63,8 +63,8 @@ export default function ForgotPasswordPage() {
             <CheckCircleOutlineIcon
               sx={{
                 fontSize: 68,
-                color: nexus.orange[500],
-                filter: 'drop-shadow(0 8px 18px rgba(154, 88, 82, 0.32))',
+                color: '#D4AF37',
+                filter: 'drop-shadow(0 8px 18px rgba(212, 175, 55, 0.32))',
               }}
             />
             <Typography
@@ -74,13 +74,19 @@ export default function ForgotPasswordPage() {
               sx={{
                 textDecoration: 'none',
                 fontWeight: 700,
-                color: nexus.orange[700],
-                border: '1px solid #EBDAC5',
+                color: '#1C1917',
+                border: '1px solid rgba(212, 175, 55, 0.3)',
                 borderRadius: 999,
-                px: 2.1,
-                py: 0.85,
-                background: 'rgba(255, 255, 255, 0.9)',
-                '&:hover': { color: nexus.orange[700] },
+                px: 3,
+                py: 1,
+                background: 'rgba(255, 255, 255, 0.4)',
+                backdropFilter: 'blur(8px)',
+                transition: 'all 300ms',
+                '&:hover': {
+                  color: '#FAF9F6',
+                  background: '#1C1917',
+                  borderColor: '#1C1917',
+                },
               }}
             >
               Back to Sign In
@@ -94,11 +100,11 @@ export default function ForgotPasswordPage() {
           noValidate
           onSubmit={handleSubmit(handleForgotPassword)}
           sx={{
-            p: { xs: 0.5, sm: 1.5 },
-            borderRadius: 2.5,
-            border: '1px solid #F0DFCB',
-            background:
-              'linear-gradient(140deg, rgba(255,248,236,0.83), rgba(239,251,248,0.9) 65%, rgba(255,255,255,0.94))',
+            p: { xs: 2, sm: 3 },
+            borderRadius: '16px',
+            border: '1px solid rgba(212, 175, 55, 0.2)',
+            background: 'rgba(255, 255, 255, 0.4)',
+            backdropFilter: 'blur(8px)',
           }}
         >
           <motion.div variants={itemVariants}>
@@ -131,7 +137,14 @@ export default function ForgotPasswordPage() {
                 fontSize: '1rem',
                 borderRadius: 999,
                 fontWeight: 700,
-                boxShadow: '0 16px 30px -14px rgba(154, 88, 82, 0.75)',
+                background: 'linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)',
+                color: '#FAF9F6',
+                boxShadow: '0 16px 30px -14px rgba(28, 25, 23, 0.4)',
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+                  color: '#0C0A09',
+                  boxShadow: '0 20px 40px -15px rgba(212, 175, 55, 0.4)',
+                }
               }}
               fullWidth
               loading={status === 'pending'}
@@ -156,8 +169,8 @@ export default function ForgotPasswordPage() {
                 sx={{
                   textDecoration: 'none',
                   fontWeight: 700,
-                  color: nexus.orange[700],
-                  '&:hover': { color: nexus.orange[700] },
+                  color: '#D4AF37',
+                  '&:hover': { color: '#CA8A04' },
                 }}
               >
                 Sign in

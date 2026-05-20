@@ -79,11 +79,11 @@ export default function OtpVerificationPage() {
             noValidate
             onSubmit={handleSubmit(handleVerifyOtp)}
             sx={{
-              p: { xs: 0.5, sm: 1.5 },
-              borderRadius: 2.5,
-              border: '1px solid #F0DFCB',
-              background:
-                'linear-gradient(140deg, rgba(255,248,236,0.83), rgba(239,251,248,0.9) 65%, rgba(255,255,255,0.94))',
+              p: { xs: 2, sm: 3 },
+              borderRadius: '16px',
+              border: '1px solid rgba(212, 175, 55, 0.2)',
+              background: 'rgba(255, 255, 255, 0.4)',
+              backdropFilter: 'blur(8px)',
             }}
           >
             <motion.div variants={itemVariants}>
@@ -123,7 +123,14 @@ export default function OtpVerificationPage() {
                   fontSize: '1rem',
                   borderRadius: 999,
                   fontWeight: 700,
-                  boxShadow: '0 16px 30px -14px rgba(154, 88, 82, 0.75)',
+                  background: 'linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)',
+                  color: '#FAF9F6',
+                  boxShadow: '0 16px 30px -14px rgba(28, 25, 23, 0.4)',
+                  '&:hover': {
+                    background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+                    color: '#0C0A09',
+                    boxShadow: '0 20px 40px -15px rgba(212, 175, 55, 0.4)',
+                  }
                 }}
                 type="submit"
                 variant="contained"
@@ -141,9 +148,9 @@ export default function OtpVerificationPage() {
                 magnetic={false}
                 disabled={resendLoading}
                 sx={{
-                  color: nexus.orange[700],
+                  color: '#D4AF37',
                   fontWeight: 700,
-                  '&:hover': { backgroundColor: nexus.orange[50] },
+                  '&:hover': { color: '#CA8A04', backgroundColor: 'rgba(212,175,55,0.05)' },
                 }}
               >
                 Resend OTP
@@ -166,7 +173,14 @@ export default function OtpVerificationPage() {
                 fontSize: '1rem',
                 borderRadius: 999,
                 fontWeight: 700,
-                boxShadow: '0 16px 30px -14px rgba(154, 88, 82, 0.75)',
+                background: 'linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)',
+                color: '#FAF9F6',
+                boxShadow: '0 16px 30px -14px rgba(28, 25, 23, 0.4)',
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+                  color: '#0C0A09',
+                  boxShadow: '0 20px 40px -15px rgba(212, 175, 55, 0.4)',
+                }
               }}
             >
               Send OTP

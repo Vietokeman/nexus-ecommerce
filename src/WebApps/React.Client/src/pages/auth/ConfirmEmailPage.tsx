@@ -61,11 +61,11 @@ export default function ConfirmEmailPage() {
       <Paper
         elevation={0}
         sx={{
-          p: 2.5,
-          borderRadius: 3,
-          border: '1px solid #EADCC8',
-          background:
-            'linear-gradient(145deg, rgba(255,248,236,0.9), rgba(240,251,248,0.9) 62%, rgba(255,255,255,0.96))',
+          p: 3,
+          borderRadius: '20px',
+          border: '1px solid rgba(212, 175, 55, 0.2)',
+          background: 'rgba(255, 255, 255, 0.4)',
+          backdropFilter: 'blur(8px)',
         }}
       >
         <Stack spacing={1.25}>
@@ -80,13 +80,44 @@ export default function ConfirmEmailPage() {
           )}
 
           {status === 'success' && (
-            <LoadingButton fullWidth variant="contained" onClick={() => navigate('/login')}>
+            <LoadingButton
+              fullWidth
+              variant="contained"
+              onClick={() => navigate('/login')}
+              sx={{
+                borderRadius: 999,
+                fontWeight: 700,
+                background: 'linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)',
+                color: '#FAF9F6',
+                py: 1.2,
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+                  color: '#0C0A09',
+                }
+              }}
+            >
               Go to login
             </LoadingButton>
           )}
 
           {status === 'error' && (
-            <LoadingButton fullWidth variant="outlined" component={Link} to="/signup">
+            <LoadingButton
+              fullWidth
+              variant="outlined"
+              component={Link}
+              to="/signup"
+              sx={{
+                borderRadius: 999,
+                fontWeight: 700,
+                borderColor: '#1C1917',
+                color: '#1C1917',
+                py: 1.2,
+                '&:hover': {
+                  borderColor: '#0A0A0A',
+                  background: 'rgba(28,25,23,0.05)',
+                }
+              }}
+            >
               Back to sign up
             </LoadingButton>
           )}
