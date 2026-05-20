@@ -57,10 +57,25 @@ export default function PaymentHistoryPage() {
           flexWrap="wrap"
           gap={1}
         >
-          <Typography variant="h4" fontWeight={800}>
+          <Typography variant="h4" fontWeight={800} sx={{ background: 'linear-gradient(135deg, #1C1917 0%, #0D0C0B 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-0.02em' }}>
             Payment History
           </Typography>
-          <Button component={Link} to="/orders" startIcon={<ArrowBackIcon />}>
+          <Button
+            component={Link}
+            to="/orders"
+            startIcon={<ArrowBackIcon />}
+            sx={{
+              borderRadius: 999,
+              borderColor: '#1C1917',
+              color: '#1C1917',
+              fontWeight: 600,
+              px: 2,
+              '&:hover': {
+                borderColor: '#0A0A0A',
+                background: 'rgba(28,25,23,0.05)',
+              }
+            }}
+          >
             Back to Orders
           </Button>
         </Stack>
@@ -68,8 +83,17 @@ export default function PaymentHistoryPage() {
         {isLoading && <Typography color="text.secondary">Loading payment history...</Typography>}
 
         {!isLoading && payments.length === 0 && (
-          <Paper sx={{ p: 3, borderRadius: 2.5, border: '1px solid #EADFCC' }}>
-            <Typography>No payment records found.</Typography>
+          <Paper
+            className="nx-liquid-glass"
+            sx={{
+              p: 4,
+              textAlign: 'center',
+              borderRadius: '24px',
+              border: '1px dashed rgba(212, 175, 55, 0.3)',
+              boxShadow: 'none',
+            }}
+          >
+            <Typography color="text.secondary">No payment records found.</Typography>
           </Paper>
         )}
 
@@ -78,11 +102,17 @@ export default function PaymentHistoryPage() {
           return (
             <Paper
               key={`${payment.transactionId || payment.orderNo || 'payment'}-${idx}`}
+              className="nx-liquid-glass"
               sx={{
-                p: 2.5,
-                borderRadius: 2.5,
-                border: '1px solid #EADFCC',
-                background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFCF7 100%)',
+                p: 3,
+                borderRadius: '24px',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                boxShadow: '0 16px 32px -16px rgba(0, 0, 0, 0.05)',
+                transition: 'transform 300ms cubic-bezier(0.22, 1, 0.36, 1), border-color 300ms',
+                '&:hover': {
+                  borderColor: '#D4AF37',
+                  transform: 'translateY(-2px)',
+                }
               }}
             >
               <Stack direction={is700 ? 'column' : 'row'} justifyContent="space-between" gap={2}>
@@ -99,7 +129,7 @@ export default function PaymentHistoryPage() {
                   </Typography>
                 </Stack>
                 <Stack alignItems={is700 ? 'flex-start' : 'flex-end'}>
-                  <Typography fontWeight={700}>${payment.amount ?? '-'}</Typography>
+                  <Typography fontWeight={800} sx={{ color: '#D4AF37' }}>${payment.amount ?? '-'}</Typography>
                   <Chip
                     size="small"
                     label={normalizedStatus}

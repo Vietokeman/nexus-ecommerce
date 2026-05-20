@@ -31,17 +31,15 @@ export default function PaymentCancelPage() {
         transition={{ duration: 0.5, ease: 'easeOut' }}
       >
         <Stack
-          className="nx-glass"
+          className="nx-liquid-glass"
           sx={{
             p: { xs: 4, md: 6 },
             textAlign: 'center',
-            borderRadius: nexus.radius.xl,
+            borderRadius: '28px',
             maxWidth: 480,
             alignItems: 'center',
-            border: `1px solid ${nexus.neutral[200]}`,
-            background:
-              'radial-gradient(130% 130% at 0% 0%, rgba(176,70,70,0.16) 0%, rgba(255,253,250,0.82) 45%, rgba(247,243,238,0.9) 100%)',
-            boxShadow: nexus.glass.shadow,
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            boxShadow: '0 32px 64px -24px rgba(0, 0, 0, 0.15)',
           }}
           spacing={2}
         >
@@ -66,10 +64,40 @@ export default function PaymentCancelPage() {
             spacing={2}
             sx={{ mt: 2.5, width: '100%' }}
           >
-            <PremiumButton variant="contained" magnetic={false} onClick={() => navigate('/cart')}>
+            <PremiumButton
+              variant="contained"
+              magnetic={false}
+              onClick={() => navigate('/cart')}
+              sx={{
+                background: 'linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)',
+                color: '#FAF9F6',
+                borderRadius: 999,
+                fontWeight: 700,
+                flex: 1,
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+                  color: '#0C0A09',
+                }
+              }}
+            >
               Back to Cart
             </PremiumButton>
-            <PremiumButton variant="outlined" magnetic={false} onClick={() => navigate('/')}>
+            <PremiumButton
+              variant="outlined"
+              magnetic={false}
+              onClick={() => navigate('/')}
+              sx={{
+                borderColor: '#1C1917',
+                color: '#1C1917',
+                borderRadius: 999,
+                fontWeight: 700,
+                flex: 1,
+                '&:hover': {
+                  borderColor: '#0A0A0A',
+                  background: 'rgba(28,25,23,0.05)',
+                }
+              }}
+            >
               Continue Shopping
             </PremiumButton>
           </Stack>
