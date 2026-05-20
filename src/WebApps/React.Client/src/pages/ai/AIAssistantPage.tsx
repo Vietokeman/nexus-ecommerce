@@ -64,13 +64,21 @@ export default function AIAssistantPage() {
     <Stack alignItems="center" mt={2} mb="5rem" px={2}>
       <Stack width="100%" maxWidth="72rem" spacing={2.5}>
         <Stack direction="row" spacing={1} alignItems="center">
-          <AutoAwesomeIcon color="warning" />
-          <Typography variant="h4" fontWeight={800}>
+          <AutoAwesomeIcon sx={{ color: '#D4AF37' }} />
+          <Typography variant="h4" fontWeight={800} sx={{ background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
             AI Shopping Assistant
           </Typography>
         </Stack>
 
-        <Paper sx={{ p: 2.5, borderRadius: 2.5, border: '1px solid #E9DCC9' }}>
+        <Paper
+          className="nx-liquid-glass"
+          sx={{
+            p: 3,
+            borderRadius: '24px',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            boxShadow: '0 24px 48px -20px rgba(0, 0, 0, 0.1)',
+          }}
+        >
           <Stack spacing={1.25}>
             <Typography color="text.secondary">
               Mo ta nhu cau theo phong cach Shopee/TikTok Shop: ngan gon, theo budget, theo nganh.
@@ -87,20 +95,57 @@ export default function AIAssistantPage() {
 
             <Stack direction="row" flexWrap="wrap" gap={1}>
               {prompts.map((item) => (
-                <Chip key={item} label={item} onClick={() => setPrompt(item)} variant="outlined" />
+                <Chip
+                  key={item}
+                  label={item}
+                  onClick={() => setPrompt(item)}
+                  variant="outlined"
+                  sx={{
+                    borderColor: 'rgba(212,175,55,0.3)',
+                    color: '#CA8A04',
+                    background: 'rgba(212,175,55,0.05)',
+                    '&:hover': {
+                      background: 'rgba(212,175,55,0.1)',
+                      borderColor: '#D4AF37',
+                    }
+                  }}
+                />
               ))}
             </Stack>
 
             <Stack direction="row" justifyContent="flex-end">
-              <Button variant="contained" onClick={handleSubmit} disabled={createSession.isPending}>
-                {createSession.isPending ? 'Dang tao session...' : 'Ask AI'}
+              <Button
+                variant="contained"
+                onClick={handleSubmit}
+                disabled={createSession.isPending}
+                sx={{
+                  borderRadius: 999,
+                  fontWeight: 700,
+                  px: 3,
+                  background: 'linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)',
+                  color: '#FAF9F6',
+                  '&:hover': {
+                    background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+                    color: '#0C0A09',
+                  }
+                }}
+              >
+                {createSession.isPending ? 'Asking AI...' : 'Ask AI'}
               </Button>
             </Stack>
           </Stack>
         </Paper>
 
         {sessionId && (
-          <Paper sx={{ p: 2.5, borderRadius: 2.5, border: '1px solid #E9DCC9' }}>
+          <Paper
+            className="nx-liquid-glass"
+            sx={{
+              p: 3,
+              borderRadius: '24px',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              boxShadow: '0 24px 48px -20px rgba(0, 0, 0, 0.1)',
+            }}
+          >
             <Typography fontWeight={700}>Session: {sessionId}</Typography>
             {isFetching && <Typography color="text.secondary">Dang tai hoi thoai...</Typography>}
 
@@ -113,13 +158,14 @@ export default function AIAssistantPage() {
                 <Paper
                   key={`${idx}-${msg.role || 'item'}`}
                   sx={{
-                    p: 1.5,
-                    borderRadius: 2,
-                    border: '1px solid #EFE3D1',
+                    p: 2,
+                    borderRadius: '16px',
+                    border: msg.role === 'assistant' ? '1px solid rgba(212, 175, 55, 0.25)' : '1px solid rgba(255, 255, 255, 0.15)',
                     background:
                       msg.role === 'assistant'
-                        ? 'linear-gradient(180deg, #FFFFFF 0%, #F8FFFA 100%)'
-                        : 'linear-gradient(180deg, #FFFFFF 0%, #FFF9F2 100%)',
+                        ? 'rgba(212, 175, 55, 0.05)'
+                        : 'rgba(255, 255, 255, 0.4)',
+                    backdropFilter: 'blur(10px)',
                   }}
                 >
                   <Typography variant="caption" color="text.secondary">

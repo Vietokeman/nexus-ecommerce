@@ -57,6 +57,7 @@ const sortOptions = [
   { name: 'Price: high to low', sort: 'price', order: 'desc' },
 ];
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const normalizeProduct = (raw: any): Product => ({
   id: Number(raw.id ?? raw.productId ?? Date.now()),
   no: String(raw.no ?? raw.productNo ?? raw.itemNo ?? raw.id ?? ''),
@@ -251,8 +252,6 @@ export default function HomePage() {
   const categoryFilterKey = Array.from(categoryFilters).sort().join('|');
 
   const theme = useTheme();
-  const is1200 = useMediaQuery(theme.breakpoints.down(1200));
-  const is800 = useMediaQuery(theme.breakpoints.down(800));
   const is700 = useMediaQuery(theme.breakpoints.down(700));
   const is600 = useMediaQuery(theme.breakpoints.down(600));
   const is500 = useMediaQuery(theme.breakpoints.down(500));
@@ -286,11 +285,12 @@ export default function HomePage() {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const selectedCategories = Array.from(categoryFilters);
+        const selectedCategories = categoryFilterKey ? categoryFilterKey.split('|') : [];
 
         if (selectedCategories.length === 0) {
           const { data } = await api.get(API_ENDPOINTS.PRODUCTS.LIST);
           const list = Array.isArray(data) ? data : (data.result ?? []);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const normalized = list.map((item: any) => normalizeProduct(item));
           setProducts(normalized);
           setFacetOptions(buildFacetOptions(normalized));
@@ -309,6 +309,7 @@ export default function HomePage() {
 
         const deduped = Array.from(
           new Map(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             merged.map((item: any) => [String(item.id ?? item.itemNo ?? item.productNo), item]),
           ).values(),
         );

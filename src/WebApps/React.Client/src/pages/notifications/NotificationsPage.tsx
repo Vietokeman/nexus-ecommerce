@@ -67,18 +67,16 @@ export default function NotificationsPage() {
         justifyContent="space-between"
         alignItems={{ xs: 'stretch', md: 'center' }}
         spacing={2}
+        className="nx-liquid-glass"
         sx={{
           p: { xs: 2.25, md: 3 },
-          borderRadius: 4,
-          border: '1px solid',
-          borderColor: '#F1E9DB',
-          background:
-            'linear-gradient(140deg, rgba(255,255,255,0.95), rgba(255,245,232,0.9) 55%, rgba(244,253,251,0.95))',
-          boxShadow: '0 20px 40px rgba(141, 97, 56, 0.12)',
+          borderRadius: '28px',
+          border: '1px solid rgba(255, 255, 255, 0.15)',
+          boxShadow: '0 24px 48px -20px rgba(0, 0, 0, 0.08)',
         }}
       >
         <Box>
-          <Typography variant="h4" fontWeight={800} sx={{ letterSpacing: '-0.02em' }}>
+          <Typography variant="h4" fontWeight={800} sx={{ background: 'linear-gradient(135deg, #1C1917 0%, #0D0C0B 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-0.02em' }}>
             Notifications
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
@@ -94,7 +92,12 @@ export default function NotificationsPage() {
             py: 1,
             borderRadius: 999,
             fontWeight: 700,
-            boxShadow: '0 10px 26px rgba(15, 118, 110, 0.25)',
+            background: 'linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)',
+            color: '#FAF9F6',
+            '&:hover': {
+              background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+              color: '#0C0A09',
+            },
           }}
         >
           Mark all as read
@@ -102,12 +105,12 @@ export default function NotificationsPage() {
       </Stack>
 
       <Paper
+        className="nx-liquid-glass"
         sx={{
-          p: 2,
-          borderRadius: 3.5,
-          border: '1px solid #EEE5D6',
-          boxShadow: '0 14px 30px rgba(120, 94, 52, 0.08)',
-          background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFDF8 100%)',
+          p: 1.5,
+          borderRadius: '20px',
+          border: '1px solid rgba(255, 255, 255, 0.15)',
+          boxShadow: '0 16px 32px -16px rgba(0, 0, 0, 0.08)',
         }}
       >
         <Tabs
@@ -120,11 +123,16 @@ export default function NotificationsPage() {
             '& .MuiTabs-indicator': {
               height: 3,
               borderRadius: 999,
+              background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 100%)',
             },
             '& .MuiTab-root': {
               textTransform: 'none',
               minHeight: 42,
               fontWeight: 600,
+              color: '#8A8576',
+              '&.Mui-selected': {
+                color: '#D4AF37',
+              }
             },
           }}
         >
@@ -139,15 +147,17 @@ export default function NotificationsPage() {
             key={notification.id}
             sx={{
               p: { xs: 2, md: 2.25 },
-              borderRadius: 3,
-              bgcolor: notification.isRead ? '#FFFFFF' : '#FFF9EE',
+              borderRadius: '20px',
+              bgcolor: notification.isRead ? 'rgba(255, 255, 255, 0.3)' : 'rgba(212, 175, 55, 0.05)',
               border: '1px solid',
-              borderColor: notification.isRead ? '#ECE6D9' : '#F0D8B6',
+              borderColor: notification.isRead ? 'rgba(255, 255, 255, 0.1)' : 'rgba(212, 175, 55, 0.25)',
+              backdropFilter: 'blur(10px)',
               cursor: notification.link ? 'pointer' : 'default',
-              transition: 'transform 180ms ease, box-shadow 180ms ease',
+              transition: 'transform 300ms cubic-bezier(0.22, 1, 0.36, 1), border-color 300ms, box-shadow 300ms',
               '&:hover': {
-                transform: notification.link ? 'translateY(-2px)' : 'none',
-                boxShadow: notification.link ? '0 14px 28px rgba(141, 97, 56, 0.14)' : 'none',
+                transform: notification.link ? 'translateY(-3px)' : 'none',
+                borderColor: notification.link ? '#D4AF37' : (notification.isRead ? 'rgba(255, 255, 255, 0.1)' : 'rgba(212, 175, 55, 0.25)'),
+                boxShadow: notification.link ? '0 16px 32px -16px rgba(212, 175, 55, 0.2)' : 'none',
               },
             }}
             onClick={() => void handleReadAndNavigate(notification)}
@@ -158,7 +168,7 @@ export default function NotificationsPage() {
               spacing={1}
             >
               <Box>
-                <Typography variant="subtitle1" fontWeight={notification.isRead ? 600 : 800}>
+                <Typography variant="subtitle1" fontWeight={notification.isRead ? 600 : 800} sx={{ color: '#1C1917' }}>
                   {notification.title}
                 </Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
@@ -174,12 +184,13 @@ export default function NotificationsPage() {
 
         {!listQuery.isLoading && rows.length === 0 && (
           <Paper
+            className="nx-liquid-glass"
             sx={{
-              p: 4,
+              p: 6,
               textAlign: 'center',
-              borderRadius: 3,
-              border: '1px dashed #E6D5BE',
-              background: 'linear-gradient(180deg, #FFFFFF, #FFFAF1)',
+              borderRadius: '24px',
+              border: '1px dashed rgba(212, 175, 55, 0.3)',
+              boxShadow: 'none',
             }}
           >
             <Typography variant="body1">No notifications found.</Typography>
