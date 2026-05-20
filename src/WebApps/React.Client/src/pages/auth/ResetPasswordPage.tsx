@@ -61,11 +61,12 @@ export default function ResetPasswordPage() {
         noValidate
         onSubmit={handleSubmit(handleResetPassword)}
         sx={{
-          p: { xs: 2, sm: 3 },
+          p: { xs: 2.5, sm: 4 },
           borderRadius: '16px',
-          border: '1px solid rgba(212, 175, 55, 0.2)',
-          background: 'rgba(255, 255, 255, 0.4)',
-          backdropFilter: 'blur(8px)',
+          border: '1px solid rgba(212, 175, 55, 0.15)',
+          background: 'rgba(255, 255, 255, 0.02)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
         }}
       >
         <motion.div variants={itemVariants}>
@@ -113,13 +114,17 @@ export default function ResetPasswordPage() {
               fontSize: '1rem',
               borderRadius: 999,
               fontWeight: 700,
-              background: 'linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)',
-              color: '#FAF9F6',
-              boxShadow: '0 16px 30px -14px rgba(28, 25, 23, 0.4)',
+              background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+              color: '#0C0A09',
+              boxShadow: '0 16px 32px -12px rgba(212, 175, 55, 0.3)',
+              transition: 'all 280ms cubic-bezier(0.22, 1, 0.36, 1)',
               '&:hover': {
-                background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
-                color: '#0C0A09',
-                boxShadow: '0 20px 40px -15px rgba(212, 175, 55, 0.4)',
+                background: 'linear-gradient(135deg, #FFFDF0 0%, #FEF08A 50%, #D4AF37 100%)',
+                boxShadow: '0 20px 40px -10px rgba(212, 175, 55, 0.45)',
+              },
+              '&.MuiLoadingButton-loading': {
+                background: 'rgba(255, 255, 255, 0.08)',
+                color: 'rgba(255, 255, 255, 0.3)',
               }
             }}
             fullWidth

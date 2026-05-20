@@ -7,7 +7,6 @@ import type { User } from '@/types/auth';
 import { api } from '@/lib/api';
 import { API_ENDPOINTS } from '@/lib/endpoints';
 import Spinner from '@/components/ui/Spinner';
-import { nexus } from '@/theme/theme';
 
 /**
  * Handles the OAuth callback from the backend.
@@ -128,27 +127,37 @@ export default function OAuthCallbackPage() {
 
   if (error) {
     return (
-      <Stack alignItems="center" justifyContent="center" sx={{ minHeight: '100dvh', px: 2 }}>
+      <Stack
+        alignItems="center"
+        justifyContent="center"
+        sx={{
+          minHeight: '100dvh',
+          px: 2,
+          background: 'linear-gradient(135deg, #1C1917 0%, #0C0A09 100%)',
+        }}
+      >
         <Paper
           elevation={0}
           sx={{
             width: '100%',
             maxWidth: 480,
-            p: { xs: 2.5, sm: 3 },
-            borderRadius: 4,
-            border: '1px solid #EBCFC8',
-            background: 'linear-gradient(145deg, #FFF6F4 0%, #FFFFFF 75%)',
-            boxShadow: '0 18px 36px rgba(132, 79, 74, 0.14)',
+            p: { xs: 4, sm: 5 },
+            borderRadius: '20px',
+            border: '1px solid rgba(239, 68, 68, 0.3)',
+            background: 'rgba(255, 255, 255, 0.02)',
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
+            boxShadow: '0 16px 36px rgba(0, 0, 0, 0.3)',
             textAlign: 'center',
           }}
         >
-          <Typography variant="h6" color="error" fontWeight={800}>
+          <Typography variant="h6" color="error.main" fontWeight={800} sx={{ mb: 1.5 }}>
             Authentication Failed
           </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 1.25 }}>
+          <Typography variant="body2" sx={{ color: '#FAF9F6', mt: 1.25 }}>
             {error}
           </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+          <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.5)', mt: 1.5 }}>
             Redirecting to login...
           </Typography>
         </Paper>
@@ -157,26 +166,35 @@ export default function OAuthCallbackPage() {
   }
 
   return (
-    <Stack alignItems="center" justifyContent="center" sx={{ minHeight: '100dvh', px: 2 }}>
+    <Stack
+      alignItems="center"
+      justifyContent="center"
+      sx={{
+        minHeight: '100dvh',
+        px: 2,
+        background: 'linear-gradient(135deg, #1C1917 0%, #0C0A09 100%)',
+      }}
+    >
       <Paper
         elevation={0}
         sx={{
           width: '100%',
           maxWidth: 520,
-          p: { xs: 2.5, sm: 3 },
-          borderRadius: 4,
-          border: '1px solid #EFE0CB',
-          background:
-            'linear-gradient(150deg, rgba(255,248,236,0.85), rgba(239,251,248,0.9) 62%, rgba(255,255,255,0.95))',
-          boxShadow: '0 20px 38px rgba(124, 92, 52, 0.12)',
+          p: { xs: 4, sm: 5 },
+          borderRadius: '20px',
+          border: '1px solid rgba(212, 175, 55, 0.15)',
+          background: 'rgba(255, 255, 255, 0.02)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          boxShadow: '0 20px 38px rgba(0, 0, 0, 0.3)',
           textAlign: 'center',
         }}
       >
         <Spinner />
-        <Typography variant="body1" color="text.secondary" sx={{ mt: 1, fontWeight: 500 }}>
+        <Typography variant="body1" sx={{ mt: 2.5, fontWeight: 600, color: '#FAF9F6' }}>
           Completing sign in...
         </Typography>
-        <Typography variant="caption" sx={{ color: nexus.neutral[500], mt: 0.5, display: 'block' }}>
+        <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.45)', mt: 1, display: 'block' }}>
           Securing your session and syncing preferences
         </Typography>
       </Paper>
