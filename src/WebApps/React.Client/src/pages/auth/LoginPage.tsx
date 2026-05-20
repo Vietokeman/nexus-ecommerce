@@ -12,7 +12,6 @@ import { API_ENDPOINTS } from '@/lib/endpoints';
 import type { LoginDto } from '@/types/auth';
 import AuthLayout from '@/components/auth/AuthLayout';
 import { itemVariants } from '@/lib/motion';
-import { nexus } from '@/theme/theme';
 import { PremiumButton, PremiumInput, PremiumPasswordInput } from '@/components/ui/primitives';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
@@ -90,14 +89,15 @@ export default function LoginPage() {
             sx={{
               p: 1.5,
               borderRadius: '12px',
-              border: '1px solid rgba(212, 175, 55, 0.2)',
-              background: 'rgba(255, 255, 255, 0.4)',
-              backdropFilter: 'blur(8px)',
+              border: '1px solid rgba(212, 175, 55, 0.15)',
+              background: 'rgba(255, 255, 255, 0.03)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
             }}
           >
             <Typography
               variant="caption"
-              sx={{ color: nexus.neutral[700], letterSpacing: '0.01em', fontWeight: 500 }}
+              sx={{ color: 'rgba(255, 255, 255, 0.75)', letterSpacing: '0.01em', fontWeight: 500 }}
             >
               Secure login with real-time order and checkout sync.
             </Typography>
@@ -146,7 +146,8 @@ export default function LoginPage() {
                 color: '#D4AF37',
                 fontWeight: 700,
                 letterSpacing: '0.01em',
-                '&:hover': { color: '#CA8A04' },
+                transition: 'color 200ms ease',
+                '&:hover': { color: '#FEF08A' },
               }}
             >
               Forgot password?
@@ -166,13 +167,17 @@ export default function LoginPage() {
               fontSize: '1rem',
               borderRadius: 999,
               fontWeight: 700,
-              background: 'linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)',
-              color: '#FAF9F6',
-              boxShadow: '0 16px 30px -14px rgba(28, 25, 23, 0.4)',
+              background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
+              color: '#0C0A09',
+              boxShadow: '0 16px 32px -12px rgba(212, 175, 55, 0.3)',
+              transition: 'all 280ms cubic-bezier(0.22, 1, 0.36, 1)',
               '&:hover': {
-                background: 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)',
-                color: '#0C0A09',
-                boxShadow: '0 20px 40px -15px rgba(212, 175, 55, 0.4)',
+                background: 'linear-gradient(135deg, #FFFDF0 0%, #FEF08A 50%, #D4AF37 100%)',
+                boxShadow: '0 20px 40px -10px rgba(212, 175, 55, 0.45)',
+              },
+              '&.MuiLoadingButton-loading': {
+                background: 'rgba(255, 255, 255, 0.08)',
+                color: 'rgba(255, 255, 255, 0.3)',
               }
             }}
             loading={loading}
@@ -184,10 +189,10 @@ export default function LoginPage() {
         </motion.div>
 
         <motion.div variants={itemVariants}>
-          <Divider sx={{ my: 1 }}>
+          <Divider sx={{ my: 1, '&::before, &::after': { borderColor: 'rgba(255, 255, 255, 0.1)' } }}>
             <Typography
               variant="body2"
-              sx={{ color: nexus.neutral[500], px: 1.5, fontWeight: 500 }}
+              sx={{ color: 'rgba(255, 255, 255, 0.4)', px: 1.5, fontWeight: 500 }}
             >
               or continue with
             </Typography>
@@ -211,13 +216,15 @@ export default function LoginPage() {
                     textTransform: 'none',
                     borderRadius: 999,
                     fontWeight: 600,
-                    borderColor: '#EBDCC9',
-                    color: nexus.neutral[700],
-                    backgroundColor: 'rgba(255,255,255,0.9)',
+                    borderColor: 'rgba(255, 255, 255, 0.15)',
+                    color: '#FAF9F6',
+                    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                    backdropFilter: 'blur(10px)',
+                    transition: 'all 200ms ease',
                     '&:hover': {
-                      borderColor: '#ea4335',
-                      backgroundColor: 'rgba(234, 67, 53, 0.08)',
-                      color: '#ea4335',
+                      borderColor: '#D4AF37',
+                      backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                      color: '#FAF9F6',
                     },
                   }}
                 >
@@ -238,13 +245,15 @@ export default function LoginPage() {
                     textTransform: 'none',
                     borderRadius: 999,
                     fontWeight: 600,
-                    borderColor: '#EBDCC9',
-                    color: nexus.neutral[700],
-                    backgroundColor: 'rgba(255,255,255,0.9)',
+                    borderColor: 'rgba(255, 255, 255, 0.15)',
+                    color: '#FAF9F6',
+                    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                    backdropFilter: 'blur(10px)',
+                    transition: 'all 200ms ease',
                     '&:hover': {
-                      borderColor: '#333',
-                      backgroundColor: 'rgba(51, 51, 51, 0.08)',
-                      color: '#333',
+                      borderColor: '#D4AF37',
+                      backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                      color: '#FAF9F6',
                     },
                   }}
                 >
@@ -259,7 +268,7 @@ export default function LoginPage() {
           <Typography
             variant="body2"
             textAlign="center"
-            sx={{ color: nexus.neutral[500], mt: 1.25, fontWeight: 500 }}
+            sx={{ color: 'rgba(255, 255, 255, 0.45)', mt: 1.25, fontWeight: 500 }}
           >
             Don&apos;t have an account?{' '}
             <Typography
@@ -270,7 +279,8 @@ export default function LoginPage() {
                 textDecoration: 'none',
                 fontWeight: 700,
                 color: '#D4AF37',
-                '&:hover': { color: '#CA8A04' },
+                transition: 'color 200ms ease',
+                '&:hover': { color: '#FEF08A' },
               }}
             >
               Create account
