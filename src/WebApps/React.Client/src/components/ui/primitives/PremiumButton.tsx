@@ -47,21 +47,43 @@ export default function PremiumButton<C extends ElementType = 'button'>({
           textTransform: 'none',
           fontWeight: 700,
           letterSpacing: '0.01em',
-          backgroundImage:
+          background:
             props.variant === 'contained'
-              ? 'linear-gradient(135deg, rgba(154, 88, 82, 1), rgba(181, 108, 99, 1))'
+              ? 'linear-gradient(135deg, #1C1917 0%, #0A0A0A 100%)'
+              : undefined,
+          color:
+            props.variant === 'contained'
+              ? '#FAF9F6'
+              : props.variant === 'outlined'
+              ? '#D4AF37'
+              : undefined,
+          border:
+            props.variant === 'outlined'
+              ? '1px solid rgba(212, 175, 55, 0.4)'
               : undefined,
           boxShadow:
             props.variant === 'contained'
-              ? '0 14px 28px -14px rgba(154, 88, 82, 0.8)'
-              : '0 6px 16px rgba(120, 94, 52, 0.06)',
-          transition: 'transform 280ms cubic-bezier(0.22, 1, 0.36, 1)',
+              ? '0 14px 28px -14px rgba(0, 0, 0, 0.4)'
+              : '0 6px 16px rgba(0, 0, 0, 0.02)',
+          transition: 'all 280ms cubic-bezier(0.22, 1, 0.36, 1)',
           '&:hover': {
             transform: 'translateY(-1px)',
+            background:
+              props.variant === 'contained'
+                ? 'linear-gradient(135deg, #FEF08A 0%, #D4AF37 50%, #CA8A04 100%)'
+                : 'rgba(212, 175, 55, 0.08)',
+            color:
+              props.variant === 'contained'
+                ? '#0C0A09'
+                : '#D4AF37',
+            borderColor:
+              props.variant === 'outlined'
+                ? '#D4AF37'
+                : undefined,
             boxShadow:
               props.variant === 'contained'
-                ? '0 16px 30px -12px rgba(154, 88, 82, 0.85)'
-                : '0 8px 18px rgba(120, 94, 52, 0.12)',
+                ? '0 16px 30px -12px rgba(212, 175, 55, 0.3)'
+                : '0 8px 18px rgba(212, 175, 55, 0.1)',
           },
           '&:active': { transform: 'translateY(1px) scale(0.985)' },
           ...sx,

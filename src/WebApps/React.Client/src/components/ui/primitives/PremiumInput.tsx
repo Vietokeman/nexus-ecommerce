@@ -48,19 +48,27 @@ export default function PremiumInput({
         sx={{
           '& .MuiInputBase-root': {
             minHeight: metrics.minHeight,
-            borderRadius: 2,
-            background: 'linear-gradient(180deg, rgba(255,255,255,1), rgba(255,251,245,0.92))',
-            boxShadow: '0 6px 16px rgba(120, 94, 52, 0.05)',
-            transition: 'box-shadow 160ms ease, transform 160ms ease',
+            borderRadius: '12px',
+            background: 'rgba(255, 255, 255, 0.8)',
+            backdropFilter: 'blur(20px)',
+            boxShadow: '0 6px 16px rgba(0, 0, 0, 0.02)',
+            transition: 'all 200ms ease',
             '&:hover': {
-              boxShadow: '0 8px 18px rgba(120, 94, 52, 0.09)',
+              boxShadow: '0 8px 20px rgba(212, 175, 55, 0.08)',
             },
             '&.Mui-focused': {
-              boxShadow: '0 0 0 3px rgba(181, 108, 99, 0.16), 0 10px 22px rgba(120, 94, 52, 0.11)',
+              boxShadow: '0 0 0 3px rgba(212, 175, 55, 0.25), 0 10px 22px rgba(212, 175, 55, 0.12)',
             },
           },
           '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: hasError ? undefined : '#E7D8C5',
+            borderColor: hasError ? undefined : 'rgba(212, 175, 55, 0.3)',
+            transition: 'border-color 200ms ease',
+          },
+          '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: hasError ? undefined : '#D4AF37',
+          },
+          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: hasError ? undefined : '#D4AF37',
           },
           '& .MuiOutlinedInput-input': {
             paddingTop: metrics.py,
