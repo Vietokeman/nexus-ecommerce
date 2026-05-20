@@ -138,7 +138,7 @@ export default function ProductDetailsPage() {
         {/* Product details */}
         <Stack
           width={is480 ? 'auto' : is1420 ? 'auto' : '88rem'}
-          p={is480 ? 2 : 0}
+          p={is480 ? 3 : 5}
           height={is840 ? 'auto' : '50rem'}
           rowGap={5}
           mt={is840 ? 0 : 5}
@@ -146,12 +146,11 @@ export default function ProductDetailsPage() {
           mb={5}
           flexDirection={is840 ? 'column' : 'row'}
           columnGap={is990 ? '2rem' : '5rem'}
+          className="nx-liquid-glass"
           sx={{
-            borderRadius: '26px',
-            border: `1px solid ${theme.palette.grey[300]}`,
-            background:
-              'linear-gradient(155deg, rgba(255,253,250,0.92) 0%, rgba(247,243,238,0.9) 55%, rgba(242,237,231,0.95) 100%)',
-            boxShadow: '0 24px 44px -34px rgba(79,67,62,0.75)',
+            borderRadius: '30px',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            boxShadow: '0 32px 64px -24px rgba(0, 0, 0, 0.15)',
           }}
         >
           {/* Left stack (images) */}
@@ -177,7 +176,13 @@ export default function ProductDetailsPage() {
                     onClick={() => setSelectedImageIndex(index)}
                   >
                     <ImageFallback
-                      style={{ width: '100%', objectFit: 'contain' }}
+                      style={{
+                        width: '100%',
+                        objectFit: 'contain',
+                        borderRadius: '12px',
+                        border: index === selectedImageIndex ? '2px solid #D4AF37' : '1px solid rgba(255, 255, 255, 0.12)',
+                        background: 'rgba(255, 255, 255, 0.05)',
+                      }}
                       src={image}
                       alt={`${product.name} image`}
                     />
@@ -323,7 +328,7 @@ export default function ProductDetailsPage() {
                         whileHover={{ scale: 1.04 }}
                         whileTap={{ scale: 0.99 }}
                         style={{
-                          border: selectedSize === size ? '' : '1px solid grayText',
+                          border: selectedSize === size ? '1px solid #D4AF37' : '1px solid rgba(255,255,255,0.2)',
                           borderRadius: '10px',
                           width: '36px',
                           height: '36px',
@@ -332,11 +337,11 @@ export default function ProductDetailsPage() {
                           alignItems: 'center',
                           cursor: 'pointer',
                           padding: '1.2rem',
-                          backgroundColor: selectedSize === size ? '#9a5852' : '#fffcf8',
-                          color: selectedSize === size ? 'white' : '',
+                          backgroundColor: selectedSize === size ? '#1C1917' : 'rgba(255, 255, 255, 0.6)',
+                          color: selectedSize === size ? '#FAF9F6' : '#1C1917',
                           boxShadow:
                             selectedSize === size
-                              ? '0 12px 22px -16px rgba(154,88,82,0.75)'
+                              ? '0 8px 20px -8px rgba(212,175,55,0.5)'
                               : 'none',
                         }}
                       >
@@ -423,9 +428,10 @@ export default function ProductDetailsPage() {
               sx={{
                 justifyContent: 'center',
                 alignItems: 'center',
-                border: '1px solid rgba(118, 102, 95, 0.35)',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
                 borderRadius: '14px',
-                background: 'rgba(255,255,255,0.62)',
+                background: 'rgba(255, 255, 255, 0.05)',
+                backdropFilter: 'blur(8px)',
               }}
             >
               <Stack
