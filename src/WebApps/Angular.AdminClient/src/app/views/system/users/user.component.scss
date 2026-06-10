@@ -39,11 +39,12 @@
 }
 
 .nx-toolbar {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(16rem, 29rem);
+  display: flex;
+  justify-content: space-between;
   align-items: center;
   gap: 0.8rem;
   margin-bottom: 0.9rem;
+  flex-wrap: wrap;
 }
 
 .nx-toolbar-actions {
@@ -53,9 +54,16 @@
 }
 
 .nx-toolbar-search {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  display: flex;
   gap: 0.5rem;
+  align-items: center;
+  width: 100%;
+  max-width: 29rem;
+
+  input {
+    flex: 1;
+    min-width: 0;
+  }
 }
 
 .nx-table-shell {
@@ -84,18 +92,7 @@
 }
 
 @media (max-width: 991px) {
-  .nx-toolbar {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 767px) {
-  .nx-toolbar-actions {
-    display: grid;
-    grid-template-columns: 1fr;
-  }
-
   .nx-toolbar-search {
-    grid-template-columns: 1fr;
+    max-width: 100%;
   }
 }

@@ -1,6 +1,7 @@
-﻿using Contracts.Common.Interfaces;
+using Contracts.Common.Interfaces;
 using Product.API.Entities;
 using Product.API.Persistence;
+using Shared.SeedWork;
 
 namespace Product.API.Repositories.Interfaces
 {
@@ -8,6 +9,7 @@ namespace Product.API.Repositories.Interfaces
     {
         Task<CatalogProduct> GetProduct(long id);
         Task<IEnumerable<CatalogProduct>> GetProducts();
+        Task<PagedList<CatalogProduct>> GetPagedProductsAsync(PagingRequestParameters requestParameters);
         Task<IEnumerable<CatalogProduct>> GetProductsByNo(string productNo);
 
         Task CreateProduct(CatalogProduct product);

@@ -28,6 +28,9 @@ namespace Ordering.Infrastructure.Persistence
             modelBuilder.Entity<Order>().Property(o => o.EmailAdress).IsRequired();
             modelBuilder.Entity<Order>().Property(o => o.TotalPrice).HasColumnType("decimal(10,2)");
             
+            // Add composite indices for paged searches to optimize query performance
+            modelBuilder.Entity<Order>().HasIndex(o => new { o.UserName, o.FirstName, o.LastName, o.EmailAdress, o.CreatedDate });
+            
             // Ignore DomainEvents navigation property
             modelBuilder.Entity<Order>().Ignore(e => e.DomainEvents);
         }

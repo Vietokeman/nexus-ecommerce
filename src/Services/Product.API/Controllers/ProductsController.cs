@@ -1,8 +1,9 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Product.API.Entities;
 using Product.API.Repositories.Interfaces;
 using Shared.DTOs.Product;
+using Shared.SeedWork;
 using System.ComponentModel.DataAnnotations;
 
 namespace Product.API.Controllers
@@ -22,15 +23,15 @@ namespace Product.API.Controllers
 
         #region CRUD
         [HttpGet]
-        public async Task<IActionResult> GetAllProducts()
+        public async Task<IActionResult> GetAllProducts([FromQuery] PagingRequestParameters requestParameters)
         {
-            var products = await _productRepo.GetProducts();
+            var products = await _productRepo.GetPagedProductsAsync(requestParameters);
             if (products == null || !products.Any())
             {
                 return NotFound("No products found.");
             }
             var productDtos = _mapper.Map<IEnumerable<ProductDto>>(products);
-            return Ok(products);
+            return Ok(new ApiSuccessResult<PagedList<ProductDto>>(new PagedList<ProductDto>(productDtos.ToList(), products.MetaData.TotalCount, products.MetaData.CurrentPage, products.MetaData.PageSize)));
         }
 
         [HttpGet("{id}")]

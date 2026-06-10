@@ -95,7 +95,7 @@ services:
   product.api:
     container_name: src-product-api
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:80
     volumes:
       - ./Services/Product.API/appsettings.json:/app/appsettings.json:ro
@@ -112,7 +112,7 @@ services:
   customer.api:
     container_name: src-customer-api
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:80
     volumes:
       - ./Services/Customer.API/appsettings.json:/app/appsettings.json:ro
@@ -129,7 +129,7 @@ services:
   basket.api:
     container_name: src-basket-api
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:80
     volumes:
       - ./Services/Basket.API/appsettings.json:/app/appsettings.json:ro
@@ -148,7 +148,7 @@ services:
   ordering.api:
     container_name: src-ordering-api
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:80
     volumes:
       - ./Services/Ordering/Ordering.API/appsettings.json:/app/appsettings.json:ro
@@ -167,7 +167,7 @@ services:
   inventory.api:
     container_name: src-inventory-api
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:80
     volumes:
       - ./Services/Inventory.Product.API/appsettings.json:/app/appsettings.json:ro
@@ -184,7 +184,7 @@ services:
   payment.api:
     container_name: src-payment-api
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:80
     volumes:
       - ./Services/Payment.API/appsettings.json:/app/appsettings.json:ro
@@ -205,7 +205,7 @@ services:
   hangfire.api:
     container_name: src-hangfire-api
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:80
     volumes:
       - ./Services/Hangfire.API/appsettings.json:/app/appsettings.json:ro
@@ -224,7 +224,7 @@ services:
   identity.api:
     container_name: src-identity-api
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:80
     volumes:
       - ./Services/Identity.API/appsettings.json:/app/appsettings.json:ro
@@ -243,7 +243,7 @@ services:
   flashsale.api:
     container_name: src-flashsale-api
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:80
     volumes:
       - ./Services/FlashSale.API/appsettings.json:/app/appsettings.json:ro
@@ -262,7 +262,7 @@ services:
   groupbuy.api:
     container_name: src-groupbuy-api
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:80
     volumes:
       - ./Services/GroupBuy.API/appsettings.json:/app/appsettings.json:ro
@@ -282,7 +282,7 @@ services:
   ocelot.apigw:
     container_name: src-ocelot-apigw
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:80
       - "ElasticConfiguration:Uri=http://elasticsearch:9200"
     depends_on:
@@ -374,7 +374,7 @@ services:
   webhealthstatus:
     container_name: src-webhealthstatus
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:80
     depends_on:
       - ocelot.apigw

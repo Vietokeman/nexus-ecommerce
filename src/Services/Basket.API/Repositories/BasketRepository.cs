@@ -1,4 +1,4 @@
-﻿using Basket.API.Entities;
+using Basket.API.Entities;
 using Basket.API.Repositories.Interfaces;
 using Contracts.Common.Interfaces;
 using Microsoft.Extensions.Caching.Distributed;
@@ -48,15 +48,13 @@ namespace Basket.API.Repositories
         {
             _logger.Information($"BEGIN : update BASKET  {cart.Username}");
 
-            if (options != null)
+            var cacheOptions = options ?? new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(3),
+                SlidingExpiration = TimeSpan.FromDays(1)
+            };
 
-            {
-                await _redisCacheService.SetStringAsync(cart.Username, _serializeService.Serialize(cart), options);
-            }
-            else
-            {
-                await _redisCacheService.SetStringAsync(cart.Username, _serializeService.Serialize(cart));
-            }
+            await _redisCacheService.SetStringAsync(cart.Username, _serializeService.Serialize(cart), cacheOptions);
             _logger.Information($"END : update BASKET for  {cart.Username}");
 
             return await GetBasketByUsernameAsync(cart.Username);

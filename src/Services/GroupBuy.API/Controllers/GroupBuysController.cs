@@ -1,6 +1,7 @@
 using GroupBuy.API.Entities;
 using GroupBuy.API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Shared.SeedWork;
 
 namespace GroupBuy.API.Controllers;
 
@@ -21,10 +22,10 @@ public class GroupBuysController : ControllerBase
     /// Get all group buy campaigns
     /// </summary>
     [HttpGet("campaigns")]
-    public async Task<IActionResult> GetAllCampaigns()
+    public async Task<IActionResult> GetAllCampaigns([FromQuery] PagingRequestParameters requestParameters)
     {
-        var campaigns = await _service.GetAllCampaignsAsync();
-        return Ok(campaigns);
+        var campaigns = await _service.GetPagedCampaignsAsync(requestParameters);
+        return Ok(new ApiSuccessResult<PagedList<GroupBuyCampaign>>(campaigns));
     }
 
     /// <summary>

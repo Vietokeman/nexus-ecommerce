@@ -2,6 +2,7 @@ using FlashSale.API.Entities;
 using FlashSale.API.Persistence;
 using FlashSale.API.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Shared.SeedWork;
 
 namespace FlashSale.API.Repositories;
 
@@ -17,9 +18,26 @@ public class FlashSaleRepository : IFlashSaleRepository
     // Sessions
     public async Task<IEnumerable<FlashSaleSession>> GetAllSessionsAsync()
         => await _context.FlashSaleSessions
+            .AsNoTracking()
             .Include(s => s.Items)
             .OrderByDescending(s => s.StartTime)
             .ToListAsync();
+
+    public async Task<PagedList<FlashSaleSession>> GetPagedSessionsAsync(PagingRequestParameters requestParameters)
+    {
+        var query = _context.FlashSaleSessions
+            .AsNoTracking()
+            .Include(s => s.Items)
+            .OrderByDescending(s => s.StartTime);
+
+        var totalCount = await query.CountAsync();
+        var items = await query
+            .Skip((requestParameters.PageNumber - 1) * requestParameters.PageSize)
+            .Take(requestParameters.PageSize)
+            .ToListAsync();
+
+        return new PagedList<FlashSaleSession>(items, totalCount, requestParameters.PageNumber, requestParameters.PageSize);
+    }
 
     public async Task<FlashSaleSession?> GetSessionByIdAsync(long id)
         => await _context.FlashSaleSessions
@@ -30,6 +48,7 @@ public class FlashSaleRepository : IFlashSaleRepository
     {
         var now = DateTime.UtcNow;
         return await _context.FlashSaleSessions
+            .AsNoTracking()
             .Include(s => s.Items)
             .Where(s => s.Status == "Active" && s.StartTime <= now && s.EndTime >= now)
             .ToListAsync();
@@ -57,6 +76,7 @@ public class FlashSaleRepository : IFlashSaleRepository
 
     public async Task<IEnumerable<FlashSaleItem>> GetItemsBySessionIdAsync(long sessionId)
         => await _context.FlashSaleItems
+            .AsNoTracking()
             .Where(i => i.SessionId == sessionId)
             .ToListAsync();
 
@@ -88,8 +108,26 @@ public class FlashSaleRepository : IFlashSaleRepository
 
     public async Task<IEnumerable<FlashSaleOrder>> GetOrdersByUserAsync(string userName)
         => await _context.FlashSaleOrders
+            .AsNoTracking()
             .Include(o => o.Item)
             .Where(o => o.UserName == userName)
             .OrderByDescending(o => o.CreatedAt)
             .ToListAsync();
+
+    public async Task<PagedList<FlashSaleOrder>> GetPagedOrdersByUserAsync(string userName, PagingRequestParameters requestParameters)
+    {
+        var query = _context.FlashSaleOrders
+            .AsNoTracking()
+            .Include(o => o.Item)
+            .Where(o => o.UserName == userName)
+            .OrderByDescending(o => o.CreatedAt);
+
+        var totalCount = await query.CountAsync();
+        var items = await query
+            .Skip((requestParameters.PageNumber - 1) * requestParameters.PageSize)
+            .Take(requestParameters.PageSize)
+            .ToListAsync();
+
+        return new PagedList<FlashSaleOrder>(items, totalCount, requestParameters.PageNumber, requestParameters.PageSize);
+    }
 }

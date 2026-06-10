@@ -1,6 +1,7 @@
 using FlashSale.API.Entities;
 using FlashSale.API.Repositories.Interfaces;
 using FlashSale.API.Services.Interfaces;
+using Shared.SeedWork;
 
 namespace FlashSale.API.Services;
 
@@ -22,6 +23,9 @@ public class FlashSaleService : IFlashSaleService
 
     public async Task<IEnumerable<FlashSaleSession>> GetAllSessionsAsync()
         => await _repository.GetAllSessionsAsync();
+
+    public async Task<PagedList<FlashSaleSession>> GetPagedSessionsAsync(PagingRequestParameters requestParameters)
+        => await _repository.GetPagedSessionsAsync(requestParameters);
 
     public async Task<FlashSaleSession?> GetSessionByIdAsync(long id)
         => await _repository.GetSessionByIdAsync(id);
@@ -139,4 +143,7 @@ public class FlashSaleService : IFlashSaleService
 
     public async Task<IEnumerable<FlashSaleOrder>> GetUserOrdersAsync(string userName)
         => await _repository.GetOrdersByUserAsync(userName);
+
+    public async Task<PagedList<FlashSaleOrder>> GetPagedUserOrdersAsync(string userName, PagingRequestParameters requestParameters)
+        => await _repository.GetPagedOrdersByUserAsync(userName, requestParameters);
 }

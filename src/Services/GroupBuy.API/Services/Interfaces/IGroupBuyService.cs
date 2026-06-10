@@ -1,4 +1,5 @@
 using GroupBuy.API.Entities;
+using Shared.SeedWork;
 
 namespace GroupBuy.API.Services.Interfaces;
 
@@ -6,6 +7,7 @@ public interface IGroupBuyService
 {
     // Campaigns
     Task<IEnumerable<GroupBuyCampaign>> GetAllCampaignsAsync();
+    Task<PagedList<GroupBuyCampaign>> GetPagedCampaignsAsync(PagingRequestParameters requestParameters);
     Task<IEnumerable<GroupBuyCampaign>> GetActiveCampaignsAsync();
     Task<GroupBuyCampaign?> GetCampaignByIdAsync(long id);
     Task<GroupBuyCampaign> CreateCampaignAsync(GroupBuyCampaign campaign);

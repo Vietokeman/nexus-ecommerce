@@ -35,7 +35,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/products",
-      "UpstreamHttpMethod": ["GET", "POST"],
+      "UpstreamHttpMethod": ["GET"],
       "Key": "products",
       "RateLimitOptions": {
         "ClientWhitelist": [],
@@ -47,6 +47,32 @@
       "FileCacheOptions": {
         "TtlSeconds": 30,
         "Region": "products"
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 5000
+      }
+    },
+    {
+      "SwaggerKey": "product",
+      "DownstreamPathTemplate": "/api/products",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "product.api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/products",
+      "UpstreamHttpMethod": ["POST"],
+      "Key": "products-write",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 10
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 3,
@@ -111,7 +137,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/customers",
-      "UpstreamHttpMethod": ["GET", "POST"],
+      "UpstreamHttpMethod": ["GET"],
       "RateLimitOptions": {
         "ClientWhitelist": [],
         "EnableRateLimiting": true,
@@ -122,6 +148,31 @@
       "FileCacheOptions": {
         "TtlSeconds": 15,
         "Region": "customers"
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 5000
+      }
+    },
+    {
+      "SwaggerKey": "customer",
+      "DownstreamPathTemplate": "/api/customers",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "customer.api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/customers",
+      "UpstreamHttpMethod": ["POST"],
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 5
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 3,
@@ -242,7 +293,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/v1/orders",
-      "UpstreamHttpMethod": ["GET", "POST"],
+      "UpstreamHttpMethod": ["GET"],
       "RateLimitOptions": {
         "ClientWhitelist": [],
         "EnableRateLimiting": true,
@@ -253,6 +304,31 @@
       "FileCacheOptions": {
         "TtlSeconds": 15,
         "Region": "orders"
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "SwaggerKey": "ordering",
+      "DownstreamPathTemplate": "/api/v1/orders",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "ordering.api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/orders",
+      "UpstreamHttpMethod": ["POST"],
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 5
       },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 3,

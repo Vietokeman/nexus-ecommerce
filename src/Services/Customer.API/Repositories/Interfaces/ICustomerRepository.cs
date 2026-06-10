@@ -1,5 +1,6 @@
-﻿using Contracts.Common.Interfaces;
+using Contracts.Common.Interfaces;
 using Customer.API.Persistence;
+using Shared.SeedWork;
 
 namespace Customer.API.Repositories.Interfaces
 {
@@ -7,5 +8,6 @@ namespace Customer.API.Repositories.Interfaces
     {
         Task<Entities.Customer?> GetByUserNameAsync(string userName);
         Task<IEnumerable<Entities.Customer>> GetAllCustomersAsync();
+        Task<PagedList<Entities.Customer>> GetPagedCustomersAsync(PagingRequestParameters requestParameters);
     }
 }

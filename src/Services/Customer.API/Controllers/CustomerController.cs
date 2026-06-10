@@ -1,4 +1,4 @@
-﻿using Customer.API.Repositories.Interfaces;
+using Customer.API.Repositories.Interfaces;
 using Customer.API.Services.Interfaces;
 
 namespace Customer.API.Controllers
@@ -9,10 +9,10 @@ namespace Customer.API.Controllers
         {
 
             app.MapGet("/", () => "Welcome to Customer Api");
-            app.MapGet("/api/customers", async (ICustomerService customerService) => await customerService.GetAllCustomerAsync()).WithTags("Customers")
+            app.MapGet("/api/customers", async ([AsParameters] Shared.SeedWork.PagingRequestParameters requestParameters, ICustomerService customerService) => await customerService.GetPagedCustomersAsync(requestParameters)).WithTags("Customers")
             .WithName("GetAllCustomers")
             .Produces(StatusCodes.Status200OK)
-            .Produces(StatusCodes.Status404NotFound); ;
+            .Produces(StatusCodes.Status404NotFound);
             app.MapGet("/api/customer/{username}", async (string username, ICustomerService customerService) =>
             {
 

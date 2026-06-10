@@ -1,9 +1,10 @@
-﻿using Contracts.Common.Interfaces;
+using Contracts.Common.Interfaces;
 using Infrastructure.Common;
 using Microsoft.EntityFrameworkCore;
 using Product.API.Entities;
 using Product.API.Persistence;
 using Product.API.Repositories.Interfaces;
+using Shared.SeedWork;
 
 namespace Product.API.Repositories
 {
@@ -18,6 +19,23 @@ namespace Product.API.Repositories
 
         public async Task<IEnumerable<CatalogProduct>> GetProducts() => await FindAll().ToListAsync();
 
+        public async Task<PagedList<CatalogProduct>> GetPagedProductsAsync(PagingRequestParameters requestParameters)
+        {
+            var query = FindAll(); // FindAll uses AsNoTracking() inside RepositoryBaseAsync
+            if (!string.IsNullOrWhiteSpace(requestParameters.SearchTerm))
+            {
+                var search = requestParameters.SearchTerm.Trim().ToLower();
+                query = query.Where(x => x.Name.ToLower().Contains(search) || x.No.ToLower().Contains(search));
+            }
+            
+            var totalCount = await query.CountAsync();
+            var items = await query
+                .Skip((requestParameters.PageNumber - 1) * requestParameters.PageSize)
+                .Take(requestParameters.PageSize)
+                .ToListAsync();
+                
+            return new PagedList<CatalogProduct>(items, totalCount, requestParameters.PageNumber, requestParameters.PageSize);
+        }
 
         public async Task<IEnumerable<CatalogProduct>> GetProductsByNo(string productNo) => await FindByCondition(x => x.No == productNo).ToListAsync();
 

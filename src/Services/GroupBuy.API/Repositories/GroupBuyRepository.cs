@@ -2,6 +2,7 @@ using GroupBuy.API.Entities;
 using GroupBuy.API.Persistence;
 using GroupBuy.API.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Shared.SeedWork;
 
 namespace GroupBuy.API.Repositories;
 
@@ -17,8 +18,24 @@ public class GroupBuyRepository : IGroupBuyRepository
     // Campaigns
     public async Task<IEnumerable<GroupBuyCampaign>> GetAllCampaignsAsync()
         => await _context.Campaigns
+            .AsNoTracking()
             .OrderByDescending(c => c.CreatedAt)
             .ToListAsync();
+
+    public async Task<PagedList<GroupBuyCampaign>> GetPagedCampaignsAsync(PagingRequestParameters requestParameters)
+    {
+        var query = _context.Campaigns
+            .AsNoTracking()
+            .OrderByDescending(c => c.CreatedAt);
+
+        var totalCount = await query.CountAsync();
+        var items = await query
+            .Skip((requestParameters.PageNumber - 1) * requestParameters.PageSize)
+            .Take(requestParameters.PageSize)
+            .ToListAsync();
+
+        return new PagedList<GroupBuyCampaign>(items, totalCount, requestParameters.PageNumber, requestParameters.PageSize);
+    }
 
     public async Task<GroupBuyCampaign?> GetCampaignByIdAsync(long id)
         => await _context.Campaigns
@@ -30,6 +47,7 @@ public class GroupBuyRepository : IGroupBuyRepository
     {
         var now = DateTime.UtcNow;
         return await _context.Campaigns
+            .AsNoTracking()
             .Where(c => c.Status == "Active" && c.StartDate <= now && c.EndDate >= now)
             .ToListAsync();
     }

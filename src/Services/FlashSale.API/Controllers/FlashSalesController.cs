@@ -1,6 +1,7 @@
 using FlashSale.API.Entities;
 using FlashSale.API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Shared.SeedWork;
 
 namespace FlashSale.API.Controllers;
 
@@ -19,10 +20,10 @@ public class FlashSalesController : ControllerBase
     /// Get all flash sale sessions
     /// </summary>
     [HttpGet("sessions")]
-    public async Task<IActionResult> GetAllSessions()
+    public async Task<IActionResult> GetAllSessions([FromQuery] PagingRequestParameters requestParameters)
     {
-        var sessions = await _service.GetAllSessionsAsync();
-        return Ok(sessions);
+        var sessions = await _service.GetPagedSessionsAsync(requestParameters);
+        return Ok(new ApiSuccessResult<PagedList<FlashSaleSession>>(sessions));
     }
 
     /// <summary>
@@ -120,10 +121,10 @@ public class FlashSalesController : ControllerBase
     /// Get user's flash sale orders
     /// </summary>
     [HttpGet("orders/{userName}")]
-    public async Task<IActionResult> GetUserOrders(string userName)
+    public async Task<IActionResult> GetUserOrders(string userName, [FromQuery] PagingRequestParameters requestParameters)
     {
-        var orders = await _service.GetUserOrdersAsync(userName);
-        return Ok(orders);
+        var orders = await _service.GetPagedUserOrdersAsync(userName, requestParameters);
+        return Ok(new ApiSuccessResult<PagedList<FlashSaleOrder>>(orders));
     }
 }
 
